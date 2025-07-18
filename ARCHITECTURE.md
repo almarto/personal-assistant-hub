@@ -23,7 +23,7 @@ This document outlines the architecture, technology choices, and implementation 
 
 - **Framework**: Next.js 14+ with App Router
 - **Language**: TypeScript 5+
-- **UI**: TailwindCSS + Shadcn/UI components
+- **UI**: CSS modules
 - **Authentication**: Auth.js (formerly NextAuth.js)
 - **Database**: Drizzle ORM with PostgreSQL
 - **State Management**: React Query + Zustand
@@ -103,62 +103,11 @@ To extract a module into a standalone project:
 4. Set up a new database with the required schema
 5. Migrate relevant data
 
-## Implementation Plan
-
-### Phase 1: Foundation (2-3 weeks)
-
-1. Set up Turborepo monorepo structure
-2. Configure shared packages (ui, auth, database, config)
-3. Implement base UI components with Shadcn/UI
-4. Set up authentication with Auth.js
-5. Configure Drizzle with PostgreSQL
-6. Create database schema for shared entities
-
-### Phase 2: Core Dashboard (1-2 weeks)
-
-1. Implement main dashboard application
-2. Create navigation between modules
-3. Set up user profile management
-4. Implement settings page
-
-### Phase 3: Module Development (2-3 weeks per module)
-
-#### Gym Workout Tracker
-1. Design database schema for workouts
-2. Implement workout creation/tracking UI
-3. Integrate AI for workout recommendations
-4. Add progress visualization
-
-#### Baby Food Tracker
-1. Design database schema for food items and reactions
-2. Implement food introduction timeline
-3. Create reaction tracking interface
-4. Add reporting and visualization
-
-#### Personal Assistant
-1. Implement calendar integration
-2. Create notes/tasks system
-3. Set up AI assistant capabilities
-4. Add notification system
-
-#### Motorbike Repair Tool
-1. Design schema for repair projects and steps
-2. Implement photo upload and organization
-3. Create step-by-step documentation interface
-4. Add search and tagging functionality
-
-### Phase 4: Integration & Refinement (2-3 weeks)
-
-1. Ensure consistent UI/UX across modules
-2. Optimize performance
-3. Implement comprehensive testing
-4. Set up Docker deployment
-5. Configure Cloudflare tunnel
 
 ## Development Practices
 
 - **Git Flow**: Feature branches with PR reviews
-- **Testing**: Jest for unit tests, Playwright for E2E tests
+- **Testing**: Vitest for unit tests, Playwright for E2E tests
 - **Documentation**: Inline code documentation + this architecture doc
 - **CI/CD**: Automated testing and deployment with GitHub Actions
 
