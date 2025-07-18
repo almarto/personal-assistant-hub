@@ -127,7 +127,7 @@ pnpm dev --filter=web
 
 ## 🔒 Self-Hosting
 
-This application is designed to be self-hosted on your local network with optional internet access via Cloudflare Tunnel. See the [DEPLOYMENT.md](./DEPLOYMENT.md) file for detailed instructions.
+This application is designed to be self-hosted on your local network with optional internet access via Cloudflare Tunnel.
 
 ## 📚 Documentation
 
