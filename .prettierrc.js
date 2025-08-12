@@ -1,0 +1,1 @@
+module.exports = require('@personal-assistant-hub/prettier-config');

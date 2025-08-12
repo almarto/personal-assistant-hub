@@ -1,0 +1,26 @@
+{
+  "name": "@personal-assistant-hub/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "library.js",
+    "next.js"
+  ],
+  "scripts": {
+    "lint": "echo 'No linting needed for config package'",
+    "check-types": "echo 'No type checking needed for config package'",
+    "build": "echo 'No build needed for config package'"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "8.18.1",
+    "@typescript-eslint/parser": "8.18.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.31.0"
+  },
+  "peerDependencies": {
+    "eslint": "8.57.1",
+    "typescript": "5.9.2"
+  }
+}

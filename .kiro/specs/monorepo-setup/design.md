@@ -16,7 +16,7 @@ graph TB
         GT[Gym Tracker]
         MT[Moto Tracker]
     end
-    
+
     subgraph "Shared Packages"
         UI[UI System]
         AUTH[Auth Package]
@@ -24,28 +24,28 @@ graph TB
         UTILS[Utils Package]
         CONFIG[Config Packages]
     end
-    
+
     subgraph "Backend Layer"
         API[NestJS API]
         GUARD[Auth Guards]
         SERVICES[Business Services]
     end
-    
+
     subgraph "Data Layer"
         PG[(PostgreSQL)]
         DRIZZLE[Drizzle ORM]
     end
-    
+
     HP --> UI
     HP --> AUTH
     BT --> UI
     BT --> AUTH
     GT --> UI
     GT --> AUTH
-    
+
     API --> DRIZZLE
     DRIZZLE --> PG
-    
+
     HP --> API
     BT --> API
     GT --> API
@@ -76,6 +76,7 @@ personal-assistant-hub/
 ### Frontend Architecture
 
 #### Homepage App Structure
+
 ```typescript
 // apps/homepage/src/
 ├── components/
@@ -102,6 +103,7 @@ personal-assistant-hub/
 ```
 
 #### Routing Strategy
+
 ```typescript
 // React Router configuration
 const router = createBrowserRouter([
@@ -123,6 +125,7 @@ const router = createBrowserRouter([
 ### Backend Architecture
 
 #### NestJS Module Structure
+
 ```typescript
 // apps/api/src/
 ├── modules/
@@ -151,17 +154,12 @@ const router = createBrowserRouter([
 ### Shared Packages Design
 
 #### ESLint Configuration Package
+
 ```typescript
 // packages/eslint-config/index.js
 module.exports = {
-  extends: [
-    '@typescript-eslint/recommended',
-    'prettier',
-  ],
-  plugins: [
-    '@typescript-eslint',
-    'import',
-  ],
+  extends: ['@typescript-eslint/recommended', 'prettier'],
+  plugins: ['@typescript-eslint', 'import'],
   rules: {
     // Import order enforcement
     'import/order': [
@@ -200,6 +198,7 @@ module.exports = {
 ```
 
 #### UI Package Structure
+
 ```typescript
 // packages/ui/src/
 ├── components/
@@ -220,6 +219,7 @@ module.exports = {
 ```
 
 #### Auth Package Interface
+
 ```typescript
 // packages/auth/src/
 export interface AuthService {
@@ -244,6 +244,7 @@ export interface User {
 ### Database Schema Design
 
 #### Core Tables
+
 ```sql
 -- Users table
 CREATE TABLE bt_users (
@@ -287,9 +288,17 @@ CREATE TABLE bt_user_sessions (
 ```
 
 #### Drizzle Schema Definition
+
 ```typescript
 // packages/database/src/schema/users.ts
-import { pgTable, uuid, varchar, timestamp, text, bigint } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  varchar,
+  timestamp,
+  text,
+  bigint,
+} from 'drizzle-orm/pg-core';
 
 export const users = pgTable('bt_users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -313,6 +322,7 @@ export const passkeyCredentials = pgTable('bt_passkey_credentials', {
 ### State Management Design
 
 #### Zustand Store Structure
+
 ```typescript
 // packages/auth/src/store/authStore.ts
 interface AuthState {
@@ -328,8 +338,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   isAuthenticated: false,
   isLoading: true,
-  
-  login: async (credentials) => {
+
+  login: async credentials => {
     set({ isLoading: true });
     try {
       const result = await authService.login(credentials);
@@ -339,12 +349,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw error;
     }
   },
-  
+
   logout: async () => {
     await authService.logout();
     set({ user: null, isAuthenticated: false, isLoading: false });
   },
-  
+
   checkAuth: async () => {
     try {
       const user = await authService.getCurrentUser();
@@ -359,6 +369,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 ## Error Handling
 
 ### Frontend Error Boundaries
+
 ```typescript
 // Error boundary for each tool/app section
 class ToolErrorBoundary extends Component<Props, State> {
@@ -386,6 +397,7 @@ class ToolErrorBoundary extends Component<Props, State> {
 ```
 
 ### Backend Error Handling
+
 ```typescript
 // Global exception filter
 @Catch()
@@ -416,12 +428,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 ## Testing Strategy
 
 ### Frontend Testing Approach
+
 ```typescript
 // Integration test example
 describe('Dashboard Integration', () => {
   test('should render dashboard with tool cards for authenticated user', async () => {
     const mockUser = { id: '1', email: 'test@example.com', role: 'user' };
-    
+
     render(
       <MemoryRouter initialEntries={['/']}>
         <AuthProvider initialUser={mockUser}>
@@ -450,6 +463,7 @@ describe('Dashboard Integration', () => {
 ```
 
 ### Backend Testing Strategy
+
 ```typescript
 // Service unit test example
 describe('AuthService', () => {
@@ -470,7 +484,7 @@ describe('AuthService', () => {
   test('should create user with valid invitation token', async () => {
     const mockToken = 'valid-token';
     const mockUserData = { email: 'test@example.com' };
-    
+
     mockUserRepository.findInvitationToken.mockResolvedValue({
       id: '1',
       token: mockToken,
@@ -478,8 +492,11 @@ describe('AuthService', () => {
       expiresAt: new Date(Date.now() + 86400000), // 24h from now
     });
 
-    const result = await service.registerWithInvitation(mockToken, mockUserData);
-    
+    const result = await service.registerWithInvitation(
+      mockToken,
+      mockUserData
+    );
+
     expect(result.user.email).toBe(mockUserData.email);
     expect(mockUserRepository.createUser).toHaveBeenCalledWith(mockUserData);
   });
@@ -489,6 +506,7 @@ describe('AuthService', () => {
 ## Internationalization Implementation
 
 ### i18n Configuration
+
 ```typescript
 // packages/i18n/src/config.ts
 import i18n from 'i18next';
@@ -504,16 +522,16 @@ i18n
     lng: 'en',
     fallbackLng: 'en',
     supportedLngs: ['en', 'es'],
-    
+
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    
+
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
     },
-    
+
     interpolation: {
       escapeValue: false,
     },
@@ -523,6 +541,7 @@ export default i18n;
 ```
 
 ### Translation File Structure
+
 ```json
 // packages/i18n/locales/en/common.json
 {
@@ -563,9 +582,41 @@ export default i18n;
 }
 ```
 
+## Security and Dependency Management
+
+### Security Guidelines
+
+#### Dependency Management Strategy
+
+- **Minimize Dependencies**: Implement functionality natively when possible to reduce attack surface
+- **Fixed Versions**: Always use exact versions (no `^` or `~`) to prevent automatic updates to potentially compromised versions
+- **Manual Updates**: Dependencies are updated manually after security review of changelogs
+- **Security Monitoring**: Regular audits of dependencies for known vulnerabilities
+
+#### Version Pinning Policy
+
+```json
+// ❌ Avoid - allows automatic updates
+"dependencies": {
+  "package": "^1.2.3"
+}
+
+// ✅ Preferred - exact version pinning
+"dependencies": {
+  "package": "1.2.3"
+}
+```
+
+#### Native Implementation Priority
+
+- Prefer native JavaScript/TypeScript implementations over external packages
+- Use built-in browser APIs and Node.js modules when available
+- Only add dependencies for complex functionality that would be error-prone to implement
+
 ## Build and Development Configuration
 
 ### Turborepo Configuration
+
 ```json
 // turbo.json
 {
@@ -592,6 +643,7 @@ export default i18n;
 ```
 
 ### Package Dependencies Strategy
+
 ```json
 // Root package.json dependencies
 {

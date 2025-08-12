@@ -42,6 +42,7 @@ personal-assistant-hub/
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 18** with TypeScript
 - **Vite** for fast development and building
 - **React Router** for client-side routing
@@ -50,6 +51,7 @@ personal-assistant-hub/
 - **React Testing Library** for testing
 
 ### Backend
+
 - **NestJS** with TypeScript
 - **PostgreSQL** database
 - **Drizzle ORM** for type-safe database operations
@@ -57,6 +59,7 @@ personal-assistant-hub/
 - **JWT** for session management
 
 ### DevOps & Tools
+
 - **Turborepo** for monorepo management
 - **Bun** as package manager
 - **ESLint & Prettier** for code quality
@@ -74,23 +77,27 @@ personal-assistant-hub/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd personal-assistant-hub
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 4. **Set up the database**
+
    ```bash
    # Create database and run migrations
    bun db:setup
@@ -102,20 +109,21 @@ personal-assistant-hub/
    ```
 
 This will start all applications in development mode:
+
 - Homepage: `http://localhost:5173`
 - API: `http://localhost:3000`
 - Storybook: `http://localhost:6006`
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `bun dev` | Start all apps in development mode |
-| `bun build` | Build all apps for production |
-| `bun lint` | Run ESLint across all packages |
-| `bun format` | Format code with Prettier |
-| `bun test` | Run all tests |
-| `bun check-types` | Type-check all TypeScript code |
+| Command           | Description                        |
+| ----------------- | ---------------------------------- |
+| `bun dev`         | Start all apps in development mode |
+| `bun build`       | Build all apps for production      |
+| `bun lint`        | Run ESLint across all packages     |
+| `bun format`      | Format code with Prettier          |
+| `bun test`        | Run all tests                      |
+| `bun check-types` | Type-check all TypeScript code     |
 
 ## 🏗️ Development Workflow
 
@@ -149,6 +157,7 @@ The project includes comprehensive testing setup:
 - **Visual Tests** - Through Storybook interactions
 
 Run tests with:
+
 ```bash
 bun test                    # All tests
 bun test:unit              # Unit tests only
