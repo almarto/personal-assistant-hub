@@ -1,0 +1,22 @@
+#!/bin/sh
+# Commit message hook to enforce conventional commit format
+
+commit_regex='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .{1,50}'
+
+error_msg="❌ Invalid commit message format!
+
+Commit message should follow conventional commits format:
+  <type>[optional scope]: <description>
+
+Types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
+
+Examples:
+  feat: add user authentication
+  fix(api): resolve login endpoint error
+  docs: update README with setup instructions
+  chore: update dependencies"
+
+if ! grep -qE "$commit_regex" "$1"; then
+  echo "$error_msg" >&2
+  exit 1
+fi

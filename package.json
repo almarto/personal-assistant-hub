@@ -10,7 +10,9 @@
     "test": "turbo run test",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build && changeset publish"
+    "release": "turbo run build && changeset publish",
+    "setup-hooks": "./scripts/setup-git-hooks.sh",
+    "postinstall": "./scripts/setup-git-hooks.sh"
   },
   "devDependencies": {
     "@changesets/cli": "2.29.5",

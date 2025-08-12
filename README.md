@@ -116,14 +116,51 @@ This will start all applications in development mode:
 
 ## 📜 Available Scripts
 
-| Command           | Description                        |
-| ----------------- | ---------------------------------- |
-| `bun dev`         | Start all apps in development mode |
-| `bun build`       | Build all apps for production      |
-| `bun lint`        | Run ESLint across all packages     |
-| `bun format`      | Format code with Prettier          |
-| `bun test`        | Run all tests                      |
-| `bun check-types` | Type-check all TypeScript code     |
+| Command                | Description                        |
+| ---------------------- | ---------------------------------- |
+| `bun dev`              | Start all apps in development mode |
+| `bun build`            | Build all apps for production      |
+| `bun lint`             | Run ESLint across all packages     |
+| `bun format`           | Format code with Prettier          |
+| `bun test`             | Run all tests                      |
+| `bun check-types`      | Type-check all TypeScript code     |
+| `bun setup-hooks`      | Install Git hooks manually         |
+| `bun changeset`        | Create a new changeset             |
+| `bun version-packages` | Version packages using changesets  |
+| `bun release`          | Build and publish packages         |
+
+## 🔧 Git Hooks
+
+The project includes automatic Git hooks that run before each commit to ensure code quality:
+
+- **Type checking** - Validates TypeScript types
+- **Linting** - Enforces code style rules
+- **Formatting** - Auto-formats code (requires re-staging if changes made)
+- **Testing** - Runs test suite
+- **Commit message validation** - Enforces conventional commit format
+
+### Conventional Commits
+
+All commit messages must follow the conventional commit format:
+
+```
+<type>[optional scope]: <description>
+
+Examples:
+feat: add user authentication
+fix(api): resolve login endpoint error
+docs: update README with setup instructions
+```
+
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
+
+### Bypassing Hooks
+
+To skip hooks temporarily (not recommended):
+
+```bash
+git commit --no-verify
+```
 
 ## 🏗️ Development Workflow
 
