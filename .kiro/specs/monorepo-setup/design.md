@@ -592,6 +592,8 @@ export default i18n;
 - **Fixed Versions**: Always use exact versions (no `^` or `~`) to prevent automatic updates to potentially compromised versions
 - **Manual Updates**: Dependencies are updated manually after security review of changelogs
 - **Security Monitoring**: Regular audits of dependencies for known vulnerabilities
+- **Latest version**: Always use the latest version of the dependency
+- **Consistency**: When a new dependency is added, check if it's already in use in other packages and keep the same version for every app and package.
 
 #### Version Pinning Policy
 

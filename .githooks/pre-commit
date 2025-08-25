@@ -22,21 +22,21 @@ echo "$STAGED_FILES" | sed 's/^/  - /'
 
 # Run type checking
 echo "🔧 Running type checks..."
-if ! bun run check-types; then
+if ! pnpm run check-types; then
   echo "❌ Type checking failed"
   exit 1
 fi
 
 # Run linting
 echo "🧹 Running linter..."
-if ! bun run lint; then
+if ! pnpm run lint; then
   echo "❌ Linting failed"
   exit 1
 fi
 
 # Run formatting (and auto-fix)
 echo "💅 Running formatter..."
-if ! bun run format; then
+if ! pnpm run format; then
   echo "❌ Formatting failed"
   exit 1
 fi
@@ -52,7 +52,7 @@ fi
 
 # Run tests if they exist
 echo "🧪 Running tests..."
-if ! bun run test; then
+if ! pnpm run test; then
   echo "❌ Tests failed"
   exit 1
 fi

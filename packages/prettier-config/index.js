@@ -1,18 +1,14 @@
 module.exports = {
   semi: true,
-  singleQuote: true,
-  tabWidth: 2,
   trailingComma: 'es5',
+  singleQuote: true,
   printWidth: 80,
+  tabWidth: 2,
+  useTabs: false,
+  quoteProps: 'as-needed',
   bracketSpacing: true,
+  bracketSameLine: false,
   arrowParens: 'avoid',
   endOfLine: 'lf',
-  overrides: [
-    {
-      files: '*.json',
-      options: {
-        printWidth: 200,
-      },
-    },
-  ],
+  embeddedLanguageFormatting: 'auto',
 };

@@ -6,14 +6,14 @@
   - Configure Changesets for version management
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.3, 7.1, 7.2_
 
-- [ ] 2. Create homepage React application with Vite and basic layout
+- [x] 2. Create homepage React application with Vite and basic layout
   - Set up React + Vite application with TypeScript
   - Implement main layout components (Header, Sidebar, Layout) with basic styling
   - Create dashboard structure with placeholder tool cards and navigation
   - Set up routing foundation with React Router
   - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 3. Build UI design system package with Storybook
+- [x] 3. Build UI design system package with Storybook
   - Create UI package with base components (Button, Input, Modal, etc.)
   - Implement CSS Modules for component styling
   - Set up Storybook for component documentation and testing

@@ -1,18 +1,24 @@
 #!/bin/bash
 # Setup Git hooks for the project
 
-set -e
-
 echo "🔧 Setting up Git hooks..."
 
-# Check if we're in a Git repository
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-  echo "❌ Not in a Git repository. Please run 'git init' first."
-  exit 1
+# Check if .git directory exists (simple check)
+if [ ! -d ".git" ]; then
+  echo "❌ Not in a Git repository. Skipping Git hooks setup."
+  echo "ℹ️  You can run 'bun run setup-hooks' manually later."
+  exit 0
+fi
+
+# Try to use git, but don't fail if it's not available
+if ! command -v git >/dev/null 2>&1; then
+  echo "❌ Git command not available. Skipping Git hooks setup."
+  echo "ℹ️  You can run 'bun run setup-hooks' manually later."
+  exit 0
 fi
 
 # Get the Git hooks directory
-GIT_HOOKS_DIR=$(git rev-parse --git-dir)/hooks
+GIT_HOOKS_DIR=".git/hooks"
 
 # Create hooks directory if it doesn't exist
 mkdir -p "$GIT_HOOKS_DIR"
@@ -38,10 +44,10 @@ fi
 echo "🎉 Git hooks setup complete!"
 echo ""
 echo "The following checks will run before each commit:"
-echo "  - Type checking (bun run check-types)"
-echo "  - Linting (bun run lint)"
-echo "  - Formatting (bun run format)"
-echo "  - Tests (bun run test)"
+echo "  - Type checking (pnpm run check-types)"
+echo "  - Linting (pnpm run lint)"
+echo "  - Formatting (pnpm run format)"
+echo "  - Tests (pnpm run test)"
 echo ""
 echo "Commit messages will be validated for conventional commit format:"
 echo "  <type>[optional scope]: <description>"

@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.icon {
+  font-size: 4rem;
+  margin: 2rem 0;
+}
+
+.message {
+  font-size: 1.25rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.submessage {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1f2937;
+  }
+  
+  .message {
+    color: #6b7280;
+  }
+  
+  .submessage {
+    color: #9ca3af;
+  }
+}

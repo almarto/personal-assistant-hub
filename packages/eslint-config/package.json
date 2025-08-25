@@ -1,26 +1,24 @@
 {
   "name": "@personal-assistant-hub/eslint-config",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Shared ESLint configuration for Personal Assistant Hub",
   "main": "index.js",
   "files": [
     "index.js",
-    "library.js",
-    "next.js"
+    "flat.js"
   ],
   "scripts": {
     "lint": "echo 'No linting needed for config package'",
-    "check-types": "echo 'No type checking needed for config package'",
     "build": "echo 'No build needed for config package'"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "8.18.1",
-    "@typescript-eslint/parser": "8.18.1",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-import": "2.31.0"
+    "@typescript-eslint/eslint-plugin": "8.40.0",
+    "@typescript-eslint/parser": "8.40.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-import": "2.32.0"
   },
   "peerDependencies": {
-    "eslint": "8.57.1",
-    "typescript": "5.9.2"
+    "eslint": ">=9.0.0",
+    "typescript": ">=5.0.0"
   }
 }

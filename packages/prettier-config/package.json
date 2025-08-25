@@ -1,14 +1,16 @@
 {
   "name": "@personal-assistant-hub/prettier-config",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Shared Prettier configuration for Personal Assistant Hub",
   "main": "index.js",
   "files": [
     "index.js"
   ],
   "scripts": {
     "lint": "echo 'No linting needed for config package'",
-    "check-types": "echo 'No type checking needed for config package'",
     "build": "echo 'No build needed for config package'"
+  },
+  "peerDependencies": {
+    "prettier": ">=3.0.0"
   }
 }

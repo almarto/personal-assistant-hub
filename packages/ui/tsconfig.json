@@ -1,0 +1,17 @@
+{
+  "extends": "@personal-assistant-hub/typescript-config/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "incremental": false,
+    "composite": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.stories.*",
+    "**/*.test.*"
+  ]
+}
