@@ -1,3 +1,8 @@
+/* Import Design Tokens */
+@import '@personal-assistant-hub/ui/tokens/colors.css';
+@import '@personal-assistant-hub/ui/tokens/spacing.css';
+@import '@personal-assistant-hub/ui/tokens/typography.css';
+
 /* CSS Reset and Base Styles */
 *,
 *::before,
@@ -10,13 +15,13 @@
 }
 
 body {
-  line-height: 1.5;
+  line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-normal);
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -53,15 +58,4 @@ h6 {
   min-height: 100vh;
 }
 
-/* Light mode */
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  
-  body {
-    color: #213547;
-    background-color: #ffffff;
-  }
-}
+/* Los tokens de diseño ya manejan automáticamente los modos claro y oscuro */

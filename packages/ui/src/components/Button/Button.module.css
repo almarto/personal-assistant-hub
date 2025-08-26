@@ -57,13 +57,13 @@
 }
 
 .secondary {
-  background-color: var(--color-background);
+  background-color: var(--color-background-secondary);
   color: var(--color-text-primary);
   border-color: var(--color-border);
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-background-tertiary);
   border-color: var(--color-border-secondary);
 }
 

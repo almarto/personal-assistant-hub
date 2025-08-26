@@ -1,0 +1,49 @@
+/* Card Component Styles */
+.ui-card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.ui-card-interactive {
+  cursor: pointer;
+}
+
+.ui-card-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Hoverable effect */
+.ui-card-hoverable:hover:not(.ui-card-disabled) {
+  border-color: var(--color-border-focus);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.15);
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .ui-card {
+    background-color: var(--color-background-secondary);
+  }
+
+  .ui-card-hoverable:hover:not(.ui-card-disabled) {
+    box-shadow: 0 4px 12px rgba(100, 108, 255, 0.15);
+  }
+}
+
+/* Light mode specific adjustments */
+@media (prefers-color-scheme: light) {
+  .ui-card-hoverable:hover:not(.ui-card-disabled) {
+    border-color: var(--color-primary-600);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  }
+}
+
+/* No padding variant */
+.ui-card-noPadding {
+  padding: 0;
+}

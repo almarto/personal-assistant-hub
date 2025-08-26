@@ -1,16 +1,16 @@
 /* Design Tokens - Colors */
 :root {
-  /* Primary Colors */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  /* Primary Colors - Updated to match homepage theme */
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e9ff;
+  --color-primary-200: #c7d6ff;
+  --color-primary-300: #a5b8ff;
+  --color-primary-400: #8b9aff;
+  --color-primary-500: #747bff;
+  --color-primary-600: #646cff;
+  --color-primary-700: #5a5fd7;
+  --color-primary-800: #4f52b3;
+  --color-primary-900: #44468f;
 
   /* Gray Colors */
   --color-gray-50: #f9fafb;
@@ -40,35 +40,38 @@
   --color-error-600: #dc2626;
   --color-error-700: #b91c1c;
 
-  /* Background Colors */
+  /* Background Colors - Light mode */
   --color-background: #ffffff;
   --color-background-secondary: #f9fafb;
   --color-background-tertiary: #f3f4f6;
 
-  /* Text Colors */
-  --color-text-primary: #111827;
+  /* Text Colors - Light mode */
+  --color-text-primary: #213547;
   --color-text-secondary: #6b7280;
   --color-text-tertiary: #9ca3af;
 
-  /* Border Colors */
+  /* Border Colors - Light mode */
   --color-border: #e5e7eb;
   --color-border-secondary: #d1d5db;
-  --color-border-focus: #3b82f6;
+  --color-border-focus: #646cff;
 }
 
 /* Dark Mode Colors */
-[data-theme="dark"] {
-  /* Background Colors */
-  --color-background: #111827;
-  --color-background-secondary: #1f2937;
-  --color-background-tertiary: #374151;
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Background Colors - Dark mode */
+    --color-background: #242424;
+    --color-background-secondary: #1a1a1a;
+    --color-background-tertiary: #333333;
 
-  /* Text Colors */
-  --color-text-primary: #f9fafb;
-  --color-text-secondary: #d1d5db;
-  --color-text-tertiary: #9ca3af;
+    /* Text Colors - Dark mode */
+    --color-text-primary: rgba(255, 255, 255, 0.87);
+    --color-text-secondary: #d1d5db;
+    --color-text-tertiary: #9ca3af;
 
-  /* Border Colors */
-  --color-border: #374151;
-  --color-border-secondary: #4b5563;
+    /* Border Colors - Dark mode */
+    --color-border: #333333;
+    --color-border-secondary: #4b5563;
+    --color-border-focus: #646cff;
+  }
 }

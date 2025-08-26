@@ -15,7 +15,7 @@ This document defines the requirements for the initial setup of the personal-ass
 1. WHEN the project is initialized THEN the system SHALL create a structure with `apps/` and `packages/` directories
 2. WHEN Turborepo is configured THEN the system SHALL allow executing commands like `build`, `dev`, `lint`, and `test` in parallel
 3. WHEN new apps or packages are added THEN the system SHALL detect them automatically through workspaces
-4. IF `bun dev` is executed THEN the system SHALL start all applications in development mode simultaneously
+4. IF `pnpm dev` is executed THEN the system SHALL start all applications in development mode simultaneously
 
 ### Requirement 2: Development Tools Configuration
 
@@ -27,8 +27,8 @@ This document defines the requirements for the initial setup of the personal-ass
 2. WHEN configurations are applied THEN the system SHALL validate TypeScript, ESLint, and Prettier across all apps
 3. WHEN ESLint is configured THEN the system SHALL enforce import order, absolute imports, and named exports
 4. IF there are linting errors THEN the system SHALL show specific errors and correction suggestions
-5. WHEN `bun format` is executed THEN the system SHALL format all files according to Prettier rules
-6. WHEN `bun lint` is executed THEN the system SHALL validate all ESLint rules across the monorepo
+5. WHEN `pnpm format` is executed THEN the system SHALL format all files according to Prettier rules
+6. WHEN `pnpm lint` is executed THEN the system SHALL validate all ESLint rules across the monorepo
 
 ### Requirement 3: Main Homepage Application
 
@@ -102,7 +102,7 @@ This document defines the requirements for the initial setup of the personal-ass
 2. WHEN tests are written THEN the system SHALL render complete routes for integration testing
 3. WHEN tests are executed THEN the system SHALL validate functionality from user perspective
 4. IF there are test failures THEN the system SHALL show clear and specific errors
-5. WHEN `bun test` is executed THEN the system SHALL run all tests in the monorepo
+5. WHEN `pnpm test` is executed THEN the system SHALL run all tests in the monorepo
 
 ### Requirement 9: Accessibility and Best Practices
 

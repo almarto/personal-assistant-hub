@@ -10,12 +10,6 @@
   color: #fff;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
 /* Light mode */
 @media (prefers-color-scheme: light) {
   .title {

@@ -1,7 +1,7 @@
+import { Grid, ToolCard } from '@personal-assistant-hub/ui';
 import React from 'react';
 
 import styles from './DashboardGrid.module.css';
-import { ToolCard } from './ToolCard';
 
 const tools = [
   {
@@ -32,18 +32,17 @@ export const DashboardGrid: React.FC = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Your Tools</h2>
-      <div className={styles.grid}>
+      <Grid gap="large" minColumnWidth="300px">
         {tools.map(tool => (
           <ToolCard
             key={tool.path}
             title={tool.title}
             description={tool.description}
             icon={tool.icon}
-            path={tool.path}
             status={tool.status}
           />
         ))}
-      </div>
+      </Grid>
     </div>
   );
 };
