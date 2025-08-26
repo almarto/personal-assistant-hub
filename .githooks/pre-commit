@@ -46,8 +46,12 @@ MODIFIED_FILES=$(git diff --name-only)
 if [ -n "$MODIFIED_FILES" ]; then
   echo "📝 Files were auto-formatted:"
   echo "$MODIFIED_FILES" | sed 's/^/  - /'
-  echo "🔄 Please stage the formatted files and commit again"
-  exit 1
+  echo "🔄 Auto-staging formatted files..."
+  
+  # Add the formatted files to the staging area
+  git add $MODIFIED_FILES
+  
+  echo "✅ Formatted files have been staged automatically"
 fi
 
 # Run tests if they exist
