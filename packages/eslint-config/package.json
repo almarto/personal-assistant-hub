@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "description": "Shared ESLint configuration for Personal Assistant Hub",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  },
   "files": [
     "index.js",
-    "flat.js"
+    "index.mjs"
   ],
   "scripts": {
     "lint": "echo 'No linting needed for config package'",

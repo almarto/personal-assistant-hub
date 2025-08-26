@@ -7,9 +7,9 @@ services:
     container_name: personal-assistant-hub-db-dev
     restart: unless-stopped
     environment:
-      POSTGRES_DB: personal_assistant_hub_dev
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${DB_NAME:-personal_assistant_hub_dev}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     ports:
       - "5432:5432"
     volumes:

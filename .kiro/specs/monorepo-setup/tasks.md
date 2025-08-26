@@ -27,7 +27,7 @@
   - Set up Drizzle migrations and database utilities
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-- [ ] 5. Create NestJS backend API with authentication endpoints
+- [x] 5. Create NestJS backend API with authentication endpoints
   - Set up NestJS application with modular architecture
   - Implement authentication controllers and services using @simplewebauthn
   - Create guards for protected routes and role-based access

@@ -2,21 +2,8 @@
   "name": "@personal-assistant-hub/database",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./schema": {
-      "types": "./dist/schema/index.d.ts",
-      "import": "./dist/schema/index.js"
-    },
-    "./migrations": {
-      "types": "./dist/migrations/index.d.ts",
-      "import": "./dist/migrations/index.js"
-    }
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -27,7 +14,8 @@
     "db:generate": "pnpm exec drizzle-kit generate",
     "db:migrate": "pnpm exec tsx src/scripts/migrate.ts",
     "db:studio": "pnpm exec drizzle-kit studio",
-    "db:push": "pnpm exec drizzle-kit push"
+    "db:push": "pnpm exec drizzle-kit push",
+    "db:seed-admin": "pnpm exec tsx src/scripts/seed-admin.ts"
   },
   "dependencies": {
     "drizzle-orm": "0.44.5",

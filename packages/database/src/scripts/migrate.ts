@@ -1,10 +1,27 @@
 #!/usr/bin/env tsx
 
+import { resolve } from 'path';
+
+import { config } from 'dotenv';
+
+import { DatabaseConnection } from '../connection.js';
 import { createMigrationManager } from '../utils/migrations.js';
+
+// Load environment variables
+config({ path: resolve(process.cwd(), '../../.env') });
 
 async function runMigrations() {
   try {
-    const migrationManager = createMigrationManager();
+    // Create explicit connection with correct database URL
+    const connectionString =
+      process.env.DATABASE_URL ||
+      'postgresql://postgres:postgres@localhost:5432/personal_assistant_hub_dev';
+
+    const connection = DatabaseConnection.createConnection({
+      url: connectionString,
+    });
+
+    const migrationManager = createMigrationManager(connection);
 
     // Test connection first
     const isConnected = await migrationManager.testConnection();

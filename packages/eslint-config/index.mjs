@@ -1,3 +1,7 @@
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
+
 // Flat config for ESLint v9+
 const createFlatConfig = (options = {}) => {
   const {
@@ -20,7 +24,7 @@ const createFlatConfig = (options = {}) => {
   configs.push({
     files,
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      parser: tsparser,
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -61,8 +65,8 @@ const createFlatConfig = (options = {}) => {
       },
     },
     plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-      'import': require('eslint-plugin-import'),
+      '@typescript-eslint': tseslint,
+      'import': importPlugin,
     },
     rules: {
       // Basic TypeScript rules
@@ -99,5 +103,4 @@ const createFlatConfig = (options = {}) => {
   return configs;
 };
 
-// Export flat config
-module.exports = { createFlatConfig };
+export { createFlatConfig };
