@@ -1,0 +1,47 @@
+{
+  "name": "@personal-assistant-hub/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js"
+    },
+    "./migrations": {
+      "types": "./dist/migrations/index.d.ts",
+      "import": "./dist/migrations/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "db:setup": "pnpm exec tsx src/scripts/setup-db.ts",
+    "db:setup:prod": "pnpm exec tsx src/scripts/setup-prod.ts",
+    "db:generate": "pnpm exec drizzle-kit generate",
+    "db:migrate": "pnpm exec tsx src/scripts/migrate.ts",
+    "db:studio": "pnpm exec drizzle-kit studio",
+    "db:push": "pnpm exec drizzle-kit push"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.44.5",
+    "postgres": "3.4.7",
+    "dotenv": "16.4.5"
+  },
+  "devDependencies": {
+    "@personal-assistant-hub/eslint-config": "workspace:*",
+    "@personal-assistant-hub/typescript-config": "workspace:*",
+    "@types/node": "24.3.0",
+    "drizzle-kit": "0.31.4",
+    "eslint": "9.34.0",
+    "tsup": "8.5.0",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2"
+  }
+}

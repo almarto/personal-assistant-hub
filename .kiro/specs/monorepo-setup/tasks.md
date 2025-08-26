@@ -21,7 +21,7 @@
   - Migrate homepage components to use the new UI system
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-- [ ] 4. Set up database infrastructure with Drizzle ORM
+- [x] 4. Set up database infrastructure with Drizzle ORM
   - Create database package with PostgreSQL connection setup
   - Implement core schema for users, passkey credentials, invitations, and sessions
   - Set up Drizzle migrations and database utilities

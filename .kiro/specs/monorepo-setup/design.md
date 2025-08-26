@@ -247,7 +247,7 @@ export interface User {
 
 ```sql
 -- Users table
-CREATE TABLE bt_users (
+CREATE TABLE hub_users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email VARCHAR(255) UNIQUE NOT NULL,
   role VARCHAR(50) NOT NULL DEFAULT 'user',
@@ -257,9 +257,9 @@ CREATE TABLE bt_users (
 );
 
 -- Passkey credentials
-CREATE TABLE bt_passkey_credentials (
+CREATE TABLE hub_passkey_credentials (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES bt_users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES hub_users(id) ON DELETE CASCADE,
   credential_id TEXT UNIQUE NOT NULL,
   public_key TEXT NOT NULL,
   counter BIGINT DEFAULT 0,
@@ -267,20 +267,20 @@ CREATE TABLE bt_passkey_credentials (
 );
 
 -- Invitation tokens
-CREATE TABLE bt_invitation_tokens (
+CREATE TABLE hub_invitation_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   token VARCHAR(255) UNIQUE NOT NULL,
   email VARCHAR(255) NOT NULL,
-  created_by UUID REFERENCES bt_users(id),
+  created_by UUID REFERENCES hub_users(id),
   expires_at TIMESTAMP NOT NULL,
   used_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- User sessions
-CREATE TABLE bt_user_sessions (
+CREATE TABLE hub_user_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES bt_users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES hub_users(id) ON DELETE CASCADE,
   session_token VARCHAR(255) UNIQUE NOT NULL,
   expires_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
@@ -300,7 +300,7 @@ import {
   bigint,
 } from 'drizzle-orm/pg-core';
 
-export const users = pgTable('bt_users', {
+export const users = pgTable('hub_users', {
   id: uuid('id').primaryKey().defaultRandom(),
   email: varchar('email', { length: 255 }).unique().notNull(),
   role: varchar('role', { length: 50 }).notNull().default('user'),
@@ -309,7 +309,7 @@ export const users = pgTable('bt_users', {
   lastLoginAt: timestamp('last_login_at'),
 });
 
-export const passkeyCredentials = pgTable('bt_passkey_credentials', {
+export const passkeyCredentials = pgTable('hub_passkey_credentials', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
   credentialId: text('credential_id').unique().notNull(),

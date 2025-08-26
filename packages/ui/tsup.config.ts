@@ -9,7 +9,7 @@ export default defineConfig({
   esbuildOptions(options) {
     options.loader = {
       ...options.loader,
-      '.css': 'text',
+      '.css': 'css',
     };
   },
   onSuccess: 'cp -r src/tokens dist/',

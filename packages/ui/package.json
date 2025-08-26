@@ -1,15 +1,16 @@
 {
   "name": "@personal-assistant-hub/ui",
   "version": "0.1.0",
+  "type": "module",
   "description": "Shared UI components and design system",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./dist/index.css": "./dist/index.css",
     "./tokens/colors.css": "./dist/tokens/colors.css",
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*",
+    "@types/node": "24.3.0",
     "@storybook/addon-essentials": "next",
     "@storybook/addon-interactions": "next",
     "@storybook/addon-links": "9.1.3",

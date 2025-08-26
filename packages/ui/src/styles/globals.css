@@ -25,6 +25,7 @@ body {
   font-family: var(--font-family-sans);
   background-color: var(--color-background);
   color: var(--color-text-primary);
+  color-scheme: light dark;
 }
 
 img,

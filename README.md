@@ -71,8 +71,9 @@ personal-assistant-hub/
 ### Prerequisites
 
 - **Node.js** >= 22
-- **Bun** >= 1.2.18
-- **PostgreSQL** >= 14
+- **pnpm** >= 9.0.0
+- **Docker** & **Docker Compose** (recommended)
+- **PostgreSQL** >= 14 (if not using Docker)
 
 ### Installation
 
@@ -83,29 +84,39 @@ personal-assistant-hub/
    cd personal-assistant-hub
    ```
 
-2. **Install dependencies**
+2. **Quick setup with Docker (Recommended)**
 
    ```bash
-   bun install
+   # Setup complete development environment
+   ./scripts/setup-development.sh
    ```
 
-3. **Set up environment variables**
+   This will:
+   - Install dependencies with pnpm
+   - Start PostgreSQL with Docker
+   - Run database migrations
+   - Set up environment variables
+
+3. **Manual setup**
 
    ```bash
+   # Install dependencies
+   pnpm install
+
+   # Copy environment variables
    cp .env.example .env
    # Edit .env with your configuration
+
+   # Start database (Docker)
+   pnpm docker:dev
+
+   # Run migrations
+   pnpm db:migrate
    ```
 
-4. **Set up the database**
-
+4. **Start development servers**
    ```bash
-   # Create database and run migrations
-   bun db:setup
-   ```
-
-5. **Start development servers**
-   ```bash
-   bun dev
+   pnpm dev
    ```
 
 This will start all applications in development mode:
@@ -113,21 +124,86 @@ This will start all applications in development mode:
 - Homepage: `http://localhost:5173`
 - API: `http://localhost:3000`
 - Storybook: `http://localhost:6006`
+- Database Admin: `http://localhost:8080` (Adminer)
+
+## 🐳 Docker Support
+
+The project includes comprehensive Docker support for both development and production:
+
+### Development with Docker
+
+```bash
+# Start development database
+pnpm docker:dev
+
+# View logs
+pnpm docker:dev:logs
+
+# Stop services
+pnpm docker:dev:down
+```
+
+### Production Deployment
+
+```bash
+# Build and start all services
+pnpm docker:build
+pnpm docker:prod
+
+# Services available:
+# - Homepage: http://localhost:3000
+# - Storybook: http://localhost:6006
+# - PostgreSQL: localhost:5432
+```
+
+### Docker Services
+
+- **PostgreSQL**: Database with persistent volumes
+- **Homepage**: Production-ready React application
+- **Storybook**: UI documentation served with Nginx
+- **Adminer**: Database administration interface (dev only)
+
+See [docker/README.md](docker/README.md) for detailed Docker configuration.
 
 ## 📜 Available Scripts
 
-| Command                | Description                        |
-| ---------------------- | ---------------------------------- |
-| `bun dev`              | Start all apps in development mode |
-| `bun build`            | Build all apps for production      |
-| `bun lint`             | Run ESLint across all packages     |
-| `bun format`           | Format code with Prettier          |
-| `bun test`             | Run all tests                      |
-| `bun check-types`      | Type-check all TypeScript code     |
-| `bun setup-hooks`      | Install Git hooks manually         |
-| `bun changeset`        | Create a new changeset             |
-| `bun version-packages` | Version packages using changesets  |
-| `bun release`          | Build and publish packages         |
+### Development
+
+| Command            | Description                        |
+| ------------------ | ---------------------------------- |
+| `pnpm dev`         | Start all apps in development mode |
+| `pnpm build`       | Build all apps for production      |
+| `pnpm lint`        | Run ESLint across all packages     |
+| `pnpm format`      | Format code with Prettier          |
+| `pnpm test`        | Run all tests                      |
+| `pnpm check-types` | Type-check all TypeScript code     |
+
+### Docker
+
+| Command                | Description                |
+| ---------------------- | -------------------------- |
+| `pnpm docker:dev`      | Start development database |
+| `pnpm docker:prod`     | Start production services  |
+| `pnpm docker:build`    | Build Docker images        |
+| `pnpm docker:dev:down` | Stop development services  |
+
+### Database
+
+| Command            | Description                                   |
+| ------------------ | --------------------------------------------- |
+| `pnpm db:setup`    | Create database + run migrations (first time) |
+| `pnpm db:generate` | Generate migrations from schema changes       |
+| `pnpm db:migrate`  | Run pending migrations only                   |
+| `pnpm db:push`     | Push schema changes directly (dev only)       |
+| `pnpm db:studio`   | Open Drizzle Studio                           |
+
+### Release Management
+
+| Command                 | Description                       |
+| ----------------------- | --------------------------------- |
+| `pnpm changeset`        | Create a new changeset            |
+| `pnpm version-packages` | Version packages using changesets |
+| `pnpm release`          | Build and publish packages        |
 
 ## 🔧 Git Hooks
 
@@ -181,8 +257,37 @@ git commit --no-verify
 ### Database Changes
 
 1. Modify schemas in `packages/database/src/schema`
-2. Generate migrations: `bun db:generate`
-3. Apply migrations: `bun db:migrate`
+2. Generate migrations: `pnpm db:generate`
+3. Apply migrations: `pnpm db:migrate`
+
+### Database Setup Workflow
+
+**First time setup (Development):**
+
+```bash
+# Start PostgreSQL with Docker
+docker-compose -f docker-compose.dev.yml up -d postgres
+
+# Setup database + run migrations (one command does it all)
+pnpm --filter @personal-assistant-hub/database run db:setup
+
+# Start Drizzle Studio
+pnpm --filter @personal-assistant-hub/database run db:studio
+```
+
+**Production deployment:**
+
+```bash
+# Assumes database already exists (created by infrastructure/deployment)
+pnpm --filter @personal-assistant-hub/database run db:setup:prod
+```
+
+**Typical development workflow:**
+
+1. **First time:** `db:setup`
+2. **Schema changes:** `db:generate` → `db:migrate`
+3. **Production:** Only `db:migrate` (database already exists)
+4. **Quick prototyping:** `db:push` (development only)
 
 ## 🧪 Testing
 
