@@ -27,18 +27,19 @@
   - Set up Drizzle migrations and database utilities
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-- [ ] 5. Implement authentication package with passkey support
-  - Create auth package with WebAuthn/passkey implementation using @simplewebauthn
-  - Implement user registration with invitation token validation
-  - Create Zustand store for authentication state management
-  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
-
-- [ ] 6. Create NestJS backend API with authentication endpoints
+- [ ] 5. Create NestJS backend API with authentication endpoints
   - Set up NestJS application with modular architecture
-  - Implement authentication controllers and services
+  - Implement authentication controllers and services using @simplewebauthn
   - Create guards for protected routes and role-based access
   - Implement invitation management endpoints for admin users
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
+
+- [ ] 6. Implement authentication package with passkey support
+  - Create auth package with WebAuthn/passkey implementation for frontend
+  - Implement user registration with invitation token validation
+  - Create Zustand store for authentication state management
+  - Connect with backend authentication endpoints
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
 - [ ] 7. Implement internationalization (i18n) package
   - Set up react-i18next configuration with language detection
