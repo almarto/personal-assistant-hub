@@ -1,6 +1,6 @@
 {
     "kiroAgent.configureMCP": "Disabled",
-    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.preferences.includePackageJsonAutoImports": "off",
     "typescript.suggest.autoImports": true,
     "typescript.validate.enable": true,
     "typescript.format.enable": true,
@@ -10,13 +10,30 @@
     "typescript.inlayHints.variableTypes.enabled": true,
     "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit",
-        "source.fixAll.eslint": "explicit"
+        "source.organizeImports": "never",
+        "source.fixAll.eslint": "never"
     },
     "eslint.validate": [
         "javascript",
         "javascriptreact",
         "typescript",
         "typescriptreact"
-    ]
+    ],
+    "eslint.workingDirectories": [
+        "apps/api",
+        "apps/homepage",
+        "packages/database",
+        "packages/ui"
+    ],
+    "eslint.useESLintClass": true,
+    "eslint.experimental.useFlatConfig": true,
+    "eslint.options": {
+        "overrideConfigFile": "eslint.config.js"
+    },
+    "eslint.format.enable": true,
+    "eslint.codeAction.showDocumentation": {
+        "enable": false
+    },
+    "eslint.quiet": false,
+    "eslint.debug": true
 }

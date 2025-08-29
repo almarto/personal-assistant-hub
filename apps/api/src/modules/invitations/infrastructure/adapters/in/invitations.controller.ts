@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
@@ -18,9 +19,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Roles } from '../auth/decorators/roles.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '@/modules/auth/infrastructure/adapters/in/decorators/roles.decorator';
+import { JwtAuthGuard } from '@/modules/auth/infrastructure/adapters/in/guards/jwt-auth.guard';
+import { RolesGuard } from '@/modules/auth/infrastructure/adapters/in/guards/roles.guard';
+import {
+  INVITATION_USE_CASE,
+  InvitationUseCase,
+} from '@/modules/invitations/domain/ports/in/invitation-use-case.port';
 
 import {
   CreateInvitationDto,
@@ -28,7 +33,6 @@ import {
   InvitationResponseDto,
   InvitationsListResponseDto,
 } from './dto/invitations.dto';
-import { InvitationsService } from './invitations.service';
 
 @ApiTags('Invitations')
 @Controller('invitations')
@@ -36,7 +40,10 @@ import { InvitationsService } from './invitations.service';
 @Roles('admin')
 @ApiBearerAuth()
 export class InvitationsController {
-  constructor(private readonly invitationsService: InvitationsService) {}
+  constructor(
+    @Inject(INVITATION_USE_CASE)
+    private readonly invitationUseCase: InvitationUseCase
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create new invitation (Admin only)' })
@@ -53,10 +60,15 @@ export class InvitationsController {
     @Body() createInvitationDto: CreateInvitationDto,
     @Request() req: any
   ) {
-    return await this.invitationsService.create(
-      createInvitationDto,
-      req.user.id
-    );
+    try {
+      return await this.invitationUseCase.create(
+        createInvitationDto.email,
+        req.user.id,
+        createInvitationDto.expirationHours
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get()
@@ -67,7 +79,11 @@ export class InvitationsController {
     type: InvitationsListResponseDto,
   })
   async findAll() {
-    return await this.invitationsService.findAll();
+    try {
+      return await this.invitationUseCase.findAll();
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get('validate')
@@ -79,7 +95,11 @@ export class InvitationsController {
     @Query('token') token: string,
     @Query('email') email: string
   ) {
-    return await this.invitationsService.validateToken(token, email);
+    try {
+      return await this.invitationUseCase.validateToken(token, email);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get(':id')
@@ -91,7 +111,11 @@ export class InvitationsController {
   })
   @ApiResponse({ status: 404, description: 'Invitation not found' })
   async findOne(@Param('id') id: string) {
-    return await this.invitationsService.findOne(id);
+    try {
+      return await this.invitationUseCase.findOne(id);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Put(':id/resend')
@@ -107,7 +131,11 @@ export class InvitationsController {
     @Param('id') id: string,
     @Body() body: { expirationHours?: number } = {}
   ) {
-    return await this.invitationsService.resend(id, body.expirationHours);
+    try {
+      return await this.invitationUseCase.resend(id, body.expirationHours);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Delete(':id')
@@ -116,6 +144,10 @@ export class InvitationsController {
   @ApiResponse({ status: 400, description: 'Cannot revoke used invitation' })
   @ApiResponse({ status: 404, description: 'Invitation not found' })
   async revoke(@Param('id') id: string) {
-    return await this.invitationsService.revoke(id);
+    try {
+      return await this.invitationUseCase.revoke(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Inject,
   Post,
   Request,
   UseGuards,
@@ -14,7 +15,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AuthService } from './auth.service';
+import {
+  AUTH_USE_CASE,
+  AuthUseCase,
+} from '@/modules/auth/domain/ports/in/auth-use-case.port';
+
 import {
   AuthResponseDto,
   LoginCompleteDto,
@@ -28,7 +33,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(AUTH_USE_CASE) private readonly authUseCase: AuthUseCase
+  ) {}
 
   @Post('register/initiate')
   @HttpCode(HttpStatus.OK)
@@ -40,7 +47,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 400, description: 'Invalid invitation token' })
   async initiateRegistration(@Body() dto: RegisterInitiateDto) {
-    return await this.authService.initiateRegistration(
+    return await this.authUseCase.initiateRegistration(
       dto.email,
       dto.invitationToken
     );
@@ -58,7 +65,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 400, description: 'Registration verification failed' })
   async completeRegistration(@Body() dto: RegisterCompleteDto) {
-    return await this.authService.completeRegistration(
+    return await this.authUseCase.completeRegistration(
       dto.email,
       dto.invitationToken,
       dto.credential,
@@ -76,7 +83,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'User not found' })
   async initiateLogin(@Body() dto: LoginInitiateDto) {
-    return await this.authService.initiateLogin(dto.email);
+    return await this.authUseCase.initiateLogin(dto.email);
   }
 
   @Post('login/complete')
@@ -92,7 +99,7 @@ export class AuthController {
     description: 'Authentication verification failed',
   })
   async completeLogin(@Body() dto: LoginCompleteDto) {
-    return await this.authService.completeLogin(dto.email, dto.credential);
+    return await this.authUseCase.completeLogin(dto.email, dto.credential);
   }
 
   @Post('logout')
@@ -100,22 +107,11 @@ export class AuthController {
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Logout user' })
-  @ApiResponse({ status: 200, description: 'Logged out successfully' })
+  @ApiResponse({ status: 200, description: 'User logged out successfully' })
   async logout(@Request() req: any) {
-    const sessionToken = req.headers.authorization?.replace('Bearer ', '');
-    return await this.authService.logout(req.user.id, sessionToken);
-  }
-
-  @Post('me')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Get current user information' })
-  @ApiResponse({
-    status: 200,
-    description: 'User information retrieved successfully',
-  })
-  async getCurrentUser(@Request() req: any) {
-    return { user: req.user };
+    // Extract session ID from JWT token or request object
+    const sessionId = req.user.sessionId || 'unknown';
+    await this.authUseCase.logout(sessionId);
+    return { message: 'Logged out successfully' };
   }
 }

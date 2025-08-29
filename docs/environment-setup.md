@@ -1,62 +1,62 @@
-# Configuración de Variables de Entorno
+# Environment Variables Configuration
 
-Este proyecto utiliza diferentes archivos de configuración para desarrollo y producción.
+This project uses different configuration files for development and production.
 
-## Archivos de Configuración
+## Configuration Files
 
-### `.env` (Producción)
+### `.env` (Production)
 
-Contiene las variables para el entorno de producción:
+Contains variables for the production environment:
 
 - `POSTGRES_DB=personal_assistant_hub`
 - `POSTGRES_USER=postgres`
 - `POSTGRES_PASSWORD=postgres`
 
-### `.env.development` (Desarrollo)
+### `.env.development` (Development)
 
-Contiene las variables para el entorno de desarrollo:
+Contains variables for the development environment:
 
 - `DB_NAME=personal_assistant_hub_dev`
 - `DB_USER=postgres`
 - `DB_PASSWORD=postgres`
 - `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/personal_assistant_hub_dev`
 
-## Uso con Docker Compose
+## Usage with Docker Compose
 
-### Desarrollo
+### Development
 
 ```bash
 pnpm docker:dev
 ```
 
-Utiliza `docker-compose.dev.yml` con variables de `.env.development`
+Uses `docker-compose.dev.yml` with variables from `.env.development`
 
-### Producción
+### Production
 
 ```bash
 pnpm docker:prod
 ```
 
-Utiliza `docker-compose.yml` con variables de `.env`
+Uses `docker-compose.yml` with variables from `.env`
 
-## Scripts Disponibles
+## Available Scripts
 
-- `pnpm docker:dev` - Inicia servicios de desarrollo
-- `pnpm docker:dev:down` - Detiene servicios de desarrollo
-- `pnpm docker:dev:logs` - Muestra logs de desarrollo
-- `pnpm docker:prod` - Inicia servicios de producción
-- `pnpm docker:prod:down` - Detiene servicios de producción
-- `pnpm docker:prod:logs` - Muestra logs de producción
+- `pnpm docker:dev` - Start development services
+- `pnpm docker:dev:down` - Stop development services
+- `pnpm docker:dev:logs` - Show development logs
+- `pnpm docker:prod` - Start production services
+- `pnpm docker:prod:down` - Stop production services
+- `pnpm docker:prod:logs` - Show production logs
 
-## Servicios Incluidos
+## Included Services
 
-### Desarrollo
+### Development
 
-- PostgreSQL (puerto 5432)
-- Adminer (puerto 8080) - Interfaz web para gestionar la base de datos
+- PostgreSQL (port 5432)
+- Adminer (port 8080) - Web interface for database management
 
-### Producción
+### Production
 
-- PostgreSQL (puerto 5432)
-- Homepage App (puerto 3000)
-- Storybook (puerto 6006)
+- PostgreSQL (port 5432)
+- Homepage App (port 3000)
+- Storybook (port 6006)

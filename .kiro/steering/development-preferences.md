@@ -22,3 +22,8 @@
 - **Always create or update Storybook stories** when creating new components or modifying existing ones in `packages/ui`
 - Stories should demonstrate the usage and different states of the component
 - This ensures proper documentation and testing of UI components
+
+## API
+
+- **Use Hexagonal Architecture** for the API
+- This ensures a clear separation of concerns and makes the codebase more maintainable

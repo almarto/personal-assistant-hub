@@ -64,6 +64,13 @@ const createFlatConfig = (options = {}) => {
       '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
       'import': require('eslint-plugin-import'),
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
+    },
     rules: {
       // Basic TypeScript rules
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
