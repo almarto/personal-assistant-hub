@@ -13,7 +13,7 @@ export default defineConfig({
   dbCredentials: {
     url:
       process.env.DATABASE_URL ||
-      'postgresql://postgres:postgres@localhost:5432/personal_assistant_hub',
+      'postgresql://postgres:postgres@localhost:5432/personal_assistant_hub_dev',
   },
   verbose: true,
   strict: true,

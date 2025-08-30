@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -11,12 +12,27 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { User } from '../domain/model/user.model';
 import { AuthUseCase } from '../domain/ports/in/auth-use-case.port';
-import { InvitationRepository } from '../domain/ports/out/invitation-repository.port';
-import { JwtService } from '../domain/ports/out/jwt-service.port';
-import { PasskeyCredentialRepository } from '../domain/ports/out/passkey-credential-repository.port';
-import { SessionRepository } from '../domain/ports/out/session-repository.port';
-import { UserRepository } from '../domain/ports/out/user-repository.port';
-import { WebAuthnService } from '../domain/ports/out/webauthn-service.port';
+import {
+  InvitationRepository,
+  INVITATION_REPOSITORY,
+} from '../domain/ports/out/invitation-repository.port';
+import { JwtService, JWT_SERVICE } from '../domain/ports/out/jwt-service.port';
+import {
+  PasskeyCredentialRepository,
+  PASSKEY_CREDENTIAL_REPOSITORY,
+} from '../domain/ports/out/passkey-credential-repository.port';
+import {
+  SessionRepository,
+  SESSION_REPOSITORY,
+} from '../domain/ports/out/session-repository.port';
+import {
+  UserRepository,
+  USER_REPOSITORY,
+} from '../domain/ports/out/user-repository.port';
+import {
+  WebAuthnService,
+  WEBAUTHN_SERVICE,
+} from '../domain/ports/out/webauthn-service.port';
 
 @Injectable()
 export class AuthService implements AuthUseCase {
@@ -26,11 +42,17 @@ export class AuthService implements AuthUseCase {
   >();
 
   constructor(
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(PASSKEY_CREDENTIAL_REPOSITORY)
     private readonly passkeyCredentialRepository: PasskeyCredentialRepository,
+    @Inject(INVITATION_REPOSITORY)
     private readonly invitationRepository: InvitationRepository,
+    @Inject(SESSION_REPOSITORY)
     private readonly sessionRepository: SessionRepository,
+    @Inject(JWT_SERVICE)
     private readonly jwtService: JwtService,
+    @Inject(WEBAUTHN_SERVICE)
     private readonly webAuthnService: WebAuthnService
   ) {}
 

@@ -40,3 +40,5 @@ export type UserRole = 'admin' | 'user';
 export type DatabaseTransaction = Parameters<
   Parameters<typeof import('./connection.js').db.transaction>[0]
 >[0];
+
+export type { Database } from './types/database.js';
