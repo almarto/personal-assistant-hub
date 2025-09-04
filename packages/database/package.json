@@ -21,12 +21,12 @@
   "dependencies": {
     "drizzle-orm": "0.44.5",
     "postgres": "3.4.7",
-    "dotenv": "16.4.5"
+    "dotenv": "17.2.2"
   },
   "devDependencies": {
     "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*",
-    "@types/node": "24.3.0",
+    "@types/node": "24.3.1",
     "drizzle-kit": "0.31.4",
     "eslint": "9.34.0",
     "tsup": "8.5.0",
