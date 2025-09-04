@@ -19,7 +19,9 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["NODE_ENV"],
+      "outputs": []
     },
     "storybook": {
       "cache": false,
