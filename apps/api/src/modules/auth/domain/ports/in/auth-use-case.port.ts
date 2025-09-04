@@ -1,6 +1,8 @@
 import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
+  PublicKeyCredentialCreationOptionsJSON,
+  PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
 
 import { User } from '../../model/user.model';
@@ -17,7 +19,7 @@ export interface AuthUseCase {
   initiateRegistration(
     email: string,
     invitationToken: string
-  ): Promise<{ options: any }>;
+  ): Promise<{ options: PublicKeyCredentialCreationOptionsJSON }>;
 
   /**
    * Completes user registration process
@@ -32,7 +34,9 @@ export interface AuthUseCase {
   /**
    * Initiates user login process
    */
-  initiateLogin(email: string): Promise<{ options: any }>;
+  initiateLogin(
+    email: string
+  ): Promise<{ options: PublicKeyCredentialRequestOptionsJSON }>;
 
   /**
    * Completes user login process

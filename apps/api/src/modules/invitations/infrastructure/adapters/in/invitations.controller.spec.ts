@@ -71,7 +71,7 @@ describe('InvitationsController', () => {
       invitationUseCase.create.mockResolvedValue(expectedResult);
 
       // Act
-      const result = await controller.create(createDto, mockRequest);
+      const result = await controller.create(createDto, mockRequest as any);
 
       // Assert
       expect(invitationUseCase.create).toHaveBeenCalledWith(
@@ -96,7 +96,7 @@ describe('InvitationsController', () => {
       invitationUseCase.create.mockResolvedValue(expectedResult);
 
       // Act
-      const result = await controller.create(createDto, mockRequest);
+      const result = await controller.create(createDto, mockRequest as any);
 
       // Assert
       expect(invitationUseCase.create).toHaveBeenCalledWith(
@@ -116,9 +116,9 @@ describe('InvitationsController', () => {
       invitationUseCase.create.mockRejectedValue(error);
 
       // Act & Assert
-      await expect(controller.create(createDto, mockRequest)).rejects.toThrow(
-        error
-      );
+      await expect(
+        controller.create(createDto, mockRequest as any)
+      ).rejects.toThrow(error);
     });
   });
 

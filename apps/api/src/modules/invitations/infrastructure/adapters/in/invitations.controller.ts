@@ -18,6 +18,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
+
+interface AuthenticatedRequest extends ExpressRequest {
+  user: {
+    id: string;
+    [key: string]: unknown;
+  };
+}
 
 import { Roles } from '@/modules/auth/infrastructure/adapters/in/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/modules/auth/infrastructure/adapters/in/guards/jwt-auth.guard';
@@ -58,7 +66,7 @@ export class InvitationsController {
   })
   async create(
     @Body() createInvitationDto: CreateInvitationDto,
-    @Request() req: any
+    @Request() req: AuthenticatedRequest
   ) {
     try {
       return await this.invitationUseCase.create(

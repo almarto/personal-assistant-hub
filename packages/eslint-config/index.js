@@ -103,6 +103,14 @@ const createFlatConfig = (options = {}) => {
     },
   });
 
+  // Add test files configuration to disable no-explicit-any
+  configs.push({
+    files: ['**/*.spec.ts', '**/*.test.ts', '**/test-setup.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  });
+
   return configs;
 };
 

@@ -14,6 +14,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 
 import {
   AUTH_USE_CASE,
@@ -108,7 +109,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 200, description: 'User logged out successfully' })
-  async logout(@Request() req: any) {
+  async logout(
+    @Request() req: ExpressRequest & { user: { sessionId?: string } }
+  ) {
     // Extract session ID from JWT token or request object
     const sessionId = req.user.sessionId || 'unknown';
     await this.authUseCase.logout(sessionId);

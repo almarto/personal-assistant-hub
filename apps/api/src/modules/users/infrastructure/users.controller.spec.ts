@@ -10,6 +10,13 @@ import {
 import { UpdateUserDto } from './adapters/in/dto/users.dto';
 import { UsersController } from './adapters/in/users.controller';
 
+interface AuthenticatedRequest {
+  user: {
+    id: string;
+    role: string;
+  };
+}
+
 describe('UsersController', () => {
   let controller: UsersController;
   let userUseCase: jest.Mocked<UserUseCase>;
@@ -151,7 +158,7 @@ describe('UsersController', () => {
       const result = await controller.update(
         'user-123',
         updateUserDto,
-        mockRequest as any
+        mockRequest as AuthenticatedRequest
       );
 
       // Assert
@@ -192,7 +199,7 @@ describe('UsersController', () => {
       const result = await controller.update(
         'user-123',
         updateUserDto,
-        mockRequest as any
+        mockRequest as AuthenticatedRequest
       );
 
       // Assert
@@ -225,7 +232,11 @@ describe('UsersController', () => {
 
       // Act & Assert
       await expect(
-        controller.update('user-123', updateUserDto, mockRequest as any)
+        controller.update(
+          'user-123',
+          updateUserDto,
+          mockRequest as AuthenticatedRequest
+        )
       ).rejects.toThrow(forbiddenError);
       expect(userUseCase.update).toHaveBeenCalledWith(
         'user-123',
@@ -247,7 +258,11 @@ describe('UsersController', () => {
 
       // Act & Assert
       await expect(
-        controller.update('user-123', updateUserDto, mockRequest as any)
+        controller.update(
+          'user-123',
+          updateUserDto,
+          mockRequest as AuthenticatedRequest
+        )
       ).rejects.toThrow(notFoundError);
       expect(userUseCase.update).toHaveBeenCalledWith(
         'user-123',
@@ -265,7 +280,10 @@ describe('UsersController', () => {
       userUseCase.remove.mockResolvedValue(expectedResult);
 
       // Act
-      const result = await controller.remove('user-123', mockRequest as any);
+      const result = await controller.remove(
+        'user-123',
+        mockRequest as AuthenticatedRequest
+      );
 
       // Assert
       expect(result).toEqual(expectedResult);
@@ -285,7 +303,7 @@ describe('UsersController', () => {
 
       // Act & Assert
       await expect(
-        controller.remove('user-123', mockRequest as any)
+        controller.remove('user-123', mockRequest as AuthenticatedRequest)
       ).rejects.toThrow(forbiddenError);
       expect(userUseCase.remove).toHaveBeenCalledWith(
         'user-123',
@@ -303,7 +321,7 @@ describe('UsersController', () => {
 
       // Act & Assert
       await expect(
-        controller.remove('user-123', mockRequest as any)
+        controller.remove('user-123', mockRequest as AuthenticatedRequest)
       ).rejects.toThrow(notFoundError);
       expect(userUseCase.remove).toHaveBeenCalledWith(
         'user-123',

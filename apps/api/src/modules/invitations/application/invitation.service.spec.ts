@@ -14,8 +14,11 @@ import {
 import { InvitationService } from './invitation.service';
 
 // Mock uuid
-jest.mock('uuid');
-const mockUuidv4 = uuidv4 as jest.MockedFunction<typeof uuidv4>;
+jest.mock('uuid', () => ({
+  v4: jest.fn(),
+}));
+
+const mockUuidv4 = jest.mocked(uuidv4);
 
 describe('InvitationService', () => {
   let service: InvitationService;
@@ -23,10 +26,10 @@ describe('InvitationService', () => {
   let configService: jest.Mocked<ConfigService>;
 
   const mockInvitation = {
-    id: 'invitation-123',
-    token: 'token-123',
+    id: 'invitation-id-123',
+    token: 'generated-token-123',
     email: 'test@example.com',
-    createdBy: 'creator-123',
+    createdBy: 'creator-id-123',
     expiresAt: new Date('2024-12-31T23:59:59Z'),
     createdAt: new Date('2024-01-01T00:00:00Z'),
     usedAt: null,
@@ -37,7 +40,7 @@ describe('InvitationService', () => {
     markAsUsed: jest.fn(),
     extendExpiration: jest.fn(),
     revoke: jest.fn(),
-  } as any;
+  } as unknown as Invitation;
 
   beforeEach(async () => {
     const mockInvitationRepository = {
@@ -111,7 +114,7 @@ describe('InvitationService', () => {
       expect(result).toEqual({
         invitationLink:
           'http://localhost:5173/register?token=generated-token-123&email=test%40example.com',
-        token: 'token-123',
+        token: 'generated-token-123',
         expiresAt: mockInvitation.expiresAt,
       });
     });
@@ -228,7 +231,7 @@ describe('InvitationService', () => {
         ...mockInvitation,
         isExpired: jest.fn().mockReturnValue(false),
         isUsed: jest.fn().mockReturnValue(false),
-      };
+      } as unknown as Invitation;
       invitationRepository.findById.mockResolvedValue(
         mockInvitationWithMethods
       );

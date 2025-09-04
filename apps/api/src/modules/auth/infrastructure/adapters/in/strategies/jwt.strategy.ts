@@ -3,6 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
+interface JwtPayload {
+  sub: string;
+  email?: string;
+  sessionId?: string;
+  iat?: number;
+  exp?: number;
+}
+
 import {
   AUTH_USE_CASE,
   AuthUseCase,
@@ -21,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
+  async validate(payload: JwtPayload) {
     const user = await this.authUseCase.validateUser(payload.sub);
     if (!user) {
       throw new UnauthorizedException();

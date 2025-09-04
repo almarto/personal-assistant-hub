@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
+  PublicKeyCredentialCreationOptionsJSON,
+  PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
 import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 
@@ -93,7 +95,9 @@ export class WebAuthnOptionsDto {
     type: 'object',
     additionalProperties: true,
   })
-  options: any;
+  options:
+    | PublicKeyCredentialCreationOptionsJSON
+    | PublicKeyCredentialRequestOptionsJSON;
 }
 
 export class UserDto {
