@@ -43,6 +43,30 @@ services:
       - ./packages:/app/packages:ro
       - /app/node_modules
 
+  # API Application
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    container_name: personal-assistant-hub-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - FRONTEND_URL=http://homepage:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - ./apps/api:/app/apps/api:ro
+      - ./packages:/app/packages:ro
+      - /app/node_modules
+
   # Storybook UI Documentation
   storybook:
     build:
