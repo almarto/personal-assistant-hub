@@ -34,7 +34,7 @@
   - Implement invitation management endpoints for admin users
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 6. Implement authentication package with passkey support
+- [x] 6. Implement authentication package with passkey support
   - Create auth package with WebAuthn/passkey implementation for frontend
   - Implement user registration with invitation token validation
   - Create Zustand store for authentication state management
