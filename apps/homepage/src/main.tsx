@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import '@personal-assistant-hub/ui/dist/index.css';
+import '@personal-assistant-hub/i18n';
 
 import { App } from './App';
 import './index.css';

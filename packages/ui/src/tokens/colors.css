@@ -1,6 +1,6 @@
-/* Design Tokens - Colors */
+/* Design Tokens - Colors - Dark Mode Only */
 :root {
-  /* Primary Colors - Updated to match homepage theme */
+  /* Primary Colors */
   --color-primary-50: #f0f4ff;
   --color-primary-100: #e0e9ff;
   --color-primary-200: #c7d6ff;
@@ -40,38 +40,19 @@
   --color-error-600: #dc2626;
   --color-error-700: #b91c1c;
 
-  /* Background Colors - Light mode */
-  --color-background: #ffffff;
-  --color-background-secondary: #f9fafb;
-  --color-background-tertiary: #f3f4f6;
+  /* Background Colors - Dark mode */
+  --color-background: #242424;
+  --color-background-secondary: #1a1a1a;
+  --color-background-tertiary: #333333;
 
-  /* Text Colors - Light mode */
-  --color-text-primary: #213547;
-  --color-text-secondary: #6b7280;
+  /* Text Colors - Dark mode */
+  --color-text-primary: rgba(255, 255, 255, 0.87);
+  --color-text-secondary: #d1d5db;
   --color-text-tertiary: #9ca3af;
 
-  /* Border Colors - Light mode */
-  --color-border: #e5e7eb;
-  --color-border-secondary: #d1d5db;
+  /* Border Colors - Dark mode */
+  --color-border: #333333;
+  --color-border-secondary: #4b5563;
   --color-border-focus: #646cff;
-}
-
-/* Dark Mode Colors */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Background Colors - Dark mode */
-    --color-background: #242424;
-    --color-background-secondary: #1a1a1a;
-    --color-background-tertiary: #333333;
-
-    /* Text Colors - Dark mode */
-    --color-text-primary: rgba(255, 255, 255, 0.87);
-    --color-text-secondary: #d1d5db;
-    --color-text-tertiary: #9ca3af;
-
-    /* Border Colors - Dark mode */
-    --color-border: #333333;
-    --color-border-secondary: #4b5563;
-    --color-border-focus: #646cff;
-  }
+  --color-border-focus-subtle: #646cff20;
 }

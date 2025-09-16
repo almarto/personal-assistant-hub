@@ -29,13 +29,13 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@personal-assistant-hub/i18n": "workspace:*",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   },
   "devDependencies": {
     "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*",
-    "@types/node": "24.3.1",
     "@storybook/addon-essentials": "next",
     "@storybook/addon-interactions": "next",
     "@storybook/addon-links": "9.1.4",
@@ -43,10 +43,11 @@
     "@storybook/react": "9.1.4",
     "@storybook/react-vite": "9.1.4",
     "@storybook/test": "next",
-    "@types/react": "19.1.12",
+    "@types/node": "24.5.0",
+    "@types/react": "19.1.13",
     "@types/react-dom": "19.1.9",
     "esbuild-css-modules-plugin": "^3.1.5",
-    "eslint": "9.34.0",
+    "eslint": "9.35.0",
     "storybook": "9.1.4",
     "tsup": "8.5.0",
     "typescript": "5.9.2",

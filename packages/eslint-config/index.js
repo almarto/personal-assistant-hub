@@ -2,7 +2,7 @@
 const createFlatConfig = (options = {}) => {
   const {
     files = ['**/*.{js,ts,tsx}'],
-    ignores = ['dist/**', 'node_modules/**'],
+    ignores = ['dist/**', 'node_modules/**, vitest.config.*'],
     allowDefaultExports = false,
     browserGlobals = false,
   } = options;

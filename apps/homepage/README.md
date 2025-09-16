@@ -10,7 +10,6 @@ The main dashboard application for the Personal Assistant Hub monorepo.
 - **CSS Modules**: Scoped styling with CSS Modules
 - **Responsive Layout**: Header, sidebar navigation, and main content area
 - **Tool Cards**: Dashboard with placeholder cards for future tools
-- **Dark/Light Mode**: Automatic theme switching based on system preference
 
 ## Structure
 

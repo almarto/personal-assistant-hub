@@ -130,3 +130,5 @@ export const Modal: React.FC<ModalProps> = ({
 
   return createPortal(modalContent, document.body);
 };
+
+Modal.displayName = 'Modal';

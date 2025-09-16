@@ -1,0 +1,53 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "babyTracker": "Baby Tracker",
+    "gymTracker": "Gym Tracker",
+    "motoTracker": "Moto Tracker",
+    "profile": "Profile"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "tool": "Tool"
+  },
+  "homepage": {
+    "title": "Personal Assistant Hub",
+    "subtitle": "Your centralized hub for personal productivity tools",
+    "welcome": "Welcome to Personal Assistant Hub",
+    "yourTools": "Your Tools"
+  },
+  "tools": {
+    "babyTracker": {
+      "title": "Baby Tracker",
+      "description": "Track feeding, sleeping, and development milestones for your little one."
+    },
+    "gymTracker": {
+      "title": "Gym Tracker",
+      "description": "Monitor your workouts, progress, and fitness goals."
+    },
+    "motoTracker": {
+      "title": "Moto Tracker",
+      "description": "Keep track of motorcycle maintenance, rides, and expenses."
+    }
+  },
+  "comingSoon": {
+    "message": "This tool is currently under development and will be available soon.",
+    "submessage": "Check back later for updates!"
+  },
+  "language": {
+    "select": "Select Language",
+    "english": "English",
+    "spanish": "Español"
+  }
+}

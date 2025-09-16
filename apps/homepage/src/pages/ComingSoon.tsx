@@ -1,28 +1,31 @@
+import { useTranslation } from '@personal-assistant-hub/i18n';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import styles from './ComingSoon.module.css';
 
 export const ComingSoon: React.FC = () => {
-  const { tool } = useParams<{ tool: string }>();
+  const location = useLocation();
+  const { t } = useTranslation();
+  const tool = location.pathname.replace('/', '');
 
-  const toolNames: Record<string, string> = {
-    'baby-tracker': 'Baby Tracker',
-    'gym-tracker': 'Gym Tracker',
-    'moto-tracker': 'Moto Tracker',
+  const toolNameKeys: Record<string, string> = {
+    'baby-tracker': 'tools.babyTracker.title',
+    'gym-tracker': 'tools.gymTracker.title',
+    'moto-tracker': 'tools.motoTracker.title',
   };
 
-  const toolName = tool ? toolNames[tool] || 'Tool' : 'Tool';
+  const toolNameKey = tool
+    ? toolNameKeys[tool] || 'common.tool'
+    : 'common.tool';
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h1 className={styles.title}>{toolName}</h1>
+        <h1 className={styles.title}>{t(toolNameKey)}</h1>
         <div className={styles.icon}>🚧</div>
-        <p className={styles.message}>
-          This tool is currently under development and will be available soon.
-        </p>
-        <p className={styles.submessage}>Check back later for updates!</p>
+        <p className={styles.message}>{t('comingSoon.message')}</p>
+        <p className={styles.submessage}>{t('comingSoon.submessage')}</p>
       </div>
     </div>
   );

@@ -68,3 +68,5 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     </Card>
   );
 };
+
+ToolCard.displayName = 'ToolCard';

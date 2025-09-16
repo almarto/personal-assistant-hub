@@ -16,3 +16,6 @@ export type { ModalProps } from './Modal';
 
 export { ToolCard } from './ToolCard';
 export type { ToolCardProps } from './ToolCard';
+
+export { LanguageSelector } from './LanguageSelector';
+export type { LanguageSelectorProps } from './LanguageSelector';

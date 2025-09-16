@@ -1,7 +1,7 @@
 .sidebar {
   width: 250px;
-  background-color: #1a1a1a;
-  border-right: 1px solid #333;
+  background-color: var(--color-background-secondary);
+  border-right: 1px solid var(--color-border);
   height: 100vh;
   position: sticky;
   top: 0;
@@ -23,21 +23,21 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  color: #d1d5db;
+  color: var(--color-text-secondary);
   text-decoration: none;
   transition: all 0.2s;
   border-left: 3px solid transparent;
 }
 
 .navLink:hover {
-  background-color: #2a2a2a;
-  color: #fff;
+  background-color: var(--color-background-tertiary);
+  color: var(--color-text-primary);
 }
 
 .navLink.active {
-  background-color: #646cff20;
-  color: #646cff;
-  border-left-color: #646cff;
+  background-color: var(--color-border-focus-subtle);
+  color: var(--color-border-focus);
+  border-left-color: var(--color-border-focus);
 }
 
 .icon {
@@ -48,27 +48,4 @@
 
 .label {
   font-weight: 500;
-}
-
-/* Light mode */
-@media (prefers-color-scheme: light) {
-  .sidebar {
-    background-color: #f9fafb;
-    border-right: 1px solid #e5e7eb;
-  }
-  
-  .navLink {
-    color: #6b7280;
-  }
-  
-  .navLink:hover {
-    background-color: #f3f4f6;
-    color: #1f2937;
-  }
-  
-  .navLink.active {
-    background-color: #eff6ff;
-    color: #2563eb;
-    border-left-color: #2563eb;
-  }
 }

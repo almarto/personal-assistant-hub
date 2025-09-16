@@ -23,7 +23,9 @@ describe('Routes Integration', () => {
     await user.click(babyTrackerLink);
 
     // Verify we navigated to the coming soon page
-    expect(screen.getByText('Baby Tracker')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Baby Tracker' })
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
         'This tool is currently under development and will be available soon.'

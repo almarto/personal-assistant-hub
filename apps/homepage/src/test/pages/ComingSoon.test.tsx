@@ -8,7 +8,9 @@ describe('ComingSoon Page', () => {
     renderWithRouter(['/baby-tracker']);
 
     // Check the tool name is displayed
-    expect(screen.getByText('Baby Tracker')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Baby Tracker' })
+    ).toBeInTheDocument();
 
     // Check the construction icon
     expect(screen.getByText('🚧')).toBeInTheDocument();
@@ -30,7 +32,9 @@ describe('ComingSoon Page', () => {
     renderWithRouter(['/gym-tracker']);
 
     // Check the tool name is displayed
-    expect(screen.getByText('Gym Tracker')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Gym Tracker' })
+    ).toBeInTheDocument();
 
     // Check the construction icon
     expect(screen.getByText('🚧')).toBeInTheDocument();
