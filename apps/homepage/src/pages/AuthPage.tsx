@@ -1,3 +1,4 @@
+import { Button, Tabs } from '@personal-assistant-hub/ui';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,6 +22,23 @@ export const AuthPage: React.FC = () => {
     console.error('Authentication error:', error);
   };
 
+  const tabItems = [
+    {
+      id: 'login',
+      label: 'Sign In',
+      content: (
+        <LoginForm onSuccess={handleAuthSuccess} onError={handleAuthError} />
+      ),
+    },
+    {
+      id: 'register',
+      label: 'Register',
+      content: (
+        <RegisterForm onSuccess={handleAuthSuccess} onError={handleAuthError} />
+      ),
+    },
+  ];
+
   return (
     <div className={styles.authPage}>
       <div className={styles.authContainer}>
@@ -29,58 +47,37 @@ export const AuthPage: React.FC = () => {
           <p>Your secure productivity companion</p>
         </div>
 
-        <div className={styles.authTabs}>
-          <button
-            className={`${styles.authTab} ${mode === 'login' ? styles.active : ''}`}
-            onClick={() => setMode('login')}
-          >
-            Sign In
-          </button>
-          <button
-            className={`${styles.authTab} ${mode === 'register' ? styles.active : ''}`}
-            onClick={() => setMode('register')}
-          >
-            Register
-          </button>
-        </div>
-
-        <div className="auth-content">
-          {mode === 'login' ? (
-            <LoginForm
-              onSuccess={handleAuthSuccess}
-              onError={handleAuthError}
-            />
-          ) : (
-            <RegisterForm
-              onSuccess={handleAuthSuccess}
-              onError={handleAuthError}
-            />
-          )}
-        </div>
+        <Tabs
+          items={tabItems}
+          activeTab={mode}
+          onTabChange={tabId => setMode(tabId as AuthMode)}
+          variant="default"
+          size="medium"
+        />
 
         <div className={styles.authFooter}>
           <p>
             {mode === 'login' ? (
               <>
                 Don't have an account?{' '}
-                <button
-                  type="button"
-                  className={styles.linkButton}
+                <Button
+                  variant="ghost"
+                  size="small"
                   onClick={() => setMode('register')}
                 >
                   Register here
-                </button>
+                </Button>
               </>
             ) : (
               <>
                 Already have an account?{' '}
-                <button
-                  type="button"
-                  className={styles.linkButton}
+                <Button
+                  variant="ghost"
+                  size="small"
                   onClick={() => setMode('login')}
                 >
                   Sign in here
-                </button>
+                </Button>
               </>
             )}
           </p>

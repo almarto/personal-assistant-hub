@@ -22,6 +22,10 @@
 - **Always create or update Storybook stories** when creating new components or modifying existing ones in `packages/ui`
 - Stories should demonstrate the usage and different states of the component
 - This ensures proper documentation and testing of UI components
+- **UI Component Strategy**: Always prioritize using existing components from the design system (`packages/ui`) when creating new UI elements.
+  - **Missing components**: If you identify that a component should logically belong in the design system but doesn't exist yet, explicitly ask: "Should I create this component in the design system (`packages/ui`) or implement it locally in this app?"
+  - **Component discovery**: Before creating any new UI component, briefly mention which existing design system components you've considered and why they don't fit the use case.
+  - **Documentation**: When creating design system components, include basic usage examples and prop documentation.
 
 ## API
 

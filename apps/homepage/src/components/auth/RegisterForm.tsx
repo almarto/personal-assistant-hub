@@ -1,4 +1,5 @@
 import {
+  Button,
   Input,
   PasswordStrengthIndicator,
   isPasswordValid,
@@ -202,28 +203,31 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           />
         )}
 
-        <button
+        <Button
           type="submit"
+          variant="primary"
+          size="medium"
+          fullWidth
+          loading={isLoading}
           disabled={isLoading || !isFormValid()}
-          className={`${styles.registerButton} ${isLoading ? styles.loading : ''}`}
         >
-          {isLoading
-            ? 'Creating account...'
-            : authMode === 'password'
-              ? 'Create Account with Password'
-              : 'Create Account with Passkey'}
-        </button>
+          {authMode === 'password'
+            ? 'Create Account with Password'
+            : 'Create Account with Passkey'}
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="medium"
+          fullWidth
           onClick={handleModeSwitch}
           disabled={isLoading}
-          className={styles.switchModeButton}
         >
           {authMode === 'password'
             ? 'Use Passkey Instead'
             : 'Use Password Instead'}
-        </button>
+        </Button>
       </div>
     </form>
   );

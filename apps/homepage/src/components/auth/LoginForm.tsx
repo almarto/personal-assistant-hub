@@ -1,4 +1,4 @@
-import { Input } from '@personal-assistant-hub/ui';
+import { Button, Input } from '@personal-assistant-hub/ui';
 import React, { useState } from 'react';
 
 import { auth } from '../../main';
@@ -103,32 +103,35 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
           />
         )}
 
-        <button
+        <Button
           type="submit"
+          variant="primary"
+          size="medium"
+          fullWidth
+          loading={isLoading}
           disabled={
             isLoading ||
             !email.trim() ||
             (authMode === 'password' && !password.trim())
           }
-          className={`${styles.loginButton} ${isLoading ? styles.loading : ''}`}
         >
-          {isLoading
-            ? 'Signing in...'
-            : authMode === 'password'
-              ? 'Sign in with Password'
-              : 'Sign in with Passkey'}
-        </button>
+          {authMode === 'password'
+            ? 'Sign in with Password'
+            : 'Sign in with Passkey'}
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="medium"
+          fullWidth
           onClick={handleModeSwitch}
           disabled={isLoading}
-          className={styles.switchModeButton}
         >
           {authMode === 'password'
             ? 'Use Passkey Instead'
             : 'Use Password Instead'}
-        </button>
+        </Button>
       </div>
     </form>
   );
