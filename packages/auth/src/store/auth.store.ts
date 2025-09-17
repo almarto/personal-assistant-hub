@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { AuthService } from '../services/passkey-auth.service';
+import type { AuthServices } from '../types/auth';
 import type { AuthStore } from '../types/auth';
 
-export const createAuthStore = (authService: AuthService) =>
+export const createAuthStore = (authServices: AuthServices) =>
   create<AuthStore>()(
     persist(
       set => ({
@@ -14,11 +14,12 @@ export const createAuthStore = (authService: AuthService) =>
         isLoading: false,
         error: null,
 
-        // Actions
+        // Actions - these are legacy methods for backward compatibility
         login: async (email: string) => {
           set({ isLoading: true, error: null });
           try {
-            const result = await authService.login(email);
+            // Default to passkey login for backward compatibility
+            const result = await authServices.passkeyService.login({ email });
             set({
               user: result.user,
               isAuthenticated: true,
@@ -43,7 +44,8 @@ export const createAuthStore = (authService: AuthService) =>
         ) => {
           set({ isLoading: true, error: null });
           try {
-            const result = await authService.register({
+            // Default to passkey registration for backward compatibility
+            const result = await authServices.passkeyService.register({
               email,
               invitationToken,
               deviceName,
@@ -68,7 +70,7 @@ export const createAuthStore = (authService: AuthService) =>
         logout: async () => {
           set({ isLoading: true, error: null });
           try {
-            await authService.logout();
+            await authServices.logout();
             set({
               user: null,
               isAuthenticated: false,
@@ -93,7 +95,7 @@ export const createAuthStore = (authService: AuthService) =>
         checkAuth: async () => {
           set({ isLoading: true, error: null });
           try {
-            const user = await authService.getCurrentUser();
+            const user = await authServices.getCurrentUser();
             set({
               user,
               isAuthenticated: !!user,
@@ -124,5 +126,5 @@ export const createAuthStore = (authService: AuthService) =>
     )
   );
 
-// Export type for the store hook
+// Export types for the store hooks
 export type AuthStoreHook = ReturnType<typeof createAuthStore>;

@@ -140,23 +140,5 @@ export class PasskeyAuthServiceImpl
   }
 }
 
-// TODO: remove legacy implementation
-// Legacy AuthService class for backward compatibility
-export class AuthService extends PasskeyAuthServiceImpl {
-  constructor(config: AuthServiceConfig) {
-    super(config);
-  }
-
-  // Legacy method signature for backward compatibility - overload to support both
-  async login(
-    emailOrCredentials: string | PasskeyCredentials
-  ): Promise<AuthResult> {
-    if (typeof emailOrCredentials === 'string') {
-      return super.login({ email: emailOrCredentials });
-    }
-    return super.login(emailOrCredentials);
-  }
-}
-
 // Export classes for instantiation
 export type { AuthServiceConfig };

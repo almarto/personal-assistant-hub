@@ -23,20 +23,38 @@ describe('useAuth hooks', () => {
   };
 
   beforeEach(() => {
-    // Create a mock AuthService instance
-    mockAuthService = {
-      isAuthenticated: vi.fn(),
-      getToken: vi.fn(),
-      getCurrentUser: vi.fn(),
-      initiateRegistration: vi.fn(),
-      register: vi.fn(),
-      initiateLogin: vi.fn(),
+    // Create mock services for the new dual authentication system
+    const mockPasswordService = {
       login: vi.fn(),
+      register: vi.fn(),
       logout: vi.fn(),
+      getCurrentUser: vi.fn(),
       refreshToken: vi.fn(),
+      getToken: vi.fn(),
+      isAuthenticated: vi.fn(),
+      changePassword: vi.fn(),
     };
 
-    // Create the store and hooks with the mocked service
+    const mockPasskeyService = {
+      login: vi.fn(),
+      register: vi.fn(),
+      logout: vi.fn(),
+      getCurrentUser: vi.fn(),
+      refreshToken: vi.fn(),
+      getToken: vi.fn(),
+      isAuthenticated: vi.fn(),
+      getAvailableCredentials: vi.fn(),
+    };
+
+    // Create a mock AuthServices instance
+    mockAuthService = {
+      passwordService: mockPasswordService,
+      passkeyService: mockPasskeyService,
+      getCurrentUser: vi.fn(),
+      logout: vi.fn(),
+    };
+
+    // Create the store and hooks with the mocked services
     useAuthStore = createAuthStore(mockAuthService);
     authHooks = createAuthHooks(useAuthStore);
 
@@ -68,12 +86,14 @@ describe('useAuth hooks', () => {
         token: 'mock-token',
       };
 
-      mockAuthService.login.mockResolvedValue(mockAuthResult);
+      mockAuthService.passkeyService.login.mockResolvedValue(mockAuthResult);
 
       await useAuthStore.getState().login('test@example.com');
       const state = useAuthStore.getState();
 
-      expect(mockAuthService.login).toHaveBeenCalledWith('test@example.com');
+      expect(mockAuthService.passkeyService.login).toHaveBeenCalledWith({
+        email: 'test@example.com',
+      });
       expect(state.user).toEqual(mockUser);
       expect(state.isAuthenticated).toBe(true);
       expect(state.isLoading).toBe(false);
@@ -86,14 +106,14 @@ describe('useAuth hooks', () => {
         token: 'mock-token',
       };
 
-      mockAuthService.register.mockResolvedValue(mockAuthResult);
+      mockAuthService.passkeyService.register.mockResolvedValue(mockAuthResult);
 
       await useAuthStore
         .getState()
         .register('test@example.com', 'token123', 'Test Device');
       const state = useAuthStore.getState();
 
-      expect(mockAuthService.register).toHaveBeenCalledWith({
+      expect(mockAuthService.passkeyService.register).toHaveBeenCalledWith({
         email: 'test@example.com',
         invitationToken: 'token123',
         deviceName: 'Test Device',
@@ -145,7 +165,9 @@ describe('useAuth hooks', () => {
 
   describe('error handling', () => {
     it('should handle login errors', async () => {
-      mockAuthService.login.mockRejectedValue(new Error('Login failed'));
+      mockAuthService.passkeyService.login.mockRejectedValue(
+        new Error('Login failed')
+      );
 
       try {
         await useAuthStore.getState().login('test@example.com');

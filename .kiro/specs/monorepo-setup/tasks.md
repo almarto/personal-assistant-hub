@@ -80,7 +80,7 @@
     - Add password strength validation and visual feedback
     - Implement smooth transition between password and passkey modes
     - _Requirements: 4.3, 4.4, 4.10_
-  - [ ] 9.5 Update authentication flow integration
+  - [x] 9.5 Update authentication flow integration
     - Connect new password service with homepage authentication
     - Update authentication store to handle both authentication methods
     - Test complete password registration and login flow
