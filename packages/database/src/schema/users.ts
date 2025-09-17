@@ -62,7 +62,7 @@ export const userSessions = pgTable('user_sessions', {
   userId: uuid('user_id')
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
-  sessionToken: varchar('session_token', { length: 255 }).unique().notNull(),
+  sessionToken: text('session_token').unique().notNull(),
   expiresAt: timestamp('expires_at').notNull(),
   ipAddress: varchar('ip_address', { length: 45 }),
   userAgent: text('user_agent'),

@@ -21,7 +21,7 @@ export class PasswordAuthServiceImpl
   }
 
   async login(credentials: PasswordCredentials): Promise<AuthResult> {
-    const response = await this.makeRequest<AuthResult>('/password/login', {
+    const response = await this.makeRequest<AuthResult>('/login/password', {
       method: 'POST',
       body: JSON.stringify({
         email: credentials.email,
@@ -40,7 +40,7 @@ export class PasswordAuthServiceImpl
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
-    const response = await this.makeRequest<AuthResult>('/password/register', {
+    const response = await this.makeRequest<AuthResult>('/register/password', {
       method: 'POST',
       body: JSON.stringify({
         email: data.email,

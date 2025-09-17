@@ -76,7 +76,7 @@ describe('PasswordAuthServiceImpl', () => {
       const result = await passwordService.login(credentials);
 
       expect(fetch).toHaveBeenCalledWith(
-        'http://localhost:3001/auth/password/login',
+        'http://localhost:3001/auth/login/password',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
@@ -147,7 +147,7 @@ describe('PasswordAuthServiceImpl', () => {
 
       expect(bcrypt.hash).toHaveBeenCalledWith('password123', 12);
       expect(fetch).toHaveBeenCalledWith(
-        'http://localhost:3001/auth/password/register',
+        'http://localhost:3001/auth/register/password',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({

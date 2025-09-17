@@ -59,7 +59,7 @@
     "vitest": "3.2.4"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "packageManager": "pnpm@10.17.0"
 }

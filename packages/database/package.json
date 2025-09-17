@@ -33,7 +33,6 @@
     "db:generate": "pnpm exec drizzle-kit generate",
     "db:migrate": "pnpm exec tsx src/scripts/migrate.ts",
     "db:studio": "pnpm exec drizzle-kit studio",
-    "db:push": "pnpm exec drizzle-kit push",
     "db:seed-admin": "pnpm exec tsx src/scripts/seed-admin.ts"
   },
   "dependencies": {
