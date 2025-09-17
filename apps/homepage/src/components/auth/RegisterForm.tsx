@@ -1,4 +1,5 @@
 import {
+  Input,
   PasswordStrengthIndicator,
   isPasswordValid,
 } from '@personal-assistant-hub/ui';
@@ -121,79 +122,84 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       )}
 
       <div className={`${styles.formContent} ${styles[`mode-${authMode}`]}`}>
-        <div className={styles.formGroup}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          id="email"
+          type="email"
+          label="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          required
+          disabled={isLoading}
+          state={error && !email.trim() ? 'error' : 'default'}
+        />
 
-        <div className={styles.formGroup}>
-          <label htmlFor="invitationToken">Invitation Token</label>
-          <input
-            id="invitationToken"
-            type="text"
-            value={invitationToken}
-            onChange={e => setInvitationToken(e.target.value)}
-            placeholder="Enter your invitation token"
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          id="invitationToken"
+          type="text"
+          label="Invitation Token"
+          value={invitationToken}
+          onChange={e => setInvitationToken(e.target.value)}
+          placeholder="Enter your invitation token"
+          required
+          disabled={isLoading}
+          state={error && !invitationToken.trim() ? 'error' : 'default'}
+        />
 
         {authMode === 'password' ? (
           <>
             <div className={styles.formGroup}>
-              <label htmlFor="password">Password</label>
-              <input
+              <Input
                 id="password"
                 type="password"
+                label="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Create a strong password"
                 required
                 disabled={isLoading}
+                showPasswordToggle
+                state={
+                  error && !isPasswordValid(password) ? 'error' : 'default'
+                }
               />
               <PasswordStrengthIndicator password={password} />
             </div>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your password"
-                required
-                disabled={isLoading}
-              />
-              {confirmPassword && password !== confirmPassword && (
-                <div className={styles.passwordMismatch}>
-                  Passwords do not match
-                </div>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className={styles.formGroup}>
-            <label htmlFor="deviceName">Device Name</label>
-            <input
-              id="deviceName"
-              type="text"
-              value={deviceName}
-              onChange={e => setDeviceName(e.target.value)}
-              placeholder="e.g., My Laptop"
+            <Input
+              id="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your password"
               required
               disabled={isLoading}
+              showPasswordToggle
+              state={
+                confirmPassword && password !== confirmPassword
+                  ? 'error'
+                  : 'default'
+              }
+              errorMessage={
+                confirmPassword && password !== confirmPassword
+                  ? 'Passwords do not match'
+                  : undefined
+              }
             />
-          </div>
+          </>
+        ) : (
+          <Input
+            id="deviceName"
+            type="text"
+            label="Device Name"
+            value={deviceName}
+            onChange={e => setDeviceName(e.target.value)}
+            placeholder="e.g., My Laptop"
+            required
+            disabled={isLoading}
+            state={error && !deviceName.trim() ? 'error' : 'default'}
+          />
         )}
 
         <button

@@ -12,10 +12,7 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./dist/index.css": "./dist/index.css",
-    "./tokens/colors.css": "./dist/tokens/colors.css",
-    "./tokens/spacing.css": "./dist/tokens/spacing.css",
-    "./tokens/typography.css": "./dist/tokens/typography.css"
+    "./globals.css": "./dist/index.css"
   },
   "files": [
     "dist"

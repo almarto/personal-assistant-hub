@@ -1,3 +1,4 @@
+import { Input } from '@personal-assistant-hub/ui';
 import React, { useState } from 'react';
 
 import { auth } from '../../main';
@@ -75,32 +76,31 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
       )}
 
       <div className={`${styles.formContent} ${styles[`mode-${authMode}`]}`}>
-        <div className={styles.formGroup}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          id="email"
+          type="email"
+          label="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          required
+          disabled={isLoading}
+          state={error && !email.trim() ? 'error' : 'default'}
+        />
 
         {authMode === 'password' && (
-          <div className={styles.formGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              disabled={isLoading}
-            />
-          </div>
+          <Input
+            id="password"
+            type="password"
+            label="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            required
+            disabled={isLoading}
+            showPasswordToggle
+            state={error && !password.trim() ? 'error' : 'default'}
+          />
         )}
 
         <button

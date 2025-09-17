@@ -5,12 +5,9 @@ export default defineConfig({
   format: ['cjs', 'esm'],
   dts: true,
   clean: true,
+  outDir: 'dist',
   external: ['react', 'react-dom'],
-  esbuildOptions(options) {
-    options.loader = {
-      ...options.loader,
-      '.css': 'css',
-    };
+  loader: {
+    '.css': 'local-css',
   },
-  onSuccess: 'cp -r src/tokens dist/',
 });

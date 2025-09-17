@@ -108,3 +108,34 @@
   color: var(--color-text-tertiary);
   pointer-events: none;
 }
+
+/* Password toggle support */
+.withPasswordToggle {
+  padding-right: var(--space-10);
+}
+
+.passwordToggle {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.passwordToggle:hover {
+  color: var(--color-text-secondary);
+}
+
+.passwordToggle:focus {
+  outline: none;
+  color: var(--color-text-primary);
+}

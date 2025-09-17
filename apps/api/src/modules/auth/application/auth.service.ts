@@ -370,12 +370,11 @@ export class AuthService implements AuthUseCase {
     });
 
     // Hash the password and create password credential
-    const { hash, salt } = await this.passwordService.hashPassword(password);
+    const hash = await this.passwordService.hashPassword(password);
     await this.passwordCredentialRepository.create({
       id: uuidv4(),
       userId: user.id,
       passwordHash: hash,
-      salt,
     });
 
     // Mark the invitation as used
@@ -402,6 +401,7 @@ export class AuthService implements AuthUseCase {
   ): Promise<{ user: User; token: string }> {
     // Find the user
     const user = await this.userRepository.findByEmail(email);
+    console.log('🚀 TCL ~ AuthService ~ loginWithPassword ~ user:', user);
 
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -414,16 +414,31 @@ export class AuthService implements AuthUseCase {
     // Find password credential
     const passwordCredential =
       await this.passwordCredentialRepository.findByUserId(user.id);
+    console.log(
+      '🚀 TCL ~ AuthService ~ loginWithPassword ~ passwordCredential:',
+      passwordCredential
+    );
 
     if (!passwordCredential) {
       throw new UnauthorizedException('Invalid email or password');
     }
+    console.log(
+      '🚀 TCL ~ AuthService ~ loginWithPassword ~ password:',
+      password
+    );
+    console.log(
+      '🚀 TCL ~ AuthService ~ loginWithPassword ~ passwordHash:',
+      passwordCredential.passwordHash
+    );
 
     // Verify password
     const isPasswordValid = await this.passwordService.verifyPassword(
       password,
-      passwordCredential.passwordHash,
-      passwordCredential.salt
+      passwordCredential.passwordHash
+    );
+    console.log(
+      '🚀 TCL ~ AuthService ~ loginWithPassword ~ isPasswordValid:',
+      isPasswordValid
     );
 
     if (!isPasswordValid) {
@@ -480,8 +495,7 @@ export class AuthService implements AuthUseCase {
     // Verify old password
     const isOldPasswordValid = await this.passwordService.verifyPassword(
       oldPassword,
-      existingCredential.passwordHash,
-      existingCredential.salt
+      existingCredential.passwordHash
     );
 
     if (!isOldPasswordValid) {
@@ -489,10 +503,9 @@ export class AuthService implements AuthUseCase {
     }
 
     // Hash the new password and update credential
-    const { hash, salt } = await this.passwordService.hashPassword(newPassword);
+    const hash = await this.passwordService.hashPassword(newPassword);
     await this.passwordCredentialRepository.updateByUserId(userId, {
       passwordHash: hash,
-      salt,
     });
   }
 

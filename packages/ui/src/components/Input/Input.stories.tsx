@@ -25,6 +25,9 @@ const meta: Meta<typeof Input> = {
     disabled: {
       control: { type: 'boolean' },
     },
+    showPasswordToggle: {
+      control: { type: 'boolean' },
+    },
   },
 };
 
@@ -47,9 +50,8 @@ export const WithLabel: Story = {
 
 export const Required: Story = {
   args: {
-    label: 'Password',
-    placeholder: 'Enter your password',
-    type: 'password',
+    label: 'Full Name',
+    placeholder: 'Enter your full name',
     required: true,
   },
 };
@@ -125,5 +127,47 @@ export const WithIcon: Story = {
         <path d="m21 21-4.35-4.35"></path>
       </svg>
     ),
+  },
+};
+
+export const Password: Story = {
+  args: {
+    label: 'Password',
+    placeholder: 'Enter your password',
+    type: 'password',
+    showPasswordToggle: true,
+  },
+};
+
+export const PasswordWithError: Story = {
+  args: {
+    label: 'Password',
+    placeholder: 'Enter your password',
+    type: 'password',
+    showPasswordToggle: true,
+    state: 'error',
+    errorMessage: 'Password must be at least 8 characters long',
+  },
+};
+
+export const PasswordRequired: Story = {
+  args: {
+    label: 'New Password',
+    placeholder: 'Create a strong password',
+    type: 'password',
+    showPasswordToggle: true,
+    required: true,
+    helperText:
+      'Must contain at least 8 characters, including uppercase, lowercase, number and special character',
+  },
+};
+
+export const ConfirmPassword: Story = {
+  args: {
+    label: 'Confirm Password',
+    placeholder: 'Re-enter your password',
+    type: 'password',
+    showPasswordToggle: true,
+    required: true,
   },
 };

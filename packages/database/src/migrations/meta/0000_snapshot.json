@@ -1,5 +1,5 @@
 {
-  "id": "12e83c0d-b593-4981-b708-6f5ba015fb72",
+  "id": "eed70721-525a-4e6e-be2f-9d8314324c75",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -214,12 +214,6 @@
         },
         "password_hash": {
           "name": "password_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "salt": {
-          "name": "salt",
           "type": "text",
           "primaryKey": false,
           "notNull": true

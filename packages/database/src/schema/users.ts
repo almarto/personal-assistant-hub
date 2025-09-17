@@ -25,7 +25,6 @@ export const passwordCredentials = pgTable('password_credentials', {
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
   passwordHash: text('password_hash').notNull(),
-  salt: text('salt').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

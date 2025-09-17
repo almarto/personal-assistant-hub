@@ -6,7 +6,6 @@ export class PasswordCredential {
     private readonly _id: string,
     private readonly _userId: string,
     private readonly _passwordHash: string,
-    private readonly _salt: string,
     private readonly _createdAt: Date,
     private readonly _updatedAt: Date
   ) {}
@@ -21,10 +20,6 @@ export class PasswordCredential {
 
   get passwordHash(): string {
     return this._passwordHash;
-  }
-
-  get salt(): string {
-    return this._salt;
   }
 
   get createdAt(): Date {
