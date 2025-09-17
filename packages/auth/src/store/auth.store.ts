@@ -18,10 +18,7 @@ export const createAuthStore = (authService: AuthService) =>
         login: async (email: string) => {
           set({ isLoading: true, error: null });
           try {
-            const result = await authService.login({
-              email,
-              credential: null!,
-            });
+            const result = await authService.login(email);
             set({
               user: result.user,
               isAuthenticated: true,
@@ -49,7 +46,6 @@ export const createAuthStore = (authService: AuthService) =>
             const result = await authService.register({
               email,
               invitationToken,
-              credential: null!, // This will be handled by the service
               deviceName,
             });
             set({

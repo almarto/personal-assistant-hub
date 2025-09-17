@@ -88,7 +88,7 @@ describe('InvitationService', () => {
         false
       );
       invitationRepository.create.mockResolvedValue(mockInvitation);
-      configService.get.mockReturnValue('http://localhost:5173');
+      configService.get.mockReturnValue('http://localhost:3000');
 
       // Act
       const result = await service.create(
@@ -108,12 +108,13 @@ describe('InvitationService', () => {
         'generated-token-123',
         'test@example.com',
         'creator-123',
-        expect.any(Date)
+        expect.any(Date),
+        'user'
       );
       expect(configService.get).toHaveBeenCalledWith('FRONTEND_URL');
       expect(result).toEqual({
         invitationLink:
-          'http://localhost:5173/register?token=generated-token-123&email=test%40example.com',
+          'http://localhost:3000/register?token=generated-token-123&email=test%40example.com',
         token: 'generated-token-123',
         expiresAt: mockInvitation.expiresAt,
       });
@@ -133,7 +134,7 @@ describe('InvitationService', () => {
 
       // Assert
       expect(result.invitationLink).toBe(
-        'http://localhost:5173/register?token=generated-token-123&email=test%40example.com'
+        'http://localhost:3000/register?token=generated-token-123&email=test%40example.com'
       );
     });
 
@@ -348,7 +349,8 @@ describe('InvitationService', () => {
         new Date(Date.now() + 24 * 60 * 60 * 1000), // Future date
         new Date(),
         new Date(), // Used date
-        'user-123' // Used by
+        'user-123', // Used by
+        'user' // Role
       );
       invitationRepository.findByTokenAndEmail.mockResolvedValue(
         usedInvitation

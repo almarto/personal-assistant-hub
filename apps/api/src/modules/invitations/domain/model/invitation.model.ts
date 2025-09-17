@@ -10,6 +10,7 @@ export class Invitation {
   private readonly _usedAt: Date | null;
   private readonly _usedBy: string | null;
   private readonly _createdAt: Date;
+  private readonly _role: 'admin' | 'user';
 
   constructor(
     id: string,
@@ -18,6 +19,7 @@ export class Invitation {
     createdBy: string,
     expiresAt: Date,
     createdAt: Date,
+    role: 'admin' | 'user' = 'user',
     usedAt: Date | null = null,
     usedBy: string | null = null
   ) {
@@ -27,6 +29,7 @@ export class Invitation {
     this._createdBy = createdBy;
     this._expiresAt = expiresAt;
     this._createdAt = createdAt;
+    this._role = role;
     this._usedAt = usedAt;
     this._usedBy = usedBy;
   }
@@ -63,6 +66,10 @@ export class Invitation {
     return this._createdAt;
   }
 
+  get role(): 'admin' | 'user' {
+    return this._role;
+  }
+
   /**
    * Checks if the invitation is expired
    */
@@ -95,6 +102,7 @@ export class Invitation {
       this._createdBy,
       this._expiresAt,
       this._createdAt,
+      this._role,
       new Date(),
       userId
     );
@@ -114,6 +122,7 @@ export class Invitation {
       this._createdBy,
       newExpiresAt,
       this._createdAt,
+      this._role,
       this._usedAt,
       this._usedBy
     );
@@ -131,6 +140,7 @@ export class Invitation {
       this._createdBy,
       new Date(), // Immediate expiration
       this._createdAt,
+      this._role,
       this._usedAt,
       this._usedBy
     );

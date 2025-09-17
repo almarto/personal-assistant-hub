@@ -72,7 +72,8 @@ export class InvitationsController {
       return await this.invitationUseCase.create(
         createInvitationDto.email,
         req.user.id,
-        createInvitationDto.expirationHours
+        createInvitationDto.expirationHours,
+        createInvitationDto.role
       );
     } catch (error) {
       throw error;

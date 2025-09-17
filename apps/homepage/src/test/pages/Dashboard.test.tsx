@@ -5,14 +5,14 @@ import { renderWithRouter } from '../test-utils';
 
 describe('Dashboard Page', () => {
   it('should render the dashboard with welcome message and all tool cards', () => {
-    renderWithRouter();
+    renderWithRouter(['/dashboard']);
 
     // Check welcome message
     expect(
       screen.getByText('Welcome to Personal Assistant Hub')
     ).toBeInTheDocument();
     expect(
-      screen.getByText('Your centralized hub for personal productivity tools')
+      screen.getByText('Your personal productivity tools in one place')
     ).toBeInTheDocument();
 
     // Check "Your Tools" section

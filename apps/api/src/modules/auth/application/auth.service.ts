@@ -142,12 +142,12 @@ export class AuthService implements AuthUseCase {
       throw new BadRequestException('Invalid or expired invitation token');
     }
 
-    // Create the user
+    // Create the user with the role from the invitation
     const userId = uuidv4();
     const user = await this.userRepository.create({
       id: userId,
       email,
-      role: 'user',
+      role: invitation.role,
       isActive: true,
     });
 

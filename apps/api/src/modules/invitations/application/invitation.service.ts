@@ -23,7 +23,8 @@ export class InvitationService implements InvitationUseCase {
   async create(
     email: string,
     createdById: string,
-    expirationHours: number = 24
+    expirationHours: number = 24,
+    role: 'admin' | 'user' = 'user'
   ) {
     // Check if user already exists
     const userExists =
@@ -49,12 +50,13 @@ export class InvitationService implements InvitationUseCase {
       token,
       email,
       createdById,
-      expiresAt
+      expiresAt,
+      role
     );
 
     // Generate invitation link
     const frontendUrl =
-      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
     const invitationLink = `${frontendUrl}/register?token=${token}&email=${encodeURIComponent(email)}`;
 
     return {
@@ -147,7 +149,7 @@ export class InvitationService implements InvitationUseCase {
 
     // Generate invitation link
     const frontendUrl =
-      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
     const invitationLink = `${frontendUrl}/register?token=${invitation.token}&email=${encodeURIComponent(invitation.email)}`;
 
     return {

@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 
 const navigationItems = [
-  { path: '/', labelKey: 'navigation.dashboard', icon: '📊' },
+  { path: '/dashboard', labelKey: 'navigation.dashboard', icon: '📊' },
   { path: '/baby-tracker', labelKey: 'navigation.babyTracker', icon: '👶' },
   { path: '/gym-tracker', labelKey: 'navigation.gymTracker', icon: '💪' },
   { path: '/moto-tracker', labelKey: 'navigation.motoTracker', icon: '🏍️' },

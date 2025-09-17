@@ -1,0 +1,1 @@
+ALTER TABLE "invitation_tokens" ADD COLUMN "role" varchar(50) DEFAULT 'user' NOT NULL;

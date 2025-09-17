@@ -36,6 +36,7 @@ export const invitationTokens = pgTable('invitation_tokens', {
   id: uuid('id').primaryKey().defaultRandom(),
   token: varchar('token', { length: 255 }).unique().notNull(),
   email: varchar('email', { length: 255 }).notNull(),
+  role: varchar('role', { length: 50 }).notNull().default('user'),
   createdBy: uuid('created_by')
     .references(() => users.id)
     .notNull(),

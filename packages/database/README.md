@@ -85,6 +85,24 @@ pnpm db:studio
 pnpm db:push
 ```
 
+## Bootstrap Process
+
+### Creating the First Admin User
+
+To bootstrap the application with the first admin user, use the invitation-based approach:
+
+```bash
+# Generate an admin invitation token
+pnpm db:seed-admin admin@example.com
+```
+
+This will:
+
+1. Create a temporary system user to satisfy database constraints
+2. Generate an admin invitation token with 7-day expiration
+3. Output an invitation link that can be sent to the admin
+4. The admin can then register using the link with their passkey
+
 ## Scripts
 
 - `pnpm build` - Build the package
@@ -93,3 +111,4 @@ pnpm db:push
 - `pnpm db:migrate` - Run database migrations
 - `pnpm db:studio` - Open Drizzle Studio
 - `pnpm db:push` - Push schema changes to database
+- `pnpm db:seed-admin` - Generate admin invitation token

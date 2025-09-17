@@ -12,7 +12,8 @@ export interface InvitationUseCase {
   create(
     email: string,
     createdById: string,
-    expirationHours?: number
+    expirationHours?: number,
+    role?: 'admin' | 'user'
   ): Promise<{
     invitationLink: string;
     token: string;

@@ -5,12 +5,12 @@ import {
 import type {
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
+  RegistrationResponseJSON,
 } from '@simplewebauthn/types';
 
 import type {
   AuthResult,
   AuthService as IAuthService,
-  PasskeyCredentials,
   RegistrationData,
   User,
 } from '../types/auth';
@@ -74,7 +74,7 @@ class AuthService implements IAuthService {
     }
   }
 
-  async initiateRegistration(
+  private async initiateRegistration(
     email: string,
     invitationToken: string
   ): Promise<PublicKeyCredentialCreationOptionsJSON> {
@@ -88,34 +88,7 @@ class AuthService implements IAuthService {
     return response.options;
   }
 
-  async register(data: RegistrationData): Promise<AuthResult> {
-    // First, initiate registration to get options
-    const options = await this.initiateRegistration(
-      data.email,
-      data.invitationToken
-    );
-
-    // Start WebAuthn registration
-    const credential = await startRegistration({ optionsJSON: options });
-
-    // Complete registration with the backend
-    const response = await this.makeRequest<AuthResult>('/register/complete', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: data.email,
-        invitationToken: data.invitationToken,
-        credential,
-        deviceName: data.deviceName,
-      }),
-    });
-
-    // Store the token
-    this.setToken(response.token);
-
-    return response;
-  }
-
-  async initiateLogin(
+  private async initiateLogin(
     email: string
   ): Promise<PublicKeyCredentialRequestOptionsJSON> {
     const response = await this.makeRequest<{
@@ -128,9 +101,41 @@ class AuthService implements IAuthService {
     return response.options;
   }
 
-  async login(credentials: PasskeyCredentials): Promise<AuthResult> {
+  async register(data: RegistrationData): Promise<AuthResult> {
+    // First, initiate registration to get options
+    const options = await this.initiateRegistration(
+      data.email,
+      data.invitationToken
+    );
+    console.log('🚀 TCL ~ AuthService ~ register ~ options:', options);
+
+    // Start WebAuthn registration
+    const credential: RegistrationResponseJSON = await startRegistration({
+      optionsJSON: options,
+    });
+    console.log('🚀 TCL ~ AuthService ~ register ~ credential:', credential);
+
+    // Complete registration with the backend
+    const response = await this.makeRequest<AuthResult>('/register/complete', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: data.email,
+        invitationToken: data.invitationToken,
+        credential,
+        deviceName: data.deviceName,
+      }),
+    });
+    console.log('🚀 TCL ~ AuthService ~ register ~ response:', response);
+
+    // Store the token
+    this.setToken(response.token);
+
+    return response;
+  }
+
+  async login(email: string): Promise<AuthResult> {
     // First, initiate login to get options
-    const options = await this.initiateLogin(credentials.email);
+    const options = await this.initiateLogin(email);
 
     // Start WebAuthn authentication
     const credential = await startAuthentication({ optionsJSON: options });
@@ -139,7 +144,7 @@ class AuthService implements IAuthService {
     const response = await this.makeRequest<AuthResult>('/login/complete', {
       method: 'POST',
       body: JSON.stringify({
-        email: credentials.email,
+        email,
         credential,
       }),
     });

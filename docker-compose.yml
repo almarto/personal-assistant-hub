@@ -33,6 +33,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - VITE_API_URL=${API_URL}
     depends_on:
       postgres:
         condition: service_healthy

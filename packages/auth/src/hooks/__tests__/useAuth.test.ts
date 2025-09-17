@@ -71,10 +71,7 @@ describe('useAuth hooks', () => {
       await useAuthStore.getState().login('test@example.com');
       const state = useAuthStore.getState();
 
-      expect(mockAuthService.login).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        credential: null,
-      });
+      expect(mockAuthService.login).toHaveBeenCalledWith('test@example.com');
       expect(state.user).toEqual(mockUser);
       expect(state.isAuthenticated).toBe(true);
       expect(state.isLoading).toBe(false);
@@ -97,7 +94,6 @@ describe('useAuth hooks', () => {
       expect(mockAuthService.register).toHaveBeenCalledWith({
         email: 'test@example.com',
         invitationToken: 'token123',
-        credential: null,
         deviceName: 'Test Device',
       });
       expect(state.user).toEqual(mockUser);

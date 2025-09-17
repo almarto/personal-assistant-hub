@@ -1,10 +1,3 @@
-import type {
-  AuthenticationResponseJSON,
-  RegistrationResponseJSON,
-  PublicKeyCredentialCreationOptionsJSON,
-  PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/types';
-
 export interface User {
   id: string;
   email: string;
@@ -20,7 +13,6 @@ export interface AuthResult {
 
 export interface PasskeyCredentials {
   email: string;
-  credential: AuthenticationResponseJSON;
 }
 
 export interface UserInfo {
@@ -31,21 +23,15 @@ export interface UserInfo {
 export interface RegistrationData {
   email: string;
   invitationToken: string;
-  credential: RegistrationResponseJSON;
   deviceName: string;
 }
 
 export interface AuthService {
-  login(credentials: PasskeyCredentials): Promise<AuthResult>;
+  login(email: string): Promise<AuthResult>;
   logout(): Promise<void>;
   register(data: RegistrationData): Promise<AuthResult>;
   getCurrentUser(): Promise<User | null>;
   refreshToken(): Promise<string>;
-  initiateRegistration(
-    email: string,
-    invitationToken: string
-  ): Promise<PublicKeyCredentialCreationOptionsJSON>;
-  initiateLogin(email: string): Promise<PublicKeyCredentialRequestOptionsJSON>;
 }
 
 export interface AuthState {

@@ -1,6 +1,7 @@
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import '@personal-assistant-hub/i18n';
 import { App } from '../App';
 
 // Custom render function for testing with routes

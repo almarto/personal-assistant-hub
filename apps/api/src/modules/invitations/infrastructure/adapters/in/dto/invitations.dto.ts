@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsEmail, IsIn, IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class CreateInvitationDto {
   @ApiProperty({ example: 'user@example.com' })
@@ -16,6 +16,16 @@ export class CreateInvitationDto {
   @Min(1)
   @Max(168) // 7 days max
   expirationHours?: number;
+
+  @ApiProperty({
+    example: 'user',
+    description: 'Role for the user to be created (default: user)',
+    enum: ['admin', 'user'],
+    required: false,
+  })
+  @IsOptional()
+  @IsIn(['admin', 'user'])
+  role?: 'admin' | 'user';
 }
 
 export class InvitationResponseDto {
@@ -42,6 +52,9 @@ export class InvitationResponseDto {
 
   @ApiProperty()
   createdAt: Date;
+
+  @ApiProperty({ enum: ['admin', 'user'] })
+  role: 'admin' | 'user';
 
   @ApiProperty()
   isExpired: boolean;

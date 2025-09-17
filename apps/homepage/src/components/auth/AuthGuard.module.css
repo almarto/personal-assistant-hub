@@ -1,0 +1,29 @@
+/* AuthGuard Component Styles */
+
+.authLoading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.loadingSpinner {
+  width: var(--space-8);
+  height: var(--space-8);
+  border: 3px solid var(--color-border);
+  border-top: 3px solid var(--color-primary-600);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.authLoading p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}

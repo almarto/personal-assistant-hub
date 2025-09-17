@@ -77,7 +77,8 @@ describe('InvitationsController', () => {
       expect(invitationUseCase.create).toHaveBeenCalledWith(
         'test@example.com',
         'user-123',
-        48
+        48,
+        undefined
       );
       expect(result).toEqual(expectedResult);
     });
@@ -102,6 +103,7 @@ describe('InvitationsController', () => {
       expect(invitationUseCase.create).toHaveBeenCalledWith(
         'test@example.com',
         'user-123',
+        undefined,
         undefined
       );
       expect(result).toEqual(expectedResult);
