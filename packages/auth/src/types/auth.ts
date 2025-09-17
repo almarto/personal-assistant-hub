@@ -41,9 +41,13 @@ export interface PasswordRegistrationData {
 
 // Base interface for common authentication functionality
 export interface BaseAuthService {
-  login(credentials: PasswordCredentials | PasskeyCredentials): Promise<AuthResult>;
+  login(
+    credentials: PasswordCredentials | PasskeyCredentials
+  ): Promise<AuthResult>;
   logout(): Promise<void>;
-  register(data: PasswordRegistrationData | PasskeyRegistrationData): Promise<AuthResult>;
+  register(
+    data: PasswordRegistrationData | PasskeyRegistrationData
+  ): Promise<AuthResult>;
   getCurrentUser(): Promise<User | null>;
   refreshToken(): Promise<string>;
   getToken(): string | null;

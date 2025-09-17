@@ -1,4 +1,12 @@
-import type { AuthResult, BaseAuthService, PasskeyCredentials, PasskeyRegistrationData, PasswordCredentials, PasswordRegistrationData, User } from '../types/auth';
+import type {
+  AuthResult,
+  BaseAuthService,
+  PasskeyCredentials,
+  PasskeyRegistrationData,
+  PasswordCredentials,
+  PasswordRegistrationData,
+  User,
+} from '../types/auth';
 
 export interface BaseAuthServiceConfig {
   apiBaseUrl: string;
@@ -114,6 +122,10 @@ export abstract class BaseAuthServiceImpl implements BaseAuthService {
   }
 
   // Abstract methods that must be implemented by subclasses
-  abstract login(credentials: PasswordCredentials | PasskeyCredentials): Promise<AuthResult>;
-  abstract register(data: PasswordRegistrationData | PasskeyRegistrationData): Promise<AuthResult>;
+  abstract login(
+    credentials: PasswordCredentials | PasskeyCredentials
+  ): Promise<AuthResult>;
+  abstract register(
+    data: PasswordRegistrationData | PasskeyRegistrationData
+  ): Promise<AuthResult>;
 }

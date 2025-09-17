@@ -2,7 +2,11 @@
 import bcrypt from 'bcryptjs';
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 
-import type { AuthResult, PasswordCredentials, PasswordRegistrationData } from '../../types/auth';
+import type {
+  AuthResult,
+  PasswordCredentials,
+  PasswordRegistrationData,
+} from '../../types/auth';
 import type { BaseAuthServiceConfig } from '../base-auth.service';
 import { PasswordAuthServiceImpl } from '../password-auth.service';
 
@@ -85,7 +89,10 @@ describe('PasswordAuthServiceImpl', () => {
         })
       );
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'jwt-token');
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'auth_token',
+        'jwt-token'
+      );
       expect(result).toEqual(mockAuthResult);
     });
 
@@ -101,7 +108,9 @@ describe('PasswordAuthServiceImpl', () => {
         json: () => Promise.resolve({ message: 'Invalid credentials' }),
       } as Response);
 
-      await expect(passwordService.login(credentials)).rejects.toThrow('Invalid credentials');
+      await expect(passwordService.login(credentials)).rejects.toThrow(
+        'Invalid credentials'
+      );
     });
   });
 
@@ -152,7 +161,10 @@ describe('PasswordAuthServiceImpl', () => {
         })
       );
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'jwt-token');
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'auth_token',
+        'jwt-token'
+      );
       expect(result).toEqual(mockAuthResult);
     });
 
@@ -171,7 +183,9 @@ describe('PasswordAuthServiceImpl', () => {
         json: () => Promise.resolve({ message: 'Invalid invitation token' }),
       } as Response);
 
-      await expect(passwordService.register(registrationData)).rejects.toThrow('Invalid invitation token');
+      await expect(passwordService.register(registrationData)).rejects.toThrow(
+        'Invalid invitation token'
+      );
     });
   });
 
@@ -220,7 +234,8 @@ describe('PasswordAuthServiceImpl', () => {
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: false,
         status: 400,
-        json: () => Promise.resolve({ message: 'Current password is incorrect' }),
+        json: () =>
+          Promise.resolve({ message: 'Current password is incorrect' }),
       } as Response);
 
       await expect(
@@ -232,7 +247,8 @@ describe('PasswordAuthServiceImpl', () => {
   describe('validatePasswordStrength', () => {
     it('should validate strong password', () => {
       const strongPassword = 'StrongP@ssw0rd';
-      const result = PasswordAuthServiceImpl.validatePasswordStrength(strongPassword);
+      const result =
+        PasswordAuthServiceImpl.validatePasswordStrength(strongPassword);
 
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -240,10 +256,13 @@ describe('PasswordAuthServiceImpl', () => {
 
     it('should reject password that is too short', () => {
       const shortPassword = 'Short1!';
-      const result = PasswordAuthServiceImpl.validatePasswordStrength(shortPassword);
+      const result =
+        PasswordAuthServiceImpl.validatePasswordStrength(shortPassword);
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must be at least 8 characters long');
+      expect(result.errors).toContain(
+        'Password must be at least 8 characters long'
+      );
     });
 
     it('should reject password without uppercase letter', () => {
@@ -251,7 +270,9 @@ describe('PasswordAuthServiceImpl', () => {
       const result = PasswordAuthServiceImpl.validatePasswordStrength(password);
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one uppercase letter');
+      expect(result.errors).toContain(
+        'Password must contain at least one uppercase letter'
+      );
     });
 
     it('should reject password without lowercase letter', () => {
@@ -259,7 +280,9 @@ describe('PasswordAuthServiceImpl', () => {
       const result = PasswordAuthServiceImpl.validatePasswordStrength(password);
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one lowercase letter');
+      expect(result.errors).toContain(
+        'Password must contain at least one lowercase letter'
+      );
     });
 
     it('should reject password without number', () => {
@@ -267,7 +290,9 @@ describe('PasswordAuthServiceImpl', () => {
       const result = PasswordAuthServiceImpl.validatePasswordStrength(password);
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one number');
+      expect(result.errors).toContain(
+        'Password must contain at least one number'
+      );
     });
 
     it('should reject password without special character', () => {
@@ -275,12 +300,15 @@ describe('PasswordAuthServiceImpl', () => {
       const result = PasswordAuthServiceImpl.validatePasswordStrength(password);
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Password must contain at least one special character');
+      expect(result.errors).toContain(
+        'Password must contain at least one special character'
+      );
     });
 
     it('should return multiple errors for weak password', () => {
       const weakPassword = 'weak';
-      const result = PasswordAuthServiceImpl.validatePasswordStrength(weakPassword);
+      const result =
+        PasswordAuthServiceImpl.validatePasswordStrength(weakPassword);
 
       expect(result.isValid).toBe(false);
       expect(result.errors).toHaveLength(4); // Missing: length, uppercase, number, special char

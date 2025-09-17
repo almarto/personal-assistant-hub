@@ -8,10 +8,7 @@ import type {
 } from '@simplewebauthn/types';
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 
-import type {
-  AuthResult,
-  PasskeyRegistrationData,
-} from '../../types/auth';
+import type { AuthResult, PasskeyRegistrationData } from '../../types/auth';
 import type { BaseAuthServiceConfig } from '../base-auth.service';
 import { PasskeyAuthServiceImpl } from '../passkey-auth.service';
 
@@ -114,7 +111,8 @@ describe('PasskeyAuthServiceImpl', () => {
       const result = await passkeyService.register(registrationData);
 
       // Should call initiate first
-      expect(fetch).toHaveBeenNthCalledWith(1,
+      expect(fetch).toHaveBeenNthCalledWith(
+        1,
         'http://localhost:3001/auth/passkey/register/initiate',
         expect.objectContaining({
           method: 'POST',
@@ -129,10 +127,13 @@ describe('PasskeyAuthServiceImpl', () => {
       );
 
       // Should call startRegistration with options
-      expect(mockStartRegistration).toHaveBeenCalledWith({ optionsJSON: mockOptions });
+      expect(mockStartRegistration).toHaveBeenCalledWith({
+        optionsJSON: mockOptions,
+      });
 
       // Should call complete registration
-      expect(fetch).toHaveBeenNthCalledWith(2,
+      expect(fetch).toHaveBeenNthCalledWith(
+        2,
         'http://localhost:3001/auth/passkey/register/complete',
         expect.objectContaining({
           method: 'POST',
@@ -148,7 +149,10 @@ describe('PasskeyAuthServiceImpl', () => {
         })
       );
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'jwt-token');
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'auth_token',
+        'jwt-token'
+      );
       expect(result).toEqual(mockAuthResult);
     });
 
@@ -165,7 +169,9 @@ describe('PasskeyAuthServiceImpl', () => {
         json: () => Promise.resolve({ message: 'Invalid invitation token' }),
       } as Response);
 
-      await expect(passkeyService.register(registrationData)).rejects.toThrow('Invalid invitation token');
+      await expect(passkeyService.register(registrationData)).rejects.toThrow(
+        'Invalid invitation token'
+      );
     });
 
     it('should throw error when user cancels registration', async () => {
@@ -182,9 +188,13 @@ describe('PasskeyAuthServiceImpl', () => {
         json: () => Promise.resolve({ options: mockOptions }),
       } as Response);
 
-      mockStartRegistration.mockRejectedValueOnce(new Error('User cancelled registration'));
+      mockStartRegistration.mockRejectedValueOnce(
+        new Error('User cancelled registration')
+      );
 
-      await expect(passkeyService.register(registrationData)).rejects.toThrow('User cancelled registration');
+      await expect(passkeyService.register(registrationData)).rejects.toThrow(
+        'User cancelled registration'
+      );
     });
   });
 
@@ -240,7 +250,8 @@ describe('PasskeyAuthServiceImpl', () => {
       const result = await passkeyService.login({ email });
 
       // Should call initiate first
-      expect(fetch).toHaveBeenNthCalledWith(1,
+      expect(fetch).toHaveBeenNthCalledWith(
+        1,
         'http://localhost:3001/auth/passkey/login/initiate',
         expect.objectContaining({
           method: 'POST',
@@ -252,10 +263,13 @@ describe('PasskeyAuthServiceImpl', () => {
       );
 
       // Should call startAuthentication with options
-      expect(mockStartAuthentication).toHaveBeenCalledWith({ optionsJSON: mockOptions });
+      expect(mockStartAuthentication).toHaveBeenCalledWith({
+        optionsJSON: mockOptions,
+      });
 
       // Should call complete login
-      expect(fetch).toHaveBeenNthCalledWith(2,
+      expect(fetch).toHaveBeenNthCalledWith(
+        2,
         'http://localhost:3001/auth/passkey/login/complete',
         expect.objectContaining({
           method: 'POST',
@@ -269,7 +283,10 @@ describe('PasskeyAuthServiceImpl', () => {
         })
       );
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'jwt-token');
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'auth_token',
+        'jwt-token'
+      );
       expect(result).toEqual(mockAuthResult);
     });
 
@@ -282,7 +299,9 @@ describe('PasskeyAuthServiceImpl', () => {
         json: () => Promise.resolve({ message: 'User not found' }),
       } as Response);
 
-      await expect(passkeyService.login({ email })).rejects.toThrow('User not found');
+      await expect(passkeyService.login({ email })).rejects.toThrow(
+        'User not found'
+      );
     });
 
     it('should throw error when user cancels authentication', async () => {
@@ -294,9 +313,13 @@ describe('PasskeyAuthServiceImpl', () => {
         json: () => Promise.resolve({ options: mockOptions }),
       } as Response);
 
-      mockStartAuthentication.mockRejectedValueOnce(new Error('User cancelled authentication'));
+      mockStartAuthentication.mockRejectedValueOnce(
+        new Error('User cancelled authentication')
+      );
 
-      await expect(passkeyService.login({ email })).rejects.toThrow('User cancelled authentication');
+      await expect(passkeyService.login({ email })).rejects.toThrow(
+        'User cancelled authentication'
+      );
     });
   });
 
@@ -370,7 +393,9 @@ describe('PasskeyAuthServiceImpl', () => {
     });
 
     it('should throw error when not authenticated', async () => {
-      await expect(passkeyService.deletePasskey('passkey-id')).rejects.toThrow();
+      await expect(
+        passkeyService.deletePasskey('passkey-id')
+      ).rejects.toThrow();
     });
   });
 });

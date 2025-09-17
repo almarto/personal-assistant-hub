@@ -2,7 +2,10 @@
 import { createAuthHooks } from './hooks/useAuth';
 import { AuthServicesImpl } from './services/auth-services';
 import type { BaseAuthServiceConfig } from './services/base-auth.service';
-import { AuthService, type AuthServiceConfig } from './services/passkey-auth.service';
+import {
+  AuthService,
+  type AuthServiceConfig,
+} from './services/passkey-auth.service';
 import { createAuthStore } from './store/auth.store';
 
 // New factory function to create the complete auth system with dual services
@@ -35,7 +38,10 @@ export const createLegacyAuth = (config: AuthServiceConfig) => {
 };
 
 // Export individual components for advanced usage
-export { AuthService, PasskeyAuthServiceImpl } from './services/passkey-auth.service';
+export {
+  AuthService,
+  PasskeyAuthServiceImpl,
+} from './services/passkey-auth.service';
 export { PasswordAuthServiceImpl } from './services/password-auth.service';
 export { AuthServicesImpl } from './services/auth-services';
 export { BaseAuthServiceImpl } from './services/base-auth.service';

@@ -19,3 +19,8 @@ export type { ToolCardProps } from './ToolCard';
 
 export { LanguageSelector } from './LanguageSelector';
 export type { LanguageSelectorProps } from './LanguageSelector';
+
+export {
+  PasswordStrengthIndicator,
+  isPasswordValid,
+} from './PasswordStrengthIndicator';

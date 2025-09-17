@@ -4,10 +4,13 @@ import type {
   AuthResult,
   PasswordAuthService,
   PasswordCredentials,
-  PasswordRegistrationData, 
+  PasswordRegistrationData,
 } from '../types/auth';
 
-import { BaseAuthServiceImpl, type BaseAuthServiceConfig } from './base-auth.service';
+import {
+  BaseAuthServiceImpl,
+  type BaseAuthServiceConfig,
+} from './base-auth.service';
 
 export class PasswordAuthServiceImpl
   extends BaseAuthServiceImpl
@@ -52,7 +55,10 @@ export class PasswordAuthServiceImpl
     return response;
   }
 
-  async changePassword(oldPassword: string, newPassword: string): Promise<void> {
+  async changePassword(
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
     // Hash new password on client side
     const saltRounds = 12;
     const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);

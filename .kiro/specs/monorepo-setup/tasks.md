@@ -74,7 +74,7 @@
     - Add password change endpoint for authenticated users
     - Update user model to include hasPassword and hasPasskeys flags
     - _Requirements: 4.1, 4.3, 4.9_
-  - [ ] 9.4 Create dual authentication UI components
+  - [x] 9.4 Create dual authentication UI components
     - Update registration form to default to password with "Use Passkey" button
     - Update login form to default to password with "Use Passkey" button
     - Add password strength validation and visual feedback

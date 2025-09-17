@@ -16,7 +16,10 @@ import type {
   PasskeyRegistrationData,
 } from '../types/auth';
 
-import { BaseAuthServiceImpl, type BaseAuthServiceConfig } from './base-auth.service';
+import {
+  BaseAuthServiceImpl,
+  type BaseAuthServiceConfig,
+} from './base-auth.service';
 
 // Legacy interface for backward compatibility
 interface AuthServiceConfig {
@@ -72,15 +75,18 @@ export class PasskeyAuthServiceImpl
     });
 
     // Complete registration with the backend
-    const response = await this.makeRequest<AuthResult>('/passkey/register/complete', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: data.email,
-        invitationToken: data.invitationToken,
-        credential,
-        deviceName: data.deviceName,
-      }),
-    });
+    const response = await this.makeRequest<AuthResult>(
+      '/passkey/register/complete',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          email: data.email,
+          invitationToken: data.invitationToken,
+          credential,
+          deviceName: data.deviceName,
+        }),
+      }
+    );
 
     // Store the token
     this.setToken(response.token);
@@ -96,13 +102,16 @@ export class PasskeyAuthServiceImpl
     const credential = await startAuthentication({ optionsJSON: options });
 
     // Complete login with the backend
-    const response = await this.makeRequest<AuthResult>('/passkey/login/complete', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: credentials.email,
-        credential,
-      }),
-    });
+    const response = await this.makeRequest<AuthResult>(
+      '/passkey/login/complete',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          email: credentials.email,
+          credential,
+        }),
+      }
+    );
 
     // Store the token
     this.setToken(response.token);
@@ -111,12 +120,16 @@ export class PasskeyAuthServiceImpl
   }
 
   async getAvailableCredentials(): Promise<PasskeyCredential[]> {
-    const response = await this.makeRequest<{ credentials: PasskeyCredential[] }>('/passkey/credentials');
+    const response = await this.makeRequest<{
+      credentials: PasskeyCredential[];
+    }>('/passkey/credentials');
     return response.credentials;
   }
 
   async getPasskeys(): Promise<PasskeyCredential[]> {
-    const response = await this.makeRequest<{ passkeys: PasskeyCredential[] }>('/passkey/list');
+    const response = await this.makeRequest<{ passkeys: PasskeyCredential[] }>(
+      '/passkey/list'
+    );
     return response.passkeys;
   }
 
@@ -135,7 +148,9 @@ export class AuthService extends PasskeyAuthServiceImpl {
   }
 
   // Legacy method signature for backward compatibility - overload to support both
-  async login(emailOrCredentials: string | PasskeyCredentials): Promise<AuthResult> {
+  async login(
+    emailOrCredentials: string | PasskeyCredentials
+  ): Promise<AuthResult> {
     if (typeof emailOrCredentials === 'string') {
       return super.login({ email: emailOrCredentials });
     }

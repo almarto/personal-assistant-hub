@@ -6,17 +6,29 @@
   padding: var(--space-8);
 }
 
-.loginForm h2 {
+.header {
+  margin-bottom: var(--space-2);
+}
+
+.header h2 {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0 0 var(--space-2) 0;
 }
 
-.loginForm p {
+.header p {
   color: var(--color-text-secondary);
-  margin: 0 0 var(--space-6) 0;
+  margin: 0;
   font-size: var(--font-size-sm);
+  transition: opacity 0.3s ease;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: all 0.3s ease;
 }
 
 .formGroup {
@@ -105,6 +117,62 @@
   border-top-color: white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.switchModeButton {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  color: var(--color-primary-600);
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: var(--space-2);
+}
+
+.switchModeButton:hover:not(:disabled) {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-300);
+  color: var(--color-primary-700);
+}
+
+.switchModeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mode-specific animations */
+.formContent.mode-password {
+  animation: slideInPassword 0.3s ease-out;
+}
+
+.formContent.mode-passkey {
+  animation: slideInPasskey 0.3s ease-out;
+}
+
+@keyframes slideInPassword {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInPasskey {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .errorMessage {

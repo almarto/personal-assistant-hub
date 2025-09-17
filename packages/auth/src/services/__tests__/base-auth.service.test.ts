@@ -1,11 +1,23 @@
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 
-import type { AuthResult, PasskeyCredentials, PasskeyRegistrationData, PasswordCredentials, PasswordRegistrationData, User } from '../../types/auth';
-import { BaseAuthServiceImpl, type BaseAuthServiceConfig } from '../base-auth.service';
+import type {
+  AuthResult,
+  PasskeyCredentials,
+  PasskeyRegistrationData,
+  PasswordCredentials,
+  PasswordRegistrationData,
+  User,
+} from '../../types/auth';
+import {
+  BaseAuthServiceImpl,
+  type BaseAuthServiceConfig,
+} from '../base-auth.service';
 
 // Create a concrete implementation for testing
 class TestAuthService extends BaseAuthServiceImpl {
-  async login(credentials: PasswordCredentials | PasskeyCredentials): Promise<AuthResult> {
+  async login(
+    credentials: PasswordCredentials | PasskeyCredentials
+  ): Promise<AuthResult> {
     const response = await this.makeRequest<AuthResult>('/test/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
@@ -14,7 +26,9 @@ class TestAuthService extends BaseAuthServiceImpl {
     return response;
   }
 
-  async register(data: PasswordRegistrationData | PasskeyRegistrationData): Promise<AuthResult> {
+  async register(
+    data: PasswordRegistrationData | PasskeyRegistrationData
+  ): Promise<AuthResult> {
     const response = await this.makeRequest<AuthResult>('/test/register', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -65,7 +79,7 @@ describe('BaseAuthServiceImpl', () => {
       localStorageMock.getItem.mockReturnValue(mockToken);
 
       const service = new TestAuthService(mockConfig);
-      
+
       expect(localStorageMock.getItem).toHaveBeenCalledWith('auth_token');
       expect(service.getToken()).toBe(mockToken);
     });
@@ -148,7 +162,9 @@ describe('BaseAuthServiceImpl', () => {
         json: () => Promise.resolve({ message: errorMessage }),
       } as Response);
 
-      await expect(authService.login({ email: 'test@example.com' })).rejects.toThrow(errorMessage);
+      await expect(
+        authService.login({ email: 'test@example.com' })
+      ).rejects.toThrow(errorMessage);
     });
   });
 
@@ -245,7 +261,7 @@ describe('BaseAuthServiceImpl', () => {
     it('should refresh token successfully', async () => {
       const oldToken = 'old-token';
       const newToken = 'new-token';
-      
+
       localStorageMock.getItem.mockReturnValue(oldToken);
       const service = new TestAuthService(mockConfig);
 
@@ -257,7 +273,10 @@ describe('BaseAuthServiceImpl', () => {
       const result = await service.refreshToken();
 
       expect(result).toBe(newToken);
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', newToken);
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'auth_token',
+        newToken
+      );
     });
 
     it('should throw error and clear token when refresh fails', async () => {
@@ -275,7 +294,9 @@ describe('BaseAuthServiceImpl', () => {
     });
 
     it('should throw error when no token to refresh', async () => {
-      await expect(authService.refreshToken()).rejects.toThrow('No token to refresh');
+      await expect(authService.refreshToken()).rejects.toThrow(
+        'No token to refresh'
+      );
     });
   });
 });
