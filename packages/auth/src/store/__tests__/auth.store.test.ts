@@ -16,6 +16,8 @@ describe('AuthStore', () => {
     role: 'user',
     createdAt: new Date(),
     lastLoginAt: new Date(),
+    hasPassword: false,
+    hasPasskeys: true,
   };
 
   beforeEach(() => {

@@ -44,6 +44,8 @@ describe('Auth Integration Tests', () => {
         role: 'user',
         createdAt: new Date('2024-01-01'),
         lastLoginAt: null,
+        hasPassword: false,
+        hasPasskeys: true,
       };
 
       const mockAuthResult: AuthResult = {
@@ -144,6 +146,8 @@ describe('Auth Integration Tests', () => {
         role: 'user',
         createdAt: new Date('2024-01-01'),
         lastLoginAt: new Date('2024-01-02'),
+        hasPassword: false,
+        hasPasskeys: true,
       };
 
       const mockAuthResult: AuthResult = {
@@ -236,6 +240,8 @@ describe('Auth Integration Tests', () => {
         role: 'user',
         createdAt: new Date('2024-01-01'),
         lastLoginAt: new Date('2024-01-02'),
+        hasPassword: false,
+        hasPasskeys: true,
       };
 
       // Set authenticated state
@@ -257,6 +263,8 @@ describe('Auth Integration Tests', () => {
         role: 'user',
         createdAt: new Date('2024-01-01'),
         lastLoginAt: new Date('2024-01-02'),
+        hasPassword: false,
+        hasPasskeys: true,
       };
 
       // Set initial authenticated state
@@ -334,7 +342,8 @@ describe('Auth Integration Tests', () => {
 
   describe('Service Integration', () => {
     it('should integrate AuthService with store correctly', () => {
-      expect(auth.authService).toBeDefined();
+      expect(auth.passwordService).toBeDefined();
+      expect(auth.passkeyService).toBeDefined();
       expect(auth.useAuthStore).toBeDefined();
       expect(auth.useAuth).toBeDefined();
     });

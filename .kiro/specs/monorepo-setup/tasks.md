@@ -62,7 +62,7 @@
     - Create Drizzle schema for password credentials
     - Generate and run database migration
     - _Requirements: 4.1, 4.9_
-  - [ ] 9.2 Refactor auth package architecture for multiple services
+  - [x] 9.2 Refactor auth package architecture for multiple services
     - Create BaseAuthService interface for common functionality
     - Implement PasswordAuthService class with bcrypt password hashing
     - Refactor existing AuthService to PasskeyAuthService

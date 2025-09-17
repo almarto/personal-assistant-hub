@@ -28,6 +28,7 @@
   "dependencies": {
     "@simplewebauthn/browser": "13.1.2",
     "@simplewebauthn/types": "12.0.0",
+    "bcryptjs": "3.0.2",
     "zustand": "5.0.8"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@testing-library/jest-dom": "6.8.0",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
+    "@types/bcryptjs": "^3.0.0",
     "@types/node": "24.5.0",
     "@types/react": "19.1.13",
     "eslint": "9.35.0",

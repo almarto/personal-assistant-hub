@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { AuthService } from '../services/auth.service';
+import type { AuthService } from '../services/passkey-auth.service';
 import type { AuthStore } from '../types/auth';
 
 export const createAuthStore = (authService: AuthService) =>
