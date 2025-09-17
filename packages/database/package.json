@@ -37,18 +37,12 @@
     "db:seed-admin": "pnpm exec tsx src/scripts/seed-admin.ts"
   },
   "dependencies": {
-    "drizzle-orm": "0.44.5",
-    "postgres": "3.4.7",
     "dotenv": "17.2.2"
   },
   "devDependencies": {
     "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*",
-    "@types/node": "24.3.1",
     "drizzle-kit": "0.31.4",
-    "eslint": "9.35.0",
-    "tsup": "8.5.0",
-    "tsx": "4.20.5",
-    "typescript": "5.9.2"
+    "tsx": "4.20.5"
   }
 }

@@ -17,14 +17,13 @@
     "lint": "echo 'No linting needed for config package'",
     "build": "echo 'No build needed for config package'"
   },
-  "dependencies": {
-    "@typescript-eslint/eslint-plugin": "8.44.0",
-    "@typescript-eslint/parser": "8.44.0",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-import": "2.32.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
+    "@typescript-eslint/eslint-plugin": ">=8.0.0",
+    "@typescript-eslint/parser": ">=8.0.0",
     "eslint": ">=9.0.0",
+    "eslint-config-prettier": ">=10.0.0",
+    "eslint-plugin-import": ">=2.0.0",
     "typescript": ">=5.0.0"
   }
 }

@@ -13,7 +13,7 @@
     "check-types": "echo 'No type checking needed for config package'",
     "build": "echo 'No build needed for config package'"
   },
-  "devDependencies": {
-    "typescript": "5.9.2"
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
   }
 }

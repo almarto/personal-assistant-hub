@@ -32,13 +32,13 @@ ADMIN_EMAIL=admin@yourcompany.com pnpm db:seed-admin
 
 ### Important Notes
 
-⚠️ **The admin still needs to register with a passkey to log in**
+⚠️ **The admin still needs to register with a passkey or password to log in**
 
 This script only creates the user record in the database. The admin must:
 
 1. Go to the registration page
 2. Enter their email (the one used in the script)
-3. Set up their passkey authentication
+3. Set up their passkey/password authentication
 4. Complete the registration process
 
 ### Security

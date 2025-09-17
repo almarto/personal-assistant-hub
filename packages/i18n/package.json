@@ -22,7 +22,6 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "react": "19.1.1",
     "react-i18next": "15.7.3",
     "i18next": "25.5.2",
     "i18next-browser-languagedetector": "8.2.0",
@@ -30,14 +29,7 @@
   },
   "devDependencies": {
     "@personal-assistant-hub/eslint-config": "workspace:*",
-    "@personal-assistant-hub/typescript-config": "workspace:*",
-    "@testing-library/react": "16.3.0",
-    "@types/node": "24.5.0",
-    "@types/react": "19.1.13",
-    "eslint": "9.35.0",
-    "tsup": "8.5.0",
-    "typescript": "5.9.2",
-    "vitest": "3.2.4"
+    "@personal-assistant-hub/typescript-config": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.0.0"
