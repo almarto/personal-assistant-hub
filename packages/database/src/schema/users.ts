@@ -19,6 +19,17 @@ export const users = pgTable('users', {
   lastLoginAt: timestamp('last_login_at'),
 });
 
+export const passwordCredentials = pgTable('password_credentials', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+  passwordHash: text('password_hash').notNull(),
+  salt: text('salt').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 export const passkeyCredentials = pgTable('passkey_credentials', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id')
@@ -61,6 +72,7 @@ export const userSessions = pgTable('user_sessions', {
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
+  passwordCredentials: many(passwordCredentials),
   passkeyCredentials: many(passkeyCredentials),
   createdInvitations: many(invitationTokens, {
     relationName: 'createdInvitations',
@@ -68,6 +80,16 @@ export const usersRelations = relations(users, ({ many }) => ({
   usedInvitations: many(invitationTokens, { relationName: 'usedInvitations' }),
   sessions: many(userSessions),
 }));
+
+export const passwordCredentialsRelations = relations(
+  passwordCredentials,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [passwordCredentials.userId],
+      references: [users.id],
+    }),
+  })
+);
 
 export const passkeyCredentialsRelations = relations(
   passkeyCredentials,

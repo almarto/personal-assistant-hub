@@ -57,7 +57,7 @@
   - _Requirements: 3.5, 4.1, 4.2_
 
 - [ ] 9. Implement dual authentication system (Password + Passkey)
-  - [ ] 9.1 Update database schema to include password credentials table
+  - [x] 9.1 Update database schema to include password credentials table
     - Add hub_password_credentials table with password_hash and salt fields
     - Create Drizzle schema for password credentials
     - Generate and run database migration
