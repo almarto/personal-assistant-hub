@@ -22,6 +22,14 @@ import {
   PASSKEY_CREDENTIAL_REPOSITORY,
 } from '../domain/ports/out/passkey-credential-repository.port';
 import {
+  PasswordCredentialRepository,
+  PASSWORD_CREDENTIAL_REPOSITORY,
+} from '../domain/ports/out/password-credential-repository.port';
+import {
+  PasswordService,
+  PASSWORD_SERVICE,
+} from '../domain/ports/out/password-service.port';
+import {
   SessionRepository,
   SESSION_REPOSITORY,
 } from '../domain/ports/out/session-repository.port';
@@ -46,6 +54,8 @@ export class AuthService implements AuthUseCase {
     private readonly userRepository: UserRepository,
     @Inject(PASSKEY_CREDENTIAL_REPOSITORY)
     private readonly passkeyCredentialRepository: PasskeyCredentialRepository,
+    @Inject(PASSWORD_CREDENTIAL_REPOSITORY)
+    private readonly passwordCredentialRepository: PasswordCredentialRepository,
     @Inject(INVITATION_REPOSITORY)
     private readonly invitationRepository: InvitationRepository,
     @Inject(SESSION_REPOSITORY)
@@ -53,7 +63,9 @@ export class AuthService implements AuthUseCase {
     @Inject(JWT_SERVICE)
     private readonly jwtService: JwtService,
     @Inject(WEBAUTHN_SERVICE)
-    private readonly webAuthnService: WebAuthnService
+    private readonly webAuthnService: WebAuthnService,
+    @Inject(PASSWORD_SERVICE)
+    private readonly passwordService: PasswordService
   ) {}
 
   async initiateRegistration(email: string, invitationToken: string) {
@@ -307,6 +319,181 @@ export class AuthService implements AuthUseCase {
 
   async logout(sessionId: string): Promise<void> {
     await this.sessionRepository.invalidate(sessionId);
+  }
+
+  async registerWithPassword(
+    email: string,
+    password: string,
+    invitationToken: string
+  ): Promise<{ user: User; token: string }> {
+    // Validate password strength
+    const passwordValidation =
+      this.passwordService.validatePasswordStrength(password);
+    if (!passwordValidation.isValid) {
+      throw new BadRequestException(
+        `Password validation failed: ${passwordValidation.errors.join(', ')}`
+      );
+    }
+
+    // Verify invitation token
+    const invitation = await this.invitationRepository.findByTokenAndEmail(
+      invitationToken,
+      email
+    );
+
+    if (!invitation) {
+      throw new BadRequestException('Invalid invitation token');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException('Invitation token already used');
+    }
+
+    if (new Date() > invitation.expiresAt) {
+      throw new BadRequestException('Invitation token expired');
+    }
+
+    // Check if user already exists
+    const existingUser = await this.userRepository.findByEmail(email);
+
+    if (existingUser) {
+      throw new BadRequestException('User already exists');
+    }
+
+    // Create the user
+    const userId = uuidv4();
+    const user = await this.userRepository.create({
+      id: userId,
+      email,
+      role: invitation.role,
+      isActive: true,
+    });
+
+    // Hash the password and create password credential
+    const { hash, salt } = await this.passwordService.hashPassword(password);
+    await this.passwordCredentialRepository.create({
+      id: uuidv4(),
+      userId: user.id,
+      passwordHash: hash,
+      salt,
+    });
+
+    // Mark the invitation as used
+    await this.invitationRepository.markAsUsed(invitationToken, email);
+
+    // Generate JWT token
+    const token = this.jwtService.generateToken(user);
+
+    // Create session
+    const sessionId = uuidv4();
+    await this.sessionRepository.create({
+      id: sessionId,
+      userId: user.id,
+      token,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    });
+
+    return { user, token };
+  }
+
+  async loginWithPassword(
+    email: string,
+    password: string
+  ): Promise<{ user: User; token: string }> {
+    // Find the user
+    const user = await this.userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is not active');
+    }
+
+    // Find password credential
+    const passwordCredential =
+      await this.passwordCredentialRepository.findByUserId(user.id);
+
+    if (!passwordCredential) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    // Verify password
+    const isPasswordValid = await this.passwordService.verifyPassword(
+      password,
+      passwordCredential.passwordHash,
+      passwordCredential.salt
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    // Update user's last login date
+    const updatedUser = await this.userRepository.updateLastLogin(user.id);
+
+    // Generate JWT token
+    const token = this.jwtService.generateToken(updatedUser);
+
+    // Create session
+    const sessionId = uuidv4();
+    await this.sessionRepository.create({
+      id: sessionId,
+      userId: user.id,
+      token,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    });
+
+    return { user: updatedUser, token };
+  }
+
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
+    // Validate new password strength
+    const passwordValidation =
+      this.passwordService.validatePasswordStrength(newPassword);
+    if (!passwordValidation.isValid) {
+      throw new BadRequestException(
+        `Password validation failed: ${passwordValidation.errors.join(', ')}`
+      );
+    }
+
+    // Find the user
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Find existing password credential
+    const existingCredential =
+      await this.passwordCredentialRepository.findByUserId(userId);
+
+    if (!existingCredential) {
+      throw new BadRequestException('No password credential found for user');
+    }
+
+    // Verify old password
+    const isOldPasswordValid = await this.passwordService.verifyPassword(
+      oldPassword,
+      existingCredential.passwordHash,
+      existingCredential.salt
+    );
+
+    if (!isOldPasswordValid) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    // Hash the new password and update credential
+    const { hash, salt } = await this.passwordService.hashPassword(newPassword);
+    await this.passwordCredentialRepository.updateByUserId(userId, {
+      passwordHash: hash,
+      salt,
+    });
   }
 
   async validateUser(userId: string): Promise<User | null> {

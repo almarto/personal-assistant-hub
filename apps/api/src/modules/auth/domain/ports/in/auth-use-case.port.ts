@@ -14,7 +14,7 @@ export const AUTH_USE_CASE = 'AUTH_USE_CASE';
  */
 export interface AuthUseCase {
   /**
-   * Initiates user registration process
+   * Initiates user registration process with passkeys
    */
   initiateRegistration(
     email: string,
@@ -22,7 +22,7 @@ export interface AuthUseCase {
   ): Promise<{ options: PublicKeyCredentialCreationOptionsJSON }>;
 
   /**
-   * Completes user registration process
+   * Completes user registration process with passkeys
    */
   completeRegistration(
     email: string,
@@ -32,19 +32,45 @@ export interface AuthUseCase {
   ): Promise<{ user: User; token: string }>;
 
   /**
-   * Initiates user login process
+   * Registers user with password
+   */
+  registerWithPassword(
+    email: string,
+    password: string,
+    invitationToken: string
+  ): Promise<{ user: User; token: string }>;
+
+  /**
+   * Initiates user login process with passkeys
    */
   initiateLogin(
     email: string
   ): Promise<{ options: PublicKeyCredentialRequestOptionsJSON }>;
 
   /**
-   * Completes user login process
+   * Completes user login process with passkeys
    */
   completeLogin(
     email: string,
     credential: AuthenticationResponseJSON
   ): Promise<{ user: User; token: string }>;
+
+  /**
+   * Logs in user with password
+   */
+  loginWithPassword(
+    email: string,
+    password: string
+  ): Promise<{ user: User; token: string }>;
+
+  /**
+   * Changes user password
+   */
+  changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void>;
 
   /**
    * Logs out a user

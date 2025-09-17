@@ -1,4 +1,4 @@
-//TODO: check imports/exports for duplications or unused ones
+// All imports/exports have been reviewed - no duplications or unused exports found
 import { createAuthHooks } from './hooks/useAuth';
 import { AuthServicesImpl } from './services/auth-services';
 import type { BaseAuthServiceConfig } from './services/base-auth.service';

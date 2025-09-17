@@ -5,7 +5,14 @@ import {
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
-import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  ValidateNested,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
 
 export class RegisterInitiateDto {
   @ApiProperty({
@@ -100,6 +107,76 @@ export class WebAuthnOptionsDto {
     | PublicKeyCredentialRequestOptionsJSON;
 }
 
+export class PasswordRegisterDto {
+  @ApiProperty({
+    description: 'User email',
+    example: 'user@example.com',
+  })
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @ApiProperty({
+    description: 'User password',
+    example: 'SecurePassword123!',
+    minLength: 8,
+    maxLength: 128,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(128)
+  password: string;
+
+  @ApiProperty({
+    description: 'Invitation token',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @IsString()
+  @IsNotEmpty()
+  invitationToken: string;
+}
+
+export class PasswordLoginDto {
+  @ApiProperty({
+    description: 'User email',
+    example: 'user@example.com',
+  })
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @ApiProperty({
+    description: 'User password',
+    example: 'SecurePassword123!',
+  })
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
+
+export class ChangePasswordDto {
+  @ApiProperty({
+    description: 'Current password',
+    example: 'OldPassword123!',
+  })
+  @IsString()
+  @IsNotEmpty()
+  oldPassword: string;
+
+  @ApiProperty({
+    description: 'New password',
+    example: 'NewSecurePassword123!',
+    minLength: 8,
+    maxLength: 128,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(128)
+  newPassword: string;
+}
+
 export class UserDto {
   @ApiProperty({
     description: 'User ID',
@@ -143,6 +220,18 @@ export class UserDto {
     nullable: true,
   })
   lastLoginAt?: Date | null;
+
+  @ApiProperty({
+    description: 'Whether user has password authentication',
+    example: true,
+  })
+  hasPassword: boolean;
+
+  @ApiProperty({
+    description: 'Whether user has passkey authentication',
+    example: false,
+  })
+  hasPasskeys: boolean;
 }
 
 export class AuthResponseDto {

@@ -68,7 +68,7 @@
     - Refactor existing AuthService to PasskeyAuthService
     - Update createAuth factory to return both services: auth.passwordService and auth.passkeyService
     - _Requirements: 4.1, 4.10_
-  - [ ] 9.3 Implement password authentication endpoints in backend
+  - [x] 9.3 Implement password authentication endpoints in backend
     - Create password registration endpoint with invitation token validation
     - Create password login endpoint with bcrypt verification
     - Add password change endpoint for authenticated users

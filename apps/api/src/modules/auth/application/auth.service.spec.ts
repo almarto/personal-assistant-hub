@@ -78,6 +78,13 @@ describe('AuthService', () => {
       updateCounter: jest.fn(),
     };
 
+    const mockPasswordCredentialRepository = {
+      create: jest.fn(),
+      findByUserId: jest.fn(),
+      updateByUserId: jest.fn(),
+      deleteByUserId: jest.fn(),
+    };
+
     const mockInvitationRepository = {
       findByTokenAndEmail: jest.fn(),
       markAsUsed: jest.fn(),
@@ -100,6 +107,12 @@ describe('AuthService', () => {
       verifyAuthenticationResponse: jest.fn(),
     };
 
+    const mockPasswordService = {
+      hashPassword: jest.fn(),
+      verifyPassword: jest.fn(),
+      validatePasswordStrength: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -109,12 +122,17 @@ describe('AuthService', () => {
           useValue: mockPasskeyCredentialRepository,
         },
         {
+          provide: 'PASSWORD_CREDENTIAL_REPOSITORY',
+          useValue: mockPasswordCredentialRepository,
+        },
+        {
           provide: 'INVITATION_REPOSITORY',
           useValue: mockInvitationRepository,
         },
         { provide: 'SESSION_REPOSITORY', useValue: mockSessionRepository },
         { provide: 'JWT_SERVICE', useValue: mockJwtService },
         { provide: 'WEBAUTHN_SERVICE', useValue: mockWebAuthnService },
+        { provide: 'PASSWORD_SERVICE', useValue: mockPasswordService },
       ],
     }).compile();
 
@@ -219,6 +237,7 @@ describe('AuthService', () => {
     beforeEach(() => {
       // Setup challenge store
       const challengeKey = 'reg_test@example.com_valid-token';
+
       (service as any).challengeStore.set(challengeKey, {
         challenge: 'mock-challenge',
         userID: 'temp-user-id',
@@ -269,6 +288,7 @@ describe('AuthService', () => {
 
     it('should throw BadRequestException for expired registration session', async () => {
       // Arrange - clear challenge store
+
       (service as any).challengeStore.clear();
 
       // Act & Assert

@@ -9,7 +9,9 @@ export class User {
     private readonly _isActive: boolean,
     private readonly _createdAt: Date,
     private readonly _updatedAt: Date,
-    private readonly _lastLoginAt?: Date | null
+    private readonly _lastLoginAt?: Date | null,
+    private readonly _hasPassword?: boolean,
+    private readonly _hasPasskeys?: boolean
   ) {}
 
   get id(): string {
@@ -38,5 +40,13 @@ export class User {
 
   get lastLoginAt(): Date | null | undefined {
     return this._lastLoginAt;
+  }
+
+  get hasPassword(): boolean {
+    return this._hasPassword ?? false;
+  }
+
+  get hasPasskeys(): boolean {
+    return this._hasPasskeys ?? false;
   }
 }
