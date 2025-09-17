@@ -42,18 +42,22 @@ This document defines the requirements for the initial setup of the personal-ass
 4. IF navigating to a tool THEN the system SHALL maintain the main layout and show the tool as a subroute
 5. WHEN building the app THEN the system SHALL generate optimized assets for production
 
-### Requirement 4: Passkey Authentication System
+### Requirement 4: Dual Authentication System (Passkey + Password)
 
-**User Story:** As an administrator, I want a passkey-based authentication system with invitation-only registration, so that I can control access and maintain system security.
+**User Story:** As a user, I want to authenticate using either passkeys or traditional password, so that I can access the system regardless of browser compatibility or device limitations.
 
 #### Acceptance Criteria
 
-1. WHEN authentication is implemented THEN the system SHALL use WebAuthn/passkeys as the primary method
+1. WHEN authentication is implemented THEN the system SHALL support both WebAuthn/passkeys and password authentication
 2. WHEN a user attempts to register THEN the system SHALL require a valid invitation token
-3. WHEN an invitation is generated THEN the system SHALL create a unique link with expiration
-4. IF a user is admin THEN the system SHALL allow generating invitations and managing users
-5. WHEN a user authenticates THEN the system SHALL maintain the session securely
-6. IF an invitation token expires THEN the system SHALL reject the registration
+3. WHEN registering THEN the system SHALL default to password authentication with an option to use passkeys
+4. WHEN logging in THEN the system SHALL default to password authentication with an option to use passkeys
+5. WHEN an invitation is generated THEN the system SHALL create a unique link with expiration
+6. IF a user is admin THEN the system SHALL allow generating invitations and managing users
+7. WHEN a user authenticates THEN the system SHALL maintain the session securely
+8. IF an invitation token expires THEN the system SHALL reject the registration
+9. WHEN using password authentication THEN the system SHALL enforce strong password requirements
+10. WHEN switching between authentication methods THEN the system SHALL provide clear UI indicators
 
 ### Requirement 5: NestJS Backend
 

@@ -49,42 +49,73 @@
   - Integrate i18n into existing homepage components
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6_
 
-- [ ] 8. Integrate authentication flow into homepage
+- [x] 8. Integrate authentication flow into homepage
   - Connect authentication package with homepage application
   - Implement passkey login/registration UI components
   - Add authentication guards to protected routes
   - Test complete authentication flow in the homepage
   - _Requirements: 3.5, 4.1, 4.2_
 
-- [ ] 9. Implement routing and tool integration architecture
+- [ ] 9. Implement dual authentication system (Password + Passkey)
+  - [ ] 9.1 Update database schema to include password credentials table
+    - Add hub_password_credentials table with password_hash and salt fields
+    - Create Drizzle schema for password credentials
+    - Generate and run database migration
+    - _Requirements: 4.1, 4.9_
+  - [ ] 9.2 Refactor auth package architecture for multiple services
+    - Create BaseAuthService interface for common functionality
+    - Implement PasswordAuthService class with bcrypt password hashing
+    - Refactor existing AuthService to PasskeyAuthService
+    - Update createAuth factory to return both services: auth.passwordService and auth.passkeyService
+    - _Requirements: 4.1, 4.10_
+  - [ ] 9.3 Implement password authentication endpoints in backend
+    - Create password registration endpoint with invitation token validation
+    - Create password login endpoint with bcrypt verification
+    - Add password change endpoint for authenticated users
+    - Update user model to include hasPassword and hasPasskeys flags
+    - _Requirements: 4.1, 4.3, 4.9_
+  - [ ] 9.4 Create dual authentication UI components
+    - Update registration form to default to password with "Use Passkey" button
+    - Update login form to default to password with "Use Passkey" button
+    - Add password strength validation and visual feedback
+    - Implement smooth transition between password and passkey modes
+    - _Requirements: 4.3, 4.4, 4.10_
+  - [ ] 9.5 Update authentication flow integration
+    - Connect new password service with homepage authentication
+    - Update authentication store to handle both authentication methods
+    - Test complete password registration and login flow
+    - Ensure backward compatibility with existing passkey users
+    - _Requirements: 4.1, 4.7, 4.8_
+
+- [ ] 10. Implement routing and tool integration architecture
   - Enhance React Router with nested routes for tools
   - Create tool loading mechanism for future applications
   - Implement protected routes with authentication guards
   - Test navigation between dashboard and tool sections
   - _Requirements: 3.3, 3.4_
 
-- [x] 10. Add comprehensive testing setup
+- [x] 11. Add comprehensive testing setup
   - Configure React Testing Library and Jest for frontend testing
   - Write integration tests for authentication flow and dashboard
   - Set up backend testing with NestJS testing utilities
   - Create accessibility tests to ensure WCAG 2.1 AA compliance
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 9.1, 9.2, 9.3, 9.4, 9.5_
 
-- [ ] 11. Implement admin panel for user and invitation management
+- [ ] 12. Implement admin panel for user and invitation management
   - Create admin-only routes and components
   - Implement invitation generation and management interface
   - Add user management functionality (view users, manage roles)
   - Test role-based access control throughout the application
-  - _Requirements: 4.3, 4.4_
+  - _Requirements: 4.5, 4.6_
 
-- [ ] 12. Set up development and build pipeline
+- [ ] 13. Set up development and build pipeline
   - Configure Turborepo pipeline for build, dev, lint, and test commands
   - Set up hot reload for both frontend and backend development
   - Implement error boundaries and global error handling
   - Test the complete development workflow
   - _Requirements: 1.1, 1.4, 5.5_
 
-- [ ] 13. Create documentation and deployment preparation
+- [ ] 14. Create documentation and deployment preparation
   - Document the monorepo structure and development workflow
   - Create README files for each package and application
   - Set up environment configuration for local development

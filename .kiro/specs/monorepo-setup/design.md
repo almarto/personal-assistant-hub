@@ -222,12 +222,31 @@ module.exports = {
 
 ```typescript
 // packages/auth/src/
-export interface AuthService {
-  login(credentials: PasskeyCredentials): Promise<AuthResult>;
+export interface BaseAuthService {
+  login(credentials: any): Promise<AuthResult>;
   logout(): Promise<void>;
-  register(invitationToken: string, userInfo: UserInfo): Promise<AuthResult>;
+  register(data: any): Promise<AuthResult>;
   getCurrentUser(): Promise<User | null>;
   refreshToken(): Promise<string>;
+}
+
+export interface PasswordAuthService extends BaseAuthService {
+  login(credentials: PasswordCredentials): Promise<AuthResult>;
+  register(data: PasswordRegistrationData): Promise<AuthResult>;
+  changePassword(oldPassword: string, newPassword: string): Promise<void>;
+}
+
+export interface PasskeyAuthService extends BaseAuthService {
+  login(credentials: PasskeyCredentials): Promise<AuthResult>;
+  register(data: PasskeyRegistrationData): Promise<AuthResult>;
+  getAvailableCredentials(): Promise<PasskeyCredential[]>;
+}
+
+export interface AuthServices {
+  passwordService: PasswordAuthService;
+  passkeyService: PasskeyAuthService;
+  getCurrentUser(): Promise<User | null>;
+  logout(): Promise<void>;
 }
 
 export interface User {
@@ -236,6 +255,8 @@ export interface User {
   role: 'admin' | 'user';
   createdAt: Date;
   lastLoginAt: Date;
+  hasPassword: boolean;
+  hasPasskeys: boolean;
 }
 ```
 
@@ -256,6 +277,16 @@ CREATE TABLE hub_users (
   last_login_at TIMESTAMP
 );
 
+-- Password credentials
+CREATE TABLE hub_password_credentials (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES hub_users(id) ON DELETE CASCADE,
+  password_hash TEXT NOT NULL,
+  salt TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Passkey credentials
 CREATE TABLE hub_passkey_credentials (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -263,6 +294,7 @@ CREATE TABLE hub_passkey_credentials (
   credential_id TEXT UNIQUE NOT NULL,
   public_key TEXT NOT NULL,
   counter BIGINT DEFAULT 0,
+  device_name VARCHAR(255),
   created_at TIMESTAMP DEFAULT NOW()
 );
 
