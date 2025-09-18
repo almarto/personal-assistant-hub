@@ -1,5 +1,3 @@
-import bcrypt from 'bcryptjs';
-
 import type {
   AuthResult,
   PasswordAuthService,
@@ -36,15 +34,11 @@ export class PasswordAuthServiceImpl
   }
 
   async register(data: PasswordRegistrationData): Promise<AuthResult> {
-    // Hash password on client side for additional security
-    const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-
     const response = await this.makeRequest<AuthResult>('/register/password', {
       method: 'POST',
       body: JSON.stringify({
         email: data.email,
-        password: hashedPassword,
+        password: data.password,
         invitationToken: data.invitationToken,
       }),
     });
@@ -59,15 +53,11 @@ export class PasswordAuthServiceImpl
     oldPassword: string,
     newPassword: string
   ): Promise<void> {
-    // Hash new password on client side
-    const saltRounds = 12;
-    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
-
     await this.makeRequest('/password/change', {
       method: 'POST',
       body: JSON.stringify({
         oldPassword,
-        newPassword: hashedNewPassword,
+        newPassword,
       }),
     });
   }

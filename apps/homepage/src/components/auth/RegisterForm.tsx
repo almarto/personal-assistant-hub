@@ -176,7 +176,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               placeholder="Confirm your password"
               required
               disabled={isLoading}
-              showPasswordToggle
               state={
                 confirmPassword && password !== confirmPassword
                   ? 'error'

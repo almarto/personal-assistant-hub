@@ -371,6 +371,7 @@ export class AuthService implements AuthUseCase {
 
     // Hash the password and create password credential
     const hash = await this.passwordService.hashPassword(password);
+
     await this.passwordCredentialRepository.create({
       id: uuidv4(),
       userId: user.id,
@@ -401,7 +402,6 @@ export class AuthService implements AuthUseCase {
   ): Promise<{ user: User; token: string }> {
     // Find the user
     const user = await this.userRepository.findByEmail(email);
-    console.log('🚀 TCL ~ AuthService ~ loginWithPassword ~ user:', user);
 
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -414,31 +414,15 @@ export class AuthService implements AuthUseCase {
     // Find password credential
     const passwordCredential =
       await this.passwordCredentialRepository.findByUserId(user.id);
-    console.log(
-      '🚀 TCL ~ AuthService ~ loginWithPassword ~ passwordCredential:',
-      passwordCredential
-    );
 
     if (!passwordCredential) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    console.log(
-      '🚀 TCL ~ AuthService ~ loginWithPassword ~ password:',
-      password
-    );
-    console.log(
-      '🚀 TCL ~ AuthService ~ loginWithPassword ~ passwordHash:',
-      passwordCredential.passwordHash
-    );
 
     // Verify password
     const isPasswordValid = await this.passwordService.verifyPassword(
       password,
       passwordCredential.passwordHash
-    );
-    console.log(
-      '🚀 TCL ~ AuthService ~ loginWithPassword ~ isPasswordValid:',
-      isPasswordValid
     );
 
     if (!isPasswordValid) {

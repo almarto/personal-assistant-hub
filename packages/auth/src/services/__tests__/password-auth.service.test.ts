@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import bcrypt from 'bcryptjs';
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 
 import type {
@@ -9,13 +7,6 @@ import type {
 } from '../../types/auth';
 import type { BaseAuthServiceConfig } from '../base-auth.service';
 import { PasswordAuthServiceImpl } from '../password-auth.service';
-
-// Mock bcrypt
-vi.mock('bcryptjs', () => ({
-  default: {
-    hash: vi.fn(),
-  },
-}));
 
 // Mock fetch globally
 global.fetch = vi.fn();
@@ -122,9 +113,6 @@ describe('PasswordAuthServiceImpl', () => {
         invitationToken: 'invitation-token',
       };
 
-      const hashedPassword = 'hashed-password';
-      (bcrypt.hash as any).mockResolvedValueOnce(hashedPassword);
-
       const mockAuthResult: AuthResult = {
         token: 'jwt-token',
         user: {
@@ -145,7 +133,6 @@ describe('PasswordAuthServiceImpl', () => {
 
       const result = await passwordService.register(registrationData);
 
-      expect(bcrypt.hash).toHaveBeenCalledWith('password123', 12);
       expect(fetch).toHaveBeenCalledWith(
         'http://localhost:3001/auth/register/password',
         expect.objectContaining({
@@ -155,7 +142,7 @@ describe('PasswordAuthServiceImpl', () => {
           }),
           body: JSON.stringify({
             email: registrationData.email,
-            password: hashedPassword,
+            password: registrationData.password,
             invitationToken: registrationData.invitationToken,
           }),
         })
@@ -175,8 +162,6 @@ describe('PasswordAuthServiceImpl', () => {
         invitationToken: 'invalid-token',
       };
 
-      (bcrypt.hash as any).mockResolvedValueOnce('hashed-password');
-
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: false,
         status: 400,
@@ -193,13 +178,10 @@ describe('PasswordAuthServiceImpl', () => {
     it('should change password successfully', async () => {
       const oldPassword = 'oldpassword';
       const newPassword = 'newpassword';
-      const hashedNewPassword = 'hashed-new-password';
 
       // Set up authenticated state
       localStorageMock.getItem.mockReturnValue('valid-token');
       const authenticatedService = new PasswordAuthServiceImpl(mockConfig);
-
-      (bcrypt.hash as any).mockResolvedValueOnce(hashedNewPassword);
 
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
@@ -208,7 +190,6 @@ describe('PasswordAuthServiceImpl', () => {
 
       await authenticatedService.changePassword(oldPassword, newPassword);
 
-      expect(bcrypt.hash).toHaveBeenCalledWith(newPassword, 12);
       expect(fetch).toHaveBeenCalledWith(
         'http://localhost:3001/auth/password/change',
         expect.objectContaining({
@@ -219,7 +200,7 @@ describe('PasswordAuthServiceImpl', () => {
           }),
           body: JSON.stringify({
             oldPassword,
-            newPassword: hashedNewPassword,
+            newPassword,
           }),
         })
       );
@@ -228,8 +209,6 @@ describe('PasswordAuthServiceImpl', () => {
     it('should throw error when change password fails', async () => {
       localStorageMock.getItem.mockReturnValue('valid-token');
       const authenticatedService = new PasswordAuthServiceImpl(mockConfig);
-
-      (bcrypt.hash as any).mockResolvedValueOnce('hashed-word');
 
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: false,
