@@ -60,7 +60,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     const [showPassword, setShowPassword] = useState(false);
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const inputId =
+      id || `input-${Math.random().toString(36).substring(2, 11)}`;
     const hasError = state === 'error' || !!errorMessage;
     const displayText = hasError ? errorMessage : helperText;
 

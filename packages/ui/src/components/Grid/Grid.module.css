@@ -1,66 +1,66 @@
 /* Grid Component Styles */
-.ui-grid {
+.uiGrid {
   display: grid;
   width: 100%;
   align-items: stretch;
 }
 
 /* Column configurations */
-.ui-grid-columns-1 {
+.uiGridColumns1 {
   grid-template-columns: 1fr;
 }
 
-.ui-grid-columns-2 {
+.uiGridColumns2 {
   grid-template-columns: repeat(2, 1fr);
 }
 
-.ui-grid-columns-3 {
+.uiGridColumns3 {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.ui-grid-columns-4 {
+.uiGridColumns4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
-.ui-grid-autoFit {
+.uiGridAutoFit {
   grid-template-columns: repeat(auto-fit, minmax(var(--min-column-width, 300px), 1fr));
 }
 
 /* Gap configurations */
-.ui-grid-gap-small {
+.uiGridGapSmall {
   gap: 0.75rem;
 }
 
-.ui-grid-gap-medium {
+.uiGridGapMedium {
   gap: 1.5rem;
 }
 
-.ui-grid-gap-large {
+.uiGridGapLarge {
   gap: 2rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .ui-grid-columns-2,
-  .ui-grid-columns-3,
-  .ui-grid-columns-4 {
+  .uiGridColumns2,
+  .uiGridColumns3,
+  .uiGridColumns4 {
     grid-template-columns: 1fr;
   }
   
-  .ui-grid-autoFit {
+  .uiGridAutoFit {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {
-  .ui-grid-columns-3,
-  .ui-grid-columns-4 {
+  .uiGridColumns3,
+  .uiGridColumns4 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 1200px) and (min-width: 1025px) {
-  .ui-grid-columns-4 {
+  .uiGridColumns4 {
     grid-template-columns: repeat(3, 1fr);
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './Grid.module.css';
+import styles from './Grid.module.css';
 
 export interface GridProps extends React.ComponentPropsWithoutRef<'div'> {
   /**
@@ -37,11 +37,11 @@ export const Grid = React.forwardRef<React.ElementRef<'div'>, GridProps>(
     ref
   ) => {
     const gridClasses = [
-      'ui-grid',
-      `ui-grid-gap-${gap}`,
+      styles.uiGrid,
+      styles[`uiGridGap${gap.charAt(0).toUpperCase() + gap.slice(1)}`],
       typeof columns === 'number'
-        ? `ui-grid-columns-${columns}`
-        : 'ui-grid-autoFit',
+        ? styles[`uiGridColumns${columns}`]
+        : styles.uiGridAutoFit,
       className,
     ]
       .filter(Boolean)

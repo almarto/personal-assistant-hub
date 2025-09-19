@@ -1,7 +1,7 @@
 import { useLanguage } from '@personal-assistant-hub/i18n';
 import React, { useState } from 'react';
 
-import './LanguageSelector.module.css';
+import styles from './LanguageSelector.module.css';
 
 export interface LanguageSelectorProps {}
 
@@ -19,24 +19,24 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = () => {
     availableLanguages[0];
 
   return (
-    <div className={'container'}>
+    <div className={styles.container}>
       <button
-        className={`button ${isOpen ? 'open' : ''}`}
+        className={`${styles.button} ${isOpen ? styles.open : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className={'flag'}>{currentLang.flag}</span>
+        <span className={styles.flag}>{currentLang.flag}</span>
       </button>
       {isOpen && (
-        <div className={'dropdown'}>
+        <div className={styles.dropdown}>
           {availableLanguages.map(lang => (
             <button
               key={lang.code}
-              className={`dropdownItem ${
-                currentLanguage === lang.code ? 'active' : ''
+              className={`${styles.dropdownItem} ${
+                currentLanguage === lang.code ? styles.active : ''
               }`}
               onClick={() => handleLanguageChange(lang.code)}
             >
-              <span className={'flag'}>{lang.flag}</span>
+              <span className={styles.flag}>{lang.flag}</span>
               <span>{lang.name}</span>
             </button>
           ))}

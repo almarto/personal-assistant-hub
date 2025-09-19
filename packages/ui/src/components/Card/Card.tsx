@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './Card.module.css';
+import styles from './Card.module.css';
 
 export interface CardProps extends React.ComponentPropsWithoutRef<'div'> {
   /**
@@ -37,10 +37,11 @@ export const Card = React.forwardRef<React.ElementRef<'div'>, CardProps>(
     ref
   ) => {
     const cardClasses = [
-      'ui-card',
-      variant !== 'default' && `ui-card-${variant}`,
-      hoverable && 'ui-card-hoverable',
-      noPadding && 'ui-card-noPadding',
+      styles.uiCard,
+      variant !== 'default' &&
+        styles[`uiCard${variant.charAt(0).toUpperCase() + variant.slice(1)}`],
+      hoverable && styles.uiCardHoverable,
+      noPadding && styles.uiCardNoPadding,
       className,
     ]
       .filter(Boolean)

@@ -1,5 +1,5 @@
 /* ToolCard Component Styles */
-.ui-toolCard {
+.uiToolCard {
   min-height: 200px;
   height: 100%;
   display: flex;
@@ -9,14 +9,14 @@
   padding: 1.5rem;
 }
 
-.ui-toolCard-icon {
+.uiToolCardIcon {
   font-size: 3rem;
   line-height: 1;
   margin-bottom: 1rem;
   flex-shrink: 0;
 }
 
-.ui-toolCard-title {
+.uiToolCardTitle {
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
@@ -24,7 +24,7 @@
   flex-shrink: 0;
 }
 
-.ui-toolCard-description {
+.uiToolCardDescription {
   color: var(--color-text-secondary);
   font-size: 0.875rem;
   line-height: 1.4;
@@ -36,7 +36,7 @@
   text-align: center;
 }
 
-.ui-toolCard-button {
+.uiToolCardButton {
   flex-shrink: 0;
   width: 100%;
 }

@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Button } from '../Button';
 import { Card } from '../Card';
-import './ToolCard.module.css';
+
+import styles from './ToolCard.module.css';
 
 export interface ToolCardProps {
   /**
@@ -49,13 +50,13 @@ export const ToolCard: React.FC<ToolCardProps> = ({
       variant={isDisabled ? 'disabled' : 'interactive'}
       hoverable={!isDisabled}
       noPadding
-      className="ui-toolCard"
+      className={styles.uiToolCard}
       onClick={!isDisabled ? onClick : undefined}
     >
-      <div className="ui-toolCard-icon">{icon}</div>
-      <h3 className="ui-toolCard-title">{title}</h3>
-      <p className="ui-toolCard-description">{description}</p>
-      <div className="ui-toolCard-button">
+      <div className={styles.uiToolCardIcon}>{icon}</div>
+      <h3 className={styles.uiToolCardTitle}>{title}</h3>
+      <p className={styles.uiToolCardDescription}>{description}</p>
+      <div className={styles.uiToolCardButton}>
         <Button
           variant={isDisabled ? 'secondary' : 'primary'}
           disabled={isDisabled}
