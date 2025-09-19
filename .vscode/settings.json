@@ -1,6 +1,6 @@
 {
     "kiroAgent.configureMCP": "Disabled",
-    "typescript.preferences.includePackageJsonAutoImports": "off",
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
     "typescript.suggest.autoImports": true,
     "typescript.validate.enable": true,
     "typescript.format.enable": true,
@@ -11,7 +11,7 @@
     "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "never",
-        "source.fixAll.eslint": "never"
+        "source.fixAll.eslint": "explicit"
     },
     "eslint.validate": [
         "javascript",
@@ -20,13 +20,11 @@
         "typescriptreact"
     ],
     "eslint.workingDirectories": [
-        "apps/api",
-        "apps/homepage",
-        "packages/database",
-        "packages/ui"
+        "apps/*",
+        "packages/*"
     ],
+    "eslint.nodePath": "./node_modules",
     "eslint.useESLintClass": true,
-    "eslint.experimental.useFlatConfig": true,
     "eslint.options": {
         "overrideConfigFile": "eslint.config.js"
     },
@@ -35,5 +33,32 @@
         "enable": false
     },
     "eslint.quiet": false,
-    "eslint.debug": true
+    "eslint.debug": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    // Prettier
+    "prettier.requireConfig": true,
+    "prettier.useEditorConfig": false,
+    "prettier.configPath": "./prettier.config.js",
+    // Exclude from file watcher
+    "files.watcherExclude": {
+        "**/node_modules/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/.next/**": true,
+        "**/.turbo/**": true
+    },
+    // Search exclusions
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/.next": true,
+        "**/.turbo": true,
+        "**/coverage": true,
+        "**/**.md": true
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    }
 }

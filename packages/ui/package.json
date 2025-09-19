@@ -20,7 +20,6 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint src --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -29,7 +28,6 @@
     "@personal-assistant-hub/i18n": "workspace:*"
   },
   "devDependencies": {
-    "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*",
     "@storybook/addon-essentials": "next",
     "@storybook/addon-interactions": "next",

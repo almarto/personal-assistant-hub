@@ -70,19 +70,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
       </div>
 
       {error && (
-        <div className={styles.errorMessage} role="alert">
+        <div className={styles.errorMessage} role='alert'>
           {error}
         </div>
       )}
 
       <div className={`${styles.formContent} ${styles[`mode-${authMode}`]}`}>
         <Input
-          id="email"
-          type="email"
-          label="Email"
+          id='email'
+          type='email'
+          label='Email'
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder='Enter your email'
           required
           disabled={isLoading}
           state={error && !email.trim() ? 'error' : 'default'}
@@ -90,12 +90,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
 
         {authMode === 'password' && (
           <Input
-            id="password"
-            type="password"
-            label="Password"
+            id='password'
+            type='password'
+            label='Password'
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="Enter your password"
+            placeholder='Enter your password'
             required
             disabled={isLoading}
             showPasswordToggle
@@ -104,9 +104,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         )}
 
         <Button
-          type="submit"
-          variant="primary"
-          size="medium"
+          type='submit'
+          variant='primary'
+          size='medium'
           fullWidth
           loading={isLoading}
           disabled={
@@ -121,9 +121,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
         </Button>
 
         <Button
-          type="button"
-          variant="outline"
-          size="medium"
+          type='button'
+          variant='outline'
+          size='medium'
           fullWidth
           onClick={handleModeSwitch}
           disabled={isLoading}

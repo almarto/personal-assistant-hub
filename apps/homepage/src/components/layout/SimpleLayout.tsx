@@ -12,14 +12,14 @@ export const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
     <div className={styles.layout}>
       <header className={styles.header}>
         <div className={styles.container}>
-          <Link to="/" className={styles.logo}>
+          <Link to='/' className={styles.logo}>
             Personal Assistant Hub
           </Link>
           <nav className={styles.nav}>
-            <Link to="/dashboard" className={styles.navLink}>
+            <Link to='/dashboard' className={styles.navLink}>
               Dashboard
             </Link>
-            <Link to="/auth" className={styles.navLink}>
+            <Link to='/auth' className={styles.navLink}>
               Iniciar Sesión
             </Link>
           </nav>

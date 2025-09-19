@@ -1,9 +1,10 @@
-import { createAuth } from '@personal-assistant-hub/auth';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import '@personal-assistant-hub/i18n';
+
+import { createAuth } from '@/services/auth';
 
 import { App } from './App';
 import './index.css';

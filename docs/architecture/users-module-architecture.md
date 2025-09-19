@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document defines the hexagonal architecture implementation for the users module, ensuring proper separation of concerns and dependency inversion.
+This document defines the hexagonal architecture implementation for the users module, ensuring
+proper separation of concerns and dependency inversion.
 
 ## Architecture Layers
 

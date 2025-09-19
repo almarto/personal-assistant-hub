@@ -17,7 +17,7 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside className={styles.sidebar}>
-      <nav className={styles.nav} data-testid="main-menu">
+      <nav className={styles.nav} data-testid='main-menu'>
         <ul className={styles.navList}>
           {navigationItems.map(item => (
             <li key={item.path}>

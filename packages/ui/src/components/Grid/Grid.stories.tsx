@@ -155,25 +155,25 @@ export const ResponsiveCards: Story = {
     gap: 'medium',
     children: (
       <>
-        <Card variant="interactive" hoverable>
+        <Card variant='interactive' hoverable>
           <div style={{ padding: '1.5rem' }}>
             <h3>Feature Card 1</h3>
             <p>This is a responsive card that adapts to screen size.</p>
           </div>
         </Card>
-        <Card variant="interactive" hoverable>
+        <Card variant='interactive' hoverable>
           <div style={{ padding: '1.5rem' }}>
             <h3>Feature Card 2</h3>
             <p>Resize the viewport to see how the grid adapts.</p>
           </div>
         </Card>
-        <Card variant="interactive" hoverable>
+        <Card variant='interactive' hoverable>
           <div style={{ padding: '1.5rem' }}>
             <h3>Feature Card 3</h3>
             <p>The minimum column width ensures readability.</p>
           </div>
         </Card>
-        <Card variant="interactive" hoverable>
+        <Card variant='interactive' hoverable>
           <div style={{ padding: '1.5rem' }}>
             <h3>Feature Card 4</h3>
             <p>Perfect for dashboard layouts and content grids.</p>

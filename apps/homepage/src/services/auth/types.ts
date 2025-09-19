@@ -10,21 +10,21 @@ export interface User {
 
 export interface AuthResult {
   user: User;
-  token: string;
 }
 
-export interface PasskeyCredentials {
+export interface PasskeyLoginCredentials {
   email: string;
+}
+
+export interface PasskeyCredential {
+  id: string;
+  deviceName: string;
+  createdAt: Date;
 }
 
 export interface PasswordCredentials {
   email: string;
   password: string;
-}
-
-export interface UserInfo {
-  email: string;
-  deviceName?: string;
 }
 
 export interface PasskeyRegistrationData {
@@ -43,9 +43,6 @@ export interface PasswordRegistrationData {
 export interface BaseAuthService {
   logout(): Promise<void>;
   getCurrentUser(): Promise<User | null>;
-  refreshToken(): Promise<string>;
-  getToken(): string | null;
-  isAuthenticated(): boolean;
 }
 
 // Password-specific authentication service
@@ -57,39 +54,19 @@ export interface PasswordAuthService extends BaseAuthService {
 
 // Passkey-specific authentication service
 export interface PasskeyAuthService extends BaseAuthService {
-  login(credentials: PasskeyCredentials): Promise<AuthResult>;
+  login(credentials: PasskeyLoginCredentials): Promise<AuthResult>;
   register(data: PasskeyRegistrationData): Promise<AuthResult>;
   getAvailableCredentials(): Promise<PasskeyCredential[]>;
 }
 
 // Combined auth services interface
 export interface AuthServiceI extends BaseAuthService {
-  passwordService: PasswordAuthService;
-  passkeyService: PasskeyAuthService;
+  loginPasskey(credentials: PasskeyLoginCredentials): Promise<AuthResult>;
+  registerPasskey(data: PasskeyRegistrationData): Promise<AuthResult>;
+  loginPassword(credentials: PasswordCredentials): Promise<AuthResult>;
+  registerPassword(data: PasswordRegistrationData): Promise<AuthResult>;
 }
 
-export interface PasskeyCredential {
-  id: string;
-  deviceName: string;
-  createdAt: Date;
+export interface AuthServiceConfig {
+  apiBaseUrl: string;
 }
-
-export interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export interface AuthActions {
-  //hydrateFromToken: () => Promise<void>;
-  setAuthState: (
-    user: User | null,
-    isAuthenticated: boolean,
-    isLoading: boolean,
-    error: string | null
-  ) => void;
-  clearError: () => void;
-}
-
-export type AuthStore = AuthState & AuthActions;

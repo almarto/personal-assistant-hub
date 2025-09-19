@@ -52,12 +52,12 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <div className={tabsClasses}>
-      <div className={styles.tabList} role="tablist">
+      <div className={styles.tabList} role='tablist'>
         {items.map(item => (
           <button
             key={item.id}
-            type="button"
-            role="tab"
+            type='button'
+            role='tab'
             aria-selected={activeTab === item.id}
             aria-controls={`tabpanel-${item.id}`}
             className={`${styles.tab} ${
@@ -74,7 +74,7 @@ export const Tabs: React.FC<TabsProps> = ({
         <div
           key={item.id}
           id={`tabpanel-${item.id}`}
-          role="tabpanel"
+          role='tabpanel'
           aria-labelledby={`tab-${item.id}`}
           className={`${styles.tabPanel} ${
             activeTab === item.id ? styles.active : styles.hidden

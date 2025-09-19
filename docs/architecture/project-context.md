@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document serves as the central context for the Personal Assistant Hub project, migrated from the `.kiro` folder to provide comprehensive architectural guidance.
+This document serves as the central context for the Personal Assistant Hub project, migrated from
+the `.kiro` folder to provide comprehensive architectural guidance.
 
 ## Technology Stack
 
@@ -106,10 +107,9 @@ modules/
 
 ## Critical Notes
 
-⚠️ **IMPORTANT**: Always use Drizzle ORM, never TypeORM
-⚠️ **IMPORTANT**: Use the existing database schema from `packages/database`
-⚠️ **IMPORTANT**: Follow hexagonal architecture patterns
-⚠️ **IMPORTANT**: Use pnpm as package manager
+⚠️ **IMPORTANT**: Always use Drizzle ORM, never TypeORM ⚠️ **IMPORTANT**: Use the existing database
+schema from `packages/database` ⚠️ **IMPORTANT**: Follow hexagonal architecture patterns ⚠️
+**IMPORTANT**: Use pnpm as package manager
 
 ## Current Implementation Status
 

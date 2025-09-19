@@ -34,7 +34,7 @@ export const DashboardGrid: React.FC = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{t('homepage.yourTools')}</h2>
-      <Grid gap="large" minColumnWidth="300px" data-testid="cards-container">
+      <Grid gap='large' minColumnWidth='300px' data-testid='cards-container'>
         {tools.map(tool => (
           <ToolCard
             key={tool.path}

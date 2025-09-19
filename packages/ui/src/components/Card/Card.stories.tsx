@@ -74,7 +74,7 @@ export const WithButton: Story = {
       <div>
         <h3>Card with Action</h3>
         <p>This card contains interactive elements like buttons.</p>
-        <Button variant="primary">Take Action</Button>
+        <Button variant='primary'>Take Action</Button>
       </div>
     ),
   },

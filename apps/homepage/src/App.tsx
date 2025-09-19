@@ -21,12 +21,12 @@ export const App: React.FC = () => {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<Homepage />} />
-      <Route path="/auth" element={<AuthPage />} />
+      <Route path='/' element={<Homepage />} />
+      <Route path='/auth' element={<AuthPage />} />
 
       {/* Protected routes */}
       <Route
-        path="/dashboard"
+        path='/dashboard'
         element={
           <AuthGuard>
             <Layout />
@@ -36,7 +36,7 @@ export const App: React.FC = () => {
         <Route index element={<Dashboard />} />
       </Route>
       <Route
-        path="/baby-tracker"
+        path='/baby-tracker'
         element={
           <ProtectedRoute>
             <ComingSoon />
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
         }
       />
       <Route
-        path="/gym-tracker"
+        path='/gym-tracker'
         element={
           <ProtectedRoute>
             <ComingSoon />
@@ -52,7 +52,7 @@ export const App: React.FC = () => {
         }
       />
       <Route
-        path="/moto-tracker"
+        path='/moto-tracker'
         element={
           <ProtectedRoute>
             <ComingSoon />

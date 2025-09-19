@@ -1,9 +1,9 @@
 import {
-  AuthenticationResponseJSON,
-  RegistrationResponseJSON,
-  PublicKeyCredentialCreationOptionsJSON,
-  PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/types';
+  type AuthenticationResponseJSON,
+  type RegistrationResponseJSON,
+  type PublicKeyCredentialCreationOptionsJSON,
+  type PublicKeyCredentialRequestOptionsJSON,
+} from '@simplewebauthn/server';
 
 import { User } from '../../model/user.model';
 
@@ -29,7 +29,7 @@ export interface AuthUseCase {
     invitationToken: string,
     credential: RegistrationResponseJSON,
     deviceName: string
-  ): Promise<{ user: User; token: string }>;
+  ): Promise<{ user: User }>;
 
   /**
    * Registers user with password
@@ -38,7 +38,7 @@ export interface AuthUseCase {
     email: string,
     password: string,
     invitationToken: string
-  ): Promise<{ user: User; token: string }>;
+  ): Promise<{ user: User }>;
 
   /**
    * Initiates user login process with passkeys
@@ -53,15 +53,12 @@ export interface AuthUseCase {
   completeLogin(
     email: string,
     credential: AuthenticationResponseJSON
-  ): Promise<{ user: User; token: string }>;
+  ): Promise<{ user: User }>;
 
   /**
    * Logs in user with password
    */
-  loginWithPassword(
-    email: string,
-    password: string
-  ): Promise<{ user: User; token: string }>;
+  loginWithPassword(email: string, password: string): Promise<{ user: User }>;
 
   /**
    * Changes user password

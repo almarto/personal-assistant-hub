@@ -41,7 +41,7 @@ export class AuthController {
     @Inject(AUTH_USE_CASE) private readonly authUseCase: AuthUseCase
   ) {}
 
-  @Post('register/initiate')
+  @Post('passkey/register/initiate')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Initiate user registration with invitation token' })
   @ApiResponse({
@@ -57,7 +57,7 @@ export class AuthController {
     );
   }
 
-  @Post('register/complete')
+  @Post('passkey/register/complete')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Complete user registration with WebAuthn credential',
@@ -77,7 +77,7 @@ export class AuthController {
     );
   }
 
-  @Post('login/initiate')
+  @Post('passkey/login/initiate')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Initiate user login' })
   @ApiResponse({
@@ -90,7 +90,7 @@ export class AuthController {
     return await this.authUseCase.initiateLogin(dto.email);
   }
 
-  @Post('login/complete')
+  @Post('passkey/login/complete')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Complete user login with WebAuthn credential' })
   @ApiResponse({
@@ -106,7 +106,7 @@ export class AuthController {
     return await this.authUseCase.completeLogin(dto.email, dto.credential);
   }
 
-  @Post('register/password')
+  @Post('password/register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register user with password' })
   @ApiResponse({
@@ -123,7 +123,7 @@ export class AuthController {
     );
   }
 
-  @Post('login/password')
+  @Post('password/login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user with password' })
   @ApiResponse({
@@ -136,7 +136,7 @@ export class AuthController {
     return await this.authUseCase.loginWithPassword(dto.email, dto.password);
   }
 
-  @Post('change-password')
+  @Post('password/change')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)

@@ -1,6 +1,7 @@
 # Database Package
 
-This package provides database connectivity, schema definitions, and utilities for the Personal Assistant Hub monorepo using Drizzle ORM and PostgreSQL.
+This package provides database connectivity, schema definitions, and utilities for the Personal
+Assistant Hub monorepo using Drizzle ORM and PostgreSQL.
 
 ## Features
 

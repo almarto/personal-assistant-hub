@@ -18,7 +18,8 @@ Runs before each commit to ensure code quality:
 Validates commit messages follow conventional commit format:
 
 - Format: `<type>[optional scope]: <description>`
-- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`,
+  `revert`
 - Examples:
   - `feat: add user authentication`
   - `fix(api): resolve login endpoint error`

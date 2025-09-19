@@ -51,8 +51,8 @@ export const AuthPage: React.FC = () => {
           items={tabItems}
           activeTab={mode}
           onTabChange={tabId => setMode(tabId as AuthMode)}
-          variant="default"
-          size="medium"
+          variant='default'
+          size='medium'
         />
 
         <div className={styles.authFooter}>
@@ -61,8 +61,8 @@ export const AuthPage: React.FC = () => {
               <>
                 Don't have an account?{' '}
                 <Button
-                  variant="ghost"
-                  size="small"
+                  variant='ghost'
+                  size='small'
                   onClick={() => setMode('register')}
                 >
                   Register here
@@ -72,8 +72,8 @@ export const AuthPage: React.FC = () => {
               <>
                 Already have an account?{' '}
                 <Button
-                  variant="ghost"
-                  size="small"
+                  variant='ghost'
+                  size='small'
                   onClick={() => setMode('login')}
                 >
                   Sign in here

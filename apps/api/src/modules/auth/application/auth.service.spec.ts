@@ -1,6 +1,6 @@
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { RegistrationResponseJSON } from '@simplewebauthn/types';
+import { type RegistrationResponseJSON } from '@simplewebauthn/server';
 
 import { PasskeyCredential } from '../domain/model/passkey-credential.model';
 import { User } from '../domain/model/user.model';

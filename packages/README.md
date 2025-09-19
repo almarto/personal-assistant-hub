@@ -27,7 +27,8 @@ Shared Prettier configuration for consistent code formatting across all packages
 
 ## Security Policy
 
-All dependencies use exact versions (no `^` or `~`) to prevent automatic updates to potentially compromised versions. Dependencies are updated manually after security review.
+All dependencies use exact versions (no `^` or `~`) to prevent automatic updates to potentially
+compromised versions. Dependencies are updated manually after security review.
 
 ## Usage
 

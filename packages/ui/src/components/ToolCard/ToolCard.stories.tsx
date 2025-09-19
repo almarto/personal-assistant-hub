@@ -67,46 +67,46 @@ export const LongDescription: Story = {
 
 export const ToolGrid: Story = {
   render: () => (
-    <Grid columns={3} gap="medium">
+    <Grid columns={3} gap='medium'>
       <ToolCard
-        title="Code Editor"
-        description="Edit and manage your code with syntax highlighting and IntelliSense."
-        icon="💻"
-        status="available"
+        title='Code Editor'
+        description='Edit and manage your code with syntax highlighting and IntelliSense.'
+        icon='💻'
+        status='available'
         onClick={() => console.log('Code Editor clicked')}
       />
       <ToolCard
-        title="Database Manager"
-        description="Manage your databases, run queries, and view data relationships."
-        icon="🗄️"
-        status="available"
+        title='Database Manager'
+        description='Manage your databases, run queries, and view data relationships.'
+        icon='🗄️'
+        status='available'
         onClick={() => console.log('Database Manager clicked')}
       />
       <ToolCard
-        title="API Testing"
-        description="Test your APIs, manage endpoints, and validate responses."
-        icon="🔌"
-        status="available"
+        title='API Testing'
+        description='Test your APIs, manage endpoints, and validate responses.'
+        icon='🔌'
+        status='available'
         onClick={() => console.log('API Testing clicked')}
       />
       <ToolCard
-        title="Performance Monitor"
-        description="Monitor application performance, track metrics, and identify bottlenecks."
-        icon="📈"
-        status="coming-soon"
+        title='Performance Monitor'
+        description='Monitor application performance, track metrics, and identify bottlenecks.'
+        icon='📈'
+        status='coming-soon'
       />
       <ToolCard
-        title="Security Scanner"
-        description="Scan your code for security vulnerabilities and compliance issues."
-        icon="🔒"
-        status="coming-soon"
+        title='Security Scanner'
+        description='Scan your code for security vulnerabilities and compliance issues.'
+        icon='🔒'
+        status='coming-soon'
       />
       <ToolCard
-        title="Team Collaboration"
-        description="Collaborate with your team, share code, and manage project tasks."
-        icon="👥"
-        status="available"
-        actionText="Join Team"
+        title='Team Collaboration'
+        description='Collaborate with your team, share code, and manage project tasks.'
+        icon='👥'
+        status='available'
+        actionText='Join Team'
         onClick={() => console.log('Team Collaboration clicked')}
       />
     </Grid>
@@ -118,30 +118,30 @@ export const ToolGrid: Story = {
 
 export const DifferentIcons: Story = {
   render: () => (
-    <Grid columns={2} gap="medium">
+    <Grid columns={2} gap='medium'>
       <ToolCard
-        title="File Manager"
-        description="Organize and manage your project files and folders."
-        icon="📁"
-        status="available"
+        title='File Manager'
+        description='Organize and manage your project files and folders.'
+        icon='📁'
+        status='available'
       />
       <ToolCard
-        title="Terminal"
-        description="Access command line interface and run shell commands."
-        icon="⌨️"
-        status="available"
+        title='Terminal'
+        description='Access command line interface and run shell commands.'
+        icon='⌨️'
+        status='available'
       />
       <ToolCard
-        title="Git Integration"
-        description="Manage version control, commits, and repository operations."
-        icon="🌿"
-        status="available"
+        title='Git Integration'
+        description='Manage version control, commits, and repository operations.'
+        icon='🌿'
+        status='available'
       />
       <ToolCard
-        title="Package Manager"
-        description="Install, update, and manage project dependencies."
-        icon="📦"
-        status="available"
+        title='Package Manager'
+        description='Install, update, and manage project dependencies.'
+        icon='📦'
+        status='available'
       />
     </Grid>
   ),
@@ -152,19 +152,19 @@ export const DifferentIcons: Story = {
 
 export const StatusComparison: Story = {
   render: () => (
-    <Grid columns={2} gap="large">
+    <Grid columns={2} gap='large'>
       <ToolCard
-        title="Available Tool"
-        description="This tool is ready to use and fully functional."
-        icon="✅"
-        status="available"
+        title='Available Tool'
+        description='This tool is ready to use and fully functional.'
+        icon='✅'
+        status='available'
         onClick={() => console.log('Available tool clicked')}
       />
       <ToolCard
-        title="Coming Soon Tool"
-        description="This tool is under development and will be available soon."
-        icon="🚧"
-        status="coming-soon"
+        title='Coming Soon Tool'
+        description='This tool is under development and will be available soon.'
+        icon='🚧'
+        status='coming-soon'
       />
     </Grid>
   ),

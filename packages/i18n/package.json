@@ -16,7 +16,6 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint src --ext .ts,.tsx",
     "check-types": "tsc --noEmit",
     "test": "vitest --run",
     "test:watch": "vitest"
@@ -28,7 +27,6 @@
     "i18next-http-backend": "3.0.2"
   },
   "devDependencies": {
-    "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*"
   },
   "peerDependencies": {

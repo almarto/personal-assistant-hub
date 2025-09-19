@@ -2,7 +2,8 @@
 
 - [x] 1. Configure monorepo foundation and shared configurations
   - Set up Turborepo workspace configuration and package.json scripts
-  - Create shared TypeScript, ESLint (with import order, absolute imports, named exports), and Prettier configuration packages
+  - Create shared TypeScript, ESLint (with import order, absolute imports, named exports), and
+    Prettier configuration packages
   - Configure Changesets for version management
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.3, 7.1, 7.2_
 
@@ -66,7 +67,8 @@
     - Create BaseAuthService interface for common functionality
     - Implement PasswordAuthService class with bcrypt password hashing
     - Refactor existing AuthService to PasskeyAuthService
-    - Update createAuth factory to return both services: auth.passwordService and auth.passkeyService
+    - Update createAuth factory to return both services: auth.passwordService and
+      auth.passkeyService
     - _Requirements: 4.1, 4.10_
   - [x] 9.3 Implement password authentication endpoints in backend
     - Create password registration endpoint with invitation token validation
@@ -121,3 +123,7 @@
   - Set up environment configuration for local development
   - Prepare deployment configuration for future hosting
   - _Requirements: All requirements validation_
+
+- [ ] 15. Improve security
+  - Set device fingerprint token verification
+  - Set geolocation token verification (does the country changed?)

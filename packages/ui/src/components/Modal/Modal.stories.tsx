@@ -67,7 +67,7 @@ export const WithFooter: Story = {
           onClose={() => setIsOpen(false)}
           footer={
             <>
-              <Button variant="secondary" onClick={() => setIsOpen(false)}>
+              <Button variant='secondary' onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
               <Button onClick={() => setIsOpen(false)}>Save</Button>
@@ -97,7 +97,7 @@ export const FormModal: Story = {
           onClose={() => setIsOpen(false)}
           footer={
             <>
-              <Button variant="secondary" onClick={() => setIsOpen(false)}>
+              <Button variant='secondary' onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
               <Button onClick={() => setIsOpen(false)}>Submit</Button>
@@ -107,17 +107,17 @@ export const FormModal: Story = {
           <div
             style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
           >
-            <Input label="Name" placeholder="Enter your name" required />
+            <Input label='Name' placeholder='Enter your name' required />
             <Input
-              label="Email"
-              type="email"
-              placeholder="Enter your email"
+              label='Email'
+              type='email'
+              placeholder='Enter your email'
               required
             />
             <Input
-              label="Message"
-              placeholder="Enter your message"
-              helperText="Optional message"
+              label='Message'
+              placeholder='Enter your message'
+              helperText='Optional message'
             />
           </div>
         </Modal>

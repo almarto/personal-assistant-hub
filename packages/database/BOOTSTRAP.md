@@ -2,7 +2,8 @@
 
 ## Creating the First Admin User
 
-Since the invitation system requires an admin to create invitations, you need to bootstrap the first admin user directly in the database.
+Since the invitation system requires an admin to create invitations, you need to bootstrap the first
+admin user directly in the database.
 
 ### Prerequisites
 

@@ -2,7 +2,8 @@
 
 ## Current Configuration
 
-The project is already configured to use absolute imports through the configuration in `tsconfig.json`:
+The project is already configured to use absolute imports through the configuration in
+`tsconfig.json`:
 
 ```json
 {
@@ -52,8 +53,10 @@ import { User } from '../domain/model/user.model';
 
 ## NestJS Compatibility
 
-Absolute imports are **fully compatible and recommended** in NestJS. In fact, they improve the project architecture by making dependencies between modules more explicit.
+Absolute imports are **fully compatible and recommended** in NestJS. In fact, they improve the
+project architecture by making dependencies between modules more explicit.
 
 ## Implemented Example
 
-See the file `src/modules/users/infrastructure/adapters/in/users.controller.ts` as an example of correct absolute imports implementation.
+See the file `src/modules/users/infrastructure/adapters/in/users.controller.ts` as an example of
+correct absolute imports implementation.

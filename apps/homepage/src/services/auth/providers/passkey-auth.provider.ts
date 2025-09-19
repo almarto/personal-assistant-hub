@@ -1,28 +1,24 @@
 import {
   startRegistration,
   startAuthentication,
+  type PublicKeyCredentialCreationOptionsJSON,
+  type PublicKeyCredentialRequestOptionsJSON,
+  type RegistrationResponseJSON,
 } from '@simplewebauthn/browser';
-import type {
-  PublicKeyCredentialCreationOptionsJSON,
-  PublicKeyCredentialRequestOptionsJSON,
-  RegistrationResponseJSON,
-} from '@simplewebauthn/types';
 
 import type {
   AuthResult,
   PasskeyAuthService,
-  PasskeyCredentials,
+  PasskeyLoginCredentials,
   PasskeyCredential,
   PasskeyRegistrationData,
-} from '../types/auth';
+  AuthServiceConfig,
+} from '../types';
 
-import {
-  BaseAuthServiceImpl,
-  type AuthServiceConfig,
-} from './base-auth.service';
+import { BaseAuthServiceProvider } from './base-auth.provider';
 
-export class PasskeyAuthServiceImpl
-  extends BaseAuthServiceImpl
+export class PasskeyAuthServiceProvider
+  extends BaseAuthServiceProvider
   implements PasskeyAuthService
 {
   constructor(config: AuthServiceConfig) {
@@ -82,16 +78,10 @@ export class PasskeyAuthServiceImpl
       }
     );
 
-    // Store the token
-    this.setToken(response.token);
-
-    // Notify auth state change
-    await this.notifyAuthSuccess(response);
-
     return response;
   }
 
-  async login(credentials: PasskeyCredentials): Promise<AuthResult> {
+  async login(credentials: PasskeyLoginCredentials): Promise<AuthResult> {
     // First, initiate login to get options
     const options = await this.initiateLogin(credentials.email);
 
@@ -110,14 +100,10 @@ export class PasskeyAuthServiceImpl
       }
     );
 
-    // Store the token
-    this.setToken(response.token);
-
-    // Notify auth state change
-    await this.notifyAuthSuccess(response);
-
     return response;
   }
+
+  //TODO: following methods are using non-implemented endpoints
 
   async getAvailableCredentials(): Promise<PasskeyCredential[]> {
     const response = await this.makeRequest<{

@@ -1,20 +1,14 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { auth } from '../../main';
+import { useUserSession } from '@/hooks/auth';
 
 import styles from './AuthGuard.module.css';
-
-interface AuthGuardProps {
-  children: React.ReactNode;
-}
+import type { AuthGuardProps } from './types';
 
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const location = useLocation();
-
-  // Use specific hooks for authentication state
-  const isAuthenticated = auth.useIsAuthenticated();
-  const isLoading = auth.useAuthLoading();
+  const { isAuthenticated, isLoading } = useUserSession();
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -28,7 +22,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   // Redirect to auth page if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
+    return <Navigate to='/auth' state={{ from: location.pathname }} replace />;
   }
 
   // Render protected content if authenticated

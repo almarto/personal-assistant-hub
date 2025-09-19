@@ -10,7 +10,10 @@
 
 ## ✨ Overview
 
-Personal Assistant Hub is a comprehensive monorepo designed to house multiple personal productivity tools under a unified, secure platform. Built with modern web technologies and a focus on developer experience, it provides a scalable foundation for building and managing personal productivity applications.
+Personal Assistant Hub is a comprehensive monorepo designed to house multiple personal productivity
+tools under a unified, secure platform. Built with modern web technologies and a focus on developer
+experience, it provides a scalable foundation for building and managing personal productivity
+applications.
 
 ## 🚀 Features
 
@@ -228,7 +231,8 @@ fix(api): resolve login endpoint error
 docs: update README with setup instructions
 ```
 
-**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`,
+`revert`
 
 ### Bypassing Hooks
 

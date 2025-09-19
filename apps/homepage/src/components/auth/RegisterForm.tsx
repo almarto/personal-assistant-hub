@@ -117,31 +117,31 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       </div>
 
       {error && (
-        <div className={styles.errorMessage} role="alert">
+        <div className={styles.errorMessage} role='alert'>
           {error}
         </div>
       )}
 
       <div className={`${styles.formContent} ${styles[`mode-${authMode}`]}`}>
         <Input
-          id="email"
-          type="email"
-          label="Email"
+          id='email'
+          type='email'
+          label='Email'
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder='Enter your email'
           required
           disabled={isLoading}
           state={error && !email.trim() ? 'error' : 'default'}
         />
 
         <Input
-          id="invitationToken"
-          type="text"
-          label="Invitation Token"
+          id='invitationToken'
+          type='text'
+          label='Invitation Token'
           value={invitationToken}
           onChange={e => setInvitationToken(e.target.value)}
-          placeholder="Enter your invitation token"
+          placeholder='Enter your invitation token'
           required
           disabled={isLoading}
           state={error && !invitationToken.trim() ? 'error' : 'default'}
@@ -151,12 +151,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <>
             <div className={styles.formGroup}>
               <Input
-                id="password"
-                type="password"
-                label="Password"
+                id='password'
+                type='password'
+                label='Password'
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="Create a strong password"
+                placeholder='Create a strong password'
                 required
                 disabled={isLoading}
                 showPasswordToggle
@@ -168,12 +168,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             </div>
 
             <Input
-              id="confirmPassword"
-              type="password"
-              label="Confirm Password"
+              id='confirmPassword'
+              type='password'
+              label='Confirm Password'
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
-              placeholder="Confirm your password"
+              placeholder='Confirm your password'
               required
               disabled={isLoading}
               state={
@@ -190,12 +190,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           </>
         ) : (
           <Input
-            id="deviceName"
-            type="text"
-            label="Device Name"
+            id='deviceName'
+            type='text'
+            label='Device Name'
             value={deviceName}
             onChange={e => setDeviceName(e.target.value)}
-            placeholder="e.g., My Laptop"
+            placeholder='e.g., My Laptop'
             required
             disabled={isLoading}
             state={error && !deviceName.trim() ? 'error' : 'default'}
@@ -203,9 +203,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         )}
 
         <Button
-          type="submit"
-          variant="primary"
-          size="medium"
+          type='submit'
+          variant='primary'
+          size='medium'
           fullWidth
           loading={isLoading}
           disabled={isLoading || !isFormValid()}
@@ -216,9 +216,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </Button>
 
         <Button
-          type="button"
-          variant="outline"
-          size="medium"
+          type='button'
+          variant='outline'
+          size='medium'
           fullWidth
           onClick={handleModeSwitch}
           disabled={isLoading}

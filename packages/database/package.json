@@ -26,7 +26,6 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "db:setup": "pnpm exec tsx src/scripts/setup-db.ts",
     "db:setup:prod": "pnpm exec tsx src/scripts/setup-prod.ts",
@@ -39,7 +38,6 @@
     "dotenv": "17.2.2"
   },
   "devDependencies": {
-    "@personal-assistant-hub/eslint-config": "workspace:*",
     "@personal-assistant-hub/typescript-config": "workspace:*",
     "drizzle-kit": "0.31.4",
     "tsx": "4.20.5"

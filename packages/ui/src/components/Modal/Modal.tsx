@@ -95,7 +95,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const modalContent = (
     <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={modalClasses} role="dialog" aria-modal="true">
+      <div className={modalClasses} role='dialog' aria-modal='true'>
         {(title || showCloseButton) && (
           <div className={styles.header}>
             {title && <h2 className={styles.title}>{title}</h2>}
@@ -103,20 +103,20 @@ export const Modal: React.FC<ModalProps> = ({
               <button
                 className={styles.closeButton}
                 onClick={onClose}
-                aria-label="Close modal"
+                aria-label='Close modal'
               >
                 <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                  <line x1='18' y1='6' x2='6' y2='18'></line>
+                  <line x1='6' y1='6' x2='18' y2='18'></line>
                 </svg>
               </button>
             )}

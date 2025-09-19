@@ -17,7 +17,7 @@ export const Homepage: React.FC = () => {
             eficiente
           </p>
           <div className={styles.actions}>
-            <Link to="/dashboard" className={styles.secondaryButton}>
+            <Link to='/dashboard' className={styles.secondaryButton}>
               Ir al Dashboard
             </Link>
           </div>

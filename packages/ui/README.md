@@ -41,22 +41,13 @@ import { Button, Input, Modal } from '@personal-assistant-hub/ui';
 function MyComponent() {
   return (
     <div>
-      <Button variant="primary" size="medium">
+      <Button variant='primary' size='medium'>
         Click me
       </Button>
 
-      <Input
-        label="Email"
-        type="email"
-        placeholder="Enter your email"
-        required
-      />
+      <Input label='Email' type='email' placeholder='Enter your email' required />
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Example Modal"
-      >
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title='Example Modal'>
         <p>Modal content goes here</p>
       </Modal>
     </div>
@@ -134,7 +125,8 @@ The design system includes CSS custom properties for consistent styling:
 
 ## Dark Mode
 
-The design system supports dark mode through CSS custom properties. Toggle dark mode by adding the `data-theme="dark"` attribute to your root element:
+The design system supports dark mode through CSS custom properties. Toggle dark mode by adding the
+`data-theme="dark"` attribute to your root element:
 
 ```tsx
 // Toggle dark mode

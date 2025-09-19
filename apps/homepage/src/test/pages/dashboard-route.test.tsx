@@ -12,7 +12,7 @@ describe('Dashboard Route Structure', () => {
       <MemoryRouter initialEntries={['/dashboard']}>
         <Routes>
           <Route
-            path="/dashboard"
+            path='/dashboard'
             element={
               <AuthGuard>
                 <Layout />

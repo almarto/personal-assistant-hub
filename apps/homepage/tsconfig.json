@@ -27,6 +27,9 @@
     "paths": {
       "@personal-assistant-hub/ui": [
         "../../packages/ui/dist/index.d.ts"
+      ],
+      "@/*": [
+        "src/*"
       ]
     }
   },

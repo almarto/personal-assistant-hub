@@ -59,7 +59,7 @@ export const Interactive: Story = {
       <div style={{ maxWidth: '400px' }}>
         <div style={{ marginBottom: '16px' }}>
           <label
-            htmlFor="password"
+            htmlFor='password'
             style={{
               display: 'block',
               marginBottom: '8px',
@@ -69,11 +69,11 @@ export const Interactive: Story = {
             Password
           </label>
           <input
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="Type a password to see strength feedback"
+            placeholder='Type a password to see strength feedback'
             style={{
               width: '100%',
               padding: '12px',

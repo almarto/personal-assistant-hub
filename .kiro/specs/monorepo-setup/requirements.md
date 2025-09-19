@@ -2,56 +2,74 @@
 
 ## Introduction
 
-This document defines the requirements for the initial setup of the personal-assistant-hub monorepo, which will serve as the foundation for a hub of personal productivity tools. The project will use Turborepo to manage multiple applications and shared packages, with a modular architecture that allows for incremental growth and future separation of individual tools.
+This document defines the requirements for the initial setup of the personal-assistant-hub monorepo,
+which will serve as the foundation for a hub of personal productivity tools. The project will use
+Turborepo to manage multiple applications and shared packages, with a modular architecture that
+allows for incremental growth and future separation of individual tools.
 
 ## Requirements
 
 ### Requirement 1: Monorepo Structure
 
-**User Story:** As a developer, I want a well-organized monorepo structure with Turborepo, so that I can efficiently manage multiple applications and shared packages.
+**User Story:** As a developer, I want a well-organized monorepo structure with Turborepo, so that I
+can efficiently manage multiple applications and shared packages.
 
 #### Acceptance Criteria
 
-1. WHEN the project is initialized THEN the system SHALL create a structure with `apps/` and `packages/` directories
-2. WHEN Turborepo is configured THEN the system SHALL allow executing commands like `build`, `dev`, `lint`, and `test` in parallel
-3. WHEN new apps or packages are added THEN the system SHALL detect them automatically through workspaces
-4. IF `pnpm dev` is executed THEN the system SHALL start all applications in development mode simultaneously
+1. WHEN the project is initialized THEN the system SHALL create a structure with `apps/` and
+   `packages/` directories
+2. WHEN Turborepo is configured THEN the system SHALL allow executing commands like `build`, `dev`,
+   `lint`, and `test` in parallel
+3. WHEN new apps or packages are added THEN the system SHALL detect them automatically through
+   workspaces
+4. IF `pnpm dev` is executed THEN the system SHALL start all applications in development mode
+   simultaneously
 
 ### Requirement 2: Development Tools Configuration
 
-**User Story:** As a developer, I want shared configurations for TypeScript, ESLint, and Prettier, so that I can maintain code consistency across the entire monorepo.
+**User Story:** As a developer, I want shared configurations for TypeScript, ESLint, and Prettier,
+so that I can maintain code consistency across the entire monorepo.
 
 #### Acceptance Criteria
 
 1. WHEN a configuration package is created THEN the system SHALL export reusable configurations
-2. WHEN configurations are applied THEN the system SHALL validate TypeScript, ESLint, and Prettier across all apps
-3. WHEN ESLint is configured THEN the system SHALL enforce import order, absolute imports, and named exports
+2. WHEN configurations are applied THEN the system SHALL validate TypeScript, ESLint, and Prettier
+   across all apps
+3. WHEN ESLint is configured THEN the system SHALL enforce import order, absolute imports, and named
+   exports
 4. IF there are linting errors THEN the system SHALL show specific errors and correction suggestions
 5. WHEN `pnpm format` is executed THEN the system SHALL format all files according to Prettier rules
 6. WHEN `pnpm lint` is executed THEN the system SHALL validate all ESLint rules across the monorepo
 
 ### Requirement 3: Main Homepage Application
 
-**User Story:** As a user, I want a central homepage application that serves as an entry point and dashboard, so that I can access all tools from a unified location.
+**User Story:** As a user, I want a central homepage application that serves as an entry point and
+dashboard, so that I can access all tools from a unified location.
 
 #### Acceptance Criteria
 
 1. WHEN accessing the homepage THEN the system SHALL display a dashboard with navigation to tools
 2. WHEN React with Vite is configured THEN the system SHALL provide hot reload and optimized builds
-3. WHEN routing is implemented THEN the system SHALL use React Router for navigation between sections
-4. IF navigating to a tool THEN the system SHALL maintain the main layout and show the tool as a subroute
+3. WHEN routing is implemented THEN the system SHALL use React Router for navigation between
+   sections
+4. IF navigating to a tool THEN the system SHALL maintain the main layout and show the tool as a
+   subroute
 5. WHEN building the app THEN the system SHALL generate optimized assets for production
 
 ### Requirement 4: Dual Authentication System (Passkey + Password)
 
-**User Story:** As a user, I want to authenticate using either passkeys or traditional password, so that I can access the system regardless of browser compatibility or device limitations.
+**User Story:** As a user, I want to authenticate using either passkeys or traditional password, so
+that I can access the system regardless of browser compatibility or device limitations.
 
 #### Acceptance Criteria
 
-1. WHEN authentication is implemented THEN the system SHALL support both WebAuthn/passkeys and password authentication
+1. WHEN authentication is implemented THEN the system SHALL support both WebAuthn/passkeys and
+   password authentication
 2. WHEN a user attempts to register THEN the system SHALL require a valid invitation token
-3. WHEN registering THEN the system SHALL default to password authentication with an option to use passkeys
-4. WHEN logging in THEN the system SHALL default to password authentication with an option to use passkeys
+3. WHEN registering THEN the system SHALL default to password authentication with an option to use
+   passkeys
+4. WHEN logging in THEN the system SHALL default to password authentication with an option to use
+   passkeys
 5. WHEN an invitation is generated THEN the system SHALL create a unique link with expiration
 6. IF a user is admin THEN the system SHALL allow generating invitations and managing users
 7. WHEN a user authenticates THEN the system SHALL maintain the session securely
@@ -61,7 +79,8 @@ This document defines the requirements for the initial setup of the personal-ass
 
 ### Requirement 5: NestJS Backend
 
-**User Story:** As a developer, I want a robust backend with NestJS, so that I can handle business logic, authentication, and data access in a scalable manner.
+**User Story:** As a developer, I want a robust backend with NestJS, so that I can handle business
+logic, authentication, and data access in a scalable manner.
 
 #### Acceptance Criteria
 
@@ -73,7 +92,8 @@ This document defines the requirements for the initial setup of the personal-ass
 
 ### Requirement 6: PostgreSQL Database with Drizzle
 
-**User Story:** As a developer, I want a PostgreSQL database with Drizzle ORM, so that I can manage user and tool data with type safety and automatic migrations.
+**User Story:** As a developer, I want a PostgreSQL database with Drizzle ORM, so that I can manage
+user and tool data with type safety and automatic migrations.
 
 #### Acceptance Criteria
 
@@ -86,7 +106,8 @@ This document defines the requirements for the initial setup of the personal-ass
 
 ### Requirement 7: Version Management with Changesets
 
-**User Story:** As a developer, I want a version management system with Changesets, so that I can track changes in shared packages and generate changelogs automatically.
+**User Story:** As a developer, I want a version management system with Changesets, so that I can
+track changes in shared packages and generate changelogs automatically.
 
 #### Acceptance Criteria
 
@@ -98,7 +119,8 @@ This document defines the requirements for the initial setup of the personal-ass
 
 ### Requirement 8: Testing with React Testing Library
 
-**User Story:** As a developer, I want unit and integration tests with React Testing Library, so that I can ensure code quality and functionality from the user's perspective.
+**User Story:** As a developer, I want unit and integration tests with React Testing Library, so
+that I can ensure code quality and functionality from the user's perspective.
 
 #### Acceptance Criteria
 
@@ -110,7 +132,8 @@ This document defines the requirements for the initial setup of the personal-ass
 
 ### Requirement 9: Accessibility and Best Practices
 
-**User Story:** As a user with accessibility needs, I want all interfaces to meet accessibility standards, so that I can use the tools without barriers.
+**User Story:** As a user with accessibility needs, I want all interfaces to meet accessibility
+standards, so that I can use the tools without barriers.
 
 #### Acceptance Criteria
 
@@ -122,7 +145,8 @@ This document defines the requirements for the initial setup of the personal-ass
 
 ### Requirement 10: Internationalization (i18n)
 
-**User Story:** As a user, I want the application to be available in English and Spanish, so that I can use the tools in my preferred language.
+**User Story:** As a user, I want the application to be available in English and Spanish, so that I
+can use the tools in my preferred language.
 
 #### Acceptance Criteria
 
@@ -131,11 +155,13 @@ This document defines the requirements for the initial setup of the personal-ass
 3. WHEN language is changed THEN the system SHALL persist the user's preference
 4. IF new texts are added THEN the system SHALL require translations in English and Spanish
 5. WHEN translations are loaded THEN the system SHALL use lazy loading to optimize performance
-6. WHEN dates and numbers are displayed THEN the system SHALL format them according to selected locale
+6. WHEN dates and numbers are displayed THEN the system SHALL format them according to selected
+   locale
 
 ### Requirement 11: CSS Modules and Design System
 
-**User Story:** As a developer, I want to use CSS Modules for styling and a documented design system, so that I can maintain visual consistency and facilitate maintenance.
+**User Story:** As a developer, I want to use CSS Modules for styling and a documented design
+system, so that I can maintain visual consistency and facilitate maintenance.
 
 #### Acceptance Criteria
 

@@ -2,7 +2,9 @@
 
 ## Overview
 
-The personal-assistant-hub is a monorepo that will host multiple personal productivity tools with a modular and scalable architecture. The design focuses on code reusability, development consistency, and the ability to separate individual tools in the future.
+The personal-assistant-hub is a monorepo that will host multiple personal productivity tools with a
+modular and scalable architecture. The design focuses on code reusability, development consistency,
+and the ability to separate individual tools in the future.
 
 ## Architecture
 
@@ -165,14 +167,7 @@ module.exports = {
     'import/order': [
       'error',
       {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-        ],
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
         'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
@@ -323,14 +318,7 @@ CREATE TABLE hub_user_sessions (
 
 ```typescript
 // packages/database/src/schema/users.ts
-import {
-  pgTable,
-  uuid,
-  varchar,
-  timestamp,
-  text,
-  bigint,
-} from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, timestamp, text, bigint } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('hub_users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -504,10 +492,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        { provide: UserRepository, useValue: mockUserRepository },
-      ],
+      providers: [AuthService, { provide: UserRepository, useValue: mockUserRepository }],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -524,10 +509,7 @@ describe('AuthService', () => {
       expiresAt: new Date(Date.now() + 86400000), // 24h from now
     });
 
-    const result = await service.registerWithInvitation(
-      mockToken,
-      mockUserData
-    );
+    const result = await service.registerWithInvitation(mockToken, mockUserData);
 
     expect(result.user.email).toBe(mockUserData.email);
     expect(mockUserRepository.createUser).toHaveBeenCalledWith(mockUserData);
@@ -621,11 +603,13 @@ export default i18n;
 #### Dependency Management Strategy
 
 - **Minimize Dependencies**: Implement functionality natively when possible to reduce attack surface
-- **Fixed Versions**: Always use exact versions (no `^` or `~`) to prevent automatic updates to potentially compromised versions
+- **Fixed Versions**: Always use exact versions (no `^` or `~`) to prevent automatic updates to
+  potentially compromised versions
 - **Manual Updates**: Dependencies are updated manually after security review of changelogs
 - **Security Monitoring**: Regular audits of dependencies for known vulnerabilities
 - **Latest version**: Always use the latest version of the dependency
-- **Consistency**: When a new dependency is added, check if it's already in use in other packages and keep the same version for every app and package.
+- **Consistency**: When a new dependency is added, check if it's already in use in other packages
+  and keep the same version for every app and package.
 
 #### Version Pinning Policy
 
@@ -693,4 +677,5 @@ export default i18n;
 // Example: "ui": "workspace:*"
 ```
 
-This design provides a solid foundation for the monorepo setup while maintaining flexibility for future growth and tool separation.
+This design provides a solid foundation for the monorepo setup while maintaining flexibility for
+future growth and tool separation.
