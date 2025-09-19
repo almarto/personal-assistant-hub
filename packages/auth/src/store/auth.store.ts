@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { AuthServices } from '../types/auth';
+import type { User } from '../types/auth';
 import type { AuthStore } from '../types/auth';
 
-export const createAuthStore = (authServices: AuthServices) =>
+export const createAuthStore = () =>
   create<AuthStore>()(
     persist(
       set => ({
@@ -14,117 +14,84 @@ export const createAuthStore = (authServices: AuthServices) =>
         isLoading: false,
         error: null,
 
-        // Actions - these are legacy methods for backward compatibility
-        login: async (email: string) => {
-          set({ isLoading: true, error: null });
-          try {
-            // Default to passkey login for backward compatibility
-            const result = await authServices.passkeyService.login({ email });
-            set({
-              user: result.user,
-              isAuthenticated: true,
-              isLoading: false,
-              error: null,
-            });
-          } catch (error: unknown) {
-            const errorMessage =
-              error instanceof Error ? error.message : 'Login failed';
-            set({
-              isLoading: false,
-              error: errorMessage,
-            });
-            throw error;
-          }
-        },
+        // Internal method to hydrate store from token
+        // hydrateFromToken: async (token: string | null) => {
+        //   // Only hydrate if no user in store but there might be a token
+        //   const currentState = get();
+        //   if (currentState.user || currentState.isLoading) {
+        //     return;
+        //   }
 
-        register: async (
-          email: string,
-          invitationToken: string,
-          deviceName: string
+        //   if (!token) {
+        //     set({
+        //       user: null,
+        //       isAuthenticated: false,
+        //       isLoading: false,
+        //       error: null,
+        //     });
+        //     return;
+        //   }
+
+        //   // If there's a token, try to get the user
+        //   set({ isLoading: true, error: null });
+        //   try {
+        //     const user = await authServices.getCurrentUser();
+        //     if (user) {
+        //       set({
+        //         user,
+        //         isAuthenticated: true,
+        //         isLoading: false,
+        //         error: null,
+        //       });
+        //     } else {
+        //       set({
+        //         user: null,
+        //         isAuthenticated: false,
+        //         isLoading: false,
+        //         error: null,
+        //       });
+        //     }
+        //   } catch {
+        //     set({
+        //       user: null,
+        //       isAuthenticated: false,
+        //       isLoading: false,
+        //       error: null,
+        //     });
+        //   }
+        // },
+
+        // Internal method to set auth state
+        setAuthState: (
+          user: User | null,
+          isAuthenticated: boolean,
+          isLoading: boolean,
+          error: string | null
         ) => {
-          set({ isLoading: true, error: null });
-          try {
-            // Default to passkey registration for backward compatibility
-            const result = await authServices.passkeyService.register({
-              email,
-              invitationToken,
-              deviceName,
-            });
-            set({
-              user: result.user,
-              isAuthenticated: true,
-              isLoading: false,
-              error: null,
-            });
-          } catch (error: unknown) {
-            const errorMessage =
-              error instanceof Error ? error.message : 'Registration failed';
-            set({
-              isLoading: false,
-              error: errorMessage,
-            });
-            throw error;
-          }
+          set({ user, isAuthenticated, isLoading, error });
         },
 
-        logout: async () => {
-          set({ isLoading: true, error: null });
-          try {
-            await authServices.logout();
-            set({
-              user: null,
-              isAuthenticated: false,
-              isLoading: false,
-              error: null,
-            });
-          } catch (error: unknown) {
-            const errorMessage =
-              error instanceof Error ? error.message : 'Logout failed';
-            set({
-              isLoading: false,
-              error: errorMessage,
-            });
-            // Even if logout fails, clear the local state
-            set({
-              user: null,
-              isAuthenticated: false,
-            });
-          }
-        },
-
-        checkAuth: async () => {
-          set({ isLoading: true, error: null });
-          try {
-            const user = await authServices.getCurrentUser();
-            set({
-              user,
-              isAuthenticated: !!user,
-              isLoading: false,
-              error: null,
-            });
-          } catch {
-            set({
-              user: null,
-              isAuthenticated: false,
-              isLoading: false,
-              error: null, // Don't show error for auth check failures
-            });
-          }
-        },
-
+        // Internal method to clear error
         clearError: () => {
           set({ error: null });
         },
       }),
       {
         name: 'auth-storage',
+        //storage: createJSONStorage(() => sessionStorage),
         partialize: (state: AuthStore) => ({
           user: state.user,
           isAuthenticated: state.isAuthenticated,
         }),
+        // onRehydrateStorage: () => (state) => {
+        //   // After hydrating from localStorage, check the token
+        //   if (state) {
+        //     state.hydrateFromToken();
+        //   }
+        // },
       }
     )
   );
 
 // Export types for the store hooks
-export type AuthStoreHook = ReturnType<typeof createAuthStore>;
+export type AuthStoreType = ReturnType<typeof createAuthStore>;

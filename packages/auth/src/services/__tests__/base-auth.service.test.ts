@@ -10,7 +10,7 @@ import type {
 } from '../../types/auth';
 import {
   BaseAuthServiceImpl,
-  type BaseAuthServiceConfig,
+  type AuthServiceConfig,
 } from '../base-auth.service';
 
 // Create a concrete implementation for testing
@@ -55,7 +55,7 @@ Object.defineProperty(window, 'localStorage', {
 
 describe('BaseAuthServiceImpl', () => {
   let authService: TestAuthService;
-  const mockConfig: BaseAuthServiceConfig = {
+  const mockConfig: AuthServiceConfig = {
     apiBaseUrl: 'http://localhost:3001',
   };
 

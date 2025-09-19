@@ -63,13 +63,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
     try {
       if (authMode === 'password') {
-        await auth.passwordService.register({
+        await auth.registerPassword({
           email,
           password,
           invitationToken,
         });
       } else {
-        await auth.passkeyService.register({
+        await auth.registerPasskey({
           email,
           invitationToken,
           deviceName,

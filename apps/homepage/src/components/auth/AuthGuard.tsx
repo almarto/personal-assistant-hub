@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { auth } from '../../main';
@@ -10,27 +10,11 @@ interface AuthGuardProps {
 }
 
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        setIsLoading(true);
-        await auth.useAuthStore.getState().checkAuth();
-        const { isAuthenticated } = auth.useAuthStore.getState();
-        setIsAuthenticated(isAuthenticated);
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuthentication();
-  }, []);
+  // Use specific hooks for authentication state
+  const isAuthenticated = auth.useIsAuthenticated();
+  const isLoading = auth.useAuthLoading();
 
   // Show loading spinner while checking authentication
   if (isLoading) {

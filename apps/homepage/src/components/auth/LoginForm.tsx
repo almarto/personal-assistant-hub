@@ -37,9 +37,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
 
     try {
       if (authMode === 'password') {
-        await auth.passwordService.login({ email, password });
+        await auth.loginPassword({ email, password });
       } else {
-        await auth.passkeyService.login({ email });
+        await auth.loginPasskey({ email });
       }
 
       onSuccess?.();

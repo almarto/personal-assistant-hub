@@ -9,7 +9,7 @@ import type {
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 
 import type { AuthResult, PasskeyRegistrationData } from '../../types/auth';
-import type { BaseAuthServiceConfig } from '../base-auth.service';
+import type { AuthServiceConfig } from '../base-auth.service';
 import { PasskeyAuthServiceImpl } from '../passkey-auth.service';
 
 // Mock the @simplewebauthn/browser module
@@ -38,7 +38,7 @@ Object.defineProperty(window, 'localStorage', {
 
 describe('PasskeyAuthServiceImpl', () => {
   let passkeyService: PasskeyAuthServiceImpl;
-  const mockConfig: BaseAuthServiceConfig = {
+  const mockConfig: AuthServiceConfig = {
     apiBaseUrl: 'http://localhost:3001',
   };
 

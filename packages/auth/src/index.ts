@@ -1,19 +1,62 @@
-// All imports/exports have been reviewed - no duplications or unused exports found
 import { createAuthHooks } from './hooks/useAuth';
-import { AuthServicesImpl } from './services/auth-services';
-import type { BaseAuthServiceConfig } from './services/base-auth.service';
+import { AuthService } from './services/auth-service';
+import { AuthServiceConfig } from './services/base-auth.service';
 import { createAuthStore } from './store/auth.store';
+import type {
+  PasskeyCredentials,
+  PasskeyRegistrationData,
+  PasswordCredentials,
+  PasswordRegistrationData,
+  User,
+} from './types/auth';
 
-// New factory function to create the complete auth system with dual services
-export const createAuth = (config: BaseAuthServiceConfig) => {
-  const authServices = new AuthServicesImpl(config);
-  const useAuthStore = createAuthStore(authServices);
+export const createAuth = (config: AuthServiceConfig) => {
+  let useAuthStore: ReturnType<typeof createAuthStore> = createAuthStore();
+
+  const onAuthStateChange = (user: User | null, token: string | null) => {
+    if (user && token) {
+      useAuthStore.setState({
+        user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+    } else {
+      useAuthStore.setState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      });
+    }
+  };
+
+  const authServices = new AuthService({
+    ...config,
+    onAuthStateChange,
+  });
+
   const hooks = createAuthHooks(useAuthStore);
 
+  const loginPassword = async (credentials: PasswordCredentials) => {
+    return authServices.passwordService.login(credentials);
+  };
+
+  const loginPasskey = async (credentials: PasskeyCredentials) => {
+    return authServices.passkeyService.login(credentials);
+  };
+  const registerPassword = async (data: PasswordRegistrationData) => {
+    return authServices.passwordService.register(data);
+  };
+  const registerPasskey = async (data: PasskeyRegistrationData) => {
+    return authServices.passkeyService.register(data);
+  };
+
   return {
-    passwordService: authServices.passwordService,
-    passkeyService: authServices.passkeyService,
-    useAuthStore,
+    loginPassword,
+    loginPasskey,
+    registerPassword,
+    registerPasskey,
     ...hooks,
   };
 };
@@ -31,13 +74,8 @@ export type {
   BaseAuthService,
   PasswordAuthService,
   PasskeyAuthService,
-  AuthServices,
-  AuthService as IAuthService,
   AuthState,
   AuthActions,
   AuthStore,
 } from './types/auth';
-export type { AuthServiceConfig } from './services/passkey-auth.service';
-export type { BaseAuthServiceConfig } from './services/base-auth.service';
-export type { AuthStoreHook } from './store/auth.store';
-export type { UseAuthReturn } from './hooks/useAuth';
+export type { AuthStoreType as AuthStoreHook } from './store/auth.store';

@@ -7,14 +7,14 @@ import type {
 
 import {
   BaseAuthServiceImpl,
-  type BaseAuthServiceConfig,
+  type AuthServiceConfig,
 } from './base-auth.service';
 
 export class PasswordAuthServiceImpl
   extends BaseAuthServiceImpl
   implements PasswordAuthService
 {
-  constructor(config: BaseAuthServiceConfig) {
+  constructor(config: AuthServiceConfig) {
     super(config);
   }
 
@@ -29,6 +29,9 @@ export class PasswordAuthServiceImpl
 
     // Store the token
     this.setToken(response.token);
+
+    // Notify auth state change
+    await this.notifyAuthSuccess(response);
 
     return response;
   }
@@ -45,6 +48,9 @@ export class PasswordAuthServiceImpl
 
     // Store the token
     this.setToken(response.token);
+
+    // Notify auth state change
+    await this.notifyAuthSuccess(response);
 
     return response;
   }

@@ -41,13 +41,7 @@ export interface PasswordRegistrationData {
 
 // Base interface for common authentication functionality
 export interface BaseAuthService {
-  login(
-    credentials: PasswordCredentials | PasskeyCredentials
-  ): Promise<AuthResult>;
   logout(): Promise<void>;
-  register(
-    data: PasswordRegistrationData | PasskeyRegistrationData
-  ): Promise<AuthResult>;
   getCurrentUser(): Promise<User | null>;
   refreshToken(): Promise<string>;
   getToken(): string | null;
@@ -68,27 +62,16 @@ export interface PasskeyAuthService extends BaseAuthService {
   getAvailableCredentials(): Promise<PasskeyCredential[]>;
 }
 
+// Combined auth services interface
+export interface AuthServiceI extends BaseAuthService {
+  passwordService: PasswordAuthService;
+  passkeyService: PasskeyAuthService;
+}
+
 export interface PasskeyCredential {
   id: string;
   deviceName: string;
   createdAt: Date;
-}
-
-// Combined auth services interface
-export interface AuthServices {
-  passwordService: PasswordAuthService;
-  passkeyService: PasskeyAuthService;
-  getCurrentUser(): Promise<User | null>;
-  logout(): Promise<void>;
-}
-
-// Legacy interface for backward compatibility
-export interface AuthService {
-  login(email: string): Promise<AuthResult>;
-  logout(): Promise<void>;
-  register(data: PasskeyRegistrationData): Promise<AuthResult>;
-  getCurrentUser(): Promise<User | null>;
-  refreshToken(): Promise<string>;
 }
 
 export interface AuthState {
@@ -99,14 +82,13 @@ export interface AuthState {
 }
 
 export interface AuthActions {
-  login: (email: string) => Promise<void>;
-  register: (
-    email: string,
-    invitationToken: string,
-    deviceName: string
-  ) => Promise<void>;
-  logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
+  //hydrateFromToken: () => Promise<void>;
+  setAuthState: (
+    user: User | null,
+    isAuthenticated: boolean,
+    isLoading: boolean,
+    error: string | null
+  ) => void;
   clearError: () => void;
 }
 

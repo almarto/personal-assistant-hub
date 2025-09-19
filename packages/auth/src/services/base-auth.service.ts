@@ -8,18 +8,24 @@ import type {
   User,
 } from '../types/auth';
 
-export interface BaseAuthServiceConfig {
+export interface AuthServiceConfig {
   apiBaseUrl: string;
+  onAuthStateChange?: (user: User | null, token: string | null) => void;
 }
 
 export abstract class BaseAuthServiceImpl implements BaseAuthService {
   protected token: string | null = null;
   protected apiBaseUrl: string;
+  protected onAuthStateChange?: (
+    user: User | null,
+    token: string | null
+  ) => void;
 
-  constructor(config: BaseAuthServiceConfig) {
+  constructor(config: AuthServiceConfig) {
     this.apiBaseUrl = config.apiBaseUrl;
+    this.onAuthStateChange = config.onAuthStateChange;
     // Load token from localStorage on initialization
-    if (typeof window !== 'undefined') {
+    if (typeof localStorage !== 'undefined') {
       this.token = localStorage.getItem('auth_token');
     }
   }
@@ -55,15 +61,26 @@ export abstract class BaseAuthServiceImpl implements BaseAuthService {
 
   protected setToken(token: string): void {
     this.token = token;
-    if (typeof window !== 'undefined') {
+    if (typeof localStorage !== 'undefined') {
       localStorage.setItem('auth_token', token);
     }
   }
 
   protected clearToken(): void {
     this.token = null;
-    if (typeof window !== 'undefined') {
+    if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('auth_token');
+    }
+    // Notify auth state change
+    if (this.onAuthStateChange) {
+      this.onAuthStateChange(null, null);
+    }
+  }
+
+  protected async notifyAuthSuccess(authResult: AuthResult): Promise<void> {
+    // Notify auth state change with user and token
+    if (this.onAuthStateChange) {
+      this.onAuthStateChange(authResult.user, authResult.token);
     }
   }
 
@@ -89,6 +106,7 @@ export abstract class BaseAuthServiceImpl implements BaseAuthService {
     }
 
     try {
+      //TODO: /me endpoint is not implemented in auth.controller.ts
       const response = await this.makeRequest<{ user: User }>('/me');
       return response.user;
     } catch {
@@ -104,6 +122,7 @@ export abstract class BaseAuthServiceImpl implements BaseAuthService {
     }
 
     try {
+      //TODO: /refresh endpoint is not implemented in auth.controller.ts
       const response = await this.makeRequest<{ token: string }>('/refresh');
       this.setToken(response.token);
       return response.token;

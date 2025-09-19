@@ -5,7 +5,7 @@ import type {
   PasswordCredentials,
   PasswordRegistrationData,
 } from '../../types/auth';
-import type { BaseAuthServiceConfig } from '../base-auth.service';
+import type { AuthServiceConfig } from '../base-auth.service';
 import { PasswordAuthServiceImpl } from '../password-auth.service';
 
 // Mock fetch globally
@@ -25,7 +25,7 @@ Object.defineProperty(window, 'localStorage', {
 
 describe('PasswordAuthServiceImpl', () => {
   let passwordService: PasswordAuthServiceImpl;
-  const mockConfig: BaseAuthServiceConfig = {
+  const mockConfig: AuthServiceConfig = {
     apiBaseUrl: 'http://localhost:3001',
   };
 

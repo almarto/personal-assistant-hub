@@ -18,20 +18,14 @@ import type {
 
 import {
   BaseAuthServiceImpl,
-  type BaseAuthServiceConfig,
+  type AuthServiceConfig,
 } from './base-auth.service';
 
-// Legacy interface for backward compatibility
-interface AuthServiceConfig {
-  apiBaseUrl: string;
-}
-
-// New PasskeyAuthService implementation
 export class PasskeyAuthServiceImpl
   extends BaseAuthServiceImpl
   implements PasskeyAuthService
 {
-  constructor(config: BaseAuthServiceConfig) {
+  constructor(config: AuthServiceConfig) {
     super(config);
   }
 
@@ -91,6 +85,9 @@ export class PasskeyAuthServiceImpl
     // Store the token
     this.setToken(response.token);
 
+    // Notify auth state change
+    await this.notifyAuthSuccess(response);
+
     return response;
   }
 
@@ -116,6 +113,9 @@ export class PasskeyAuthServiceImpl
     // Store the token
     this.setToken(response.token);
 
+    // Notify auth state change
+    await this.notifyAuthSuccess(response);
+
     return response;
   }
 
@@ -139,6 +139,3 @@ export class PasskeyAuthServiceImpl
     });
   }
 }
-
-// Export classes for instantiation
-export type { AuthServiceConfig };
