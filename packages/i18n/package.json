@@ -1,0 +1,35 @@
+{
+  "name": "@personal-assistant-hub/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "check-types": "tsc --noEmit",
+    "test": "vitest --run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "react-i18next": "15.7.3",
+    "i18next": "25.5.2",
+    "i18next-browser-languagedetector": "8.2.0",
+    "i18next-http-backend": "3.0.2"
+  },
+  "devDependencies": {
+    "@personal-assistant-hub/typescript-config": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  }
+}

@@ -1,0 +1,2 @@
+/* Import all UI styles (tokens, globals, and component styles) */
+@import '@personal-assistant-hub/ui/globals.css';

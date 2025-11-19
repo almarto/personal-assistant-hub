@@ -1,0 +1,18 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1f2937;
+  }
+}

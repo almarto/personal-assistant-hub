@@ -1,0 +1,46 @@
+{
+  "name": "@personal-assistant-hub/ui",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Shared UI components and design system",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./globals.css": "./dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@personal-assistant-hub/i18n": "workspace:*"
+  },
+  "devDependencies": {
+    "@personal-assistant-hub/typescript-config": "workspace:*",
+    "@storybook/addon-essentials": "next",
+    "@storybook/addon-interactions": "next",
+    "@storybook/addon-links": "9.1.6",
+    "@storybook/blocks": "next",
+    "@storybook/react": "9.1.6",
+    "@storybook/react-vite": "9.1.6",
+    "@storybook/test": "next",
+    "esbuild-css-modules-plugin": "^3.1.5",
+    "storybook": "9.1.6"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
+  }
+}

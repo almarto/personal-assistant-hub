@@ -1,0 +1,45 @@
+{
+  "name": "@personal-assistant-hub/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js",
+      "require": "./dist/schema/index.cjs"
+    },
+    "./dist/schema/index.js": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js",
+      "require": "./dist/schema/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "type-check": "tsc --noEmit",
+    "db:setup": "pnpm exec tsx src/scripts/setup-db.ts",
+    "db:setup:prod": "pnpm exec tsx src/scripts/setup-prod.ts",
+    "db:generate": "pnpm exec drizzle-kit generate",
+    "db:migrate": "pnpm exec tsx src/scripts/migrate.ts",
+    "db:studio": "pnpm exec drizzle-kit studio",
+    "db:seed-admin": "pnpm exec tsx src/scripts/seed-admin.ts"
+  },
+  "dependencies": {
+    "dotenv": "17.2.2"
+  },
+  "devDependencies": {
+    "@personal-assistant-hub/typescript-config": "workspace:*",
+    "drizzle-kit": "0.31.4",
+    "tsx": "4.20.5"
+  }
+}

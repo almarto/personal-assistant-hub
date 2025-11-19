@@ -1,0 +1,66 @@
+/* Grid Component Styles */
+.uiGrid {
+  display: grid;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Column configurations */
+.uiGridColumns1 {
+  grid-template-columns: 1fr;
+}
+
+.uiGridColumns2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.uiGridColumns3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.uiGridColumns4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.uiGridAutoFit {
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-column-width, 300px), 1fr));
+}
+
+/* Gap configurations */
+.uiGridGapSmall {
+  gap: 0.75rem;
+}
+
+.uiGridGapMedium {
+  gap: 1.5rem;
+}
+
+.uiGridGapLarge {
+  gap: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .uiGridColumns2,
+  .uiGridColumns3,
+  .uiGridColumns4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .uiGridAutoFit {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .uiGridColumns3,
+  .uiGridColumns4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 1025px) {
+  .uiGridColumns4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

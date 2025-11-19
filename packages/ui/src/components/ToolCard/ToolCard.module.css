@@ -1,0 +1,42 @@
+/* ToolCard Component Styles */
+.uiToolCard {
+  min-height: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.uiToolCardIcon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.uiToolCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem 0;
+  flex-shrink: 0;
+}
+
+.uiToolCardDescription {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.uiToolCardButton {
+  flex-shrink: 0;
+  width: 100%;
+}

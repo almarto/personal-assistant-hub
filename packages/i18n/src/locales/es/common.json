@@ -1,0 +1,53 @@
+{
+  "navigation": {
+    "dashboard": "Panel de Control",
+    "babyTracker": "Seguimiento de Bebé",
+    "gymTracker": "Seguimiento de Gimnasio",
+    "motoTracker": "Seguimiento de Moto",
+    "profile": "Perfil"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "tool": "Herramienta"
+  },
+  "homepage": {
+    "title": "Hub de Asistente Personal",
+    "subtitle": "Tu centro centralizado para herramientas de productividad personal",
+    "welcome": "Bienvenido al Hub de Asistente Personal",
+    "yourTools": "Tus Herramientas"
+  },
+  "tools": {
+    "babyTracker": {
+      "title": "Seguimiento de Bebé",
+      "description": "Rastrea la alimentación, el sueño y los hitos de desarrollo de tu pequeño."
+    },
+    "gymTracker": {
+      "title": "Seguimiento de Gimnasio",
+      "description": "Monitorea tus entrenamientos, progreso y objetivos de fitness."
+    },
+    "motoTracker": {
+      "title": "Seguimiento de Moto",
+      "description": "Lleva un registro del mantenimiento, viajes y gastos de tu motocicleta."
+    }
+  },
+  "comingSoon": {
+    "message": "Esta herramienta está actualmente en desarrollo y estará disponible pronto.",
+    "submessage": "¡Vuelve más tarde para actualizaciones!"
+  },
+  "language": {
+    "select": "Seleccionar Idioma",
+    "english": "English",
+    "spanish": "Español"
+  }
+}

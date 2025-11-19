@@ -1,0 +1,65 @@
+#!/bin/sh
+# Pre-commit hook to run tests, lint, and format
+
+echo "🔍 Running pre-commit checks..."
+
+# Check if we're in a Git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "❌ Not in a Git repository"
+  exit 1
+fi
+
+# Get list of staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx|json|md)$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+  echo "✅ No relevant files staged for commit"
+  exit 0
+fi
+
+echo "📝 Staged files to check:"
+echo "$STAGED_FILES" | sed 's/^/  - /'
+
+# Run type checking
+echo "🔧 Running type checks..."
+if ! pnpm run check-types; then
+  echo "❌ Type checking failed"
+  exit 1
+fi
+
+# Run linting
+echo "🧹 Running linter..."
+if ! pnpm run lint; then
+  echo "❌ Linting failed"
+  exit 1
+fi
+
+# Run formatting (and auto-fix)
+echo "💅 Running formatter..."
+if ! pnpm run format; then
+  echo "❌ Formatting failed"
+  exit 1
+fi
+
+# Check if formatting changed any files
+MODIFIED_FILES=$(git diff --name-only)
+if [ -n "$MODIFIED_FILES" ]; then
+  echo "📝 Files were auto-formatted:"
+  echo "$MODIFIED_FILES" | sed 's/^/  - /'
+  echo "🔄 Auto-staging formatted files..."
+  
+  # Add the formatted files to the staging area
+  git add $MODIFIED_FILES
+  
+  echo "✅ Formatted files have been staged automatically"
+fi
+
+# Run tests if they exist
+echo "🧪 Running tests..."
+if ! pnpm run test; then
+  echo "❌ Tests failed"
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed!"
+exit 0
