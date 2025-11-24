@@ -24,6 +24,8 @@ coverage
 # Build Outputs
 .next/
 out/
+!**/domain/ports/out/
+!**/infrastructure/adapters/out/
 build
 dist
 

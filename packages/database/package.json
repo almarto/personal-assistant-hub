@@ -35,11 +35,11 @@
     "db:seed-admin": "pnpm exec tsx src/scripts/seed-admin.ts"
   },
   "dependencies": {
-    "dotenv": "17.2.2"
+    "dotenv": "17.2.3"
   },
   "devDependencies": {
     "@personal-assistant-hub/typescript-config": "workspace:*",
-    "drizzle-kit": "0.31.4",
-    "tsx": "4.20.5"
+    "drizzle-kit": "0.31.5",
+    "tsx": "4.20.6"
   }
 }

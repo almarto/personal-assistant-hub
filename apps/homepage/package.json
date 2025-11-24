@@ -16,13 +16,13 @@
   "dependencies": {
     "@personal-assistant-hub/i18n": "workspace:*",
     "@personal-assistant-hub/ui": "workspace:*",
-    "react-router-dom": "7.9.1"
+    "react-router-dom": "7.9.4"
   },
   "devDependencies": {
+    "@eslint/js": "9.38.0",
     "@personal-assistant-hub/typescript-config": "workspace:*",
-    "@eslint/js": "9.35.0",
-    "@vitejs/plugin-react": "5.0.2",
-    "@vitest/coverage-v8": "3.2.4",
-    "@vitest/ui": "3.2.4"
+    "@vitejs/plugin-react": "5.1.0",
+    "@vitest/coverage-v8": "4.0.3",
+    "@vitest/ui": "4.0.3"
   }
 }
