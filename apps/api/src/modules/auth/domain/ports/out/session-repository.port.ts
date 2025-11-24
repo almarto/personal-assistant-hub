@@ -8,5 +8,4 @@ export interface SessionRepository {
     expiresAt: Date;
   }): Promise<void>;
   invalidate(sessionId: string): Promise<void>;
-  invalidateAllForUser(userId: string): Promise<void>;
 }

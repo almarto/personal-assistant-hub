@@ -1,19 +1,12 @@
 import { and, eq, gt, isNull, lt } from 'drizzle-orm';
 
 import { db } from '../connection.js';
-import {
-  invitationTokens,
-  passkeyCredentials,
-  userSessions,
-  users,
-} from '../schema/index.js';
+import { invitationTokens, userSessions, users } from '../schema/index.js';
 import type {
   InvitationToken,
   NewInvitationToken,
-  NewPasskeyCredential,
   NewUser,
   NewUserSession,
-  PasskeyCredential,
   User,
   UserSession,
   UserUpdate,
@@ -73,59 +66,6 @@ export const userQueries = {
 
   async findActiveUsers(): Promise<User[]> {
     return await db.select().from(users).where(eq(users.isActive, true));
-  },
-};
-
-// Passkey credential queries
-export const passkeyQueries = {
-  async findByCredentialId(
-    credentialId: string
-  ): Promise<PasskeyCredential | undefined> {
-    const result = await db
-      .select()
-      .from(passkeyCredentials)
-      .where(eq(passkeyCredentials.credentialId, credentialId))
-      .limit(1);
-    return result[0];
-  },
-
-  async findByUserId(userId: string): Promise<PasskeyCredential[]> {
-    return await db
-      .select()
-      .from(passkeyCredentials)
-      .where(eq(passkeyCredentials.userId, userId));
-  },
-
-  async create(
-    credentialData: NewPasskeyCredential
-  ): Promise<PasskeyCredential> {
-    const result = await db
-      .insert(passkeyCredentials)
-      .values(credentialData)
-      .returning();
-    return result[0];
-  },
-
-  async updateCounter(
-    credentialId: string,
-    counter: number
-  ): Promise<PasskeyCredential | undefined> {
-    const result = await db
-      .update(passkeyCredentials)
-      .set({
-        counter,
-        lastUsedAt: new Date(),
-      })
-      .where(eq(passkeyCredentials.credentialId, credentialId))
-      .returning();
-    return result[0];
-  },
-
-  async delete(id: string): Promise<boolean> {
-    const result = await db
-      .delete(passkeyCredentials)
-      .where(eq(passkeyCredentials.id, id));
-    return result.length > 0;
   },
 };
 

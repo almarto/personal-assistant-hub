@@ -10,5 +10,4 @@ export interface PasswordCredentialRepository {
   }): Promise<void>;
   findByUserId(userId: string): Promise<PasswordCredential | null>;
   updateByUserId(userId: string, data: { passwordHash: string }): Promise<void>;
-  deleteByUserId(userId: string): Promise<void>;
 }

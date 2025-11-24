@@ -24,13 +24,8 @@ import {
 import {
   AuthResponseDto,
   ChangePasswordDto,
-  LoginCompleteDto,
-  LoginInitiateDto,
   PasswordLoginDto,
   PasswordRegisterDto,
-  RegisterCompleteDto,
-  RegisterInitiateDto,
-  WebAuthnOptionsDto,
 } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
@@ -40,71 +35,6 @@ export class AuthController {
   constructor(
     @Inject(AUTH_USE_CASE) private readonly authUseCase: AuthUseCase
   ) {}
-
-  @Post('passkey/register/initiate')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Initiate user registration with invitation token' })
-  @ApiResponse({
-    status: 200,
-    description: 'Registration options generated successfully',
-    type: WebAuthnOptionsDto,
-  })
-  @ApiResponse({ status: 400, description: 'Invalid invitation token' })
-  async initiateRegistration(@Body() dto: RegisterInitiateDto) {
-    return await this.authUseCase.initiateRegistration(
-      dto.email,
-      dto.invitationToken
-    );
-  }
-
-  @Post('passkey/register/complete')
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({
-    summary: 'Complete user registration with WebAuthn credential',
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'User registered successfully',
-    type: AuthResponseDto,
-  })
-  @ApiResponse({ status: 400, description: 'Registration verification failed' })
-  async completeRegistration(@Body() dto: RegisterCompleteDto) {
-    return await this.authUseCase.completeRegistration(
-      dto.email,
-      dto.invitationToken,
-      dto.credential,
-      dto.deviceName
-    );
-  }
-
-  @Post('passkey/login/initiate')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Initiate user login' })
-  @ApiResponse({
-    status: 200,
-    description: 'Authentication options generated successfully',
-    type: WebAuthnOptionsDto,
-  })
-  @ApiResponse({ status: 401, description: 'User not found' })
-  async initiateLogin(@Body() dto: LoginInitiateDto) {
-    return await this.authUseCase.initiateLogin(dto.email);
-  }
-
-  @Post('passkey/login/complete')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Complete user login with WebAuthn credential' })
-  @ApiResponse({
-    status: 200,
-    description: 'User authenticated successfully',
-    type: AuthResponseDto,
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Authentication verification failed',
-  })
-  async completeLogin(@Body() dto: LoginCompleteDto) {
-    return await this.authUseCase.completeLogin(dto.email, dto.credential);
-  }
 
   @Post('password/register')
   @HttpCode(HttpStatus.CREATED)

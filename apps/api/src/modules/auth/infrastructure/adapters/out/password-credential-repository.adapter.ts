@@ -53,10 +53,4 @@ export class PasswordCredentialRepositoryAdapter
       })
       .where(eq(passwordCredentials.userId, userId));
   }
-
-  async deleteByUserId(userId: string): Promise<void> {
-    await db
-      .delete(passwordCredentials)
-      .where(eq(passwordCredentials.userId, userId));
-  }
 }

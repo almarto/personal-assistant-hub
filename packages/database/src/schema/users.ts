@@ -29,19 +29,6 @@ export const passwordCredentials = pgTable('password_credentials', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export const passkeyCredentials = pgTable('passkey_credentials', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id')
-    .references(() => users.id, { onDelete: 'cascade' })
-    .notNull(),
-  credentialId: text('credential_id').unique().notNull(),
-  publicKey: text('public_key').notNull(),
-  counter: bigint('counter', { mode: 'number' }).default(0).notNull(),
-  deviceName: varchar('device_name', { length: 255 }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  lastUsedAt: timestamp('last_used_at'),
-});
-
 export const invitationTokens = pgTable('invitation_tokens', {
   id: uuid('id').primaryKey().defaultRandom(),
   token: varchar('token', { length: 255 }).unique().notNull(),
@@ -72,7 +59,6 @@ export const userSessions = pgTable('user_sessions', {
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   passwordCredentials: many(passwordCredentials),
-  passkeyCredentials: many(passkeyCredentials),
   createdInvitations: many(invitationTokens, {
     relationName: 'createdInvitations',
   }),
@@ -85,16 +71,6 @@ export const passwordCredentialsRelations = relations(
   ({ one }) => ({
     user: one(users, {
       fields: [passwordCredentials.userId],
-      references: [users.id],
-    }),
-  })
-);
-
-export const passkeyCredentialsRelations = relations(
-  passkeyCredentials,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [passkeyCredentials.userId],
       references: [users.id],
     }),
   })

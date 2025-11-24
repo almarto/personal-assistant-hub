@@ -1,23 +1,11 @@
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 
-import type {
-  invitationTokens,
-  passkeyCredentials,
-  userSessions,
-  users,
-} from './schema/users.js';
+import type { invitationTokens, userSessions, users } from './schema/users.js';
 
 // User types
 export type User = InferSelectModel<typeof users>;
 export type NewUser = InferInsertModel<typeof users>;
 export type UserUpdate = Partial<Omit<NewUser, 'id' | 'createdAt'>>;
-
-// Passkey credential types
-export type PasskeyCredential = InferSelectModel<typeof passkeyCredentials>;
-export type NewPasskeyCredential = InferInsertModel<typeof passkeyCredentials>;
-export type PasskeyCredentialUpdate = Partial<
-  Omit<NewPasskeyCredential, 'id' | 'createdAt'>
->;
 
 // Invitation token types
 export type InvitationToken = InferSelectModel<typeof invitationTokens>;

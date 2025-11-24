@@ -1,6 +1,5 @@
 // Domain
 export * from './domain/model/user.model';
-export * from './domain/model/passkey-credential.model';
 export * from './domain/model/password-credential.model';
 export * from './domain/ports/in/auth-use-case.port';
 

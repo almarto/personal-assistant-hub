@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
 import { db, userSessions } from '@personal-assistant-hub/database';
+import { eq } from 'drizzle-orm';
 
 import { SessionRepository } from '../../../domain/ports/out/session-repository.port';
 
@@ -22,9 +22,5 @@ export class SessionRepositoryAdapter implements SessionRepository {
 
   async invalidate(sessionId: string): Promise<void> {
     await db.delete(userSessions).where(eq(userSessions.id, sessionId));
-  }
-
-  async invalidateAllForUser(userId: string): Promise<void> {
-    await db.delete(userSessions).where(eq(userSessions.userId, userId));
   }
 }

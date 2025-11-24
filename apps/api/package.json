@@ -22,7 +22,6 @@
     "@nestjs/platform-express": "11.1.7",
     "@nestjs/swagger": "11.2.1",
     "@personal-assistant-hub/database": "workspace:*",
-    "@simplewebauthn/server": "13.2.2",
     "@types/bcrypt": "^6.0.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "0.5.1",

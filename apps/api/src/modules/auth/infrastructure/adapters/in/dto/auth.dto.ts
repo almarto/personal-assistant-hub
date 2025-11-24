@@ -1,111 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  type AuthenticationResponseJSON,
-  type RegistrationResponseJSON,
-  type PublicKeyCredentialCreationOptionsJSON,
-  type PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/server';
-import {
   IsEmail,
   IsNotEmpty,
   IsString,
-  ValidateNested,
   MinLength,
   MaxLength,
 } from 'class-validator';
-
-export class RegisterInitiateDto {
-  @ApiProperty({
-    description: 'User email',
-    example: 'user@example.com',
-  })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({
-    description: 'Invitation token',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @IsString()
-  @IsNotEmpty()
-  invitationToken: string;
-}
-
-export class RegisterCompleteDto {
-  @ApiProperty({
-    description: 'User email',
-    example: 'user@example.com',
-  })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({
-    description: 'Invitation token',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @IsString()
-  @IsNotEmpty()
-  invitationToken: string;
-
-  @ApiProperty({
-    description: 'WebAuthn credential',
-    type: 'object',
-    additionalProperties: true,
-  })
-  @IsNotEmpty()
-  @ValidateNested()
-  credential: RegistrationResponseJSON;
-
-  @ApiProperty({
-    description: 'Device name',
-    example: "John's iPhone",
-  })
-  @IsString()
-  @IsNotEmpty()
-  deviceName: string;
-}
-
-export class LoginInitiateDto {
-  @ApiProperty({
-    description: 'User email',
-    example: 'user@example.com',
-  })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-}
-
-export class LoginCompleteDto {
-  @ApiProperty({
-    description: 'User email',
-    example: 'user@example.com',
-  })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({
-    description: 'WebAuthn credential',
-    type: 'object',
-    additionalProperties: true,
-  })
-  @IsNotEmpty()
-  @ValidateNested()
-  credential: AuthenticationResponseJSON;
-}
-
-export class WebAuthnOptionsDto {
-  @ApiProperty({
-    description: 'WebAuthn options',
-    type: 'object',
-    additionalProperties: true,
-  })
-  options:
-    | PublicKeyCredentialCreationOptionsJSON
-    | PublicKeyCredentialRequestOptionsJSON;
-}
 
 export class PasswordRegisterDto {
   @ApiProperty({
@@ -226,12 +126,6 @@ export class UserDto {
     example: true,
   })
   hasPassword: boolean;
-
-  @ApiProperty({
-    description: 'Whether user has passkey authentication',
-    example: false,
-  })
-  hasPasskeys: boolean;
 }
 
 export class AuthResponseDto {
