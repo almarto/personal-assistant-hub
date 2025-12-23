@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-import LogoutButton from '../LogoutButton/LogoutButton';
-import styles from './Navigation.module.css';
-import { useTranslations } from 'next-intl';
+import { Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import LogoutButton from "../LogoutButton/LogoutButton";
+import styles from "./Navigation.module.css";
 
 interface NavigationProps {
   showLogout?: boolean;
@@ -15,7 +16,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const t = useTranslations('LanguageSwitcher');
+  const t = useTranslations("LanguageSwitcher");
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -25,8 +26,8 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -39,7 +40,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
 
       {/* Mobile Navigation */}
       <div className={styles.mobileNav}>
-        <button 
+        <button
           className={styles.hamburger}
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -50,7 +51,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
         {isOpen && (
           <div className={styles.mobileMenu}>
             <div className={styles.mobileMenuItem}>
-              <span>{t('switcher')}</span>
+              <span>{t("switcher")}</span>
               <LanguageSwitcher />
             </div>
             {showLogout && (

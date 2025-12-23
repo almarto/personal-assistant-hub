@@ -45,7 +45,7 @@
 
 .input {
   padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   border-radius: var(--border-radius-md);
   font-size: var(--font-size-base);
   transition: border-color 0.2s;

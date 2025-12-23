@@ -1,6 +1,7 @@
 # Project Status & Todo List
 
 ## Completed Tasks
+
 - [x] **Create Product Requirements Document (PRD)**
   - Detailed features, user flows, and technical specs defined.
 - [x] **Initialize Next.js project**
@@ -15,6 +16,7 @@
   - Database schema defined in migrations.
 
 ## Pending Tasks
+
 - [x] **Verify Database Connection**
   - Start Docker containers (`docker compose up -d`).
   - Run migrations (`pnpm migrate`).
@@ -27,6 +29,7 @@
   - Write unit tests.
 
 ## How to Resume
+
 1. Open the project.
 2. Start the database: `docker compose up -d`
 3. Run migrations (if not done): `pnpm migrate`

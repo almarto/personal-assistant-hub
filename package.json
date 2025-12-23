@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write .",
     "migrate": "tsx --env-file=.env scripts/migrate.ts"
   },
   "dependencies": {
@@ -27,6 +28,9 @@
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.2",
     "eslint-config-next": "16.1.1",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "prettier": "3.7.4",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
   }

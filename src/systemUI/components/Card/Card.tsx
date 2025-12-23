@@ -1,13 +1,14 @@
-import React from 'react';
-import styles from './Card.module.css';
-import clsx from 'clsx';
+import clsx from "clsx";
+import React from "react";
+
+import styles from "./Card.module.css";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'elevated';
+  variant?: "default" | "elevated";
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = 'default', children, ...props }, ref) => {
+  ({ className, variant = "default", children, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -20,4 +21,4 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   }
 );
 
-Card.displayName = 'Card';
+Card.displayName = "Card";

@@ -1,18 +1,31 @@
-import React from 'react';
-import styles from './Button.module.css';
-import { Loader2 } from 'lucide-react';
-import clsx from 'clsx';
+import clsx from "clsx";
+import { Loader2 } from "lucide-react";
+import React from "react";
+
+import styles from "./Button.module.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', size = 'md', isLoading, leftIcon, rightIcon, children, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = "primary",
+      size = "md",
+      isLoading,
+      leftIcon,
+      rightIcon,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     return (
       <button
         ref={ref}
@@ -26,12 +39,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && <Loader2 className={styles.spinner} size={16} />}
-        {!isLoading && leftIcon && <span className={styles.icon}>{leftIcon}</span>}
+        {!isLoading && leftIcon && (
+          <span className={styles.icon}>{leftIcon}</span>
+        )}
         {children}
-        {!isLoading && rightIcon && <span className={styles.icon}>{rightIcon}</span>}
+        {!isLoading && rightIcon && (
+          <span className={styles.icon}>{rightIcon}</span>
+        )}
       </button>
     );
   }
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";

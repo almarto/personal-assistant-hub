@@ -7,19 +7,19 @@ graph TD
     C --> D[Neon PostgreSQL]
     B --> E[API Routes]
     E --> D
-    
+
     subgraph "Frontend Layer"
         B
     end
-    
+
     subgraph "Authentication Layer"
         C
     end
-    
+
     subgraph "Data Layer"
         D
     end
-    
+
     subgraph "External Services"
         F[Vercel Deployment]
         G[Playwright Testing]
@@ -28,27 +28,27 @@ graph TD
 
 ## 2. Technology Description
 
-* **Frontend**: Next.js\@14 + TypeScript + CSS Modules
+- **Frontend**: Next.js\@14 + TypeScript + CSS Modules
 
-* **Initialization Tool**: create-next-app
+- **Initialization Tool**: create-next-app
 
-* **Authentication**: Better Auth
+- **Authentication**: Better Auth
 
-* **Database**: Neon PostgreSQL
+- **Database**: Neon PostgreSQL
 
-* **Testing**: Playwright + **Vitest**
+- **Testing**: Playwright + **Vitest**
 
-* **Package Manager**: pnpm with strict version control
+- **Package Manager**: pnpm with strict version control
 
 ### Dependency Management Configuration
 
-* pnpm configuration to prevent packages newer than 1 week
+- pnpm configuration to prevent packages newer than 1 week
 
-* Exact version pinning (no caret ^ symbols)
+- Exact version pinning (no caret ^ symbols)
 
-* Manual dependency updates only
+- Manual dependency updates only
 
-* Minimal external dependencies policy
+- Minimal external dependencies policy
 
 ## 3. Route definitions
 
@@ -130,16 +130,16 @@ graph TD
     A[Next.js API Routes] --> B[Validation Layer]
     B --> C[Service Layer]
     C --> D[Database Layer]
-    
+
     subgraph "API Layer"
         A
     end
-    
+
     subgraph "Business Logic"
         B
         C
     end
-    
+
     subgraph "Data Layer"
         D
     end
@@ -156,7 +156,7 @@ erDiagram
     USER ||--o{ FOOD_ENTRY : creates
     BABY ||--o{ FOOD_ENTRY : has
     BABY ||--o{ CAREGIVER : has
-    
+
     USER {
         string id PK
         string username UK
@@ -166,7 +166,7 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
-    
+
     BABY {
         string id PK
         string user_id FK
@@ -175,7 +175,7 @@ erDiagram
         string photo_url
         timestamp created_at
     }
-    
+
     FOOD_ENTRY {
         string id PK
         string baby_id FK
@@ -188,7 +188,7 @@ erDiagram
         string photo_url
         timestamp created_at
     }
-    
+
     CAREGIVER {
         string id PK
         string baby_id FK
@@ -196,7 +196,7 @@ erDiagram
         string permission_level
         timestamp created_at
     }
-    
+
     INVITATION {
         string id PK
         string code UK
@@ -312,35 +312,34 @@ systemUI/
 ```css
 :root {
   /* Colors */
-  --color-primary: #FF6B6B;
-  --color-secondary: #4ECDC4;
-  --color-background: #F7F7F7;
-  --color-surface: #FFFFFF;
+  --color-primary: #ff6b6b;
+  --color-secondary: #4ecdc4;
+  --color-background: #f7f7f7;
+  --color-surface: #ffffff;
   --color-text: #333333;
   --color-text-secondary: #666666;
-  
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   /* Typography */
   --font-size-sm: 14px;
   --font-size-base: 16px;
   --font-size-lg: 18px;
   --font-size-xl: 24px;
-  
+
   /* Borders */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
-  
+
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 ```
-

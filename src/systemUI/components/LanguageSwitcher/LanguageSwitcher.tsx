@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import { useLocale } from 'next-intl';
-import { useRouter, usePathname } from '@/i18n/routing';
-import { useTransition, useState, useRef, useEffect } from 'react';
-import styles from './LanguageSwitcher.module.css';
-import { getTranslations } from 'next-intl/server';
+import { useLocale } from "next-intl";
+import { useEffect, useRef, useState, useTransition } from "react";
+
+import { usePathname, useRouter } from "@/i18n/routing";
+
+import styles from "./LanguageSwitcher.module.css";
 
 const LOCALE_FLAGS: Record<string, string> = {
-  en: '🇺🇸',
-  es: '🇪🇸',
+  en: "🇺🇸",
+  es: "🇪🇸",
 };
 
-const LOCALES = ['en', 'es'];
+const LOCALES = ["en", "es"];
 
 export default function LanguageSwitcher() {
   const locale = useLocale();
@@ -23,7 +24,7 @@ export default function LanguageSwitcher() {
 
   const switchLocale = (nextLocale: string) => {
     startTransition(() => {
-      router.replace(pathname, {locale: nextLocale});
+      router.replace(pathname, { locale: nextLocale });
       setIsOpen(false);
     });
   };
@@ -31,20 +32,23 @@ export default function LanguageSwitcher() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const otherLocales = LOCALES.filter((l) => l !== locale);
 
   return (
     <div className={styles.container} ref={dropdownRef}>
-      <button 
+      <button
         className={styles.trigger}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Change language"
@@ -60,7 +64,7 @@ export default function LanguageSwitcher() {
               key={l}
               className={styles.option}
               onClick={() => switchLocale(l)}
-              title={l === 'en' ? 'English' : 'Español'}
+              title={l === "en" ? "English" : "Español"}
             >
               {LOCALE_FLAGS[l]}
             </button>

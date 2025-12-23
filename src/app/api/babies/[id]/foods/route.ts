@@ -1,29 +1,36 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { pool } from '@/lib/db';
-import { headers } from 'next/headers';
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+import { auth } from "@/lib/auth";
+import { pool } from "@/lib/db";
+
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = await auth.api.getSession({
-    headers: await headers()
+    headers: await headers(),
   });
 
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id: babyId } = await params;
 
   try {
     const formData = await req.formData();
-    const foodName = formData.get('foodName') as string;
-    const category = formData.get('category') as string;
-    const feedback = Number(formData.get('feedback'));
-    const reaction = Number(formData.get('reaction'));
-    const notes = formData.get('notes') as string | null;
+    const foodName = formData.get("foodName") as string;
+    const category = formData.get("category") as string;
+    const feedback = Number(formData.get("feedback"));
+    const reaction = Number(formData.get("reaction"));
+    const notes = formData.get("notes") as string | null;
 
     if (!foodName || !category || isNaN(feedback) || isNaN(reaction)) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     // Check permissions
@@ -35,7 +42,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     );
 
     if (permCheck.rowCount === 0) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const result = await pool.query(
@@ -47,18 +54,24 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     return NextResponse.json(result.rows[0]);
   } catch (error) {
-    console.error('Error adding food entry:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error("Error adding food entry:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = await auth.api.getSession({
-    headers: await headers()
+    headers: await headers(),
   });
 
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id: babyId } = await params;
@@ -73,7 +86,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     );
 
     if (permCheck.rowCount === 0) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const result = await pool.query(
@@ -83,7 +96,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error('Error fetching food entries:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error("Error fetching food entries:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
