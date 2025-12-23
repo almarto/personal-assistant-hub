@@ -17,14 +17,13 @@ export default async function Home() {
         <div className={styles.hero}>
           <h1 className={styles.title}>Baby Food Tracker</h1>
           <p className={styles.subtitle}>
-            Track your baby's journey to solid foods with ease. Monitor reactions, preferences, and progress.
+            Track your baby&apos;s journey to solid foods with ease. Monitor reactions, preferences, and progress.
           </p>
           <div className={styles.actions}>
-            {/* Note: In a real app, use client-side navigation for auth pages or Better Auth client methods */}
-            <Link href="/api/auth/signin"> 
+            <Link href="/auth/signin"> 
               <Button size="lg" className={styles.button}>Login</Button>
             </Link>
-            <Link href="/api/auth/signup">
+            <Link href="/auth/signup">
               <Button variant="outline" size="lg" className={styles.button}>Register</Button>
             </Link>
           </div>
