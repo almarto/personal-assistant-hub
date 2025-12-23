@@ -22,6 +22,14 @@
     "hasAccount": "Already have an account?",
     "register": "Register"
   },
+  "AuthErrors": {
+    "INVALID_EMAIL_OR_PASSWORD": "Invalid email or password",
+    "USER_ALREADY_EXISTS": "User already exists",
+    "PASSWORD_TOO_SHORT": "Password is too short",
+    "INVALID_EMAIL": "Invalid email address",
+    "FAILED_TO_CREATE_USER": "Failed to create user",
+    "default": "An unexpected error occurred"
+  },
   "Common": {
     "language": "Language"
   },

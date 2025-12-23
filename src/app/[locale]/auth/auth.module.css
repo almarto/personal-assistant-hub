@@ -6,6 +6,14 @@
   min-height: 100vh;
   padding: var(--spacing-md);
   background-color: var(--color-background);
+  position: relative;
+}
+
+.languageWrapper {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 10;
 }
 
 .card {
@@ -54,6 +62,34 @@
 .input:focus {
   outline: none;
   border-color: var(--color-primary);
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInput {
+  width: 100%;
+  padding-right: 40px; /* Space for the icon */
+}
+
+.passwordToggle {
+  position: absolute;
+  right: var(--spacing-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordToggle:hover {
+  color: var(--color-text);
 }
 
 .footer {
