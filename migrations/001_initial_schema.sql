@@ -1,18 +1,8 @@
-CREATE TABLE IF NOT EXISTS users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    preferred_language VARCHAR(10) DEFAULT 'en',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+-- Users table is managed by Better Auth (table name: "user")
 
 CREATE TABLE IF NOT EXISTS babies (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
     photo_url VARCHAR(500),
@@ -25,7 +15,7 @@ CREATE INDEX IF NOT EXISTS idx_babies_created_at ON babies(created_at DESC);
 CREATE TABLE IF NOT EXISTS food_entries (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     baby_id UUID NOT NULL REFERENCES babies(id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
     food_name VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
     feedback_score INTEGER CHECK (feedback_score >= 1 AND feedback_score <= 5),
@@ -41,7 +31,7 @@ CREATE INDEX IF NOT EXISTS idx_food_entries_food_name ON food_entries(food_name)
 CREATE TABLE IF NOT EXISTS caregivers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     baby_id UUID NOT NULL REFERENCES babies(id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
     permission_level VARCHAR(20) DEFAULT 'editor' CHECK (permission_level IN ('viewer', 'editor')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(baby_id, user_id)

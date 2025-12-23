@@ -15,9 +15,9 @@
   - Database schema defined in migrations.
 
 ## Pending Tasks
-- [ ] **Verify Database Connection**
+- [x] **Verify Database Connection**
   - Start Docker containers (`docker compose up -d`).
-  - Run migrations (`npm run migrate`).
+  - Run migrations (`pnpm migrate`).
 - [ ] **Build Frontend Pages**
   - Dashboard (Baby list).
   - Baby Profile & Settings.
@@ -29,5 +29,5 @@
 ## How to Resume
 1. Open the project.
 2. Start the database: `docker compose up -d`
-3. Run migrations (if not done): `npm run migrate`
-4. Start the dev server: `npm run dev`
+3. Run migrations (if not done): `pnpm migrate`
+4. Start the dev server: `pnpm dev`
