@@ -24,5 +24,8 @@
   },
   "Common": {
     "language": "Idioma"
+  },
+  "LanguageSwitcher": {
+    "switcher": "Cambiar Idioma"
   }
 }

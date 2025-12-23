@@ -45,7 +45,7 @@ export default async function Home() {
     <div className={styles.dashboardContainer}>
       <header className={styles.header}>
         <h1 className={styles.welcome}>{t('welcome', {name: session.user.name})}</h1>
-        <Navigation/>
+        <Navigation showLogout={true} />
       </header>
 
       <main className={styles.grid}>

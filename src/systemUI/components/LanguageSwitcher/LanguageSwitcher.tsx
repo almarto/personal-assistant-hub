@@ -4,6 +4,7 @@ import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useTransition, useState, useRef, useEffect } from 'react';
 import styles from './LanguageSwitcher.module.css';
+import { getTranslations } from 'next-intl/server';
 
 const LOCALE_FLAGS: Record<string, string> = {
   en: '🇺🇸',

@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import LogoutButton from '../LogoutButton/LogoutButton';
 import styles from './Navigation.module.css';
+import { useTranslations } from 'next-intl';
 
 interface NavigationProps {
   showLogout?: boolean;
@@ -13,6 +14,8 @@ interface NavigationProps {
 export default function Navigation({ showLogout = false }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const t = useTranslations('LanguageSwitcher');
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -47,7 +50,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
         {isOpen && (
           <div className={styles.mobileMenu}>
             <div className={styles.mobileMenuItem}>
-              <span>Language</span>
+              <span>{t('switcher')}</span>
               <LanguageSwitcher />
             </div>
             {showLogout && (
