@@ -1,0 +1,28 @@
+{
+  "HomePage": {
+    "title": "Baby Food Tracker",
+    "subtitle": "Track your baby's journey to solid foods with ease. Monitor reactions, preferences, and progress.",
+    "login": "Login",
+    "register": "Register",
+    "welcome": "Welcome, {name}",
+    "yourBabies": "Your Babies",
+    "noBabies": "No babies added yet.",
+    "addBaby": "Add Baby"
+  },
+  "Auth": {
+    "logout": "Logout",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "signInButton": "Sign In",
+    "signUpButton": "Sign Up",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "register": "Register"
+  },
+  "Common": {
+    "language": "Language"
+  }
+}

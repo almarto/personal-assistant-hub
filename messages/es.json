@@ -1,0 +1,28 @@
+{
+  "HomePage": {
+    "title": "Rastreador de Alimentos para Bebés",
+    "subtitle": "Sigue el viaje de tu bebé hacia los alimentos sólidos con facilidad. Monitorea reacciones, preferencias y progreso.",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "welcome": "Bienvenido, {name}",
+    "yourBabies": "Tus Bebés",
+    "noBabies": "Aún no has agregado bebés.",
+    "addBaby": "Agregar Bebé"
+  },
+  "Auth": {
+    "logout": "Cerrar Sesión",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "signInButton": "Iniciar Sesión",
+    "signUpButton": "Registrarse",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "register": "Registrarse"
+  },
+  "Common": {
+    "language": "Idioma"
+  }
+}

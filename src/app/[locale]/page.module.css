@@ -136,3 +136,12 @@
     gap: var(--spacing-md);
   }
 }
+
+.topBar {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-md);
+  z-index: 10;
+}

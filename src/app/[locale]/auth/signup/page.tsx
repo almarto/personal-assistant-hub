@@ -4,25 +4,28 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/routing";
 import styles from "../auth.module.css";
+import { useTranslations } from "next-intl";
 
-export default function SignIn() {
+export default function SignUp() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const t = useTranslations('Auth');
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    await authClient.signIn.email({
+    await authClient.signUp.email({
       email,
       password,
+      name,
     }, {
       onSuccess: () => {
           router.push("/");
@@ -38,13 +41,25 @@ export default function SignIn() {
   return (
     <div className={styles.container}>
       <Card className={styles.card} variant="elevated">
-        <h1 className={styles.title}>Sign In</h1>
+        <h1 className={styles.title}>{t('signUp')}</h1>
         
         {error && <div className={styles.error}>{error}</div>}
 
-        <form onSubmit={handleSignIn} className={styles.form}>
+        <form onSubmit={handleSignUp} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>Email</label>
+            <label htmlFor="name" className={styles.label}>{t('name')}</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={styles.input}
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="email" className={styles.label}>{t('email')}</label>
             <input
               id="email"
               type="email"
@@ -56,7 +71,7 @@ export default function SignIn() {
           </div>
           
           <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>Password</label>
+            <label htmlFor="password" className={styles.label}>{t('password')}</label>
             <input
               id="password"
               type="password"
@@ -68,14 +83,14 @@ export default function SignIn() {
           </div>
 
           <Button type="submit" isLoading={loading}>
-            Sign In
+            {t('signUpButton')}
           </Button>
         </form>
 
         <div className={styles.footer}>
-          Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className={styles.link}>
-            Sign up
+          {t('hasAccount')}{" "}
+          <Link href="/auth/signin" className={styles.link}>
+            {t('signIn')}
           </Link>
         </div>
       </Card>

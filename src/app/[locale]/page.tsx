@@ -1,30 +1,43 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 import styles from "./page.module.css";
 import { Plus } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import LanguageSwitcher from "@/systemUI/components/LanguageSwitcher/LanguageSwitcher";
+import LogoutButton from "@/systemUI/components/LogoutButton/LogoutButton";
 
 export default async function Home() {
   const session = await auth.api.getSession({
     headers: await headers()
   });
+  const t = await getTranslations('HomePage');
+
+  // Common header with Language Switcher
+  const TopBar = () => (
+    <div className={styles.topBar}>
+      <LanguageSwitcher />
+      {session && <LogoutButton />}
+    </div>
+  );
 
   if (!session) {
     return (
       <div className={styles.container}>
+        <TopBar />
         <div className={styles.hero}>
-          <h1 className={styles.title}>Baby Food Tracker</h1>
+          <h1 className={styles.title}>{t('title')}</h1>
           <p className={styles.subtitle}>
-            Track your baby&apos;s journey to solid foods with ease. Monitor reactions, preferences, and progress.
+            {t('subtitle')}
           </p>
           <div className={styles.actions}>
             <Link href="/auth/signin"> 
-              <Button size="lg" className={styles.button}>Login</Button>
+              <Button size="lg" className={styles.button}>{t('login')}</Button>
             </Link>
             <Link href="/auth/signup">
-              <Button variant="outline" size="lg" className={styles.button}>Register</Button>
+              <Button variant="outline" size="lg" className={styles.button}>{t('register')}</Button>
             </Link>
           </div>
         </div>
@@ -34,17 +47,18 @@ export default async function Home() {
 
   return (
     <div className={styles.dashboardContainer}>
+      <TopBar />
       <header className={styles.header}>
-        <h1 className={styles.welcome}>Welcome, {session.user.name}</h1>
+        <h1 className={styles.welcome}>{t('welcome', {name: session.user.name})}</h1>
       </header>
 
       <main className={styles.grid}>
         <Card className={styles.emptyCard}>
-           <h2 className={styles.cardTitle}>Your Babies</h2>
-           <p className={styles.cardText}>No babies added yet.</p>
+           <h2 className={styles.cardTitle}>{t('yourBabies')}</h2>
+           <p className={styles.cardText}>{t('noBabies')}</p>
            <Link href="/baby/add">
              <Button leftIcon={<Plus size={20} />}>
-               Add Baby
+               {t('addBaby')}
              </Button>
            </Link>
         </Card>
