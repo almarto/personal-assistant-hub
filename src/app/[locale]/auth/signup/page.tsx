@@ -15,6 +15,7 @@ import styles from "../auth.module.css";
 
 export default function SignUp() {
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +35,7 @@ export default function SignUp() {
         email,
         password,
         name,
+        username,
       },
       {
         onSuccess: () => {
@@ -73,6 +75,20 @@ export default function SignUp() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className={styles.input}
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="username" className={styles.label}>
+              {t("username")}
+            </label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className={styles.input}
               required
             />

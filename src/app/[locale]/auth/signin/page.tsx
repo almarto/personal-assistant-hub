@@ -14,7 +14,7 @@ import LanguageSwitcher from "@/systemUI/components/LanguageSwitcher/LanguageSwi
 import styles from "../auth.module.css";
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,9 +28,9 @@ export default function SignIn() {
     setLoading(true);
     setError(null);
 
-    await authClient.signIn.email(
+    await authClient.signIn.username(
       {
-        email,
+        username,
         password,
       },
       {
@@ -63,14 +63,14 @@ export default function SignIn() {
 
         <form onSubmit={handleSignIn} className={styles.form}>
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              {t("email")}
+            <label htmlFor="username" className={styles.label}>
+              {t("username")}
             </label>
             <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className={styles.input}
               required
             />
