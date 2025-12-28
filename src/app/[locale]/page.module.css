@@ -97,6 +97,7 @@
   text-align: center;
   min-height: 200px;
   justify-content: center;
+  grid-column: 1 / -1;
 }
 
 .cardTitle {
@@ -108,6 +109,57 @@
 
 .cardText {
   color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.sectionHeader {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.babyCardLink {
+  text-decoration: none;
+  display: block;
+  height: 100%;
+}
+
+.babyCard {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  height: 100%;
+  padding: var(--spacing-lg);
+  border: 2px solid transparent;
+}
+
+.babyCardLink:hover .babyCard {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.babyName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.babyInfo {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
   margin: 0;
 }
 

@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
-import { pool } from "@/lib/db";
+import { getBabies, createBaby } from "@/lib/services/babies";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({
@@ -29,14 +29,14 @@ export async function POST(req: Request) {
     // TODO: Handle photo upload if needed
     const photoUrl = null;
 
-    const result = await pool.query(
-      `INSERT INTO babies (user_id, name, birth_date, photo_url) 
-       VALUES ($1, $2, $3, $4) 
-       RETURNING id, name, birth_date, photo_url`,
-      [session.user.id, name, birthDate, photoUrl]
-    );
+    const newBaby = await createBaby({
+      userId: session.user.id,
+      name,
+      birthDate,
+      photoUrl,
+    });
 
-    return NextResponse.json(result.rows[0]);
+    return NextResponse.json(newBaby);
   } catch (error) {
     console.error("Error creating baby:", error);
     return NextResponse.json(
@@ -56,18 +56,8 @@ export async function GET() {
   }
 
   try {
-    // Get babies where user is primary or caregiver
-    const result = await pool.query(
-      `SELECT b.*, 
-        CASE WHEN b.user_id = $1 THEN 'owner' ELSE c.permission_level END as role
-       FROM babies b
-       LEFT JOIN caregivers c ON b.id = c.baby_id AND c.user_id = $1
-       WHERE b.user_id = $1 OR c.user_id = $1
-       ORDER BY b.created_at DESC`,
-      [session.user.id]
-    );
-
-    return NextResponse.json(result.rows);
+    const babies = await getBabies(session.user.id);
+    return NextResponse.json(babies);
   } catch (error) {
     console.error("Error fetching babies:", error);
     return NextResponse.json(

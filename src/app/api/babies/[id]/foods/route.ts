@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
-import { pool } from "@/lib/db";
+import { addFoodEntry, getFoodEntries } from "@/lib/services/foods";
 
 export async function POST(
   req: Request,
@@ -33,27 +33,21 @@ export async function POST(
       );
     }
 
-    // Check permissions
-    const permCheck = await pool.query(
-      `SELECT 1 FROM babies WHERE id = $1 AND user_id = $2
-       UNION
-       SELECT 1 FROM caregivers WHERE baby_id = $1 AND user_id = $2 AND permission_level = 'editor'`,
-      [babyId, session.user.id]
-    );
+    const newFoodEntry = await addFoodEntry({
+      babyId,
+      userId: session.user.id,
+      foodName,
+      category,
+      feedbackScore: feedback,
+      reactionScore: reaction,
+      notes,
+    });
 
-    if (permCheck.rowCount === 0) {
+    return NextResponse.json(newFoodEntry);
+  } catch (error: any) {
+    if (error.message.startsWith("Forbidden")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-
-    const result = await pool.query(
-      `INSERT INTO food_entries (baby_id, user_id, food_name, category, feedback_score, reaction_score, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING *`,
-      [babyId, session.user.id, foodName, category, feedback, reaction, notes]
-    );
-
-    return NextResponse.json(result.rows[0]);
-  } catch (error) {
     console.error("Error adding food entry:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -77,25 +71,12 @@ export async function GET(
   const { id: babyId } = await params;
 
   try {
-    // Check view permissions
-    const permCheck = await pool.query(
-      `SELECT 1 FROM babies WHERE id = $1 AND user_id = $2
-       UNION
-       SELECT 1 FROM caregivers WHERE baby_id = $1 AND user_id = $2`,
-      [babyId, session.user.id]
-    );
-
-    if (permCheck.rowCount === 0) {
+    const foods = await getFoodEntries(babyId, session.user.id);
+    return NextResponse.json(foods);
+  } catch (error: any) {
+    if (error.message.startsWith("Forbidden")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-
-    const result = await pool.query(
-      `SELECT * FROM food_entries WHERE baby_id = $1 ORDER BY created_at DESC`,
-      [babyId]
-    );
-
-    return NextResponse.json(result.rows);
-  } catch (error) {
     console.error("Error fetching food entries:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

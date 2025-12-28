@@ -35,5 +35,13 @@
   },
   "LanguageSwitcher": {
     "switcher": "Cambiar Idioma"
+  },
+  "Baby": {
+    "addBaby": "Agregar Bebé",
+    "name": "Nombre",
+    "birthDate": "Fecha de Nacimiento",
+    "save": "Guardar Bebé",
+    "success": "Bebé agregado exitosamente",
+    "error": "Error al agregar bebé"
   }
 }

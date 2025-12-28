@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
+import { getBabies } from "@/lib/services/babies";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
@@ -45,6 +46,8 @@ export default async function Home() {
     );
   }
 
+  const babies = await getBabies(session.user.id);
+
   return (
     <div className={styles.dashboardContainer}>
       <header className={styles.header}>
@@ -55,13 +58,40 @@ export default async function Home() {
       </header>
 
       <main className={styles.grid}>
-        <Card className={styles.emptyCard}>
-          <h2 className={styles.cardTitle}>{t("yourBabies")}</h2>
-          <p className={styles.cardText}>{t("noBabies")}</p>
-          <Link href="/baby/add">
-            <Button leftIcon={<Plus size={20} />}>{t("addBaby")}</Button>
-          </Link>
-        </Card>
+        {babies.length === 0 ? (
+          <Card className={styles.emptyCard}>
+            <h2 className={styles.cardTitle}>{t("yourBabies")}</h2>
+            <p className={styles.cardText}>{t("noBabies")}</p>
+            <Link href="/baby/add">
+              <Button leftIcon={<Plus size={20} />}>{t("addBaby")}</Button>
+            </Link>
+          </Card>
+        ) : (
+          <>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>{t("yourBabies")}</h2>
+              <Link href="/baby/add">
+                <Button size="sm" leftIcon={<Plus size={16} />}>
+                  {t("addBaby")}
+                </Button>
+              </Link>
+            </div>
+            {babies.map((baby) => (
+              <Link
+                href={`/baby/${baby.id}`}
+                key={baby.id}
+                className={styles.babyCardLink}
+              >
+                <Card className={styles.babyCard}>
+                  <h3 className={styles.babyName}>{baby.name}</h3>
+                  <p className={styles.babyInfo}>
+                    {new Date(baby.birth_date).toLocaleDateString()}
+                  </p>
+                </Card>
+              </Link>
+            ))}
+          </>
+        )}
       </main>
     </div>
   );
