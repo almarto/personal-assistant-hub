@@ -4,9 +4,12 @@ import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
+import { Link } from "@/i18n/routing";
+import { authClient } from "@/lib/auth-client";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import styles from "./Navigation.module.css";
+import { Role } from "@/lib/types/roles";
 
 interface NavigationProps {
   showLogout?: boolean;
@@ -15,8 +18,10 @@ interface NavigationProps {
 export default function Navigation({ showLogout = false }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { data: session } = authClient.useSession();
 
-  const t = useTranslations("LanguageSwitcher");
+  const t = useTranslations("Navigation");
+  const tSwitcher = useTranslations("LanguageSwitcher");
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -34,6 +39,11 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     <nav className={styles.container} ref={menuRef}>
       {/* Desktop Navigation */}
       <div className={styles.desktopNav}>
+        {session?.user?.role === Role.ADMIN && (
+          <Link href="/admin/users" className={styles.link}>
+            {t("admin")}
+          </Link>
+        )}
         <LanguageSwitcher />
         {showLogout && <LogoutButton />}
       </div>
@@ -43,15 +53,26 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
         <button
           className={styles.hamburger}
           onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-label={isOpen ? t("closeMenu") : t("openMenu")}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
         {isOpen && (
           <div className={styles.mobileMenu}>
+            {session?.user?.role === Role.ADMIN && (
+              <div className={styles.mobileMenuItem}>
+                <Link
+                  href="/admin/users"
+                  className={styles.link}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {t("admin")}
+                </Link>
+              </div>
+            )}
             <div className={styles.mobileMenuItem}>
-              <span>{t("switcher")}</span>
+              <span>{tSwitcher("switcher")}</span>
               <LanguageSwitcher />
             </div>
             {showLogout && (

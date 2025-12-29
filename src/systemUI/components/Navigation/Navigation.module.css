@@ -10,6 +10,19 @@
   gap: var(--spacing-md);
 }
 
+.link {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s;
+}
+
+.link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 /* Mobile styles */
 .mobileNav {
   display: none;

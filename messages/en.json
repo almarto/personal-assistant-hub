@@ -29,6 +29,7 @@
     "PASSWORD_TOO_SHORT": "Password is too short",
     "INVALID_EMAIL": "Invalid email address",
     "FAILED_TO_CREATE_USER": "Failed to create user",
+    "PASSWORD_REQUIREMENTS_NOT_MET": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
     "default": "An unexpected error occurred"
   },
   "Common": {
@@ -44,5 +45,30 @@
     "save": "Save Baby",
     "success": "Baby added successfully",
     "error": "Failed to add baby"
+  },
+  "Admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Users",
+    "createUser": "Create User",
+    "editUser": "Edit User",
+    "deleteUser": "Delete User",
+    "role": "Role",
+    "actions": "Actions",
+    "admin": "Admin",
+    "user": "User",
+    "username": "Username",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmDelete": "Are you sure you want to delete this user?",
+    "leaveBlankToKeep": "Leave blank to keep current",
+    "cancel": "Cancel",
+    "save": "Save",
+    "passwordRequirements": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
+  },
+  "Navigation": {
+    "admin": "Admin",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   }
 }

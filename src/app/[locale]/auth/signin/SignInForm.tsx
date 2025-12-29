@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import clsx from "clsx";
 
-import { Link, useRouter } from "@/i18n/routing";
+import { useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
@@ -13,10 +13,8 @@ import LanguageSwitcher from "@/systemUI/components/LanguageSwitcher/LanguageSwi
 
 import styles from "../auth.module.css";
 
-export default function SignUp() {
-  const [name, setName] = useState("");
+export default function SignInForm() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,17 +23,15 @@ export default function SignUp() {
   const t = useTranslations("Auth");
   const tErrors = useTranslations("AuthErrors");
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    await authClient.signUp.email(
+    await authClient.signIn.username(
       {
-        email,
-        password,
-        name,
         username,
+        password,
       },
       {
         onSuccess: () => {
@@ -61,25 +57,11 @@ export default function SignUp() {
         <LanguageSwitcher />
       </div>
       <Card className={styles.card} variant="elevated">
-        <h1 className={styles.title}>{t("signUp")}</h1>
+        <h1 className={styles.title}>{t("signIn")}</h1>
 
         {error && <div className={styles.error}>{error}</div>}
 
-        <form onSubmit={handleSignUp} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.label}>
-              {t("name")}
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={styles.input}
-              required
-            />
-          </div>
-
+        <form onSubmit={handleSignIn} className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="username" className={styles.label}>
               {t("username")}
@@ -89,20 +71,6 @@ export default function SignUp() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className={styles.input}
-              required
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              {t("email")}
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               className={styles.input}
               required
             />
@@ -133,16 +101,9 @@ export default function SignUp() {
           </div>
 
           <Button type="submit" isLoading={loading}>
-            {t("signUpButton")}
+            {t("signInButton")}
           </Button>
         </form>
-
-        <div className={styles.footer}>
-          {t("hasAccount")}{" "}
-          <Link href="/auth/signin" className={styles.link}>
-            {t("signIn")}
-          </Link>
-        </div>
       </Card>
     </div>
   );

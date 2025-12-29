@@ -29,6 +29,7 @@
     "PASSWORD_TOO_SHORT": "La contraseña es demasiado corta",
     "INVALID_EMAIL": "Dirección de correo electrónico inválida",
     "FAILED_TO_CREATE_USER": "Error al crear el usuario",
+    "PASSWORD_REQUIREMENTS_NOT_MET": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
     "default": "Ocurrió un error inesperado"
   },
   "Common": {
@@ -44,5 +45,30 @@
     "save": "Guardar Bebé",
     "success": "Bebé agregado exitosamente",
     "error": "Error al agregar bebé"
+  },
+  "Admin": {
+    "dashboard": "Panel de Administración",
+    "users": "Usuarios",
+    "createUser": "Crear Usuario",
+    "editUser": "Editar Usuario",
+    "deleteUser": "Eliminar Usuario",
+    "role": "Rol",
+    "actions": "Acciones",
+    "admin": "Administrador",
+    "user": "Usuario",
+    "username": "Nombre de usuario",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este usuario?",
+    "leaveBlankToKeep": "Dejar en blanco para mantener la actual",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "passwordRequirements": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número."
+  },
+  "Navigation": {
+    "admin": "Administrador",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   }
 }

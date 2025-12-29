@@ -34,11 +34,6 @@ export default async function Home() {
                   {t("login")}
                 </Button>
               </Link>
-              <Link href="/auth/signup">
-                <Button variant="outline" size="lg" className={styles.button}>
-                  {t("register")}
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
