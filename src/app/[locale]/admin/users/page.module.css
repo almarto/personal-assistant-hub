@@ -41,6 +41,20 @@
   font-size: var(--font-size-base);
 }
 
+.checkboxGroup {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.checkboxLabel {
+  display: flex !important; /* Override .formGroup label block display */
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  font-weight: normal !important;
+}
+
 .formActions {
   display: flex;
   justify-content: flex-end;

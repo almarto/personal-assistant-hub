@@ -64,7 +64,9 @@
     "leaveBlankToKeep": "Dejar en blanco para mantener la actual",
     "cancel": "Cancelar",
     "save": "Guardar",
-    "passwordRequirements": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número."
+    "passwordRequirements": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
+    "parent": "Tutor",
+    "caregiver": "Cuidador"
   },
   "Navigation": {
     "admin": "Administrador",

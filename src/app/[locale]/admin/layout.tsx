@@ -1,7 +1,7 @@
+import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
-import { Role } from "@/lib/types/roles";
+import { Role, hasRole } from "@/lib/types/roles";
 
 export default async function AdminLayout({
   children,
@@ -12,7 +12,7 @@ export default async function AdminLayout({
     headers: await headers(),
   });
 
-  if (!session || session.user.role !== Role.ADMIN) {
+  if (!session || !hasRole(session.user.role, Role.ADMIN)) {
     redirect("/");
   }
 

@@ -64,7 +64,9 @@
     "leaveBlankToKeep": "Leave blank to keep current",
     "cancel": "Cancel",
     "save": "Save",
-    "passwordRequirements": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
+    "passwordRequirements": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+    "parent": "Parent",
+    "caregiver": "Caregiver"
   },
   "Navigation": {
     "admin": "Admin",

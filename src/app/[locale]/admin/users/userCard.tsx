@@ -1,10 +1,17 @@
 "use client";
 
-import { Trash2, Edit2, Shield, User } from "lucide-react";
+import {
+  Trash2,
+  Edit2,
+  Shield,
+  User,
+  Baby,
+  HeartHandshake,
+} from "lucide-react";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 import styles from "./page.module.css";
-import { Role } from "@/lib/types/roles";
+import { Role, hasRole } from "@/lib/types/roles";
 import { User as UserType } from "./types";
 
 type UserCardProps = {
@@ -18,16 +25,21 @@ export const UserCard = ({
   handleEditClick,
   handleDeleteUser,
 }: UserCardProps) => {
+  const getRoleIcon = () => {
+    if (hasRole(user.role, Role.ADMIN)) return <Shield size={24} />;
+    if (hasRole(user.role, Role.PARENT)) return <Baby size={24} />;
+    if (hasRole(user.role, Role.CAREGIVER)) return <HeartHandshake size={24} />;
+    return <User size={24} />;
+  };
+
   return (
     <Card key={user.id} className={styles.userCard}>
       <div className={styles.userInfo}>
-        <div className={styles.avatar}>
-          {user.role === Role.ADMIN ? <Shield size={24} /> : <User size={24} />}
-        </div>
+        <div className={styles.avatar}>{getRoleIcon()}</div>
         <div className={styles.userDetails}>
           <h3 className={styles.userName}>{user.username}</h3>
           <p className={styles.email}>{user.email}</p>
-          <span className={styles.role}>{user.role || Role.USER}</span>
+          <span className={styles.role}>{user.role || Role.CAREGIVER}</span>
         </div>
       </div>
       <div className={styles.actions}>

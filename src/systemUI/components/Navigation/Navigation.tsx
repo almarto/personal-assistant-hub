@@ -9,7 +9,7 @@ import { authClient } from "@/lib/auth-client";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import styles from "./Navigation.module.css";
-import { Role } from "@/lib/types/roles";
+import { Role, hasRole } from "@/lib/types/roles";
 
 interface NavigationProps {
   showLogout?: boolean;
@@ -39,7 +39,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     <nav className={styles.container} ref={menuRef}>
       {/* Desktop Navigation */}
       <div className={styles.desktopNav}>
-        {session?.user?.role === Role.ADMIN && (
+        {hasRole(session?.user?.role, Role.ADMIN) && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
           </Link>
@@ -60,7 +60,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
 
         {isOpen && (
           <div className={styles.mobileMenu}>
-            {session?.user?.role === Role.ADMIN && (
+            {hasRole(session?.user?.role, Role.ADMIN) && (
               <div className={styles.mobileMenuItem}>
                 <Link
                   href="/admin/users"
