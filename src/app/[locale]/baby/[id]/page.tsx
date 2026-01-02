@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 
-import { Link } from "@/i18n/routing";
+import { Link, redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { getBaby } from "@/lib/services/babies";
 import { Button } from "@/systemUI/components/Button/Button";
@@ -17,15 +17,23 @@ import styles from "../baby.module.css";
 export default async function BabyPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   if (!session) {
-    return null; // Or redirect
+    return redirect({
+      href: {
+        pathname: "/auth/signin",
+        query: {
+          callbackUrl: `/baby/${id}`,
+        },
+      },
+      locale,
+    });
   }
 
   const baby = await getBaby(id, session.user.id);

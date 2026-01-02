@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -20,8 +21,11 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations("Auth");
   const tErrors = useTranslations("AuthErrors");
+
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,11 +39,22 @@ export default function SignInForm() {
       },
       {
         onSuccess: () => {
-          router.push("/");
+          // Ensure callbackUrl is a relative path to prevent open redirects
+          if (
+            callbackUrl &&
+            callbackUrl.startsWith("/") &&
+            !callbackUrl.startsWith("//")
+          ) {
+            router.push(callbackUrl);
+          } else {
+            router.push("/");
+          }
           router.refresh();
         },
         onError: (ctx) => {
-          const code = ctx.error.code || (ctx.error as { body?: { code?: string } }).body?.code;
+          const code =
+            ctx.error.code ||
+            (ctx.error as { body?: { code?: string } }).body?.code;
           if (code && tErrors.has(code)) {
             setError(tErrors(code));
           } else {

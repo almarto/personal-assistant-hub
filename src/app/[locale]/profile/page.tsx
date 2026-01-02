@@ -1,19 +1,33 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/routing";
 
 import { auth } from "@/lib/auth";
 import { ProfileClient } from "./ProfileClient";
 import styles from "./page.module.css";
 import { Role } from "@/lib/types/roles";
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
+  const { locale } = await params;
+
   if (!session) {
-    redirect("/auth/signin");
+    return redirect({
+      href: {
+        pathname: "/auth/signin",
+        query: {
+          callbackUrl: "/profile",
+        },
+      },
+      locale,
+    });
   }
 
   const t = await getTranslations("Navigation");

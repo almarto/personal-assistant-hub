@@ -30,6 +30,7 @@
     "INVALID_EMAIL": "Invalid email address",
     "FAILED_TO_CREATE_USER": "Failed to create user",
     "PASSWORD_REQUIREMENTS_NOT_MET": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+    "PASSWORDS_DO_NOT_MATCH": "Passwords do not match",
     "default": "An unexpected error occurred"
   },
   "Common": {
@@ -86,10 +87,13 @@
     "cancel": "Cancel",
     "save": "Save",
     "passwordRequirements": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
     "parent": "Parent",
     "caregiver": "Caregiver",
     "currentPassword": "Current Password",
-    "currentPasswordRequired": "Current password is required to change password"
+    "currentPasswordRequired": "Current password is required to change password",
+    "allFieldsRequired": "Please fill in all required fields"
   },
   "Navigation": {
     "admin": "Admin",

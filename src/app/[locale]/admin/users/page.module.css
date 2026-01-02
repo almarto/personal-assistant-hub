@@ -36,6 +36,38 @@
   font-size: var(--font-size-base);
 }
 
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInput {
+  padding-right: 40px; /* Space for the icon */
+}
+
+.passwordToggle {
+  position: absolute;
+  right: var(--spacing-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordToggle:hover {
+  color: var(--color-text);
+}
+
 .input:disabled,
 .select:disabled {
   background-color: var(--color-background);

@@ -30,6 +30,7 @@
     "INVALID_EMAIL": "Dirección de correo electrónico inválida",
     "FAILED_TO_CREATE_USER": "Error al crear el usuario",
     "PASSWORD_REQUIREMENTS_NOT_MET": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
+    "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
     "default": "Ocurrió un error inesperado"
   },
   "Common": {
@@ -86,10 +87,13 @@
     "cancel": "Cancelar",
     "save": "Guardar",
     "passwordRequirements": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
     "parent": "Tutor",
     "caregiver": "Cuidador",
     "currentPassword": "Contraseña Actual",
-    "currentPasswordRequired": "Se requiere la contraseña actual para cambiar la contraseña"
+    "currentPasswordRequired": "Se requiere la contraseña actual para cambiar la contraseña",
+    "allFieldsRequired": "Por favor, complete todos los campos obligatorios"
   },
   "Navigation": {
     "admin": "Administrador",
