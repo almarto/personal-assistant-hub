@@ -6,7 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { UserCard } from "./userCard-temp";
+import { UserCard } from "./UserCard";
 import { UserForm } from "./UserForm";
 import styles from "./page.module.css";
 
