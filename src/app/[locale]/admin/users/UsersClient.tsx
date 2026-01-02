@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
-import styles from "./page.module.css";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { UserCard } from "./UserCard";
 import { UserForm } from "./UserForm";
+import styles from "./page.module.css";
 
 import { User } from "./types";
 

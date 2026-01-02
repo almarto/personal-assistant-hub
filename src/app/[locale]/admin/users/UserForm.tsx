@@ -8,6 +8,7 @@ import styles from "./page.module.css";
 import { Role } from "@/lib/types/roles";
 import { authClient } from "@/lib/auth-client";
 import { User } from "./types";
+import { createUserAndNotify } from "@/app/actions/admin-users";
 
 interface UserFormProps {
   editingUser: User | null;
@@ -48,6 +49,8 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
       });
     }
   }, [editingUser]);
+
+  const isCurrentUser = editingUser?.id === session?.user?.id;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,17 +105,15 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           }
         }
       } else {
-        const { error } = await authClient.admin.createUser({
+        const result = await createUserAndNotify({
           name: formData.name,
           email: formData.email,
-          password: formData.password,
+          username: formData.username,
           role: formData.role,
-          data: {
-            username: formData.username,
-          },
         });
-        if (error) {
-          handleAuthError(error);
+
+        if (!result.success) {
+          setError(result.error || tAuth("default"));
           return;
         }
       }
@@ -134,6 +135,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
             className={styles.input}
+            disabled={!!editingUser && !isCurrentUser}
           />
         </div>
         <div className={styles.formGroup}>
@@ -161,19 +163,20 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
             disabled={!!editingUser}
           />
         </div>
-        <div className={styles.formGroup}>
-          <label>{t("password")}</label>
-          <input
-            type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required={!editingUser}
-            placeholder={editingUser ? t("leaveBlankToKeep") : ""}
-            className={styles.input}
-          />
-        </div>
+        {isCurrentUser && (
+          <div className={styles.formGroup}>
+            <label>{t("password")}</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              placeholder={t("leaveBlankToKeep")}
+              className={styles.input}
+            />
+          </div>
+        )}
         <div className={styles.formGroup}>
           <label>{t("role")}</label>
           <select
