@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "migrate": "npx @better-auth/cli migrate --yes && tsx --env-file=.env scripts/migrate.ts"
+    "migrate": "npx @better-auth/cli migrate --yes && tsx --env-file=.env scripts/migrate.ts",
+    "migrate:prod": "tsx scripts/migrateProduction.ts"
   },
   "dependencies": {
     "better-auth": "1.4.8",
