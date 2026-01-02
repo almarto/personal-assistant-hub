@@ -39,7 +39,7 @@ export function generateWelcomeEmailHtml({
     .logo {
       font-size: 24px;
       font-weight: bold;
-      color: #4f46e5;
+      color: #ff6b6b;
       text-decoration: none;
     }
     .card {
@@ -55,7 +55,7 @@ export function generateWelcomeEmailHtml({
       color: #111827;
     }
     .credentials-box {
-      background-color: #f3f4f6;
+      background-color: #f7f7f7;
       border-radius: 6px;
       padding: 20px;
       margin: 20px 0;
@@ -69,7 +69,7 @@ export function generateWelcomeEmailHtml({
     }
     .credential-label {
       font-weight: 600;
-      color: #6b7280;
+      color: #666666;
       font-size: 14px;
       display: block;
       margin-bottom: 4px;
@@ -77,7 +77,7 @@ export function generateWelcomeEmailHtml({
     .credential-value {
       font-family: monospace;
       font-size: 16px;
-      color: #111827;
+      color: #333333;
       background: #ffffff;
       padding: 4px 8px;
       border-radius: 4px;
@@ -85,8 +85,8 @@ export function generateWelcomeEmailHtml({
     }
     .button {
       display: inline-block;
-      background-color: #4f46e5;
-      color: #ffffff;
+      background-color: #ff6b6b;
+      color: #ffffff !important;
       text-decoration: none;
       padding: 12px 24px;
       border-radius: 6px;
@@ -95,7 +95,7 @@ export function generateWelcomeEmailHtml({
       text-align: center;
     }
     .button:hover {
-      background-color: #4338ca;
+      background-color: #ff5252;
     }
     .footer {
       text-align: center;
@@ -116,24 +116,24 @@ export function generateWelcomeEmailHtml({
 <body>
   <div class="container">
     <div class="header">
-      <a href="${loginUrl}" class="logo">Baby Food Tracker</a>
+      <h1 class="logo">Baby Food Tracker</h1>
     </div>
     
     <div class="card">
-      <div class="welcome-text">Welcome, ${name}!</div>
+      <div class="welcome-text">¡Bienvenido, ${name}!</div>
       
-      <p>Your account has been successfully created. We're excited to help you track your baby's journey to solid foods.</p>
+      <p>Tu cuenta ha sido creada exitosamente. Estamos emocionados de ayudarte a seguir el viaje de tu bebé hacia los alimentos sólidos.</p>
       
       <div class="credentials-box">
         <div class="credential-row">
-          <span class="credential-label">Username</span>
+          <span class="credential-label">Nombre de usuario</span>
           <span class="credential-value">${username}</span>
         </div>
         ${
           password
             ? `
         <div class="credential-row">
-          <span class="credential-label">Temporary Password</span>
+          <span class="credential-label">Contraseña Temporal</span>
           <span class="credential-value">${password}</span>
         </div>
         `
@@ -145,20 +145,20 @@ export function generateWelcomeEmailHtml({
         password
           ? `
       <div class="warning">
-        Please change your password immediately after your first login for security purposes.
+        Por favor cambia tu contraseña inmediatamente después de tu primer inicio de sesión por motivos de seguridad.
       </div>
       `
           : ""
       }
 
       <div style="text-align: center;">
-        <a href="${loginUrl}" class="button">Log In to Your Account</a>
+        <a href="${loginUrl}" class="button" style="color: #ffffff !important;">Iniciar Sesión en tu Cuenta</a>
       </div>
     </div>
 
     <div class="footer">
-      <p>© ${new Date().getFullYear()} Baby Food Tracker. All rights reserved.</p>
-      <p>If you didn't request this account, please ignore this email.</p>
+      <p>© ${new Date().getFullYear()} Baby Food Tracker. Todos los derechos reservados.</p>
+      <p>Si no solicitaste esta cuenta, por favor ignora este correo.</p>
     </div>
   </div>
 </body>

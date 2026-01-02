@@ -51,13 +51,13 @@ export async function createUserAndNotify(data: CreateUserData) {
       name: data.name,
       username: data.username,
       password: password,
-      loginUrl: appUrl,
+      loginUrl: `${appUrl}/es/profile`,
     });
 
     const { error: emailError } = await emailService.sendEmail({
       to: [data.email],
-      subject: "Welcome to Baby Food Tracker",
-      text: `Welcome to Baby Food Tracker!\n\nHere are your login details:\nLink: ${appUrl}\nUsername: ${data.username}\nPassword: ${password}\n\nPlease change your password after logging in.`,
+      subject: "Bienvenido a Baby Food Tracker",
+      text: `¡Bienvenido a Baby Food Tracker!\n\nAquí están tus detalles de inicio de sesión:\nEnlace: ${appUrl}\nNombre de usuario: ${data.username}\nContraseña: ${password}\n\nPor favor cambia tu contraseña después de iniciar sesión.`,
       html: emailHtml,
     });
 

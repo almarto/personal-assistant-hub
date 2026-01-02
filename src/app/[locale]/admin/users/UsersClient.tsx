@@ -57,7 +57,10 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
         <h2 className={styles.title}>{t("users")}</h2>
         <Button
           size="sm"
-          onClick={() => setIsCreating(true)}
+          onClick={() => {
+            setEditingUser(null);
+            setIsCreating(true);
+          }}
           leftIcon={<Plus size={16} />}
         >
           {t("createUser")}
