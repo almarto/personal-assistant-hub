@@ -41,18 +41,11 @@
   font-size: var(--font-size-base);
 }
 
-.checkboxGroup {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-sm);
-}
-
-.checkboxLabel {
-  display: flex !important; /* Override .formGroup label block display */
-  align-items: center;
-  gap: var(--spacing-sm);
-  cursor: pointer;
-  font-weight: normal !important;
+.input:disabled,
+.select:disabled {
+  background-color: var(--color-background);
+  cursor: not-allowed;
+  color: var(--color-text-secondary);
 }
 
 .formActions {
@@ -74,7 +67,9 @@
   align-items: center;
   padding: var(--spacing-lg);
   gap: var(--spacing-md);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .userCard:hover {

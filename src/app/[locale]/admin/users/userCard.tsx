@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  Trash2,
-  Edit2,
-  Shield,
-  User,
-  Baby,
-  HeartHandshake,
-} from "lucide-react";
+import { Trash2, Edit2, Shield, User } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 import styles from "./page.module.css";
@@ -25,10 +19,10 @@ export const UserCard = ({
   handleEditClick,
   handleDeleteUser,
 }: UserCardProps) => {
+  const { data: session } = authClient.useSession();
+
   const getRoleIcon = () => {
     if (hasRole(user.role, Role.ADMIN)) return <Shield size={24} />;
-    if (hasRole(user.role, Role.PARENT)) return <Baby size={24} />;
-    if (hasRole(user.role, Role.CAREGIVER)) return <HeartHandshake size={24} />;
     return <User size={24} />;
   };
 
@@ -39,7 +33,7 @@ export const UserCard = ({
         <div className={styles.userDetails}>
           <h3 className={styles.userName}>{user.username}</h3>
           <p className={styles.email}>{user.email}</p>
-          <span className={styles.role}>{user.role || Role.CAREGIVER}</span>
+          <span className={styles.role}>{user.role || Role.USER}</span>
         </div>
       </div>
       <div className={styles.actions}>
@@ -56,6 +50,7 @@ export const UserCard = ({
           size="sm"
           onClick={() => handleDeleteUser(user.id)}
           className={styles.deleteButton}
+          disabled={user.id === session?.user?.id}
         >
           <Trash2 size={16} />
         </Button>

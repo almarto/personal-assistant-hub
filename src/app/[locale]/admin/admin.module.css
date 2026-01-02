@@ -1,0 +1,35 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+}

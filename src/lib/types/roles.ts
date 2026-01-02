@@ -1,7 +1,6 @@
 export enum Role {
   ADMIN = "admin",
-  PARENT = "parent",
-  CAREGIVER = "caregiver",
+  USER = "user",
 }
 
 export function hasRole(
@@ -9,6 +8,5 @@ export function hasRole(
   role: Role
 ): boolean {
   if (!userRole) return false;
-  const roles = userRole.split(",").map((r) => r.trim());
-  return roles.includes(role);
+  return userRole === role;
 }

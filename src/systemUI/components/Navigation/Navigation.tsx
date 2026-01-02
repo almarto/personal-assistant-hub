@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
@@ -19,6 +19,11 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { data: session } = authClient.useSession();
+  const pathname = usePathname();
+  const isAdminPage =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/en/admin") ||
+    pathname.startsWith("/es/admin"); // Simple check, better to use localized path check if possible
 
   const t = useTranslations("Navigation");
   const tSwitcher = useTranslations("LanguageSwitcher");
@@ -39,7 +44,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     <nav className={styles.container} ref={menuRef}>
       {/* Desktop Navigation */}
       <div className={styles.desktopNav}>
-        {hasRole(session?.user?.role, Role.ADMIN) && (
+        {hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
           </Link>
@@ -60,7 +65,7 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
 
         {isOpen && (
           <div className={styles.mobileMenu}>
-            {hasRole(session?.user?.role, Role.ADMIN) && (
+            {hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage && (
               <div className={styles.mobileMenuItem}>
                 <Link
                   href="/admin/users"

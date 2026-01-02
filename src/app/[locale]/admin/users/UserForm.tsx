@@ -18,13 +18,14 @@ interface UserFormProps {
 export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
   const t = useTranslations("Admin");
   const tAuth = useTranslations("AuthErrors");
+  const { data: session } = authClient.useSession();
 
   const [formData, setFormData] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
-    roles: [Role.CAREGIVER] as string[],
+    role: Role.USER,
   });
   const [error, setError] = useState("");
 
@@ -35,9 +36,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         username: editingUser.username || "",
         email: editingUser.email,
         password: "",
-        roles: editingUser.role
-          ? editingUser.role.split(",").map((r) => r.trim())
-          : [Role.CAREGIVER],
+        role: (editingUser.role as Role) || Role.USER,
       });
     } else {
       setFormData({
@@ -45,26 +44,14 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         username: "",
         email: "",
         password: "",
-        roles: [Role.CAREGIVER],
+        role: Role.USER,
       });
     }
   }, [editingUser]);
 
-  const handleRoleChange = (role: string, checked: boolean) => {
-    setFormData((prev) => {
-      if (checked) {
-        return { ...prev, roles: [...prev.roles, role] };
-      } else {
-        return { ...prev, roles: prev.roles.filter((r) => r !== role) };
-      }
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    const roleString = formData.roles.join(",");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleAuthError = (error: any) => {
@@ -92,11 +79,10 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         }
 
         // Update role
-        if (editingUser.role !== roleString) {
+        if (editingUser.role !== formData.role) {
           const { error } = await authClient.admin.setRole({
             userId: editingUser.id,
-            // @ts-expect-error better-auth types might not support comma-separated string explicitly but it works
-            role: roleString,
+            role: formData.role,
           });
           if (error) {
             handleAuthError(error);
@@ -120,8 +106,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           name: formData.name,
           email: formData.email,
           password: formData.password,
-          // @ts-expect-error better-auth types might not support comma-separated string explicitly but it works
-          role: roleString,
+          role: formData.role,
           data: {
             username: formData.username,
           },
@@ -191,36 +176,17 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         </div>
         <div className={styles.formGroup}>
           <label>{t("role")}</label>
-          <div className={styles.checkboxGroup}>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={formData.roles.includes(Role.ADMIN)}
-                onChange={(e) => handleRoleChange(Role.ADMIN, e.target.checked)}
-              />
-              {t("admin")}
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={formData.roles.includes(Role.PARENT)}
-                onChange={(e) =>
-                  handleRoleChange(Role.PARENT, e.target.checked)
-                }
-              />
-              {t("parent")}
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={formData.roles.includes(Role.CAREGIVER)}
-                onChange={(e) =>
-                  handleRoleChange(Role.CAREGIVER, e.target.checked)
-                }
-              />
-              {t("caregiver")}
-            </label>
-          </div>
+          <select
+            value={formData.role}
+            onChange={(e) =>
+              setFormData({ ...formData, role: e.target.value as Role })
+            }
+            className={styles.select}
+            disabled={editingUser?.id === session?.user?.id}
+          >
+            <option value={Role.USER}>{t("user")}</option>
+            <option value={Role.ADMIN}>{t("admin")}</option>
+          </select>
         </div>
         <div className={styles.formActions}>
           <Button type="button" variant="outline" onClick={onCancel}>
