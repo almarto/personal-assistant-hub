@@ -8,6 +8,8 @@ import { getBabies } from "@/lib/services/babies";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
+import { BabyAgeBadge } from "@/components/BabyAgeBadge";
+import { DateDisplay } from "@/components/DateDisplay";
 
 import styles from "./page.module.css";
 
@@ -72,18 +74,24 @@ export default async function Home() {
               </Link>
             </div>
             {babies.map((baby) => (
-              <Link
-                href={`/baby/${baby.id}`}
-                key={baby.id}
-                className={styles.babyCardLink}
-              >
-                <Card className={styles.babyCard}>
-                  <h3 className={styles.babyName}>{baby.name}</h3>
-                  <p className={styles.babyInfo}>
-                    {new Date(baby.birth_date).toLocaleDateString()}
-                  </p>
-                </Card>
-              </Link>
+              <Card key={baby.id} className={styles.babyCard}>
+                <Link
+                  href={`/baby/${baby.id}`}
+                  className={styles.cardContentLink}
+                >
+                  <div className={styles.cardMainRow}>
+                    <div className={styles.cardInfoGroup}>
+                      <h3 className={styles.babyName}>{baby.name}</h3>
+                      <DateDisplay
+                        date={baby.birth_date}
+                        variant="text"
+                        className={styles.babyInfo}
+                      />
+                    </div>
+                    <BabyAgeBadge birthDate={baby.birth_date} />
+                  </div>
+                </Link>
+              </Card>
             ))}
           </>
         )}

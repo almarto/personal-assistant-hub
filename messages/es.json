@@ -33,7 +33,15 @@
     "default": "Ocurrió un error inesperado"
   },
   "Common": {
-    "language": "Idioma"
+    "language": "Idioma",
+    "year": "año",
+    "years": "años",
+    "month": "mes",
+    "months": "meses",
+    "day": "día",
+    "days": "días",
+    "daysLeft": "falta {count} días",
+    "today": "Hoy"
   },
   "LanguageSwitcher": {
     "switcher": "Cambiar Idioma"
@@ -45,6 +53,19 @@
     "save": "Guardar Bebé",
     "success": "Bebé agregado exitosamente",
     "error": "Error al agregar bebé"
+  },
+  "ShareBaby": {
+    "button": "Compartir",
+    "title": "Compartir {name}",
+    "selectUser": "Seleccionar Usuario",
+    "emailPlaceholder": "Correo Electrónico del Usuario",
+    "roleParent": "Tutor",
+    "roleCaregiver": "Cuidador",
+    "add": "Agregar",
+    "currentAccess": "Acceso Actual",
+    "noAccess": "Aún no hay nadie con acceso.",
+    "confirmRemove": "¿Estás seguro de que deseas eliminar este usuario?",
+    "errorGeneric": "Error al compartir"
   },
   "Admin": {
     "dashboard": "Panel de Administración",

@@ -33,7 +33,15 @@
     "default": "An unexpected error occurred"
   },
   "Common": {
-    "language": "Language"
+    "language": "Language",
+    "year": "year",
+    "years": "years",
+    "month": "month",
+    "months": "months",
+    "day": "day",
+    "days": "days",
+    "daysLeft": "{count} days left",
+    "today": "Today"
   },
   "LanguageSwitcher": {
     "switcher": "Switch Language"
@@ -45,6 +53,19 @@
     "save": "Save Baby",
     "success": "Baby added successfully",
     "error": "Failed to add baby"
+  },
+  "ShareBaby": {
+    "button": "Share",
+    "title": "Share {name}",
+    "selectUser": "Select User",
+    "emailPlaceholder": "User Email",
+    "roleParent": "Parent",
+    "roleCaregiver": "Caregiver",
+    "add": "Add",
+    "currentAccess": "Current Access",
+    "noAccess": "No one else has access yet.",
+    "confirmRemove": "Are you sure you want to remove this user?",
+    "errorGeneric": "Failed to share"
   },
   "Admin": {
     "dashboard": "Admin Dashboard",

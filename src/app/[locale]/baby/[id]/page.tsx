@@ -9,6 +9,8 @@ import { getBaby } from "@/lib/services/babies";
 import { Button } from "@/systemUI/components/Button/Button";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
 import { Card } from "@/systemUI/components/Card/Card";
+import { DateDisplay } from "@/components/DateDisplay";
+import ShareBabyButton from "@/components/ShareBabyButton";
 
 import styles from "../baby.module.css";
 
@@ -31,7 +33,7 @@ export default async function BabyPage({
   if (!baby) {
     notFound();
   }
-  
+
   const t = await getTranslations("HomePage"); // Using HomePage for now as we don't have BabyDetails translations
 
   return (
@@ -42,13 +44,28 @@ export default async function BabyPage({
         </Link>
         <Navigation showLogout={true} />
       </header>
-      
+
       <Card className={styles.card} variant="elevated">
-        <h1 className={styles.title}>{baby.name}</h1>
-        <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-          {new Date(baby.birth_date).toLocaleDateString()}
-        </p>
-        
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          <h1 className={styles.title} style={{ margin: 0 }}>
+            {baby.name}
+          </h1>
+          {(baby.role === "owner" || baby.role === "parent") && (
+            <div style={{ width: "auto" }}>
+              <ShareBabyButton babyId={baby.id} babyName={baby.name} />
+            </div>
+          )}
+        </div>
+
+        <DateDisplay date={baby.birth_date} variant="card" />
+
         <div className={styles.backLink}>
           <Link href="/">
             <Button variant="ghost" leftIcon={<ArrowLeft size={16} />}>
