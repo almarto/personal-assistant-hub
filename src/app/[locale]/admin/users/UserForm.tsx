@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 import styles from "./page.module.css";
-import { Role } from "@/lib/types/roles";
+import { Role, hasRole } from "@/lib/types/roles";
 import { authClient } from "@/lib/auth-client";
 import { User } from "./types";
 import { createUserAndNotify } from "@/app/actions/admin-users";
@@ -20,12 +20,15 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
   const t = useTranslations("Admin");
   const tAuth = useTranslations("AuthErrors");
   const { data: session } = authClient.useSession();
+  
+  const isAdmin = hasRole(session?.user?.role, Role.ADMIN);
 
   const [formData, setFormData] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
+    currentPassword: "",
     role: Role.USER,
   });
   const [error, setError] = useState("");
@@ -37,6 +40,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         username: editingUser.username || "",
         email: editingUser.email,
         password: "",
+        currentPassword: "",
         role: (editingUser.role as Role) || Role.USER,
       });
     } else {
@@ -45,6 +49,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         username: "",
         email: "",
         password: "",
+        currentPassword: "",
         role: Role.USER,
       });
     }
@@ -67,42 +72,74 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
 
     try {
       if (editingUser) {
-        // Update name
-        if (editingUser.name !== formData.name) {
-          const { error } = await authClient.admin.updateUser({
-            userId: editingUser.id,
-            data: {
-              name: formData.name,
-            },
-          });
-          if (error) {
-            handleAuthError(error);
-            return;
-          }
-        }
+        if (isAdmin) {
+            // Admin updating user (or self)
+            // Update name
+            if (editingUser.name !== formData.name) {
+              const { error } = await authClient.admin.updateUser({
+                userId: editingUser.id,
+                data: {
+                  name: formData.name,
+                },
+              });
+              if (error) {
+                handleAuthError(error);
+                return;
+              }
+            }
 
-        // Update role
-        if (editingUser.role !== formData.role) {
-          const { error } = await authClient.admin.setRole({
-            userId: editingUser.id,
-            role: formData.role,
-          });
-          if (error) {
-            handleAuthError(error);
-            return;
-          }
-        }
+            // Update role
+            if (editingUser.role !== formData.role) {
+              const { error } = await authClient.admin.setRole({
+                userId: editingUser.id,
+                role: formData.role,
+              });
+              if (error) {
+                handleAuthError(error);
+                return;
+              }
+            }
 
-        // Update password if provided
-        if (formData.password) {
-          const { error } = await authClient.admin.setUserPassword({
-            userId: editingUser.id,
-            newPassword: formData.password,
-          });
-          if (error) {
-            handleAuthError(error);
-            return;
-          }
+            // Update password if provided
+            if (formData.password) {
+              const { error } = await authClient.admin.setUserPassword({
+                userId: editingUser.id,
+                newPassword: formData.password,
+              });
+              if (error) {
+                handleAuthError(error);
+                return;
+              }
+            }
+        } else if (isCurrentUser) {
+            // Non-admin updating self
+             // Update name
+            if (editingUser.name !== formData.name) {
+              const { error } = await authClient.updateUser({
+                name: formData.name,
+              });
+              if (error) {
+                handleAuthError(error);
+                return;
+              }
+            }
+            
+             // Update password if provided
+            if (formData.password) {
+                if (!formData.currentPassword) {
+                    setError(t("currentPasswordRequired"));
+                    return;
+                }
+              const { error } = await authClient.changePassword({
+                newPassword: formData.password,
+                currentPassword: formData.currentPassword,
+                revokeOtherSessions: true
+              });
+              if (error) {
+                handleAuthError(error);
+                return;
+              }
+            }
         }
       } else {
         const result = await createUserAndNotify({
@@ -164,33 +201,51 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           />
         </div>
         {isCurrentUser && (
-          <div className={styles.formGroup}>
-            <label>{t("password")}</label>
-            <input
-              type="password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              placeholder={t("leaveBlankToKeep")}
-              className={styles.input}
-            />
-          </div>
+            <>
+            <div className={styles.formGroup}>
+                <label>{t("password")}</label>
+                <input
+                type="password"
+                value={formData.password}
+                onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                }
+                placeholder={t("leaveBlankToKeep")}
+                className={styles.input}
+                />
+            </div>
+            {!isAdmin && formData.password && (
+                 <div className={styles.formGroup}>
+                    <label>{t("currentPassword")}</label>
+                    <input
+                    type="password"
+                    value={formData.currentPassword}
+                    onChange={(e) =>
+                        setFormData({ ...formData, currentPassword: e.target.value })
+                    }
+                    className={styles.input}
+                    required
+                    />
+                </div>
+            )}
+          </>
         )}
-        <div className={styles.formGroup}>
-          <label>{t("role")}</label>
-          <select
-            value={formData.role}
-            onChange={(e) =>
-              setFormData({ ...formData, role: e.target.value as Role })
-            }
-            className={styles.select}
-            disabled={editingUser?.id === session?.user?.id}
-          >
-            <option value={Role.USER}>{t("user")}</option>
-            <option value={Role.ADMIN}>{t("admin")}</option>
-          </select>
-        </div>
+        {isAdmin && (
+            <div className={styles.formGroup}>
+            <label>{t("role")}</label>
+            <select
+                value={formData.role}
+                onChange={(e) =>
+                setFormData({ ...formData, role: e.target.value as Role })
+                }
+                className={styles.select}
+                disabled={editingUser?.id === session?.user?.id}
+            >
+                <option value={Role.USER}>{t("user")}</option>
+                <option value={Role.ADMIN}>{t("admin")}</option>
+            </select>
+            </div>
+        )}
         <div className={styles.formActions}>
           <Button type="button" variant="outline" onClick={onCancel}>
             {t("cancel")}

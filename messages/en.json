@@ -87,10 +87,13 @@
     "save": "Save",
     "passwordRequirements": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
     "parent": "Parent",
-    "caregiver": "Caregiver"
+    "caregiver": "Caregiver",
+    "currentPassword": "Current Password",
+    "currentPasswordRequired": "Current password is required to change password"
   },
   "Navigation": {
     "admin": "Admin",
+    "profile": "Profile",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   }

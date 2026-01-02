@@ -87,10 +87,13 @@
     "save": "Guardar",
     "passwordRequirements": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
     "parent": "Tutor",
-    "caregiver": "Cuidador"
+    "caregiver": "Cuidador",
+    "currentPassword": "Contraseña Actual",
+    "currentPasswordRequired": "Se requiere la contraseña actual para cambiar la contraseña"
   },
   "Navigation": {
     "admin": "Administrador",
+    "profile": "Perfil",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
   }

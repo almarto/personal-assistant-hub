@@ -26,7 +26,6 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     pathname.startsWith("/es/admin"); // Simple check, better to use localized path check if possible
 
   const t = useTranslations("Navigation");
-  const tSwitcher = useTranslations("LanguageSwitcher");
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -47,6 +46,11 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
         {hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
+          </Link>
+        )}
+        {session?.user && !hasRole(session?.user?.role, Role.ADMIN) && (
+          <Link href="/profile" className={styles.link}>
+            {t("profile")}
           </Link>
         )}
         <LanguageSwitcher />
@@ -76,8 +80,18 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
                 </Link>
               </div>
             )}
+            {session?.user && !hasRole(session?.user?.role, Role.ADMIN) && (
+              <div className={styles.mobileMenuItem}>
+                <Link
+                  href="/profile"
+                  className={styles.link}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {t("profile")}
+                </Link>
+              </div>
+            )}
             <div className={styles.mobileMenuItem}>
-              <span>{tSwitcher("switcher")}</span>
               <LanguageSwitcher />
             </div>
             {showLogout && (
