@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
-import Navigation from "@/systemUI/components/Navigation/Navigation";
 import { ProfileClient } from "./ProfileClient";
 import styles from "./page.module.css";
 import { Role } from "@/lib/types/roles";
@@ -28,14 +27,11 @@ export default async function ProfilePage() {
   };
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>{t("profile")}</h1>
-        <Navigation showLogout={true} />
-      </header>
-      <div className={styles.content}>
-        <ProfileClient user={user} />
+    <div>
+      <div className={styles.header}>
+        <h2 className={styles.title}>{t("profile")}</h2>
       </div>
+      <ProfileClient user={user} />
     </div>
   );
 }

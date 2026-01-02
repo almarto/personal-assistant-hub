@@ -20,6 +20,13 @@
   --font-size-lg: 18px;
   --font-size-xl: 24px;
 
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
   /* Borders */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;

@@ -1,5 +1,10 @@
+import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 import AddBabyForm from "./AddBabyForm";
 
 export default function AddBaby() {
-  return <AddBabyForm />;
+  return (
+    <PageLayout>
+      <AddBabyForm />
+    </PageLayout>
+  );
 }

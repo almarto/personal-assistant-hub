@@ -1,8 +1,3 @@
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
-}
 
 .header {
   display: flex;
@@ -106,7 +101,7 @@
 
 .userName {
   font-size: var(--font-size-base);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;

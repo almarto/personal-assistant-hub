@@ -1,22 +1,6 @@
-.dashboardContainer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
-  min-height: 100vh;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 .welcome {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0;
 }
@@ -41,7 +25,7 @@
 
 .cardTitle {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0;
 }
@@ -52,8 +36,8 @@
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0;
 }
@@ -111,7 +95,7 @@
 
 .babyName {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0;
 }
@@ -151,7 +135,7 @@
   .actions button {
     width: 100%;
   }
-  
+
   .dashboardContainer {
     padding: var(--spacing-md);
   }
@@ -194,7 +178,11 @@
   color: var(--color-text);
   line-height: 1.2;
   margin: 0;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

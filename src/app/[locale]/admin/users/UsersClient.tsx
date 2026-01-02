@@ -52,12 +52,13 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
   };
 
   return (
-    <div className={styles.container}>
+    <div>
       <div className={styles.header}>
         <h2 className={styles.title}>{t("users")}</h2>
         <Button
+          size="sm"
           onClick={() => setIsCreating(true)}
-          leftIcon={<Plus size={20} />}
+          leftIcon={<Plus size={16} />}
         >
           {t("createUser")}
         </Button>

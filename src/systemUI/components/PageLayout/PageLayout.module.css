@@ -21,9 +21,16 @@
   text-decoration: none;
 }
 
+.headerContent {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+}
+
 @media (min-width: 768px) {
   .logo {
-    font-size: 1.5rem;
+    font-size: var(--font-size-xl);
   }
 }
 

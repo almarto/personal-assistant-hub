@@ -7,11 +7,11 @@ import { Link } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { getBaby } from "@/lib/services/babies";
 import { Button } from "@/systemUI/components/Button/Button";
-import Navigation from "@/systemUI/components/Navigation/Navigation";
 import { Card } from "@/systemUI/components/Card/Card";
 import { DateDisplay } from "@/components/DateDisplay";
 import ShareBabyButton from "@/components/ShareBabyButton";
 
+import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 import styles from "../baby.module.css";
 
 export default async function BabyPage({
@@ -37,14 +37,7 @@ export default async function BabyPage({
   const t = await getTranslations("HomePage"); // Using HomePage for now as we don't have BabyDetails translations
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <Link href="/" className={styles.logo}>
-          Baby Food Tracker
-        </Link>
-        <Navigation showLogout={true} />
-      </header>
-
+    <PageLayout>
       <Card className={styles.card} variant="elevated">
         <div
           style={{
@@ -74,6 +67,6 @@ export default async function BabyPage({
           </Link>
         </div>
       </Card>
-    </div>
+    </PageLayout>
   );
 }

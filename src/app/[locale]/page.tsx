@@ -10,6 +10,7 @@ import { Card } from "@/systemUI/components/Card/Card";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
 import { BabyAgeBadge } from "@/components/BabyAgeBadge";
 import { DateDisplay } from "@/components/DateDisplay";
+import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 import styles from "./page.module.css";
 
@@ -46,15 +47,15 @@ export default async function Home() {
   const babies = await getBabies(session.user.id);
 
   return (
-    <div className={styles.dashboardContainer}>
-      <header className={styles.header}>
+    <PageLayout
+      showLogo={false}
+      headerContent={
         <h1 className={styles.welcome}>
           {t("welcome", { name: session.user.name })}
         </h1>
-        <Navigation showLogout={true} />
-      </header>
-
-      <main className={styles.grid}>
+      }
+    >
+      <div className={styles.grid}>
         {babies.length === 0 ? (
           <Card className={styles.emptyCard}>
             <h2 className={styles.cardTitle}>{t("yourBabies")}</h2>
@@ -95,7 +96,7 @@ export default async function Home() {
             ))}
           </>
         )}
-      </main>
-    </div>
+      </div>
+    </PageLayout>
   );
 }

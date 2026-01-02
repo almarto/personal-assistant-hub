@@ -1,26 +1,12 @@
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
-  min-height: 100vh;
-}
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
   color: var(--color-text);
-  margin: 0;
-}
-
-.content {
-  margin-top: var(--spacing-lg);
 }
