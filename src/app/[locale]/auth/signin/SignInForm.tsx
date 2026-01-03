@@ -9,8 +9,6 @@ import clsx from "clsx";
 import { useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
-import { Card } from "@/systemUI/components/Card/Card";
-import LanguageSwitcher from "@/systemUI/components/LanguageSwitcher/LanguageSwitcher";
 
 import styles from "../auth.module.css";
 
@@ -67,59 +65,52 @@ export default function SignInForm() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.languageWrapper}>
-        <LanguageSwitcher />
-      </div>
-      <Card className={styles.card} variant="elevated">
-        <h1 className={styles.title}>{t("signIn")}</h1>
+    <>
+      {error && <div className={styles.error}>{error}</div>}
 
-        {error && <div className={styles.error}>{error}</div>}
+      <form onSubmit={handleSignIn} className={styles.form}>
+        <div className={styles.formGroup}>
+          <label htmlFor="username" className={styles.label}>
+            {t("username")}
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={styles.input}
+            required
+          />
+        </div>
 
-        <form onSubmit={handleSignIn} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label htmlFor="username" className={styles.label}>
-              {t("username")}
-            </label>
+        <div className={styles.formGroup}>
+          <label htmlFor="password" className={styles.label}>
+            {t("password")}
+          </label>
+          <div className={styles.passwordWrapper}>
             <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className={styles.input}
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={clsx(styles.input, styles.passwordInput)}
               required
             />
+            <button
+              type="button"
+              className={styles.passwordToggle}
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
+        </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>
-              {t("password")}
-            </label>
-            <div className={styles.passwordWrapper}>
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={clsx(styles.input, styles.passwordInput)}
-                required
-              />
-              <button
-                type="button"
-                className={styles.passwordToggle}
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-          </div>
-
-          <Button type="submit" isLoading={loading}>
-            {t("signInButton")}
-          </Button>
-        </form>
-      </Card>
-    </div>
+        <Button type="submit" isLoading={loading}>
+          {t("signInButton")}
+        </Button>
+      </form>
+    </>
   );
 }

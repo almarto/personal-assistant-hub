@@ -134,7 +134,6 @@ export default function ShareBabyButton({
                   onChange={(e) => setSelectedUserId(e.target.value)}
                   required
                   className={clsx(styles.select, styles.userSelect)}
-                  style={{ flex: 1 }}
                 >
                   <option value="">{t("selectUser")}</option>
                   {potentialUsers.map((user) => (
@@ -148,8 +147,7 @@ export default function ShareBabyButton({
                   onChange={(e) =>
                     setRole(e.target.value as "parent" | "caregiver")
                   }
-                  className={styles.select}
-                  style={{ width: "auto" }}
+                  className={clsx(styles.select, styles.roleSelect)}
                 >
                   <option value="parent">{t("roleParent")}</option>
                   <option value="caregiver">{t("roleCaregiver")}</option>
@@ -159,6 +157,7 @@ export default function ShareBabyButton({
                   isLoading={loading}
                   size="sm"
                   disabled={!selectedUserId}
+                  className={styles.addButton}
                 >
                   {t("add")}
                 </Button>
