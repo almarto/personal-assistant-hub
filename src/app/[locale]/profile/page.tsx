@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { Role } from "@/lib/types/roles";
+import { User } from "@/lib/types/user";
 
 import styles from "./page.module.css";
 import { ProfileClient } from "./ProfileClient";
@@ -37,7 +38,7 @@ export default async function ProfilePage({
     id: session.user.id,
     name: session.user.name,
     email: session.user.email,
-    username: (session.user as any).username || "",
+    username: (session.user as User).username || "",
     role: session.user.role as Role,
   };
 
