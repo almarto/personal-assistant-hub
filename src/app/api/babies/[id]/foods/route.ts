@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
 import { addFoodEntry, getFoodEntries } from "@/lib/services/foods";
+import { AppError } from "@/lib/types/errors";
 
 export async function POST(
   req: Request,
@@ -44,11 +45,12 @@ export async function POST(
     });
 
     return NextResponse.json(newFoodEntry);
-  } catch (error: any) {
-    if (error.message.startsWith("Forbidden")) {
+  } catch (error: unknown) {
+    const appError = error as AppError;
+    if (appError.message.startsWith("Forbidden")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-    console.error("Error adding food entry:", error);
+    console.error("Error adding food entry:", appError);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -73,11 +75,12 @@ export async function GET(
   try {
     const foods = await getFoodEntries(babyId, session.user.id);
     return NextResponse.json(foods);
-  } catch (error: any) {
-    if (error.message.startsWith("Forbidden")) {
+  } catch (error: unknown) {
+    const appError = error as AppError;
+    if (appError.message.startsWith("Forbidden")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-    console.error("Error fetching food entries:", error);
+    console.error("Error fetching food entries:", appError);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
