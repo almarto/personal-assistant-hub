@@ -1,13 +1,7 @@
 import { pool } from "@/lib/db";
-import { Role } from "@/lib/types/roles";
+import { User } from "@/lib/types/user";
 
-export type User = {
-  id: string;
-  email: string;
-  name: string;
-  username: string;
-  role?: Role;
-};
+export { type User };
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   const result = await pool.query(

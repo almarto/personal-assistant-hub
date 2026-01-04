@@ -8,11 +8,11 @@ import { useState } from "react";
 import { createUserAndNotify } from "@/app/actions/admin-users";
 import { authClient } from "@/lib/auth-client";
 import { hasRole,Role } from "@/lib/types/roles";
+import { User } from "@/lib/types/user";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 
 import styles from "./page.module.css";
-import { User } from "./types";
 
 interface UserFormProps {
   editingUser: User | null;

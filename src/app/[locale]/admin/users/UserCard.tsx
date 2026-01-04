@@ -4,11 +4,11 @@ import { Edit2, Shield, Trash2, User } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
 import { hasRole,Role } from "@/lib/types/roles";
+import { User as UserType } from "@/lib/types/user";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 
 import styles from "./page.module.css";
-import { User as UserType } from "./types";
 
 type UserCardProps = {
   user: UserType;
