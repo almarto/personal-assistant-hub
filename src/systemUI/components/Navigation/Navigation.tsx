@@ -26,6 +26,14 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     pathname.startsWith("/en/admin") ||
     pathname.startsWith("/es/admin"); // Simple check, better to use localized path check if possible
 
+  const showAdminLink = hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage;
+  const showProfileLink =
+    session?.user && !hasRole(session?.user?.role, Role.ADMIN);
+  const showLogoutBtn = showLogout;
+
+  const onlyLanguageSwitcher =
+    !showAdminLink && !showProfileLink && !showLogoutBtn;
+
   const t = useTranslations("Navigation");
 
   // Close menu when clicking outside
@@ -44,63 +52,69 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     <nav className={styles.container} ref={menuRef}>
       {/* Desktop Navigation */}
       <div className={styles.desktopNav}>
-        {hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage && (
+        {showAdminLink && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
           </Link>
         )}
-        {session?.user && !hasRole(session?.user?.role, Role.ADMIN) && (
+        {showProfileLink && (
           <Link href="/profile" className={styles.link}>
             {t("profile")}
           </Link>
         )}
         <LanguageSwitcher />
-        {showLogout && <LogoutButton />}
+        {showLogoutBtn && <LogoutButton />}
       </div>
 
       {/* Mobile Navigation */}
       <div className={styles.mobileNav}>
-        <button
-          className={styles.hamburger}
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? t("closeMenu") : t("openMenu")}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {onlyLanguageSwitcher ? (
+          <LanguageSwitcher />
+        ) : (
+          <>
+            <button
+              className={styles.hamburger}
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? t("closeMenu") : t("openMenu")}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
 
-        {isOpen && (
-          <div className={styles.mobileMenu}>
-            {hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage && (
-              <div className={styles.mobileMenuItem}>
-                <Link
-                  href="/admin/users"
-                  className={styles.link}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {t("admin")}
-                </Link>
+            {isOpen && (
+              <div className={styles.mobileMenu}>
+                {showAdminLink && (
+                  <div className={styles.mobileMenuItem}>
+                    <Link
+                      href="/admin/users"
+                      className={styles.link}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {t("admin")}
+                    </Link>
+                  </div>
+                )}
+                {showProfileLink && (
+                  <div className={styles.mobileMenuItem}>
+                    <Link
+                      href="/profile"
+                      className={styles.link}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {t("profile")}
+                    </Link>
+                  </div>
+                )}
+                <div className={styles.mobileMenuItem}>
+                  <LanguageSwitcher />
+                </div>
+                {showLogoutBtn && (
+                  <div className={styles.mobileMenuItem}>
+                    <LogoutButton />
+                  </div>
+                )}
               </div>
             )}
-            {session?.user && !hasRole(session?.user?.role, Role.ADMIN) && (
-              <div className={styles.mobileMenuItem}>
-                <Link
-                  href="/profile"
-                  className={styles.link}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {t("profile")}
-                </Link>
-              </div>
-            )}
-            <div className={styles.mobileMenuItem}>
-              <LanguageSwitcher />
-            </div>
-            {showLogout && (
-              <div className={styles.mobileMenuItem}>
-                <LogoutButton />
-              </div>
-            )}
-          </div>
+          </>
         )}
       </div>
     </nav>
