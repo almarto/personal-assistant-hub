@@ -1,11 +1,12 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
-import { redirect } from "@/i18n/routing";
 
+import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
-import { ProfileClient } from "./ProfileClient";
-import styles from "./page.module.css";
 import { Role } from "@/lib/types/roles";
+
+import styles from "./page.module.css";
+import { ProfileClient } from "./ProfileClient";
 
 export default async function ProfilePage({
   params,

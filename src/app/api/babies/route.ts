@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
-import { getBabies, createBaby } from "@/lib/services/babies";
+import { createBaby,getBabies } from "@/lib/services/babies";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({

@@ -1,9 +1,10 @@
 import { useTranslations } from "next-intl";
-import LanguageSwitcher from "@/systemUI/components/LanguageSwitcher/LanguageSwitcher";
+
 import { Card } from "@/systemUI/components/Card/Card";
-import SignInForm from "./SignInForm";
+import LanguageSwitcher from "@/systemUI/components/LanguageSwitcher/LanguageSwitcher";
 
 import styles from "../auth.module.css";
+import SignInForm from "./SignInForm";
 
 export default function SignIn() {
   const t = useTranslations("Auth");

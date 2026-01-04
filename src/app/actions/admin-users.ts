@@ -1,12 +1,13 @@
 "use server";
 
+import { headers } from "next/headers";
+
 import { auth } from "@/lib/auth";
-import { Role } from "@/lib/types/roles";
+import { requireAdmin } from "@/lib/auth-guards";
 import { emailService } from "@/lib/services/email";
 import { generateWelcomeEmailHtml } from "@/lib/services/email/templates/welcome";
+import { Role } from "@/lib/types/roles";
 import { generatePassword } from "@/lib/utils/password";
-import { requireAdmin } from "@/lib/auth-guards";
-import { headers } from "next/headers";
 
 interface CreateUserData {
   name: string;

@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+
 import { IEmailService, SendEmailOptions, SendEmailResult } from "./types";
 
 export class ResendEmailProvider implements IEmailService {

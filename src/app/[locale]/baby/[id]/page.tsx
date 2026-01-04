@@ -1,17 +1,17 @@
+import { ArrowLeft } from "lucide-react";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ArrowLeft } from "lucide-react";
 
+import { DateDisplay } from "@/components/DateDisplay";
+import ShareBabyButton from "@/components/ShareBabyButton";
 import { Link, redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { getBaby } from "@/lib/services/babies";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
-import { DateDisplay } from "@/components/DateDisplay";
-import ShareBabyButton from "@/components/ShareBabyButton";
-
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
+
 import styles from "../baby.module.css";
 
 export default async function BabyPage({

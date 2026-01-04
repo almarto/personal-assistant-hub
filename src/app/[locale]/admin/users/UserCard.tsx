@@ -1,11 +1,13 @@
 "use client";
 
-import { Trash2, Edit2, Shield, User } from "lucide-react";
+import { Edit2, Shield, Trash2, User } from "lucide-react";
+
 import { authClient } from "@/lib/auth-client";
+import { hasRole,Role } from "@/lib/types/roles";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
+
 import styles from "./page.module.css";
-import { Role, hasRole } from "@/lib/types/roles";
 import { User as UserType } from "./types";
 
 type UserCardProps = {

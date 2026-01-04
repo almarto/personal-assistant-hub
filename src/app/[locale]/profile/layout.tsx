@@ -1,6 +1,7 @@
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+
 import { redirect } from "@/i18n/routing";
+import { auth } from "@/lib/auth";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 export default async function ProfileLayout({

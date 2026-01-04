@@ -1,5 +1,5 @@
-import { betterAuth, APIError, type BetterAuthPlugin } from "better-auth";
-import { username, admin } from "better-auth/plugins";
+import { APIError, betterAuth, type BetterAuthPlugin } from "better-auth";
+import { admin,username } from "better-auth/plugins";
 import { Pool } from "pg";
 
 const passwordValidator = {

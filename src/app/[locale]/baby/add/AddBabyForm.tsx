@@ -1,8 +1,8 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
 
 import { Link, useRouter } from "@/i18n/routing";
 import { Button } from "@/systemUI/components/Button/Button";

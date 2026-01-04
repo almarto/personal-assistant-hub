@@ -36,8 +36,8 @@ export function calculateDaysToNextMonthversary(birthDate: Date | string) {
   const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
 
   // Determine potential target date in current month
-  let maxDaysInCurrentMonth = getDaysInMonth(targetYear, targetMonth);
-  let targetDayInCurrentMonth = Math.min(birthDay, maxDaysInCurrentMonth);
+  const maxDaysInCurrentMonth = getDaysInMonth(targetYear, targetMonth);
+  const targetDayInCurrentMonth = Math.min(birthDay, maxDaysInCurrentMonth);
   let targetDate = new Date(targetYear, targetMonth, targetDayInCurrentMonth);
 
   // If target date is in the past, move to next month

@@ -1,7 +1,8 @@
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+
 import { redirect } from "@/i18n/routing";
-import { Role, hasRole } from "@/lib/types/roles";
+import { auth } from "@/lib/auth";
+import { hasRole,Role } from "@/lib/types/roles";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 export default async function AdminLayout({

@@ -1,7 +1,9 @@
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import UsersClient from "./UsersClient";
+
+import { auth } from "@/lib/auth";
+
 import { User } from "./types";
+import UsersClient from "./UsersClient";
 
 export default async function AdminUsersPage() {
   const sessionHeaders = await headers();

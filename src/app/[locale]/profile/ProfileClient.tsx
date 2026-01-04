@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "@/i18n/routing";
-import { UserForm } from "@/app/[locale]/admin/users/UserForm";
 import { User } from "@/app/[locale]/admin/users/types";
+import { UserForm } from "@/app/[locale]/admin/users/UserForm";
+import { useRouter } from "@/i18n/routing";
 
 interface ProfileClientProps {
   user: User;

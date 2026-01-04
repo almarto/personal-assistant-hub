@@ -1,8 +1,9 @@
 import { headers } from "next/headers";
-import { redirect } from "@/i18n/routing";
 
+import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
+
 import AddBabyForm from "./AddBabyForm";
 
 export default async function AddBaby({

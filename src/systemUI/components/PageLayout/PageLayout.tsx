@@ -1,6 +1,8 @@
 import React from "react";
+
 import { Link } from "@/i18n/routing";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
+
 import styles from "./PageLayout.module.css";
 
 interface PageLayoutProps {

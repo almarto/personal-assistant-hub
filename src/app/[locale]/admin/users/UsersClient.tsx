@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/systemUI/components/Button/Button";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+
+import styles from "./page.module.css";
+import { User } from "./types";
 import { UserCard } from "./UserCard";
 import { UserForm } from "./UserForm";
-import styles from "./page.module.css";
-
-import { User } from "./types";
 
 interface UsersClientProps {
   initialUsers: User[];

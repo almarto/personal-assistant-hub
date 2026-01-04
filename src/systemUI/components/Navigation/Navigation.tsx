@@ -6,10 +6,11 @@ import { useEffect, useRef, useState } from "react";
 
 import { Link, usePathname } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
+import { hasRole,Role } from "@/lib/types/roles";
+
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import styles from "./Navigation.module.css";
-import { Role, hasRole } from "@/lib/types/roles";
 
 interface NavigationProps {
   showLogout?: boolean;

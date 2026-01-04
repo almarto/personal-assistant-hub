@@ -1,10 +1,10 @@
 "use client";
 
+import clsx from "clsx";
+import { Eye, EyeOff } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import clsx from "clsx";
 
 import { useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";

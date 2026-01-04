@@ -1,18 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
 import clsx from "clsx";
-import { Button } from "@/systemUI/components/Button/Button";
+import { Share2, Trash2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect,useState } from "react";
+
 import {
+  getPotentialShareUsersAction,
+  getSharesAction,
   shareBabyAction,
   unshareBabyAction,
-  getSharesAction,
-  getPotentialShareUsersAction,
 } from "@/app/actions/baby";
-import styles from "./ShareBabyButton.module.css";
 import { BabyShare } from "@/lib/services/babies";
-import { Share2, Trash2, X } from "lucide-react";
+import { Button } from "@/systemUI/components/Button/Button";
+
+import styles from "./ShareBabyButton.module.css";
 
 interface ShareBabyButtonProps {
   babyId: string;

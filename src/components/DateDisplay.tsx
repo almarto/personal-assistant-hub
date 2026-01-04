@@ -1,8 +1,9 @@
 "use client";
 
-import { useLocale } from "next-intl";
-import { Calendar as CalendarIcon } from "lucide-react";
 import clsx from "clsx";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { useLocale } from "next-intl";
+
 import styles from "./DateDisplay.module.css";
 
 interface DateDisplayProps {
