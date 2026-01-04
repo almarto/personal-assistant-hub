@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
 import { emailService } from "@/lib/services/email";
 import { generateWelcomeEmailHtml } from "@/lib/services/email/templates/welcome";
+import { AppError } from "@/lib/types/errors";
 import { Role } from "@/lib/types/roles";
 import { generatePassword } from "@/lib/utils/password";
 
@@ -72,18 +73,22 @@ export async function createUserAndNotify(data: CreateUserData) {
     }
 
     return { success: true };
-  } catch (error: any) {
-    console.error("Error creating user:", error);
-    
+  } catch (error: unknown) {
+    const appError = error as AppError;
+    console.error("Error creating user:", appError);
+
     // Handle specific auth errors
-    if (error.message === "Unauthorized: Admin access required") {
-        return { success: false, error: "Unauthorized" };
+    if (appError.message === "Unauthorized: Admin access required") {
+      return { success: false, error: "Unauthorized" };
     }
 
     // Better auth error handling
-    if (error.body?.message) {
-      return { success: false, error: error.body.message };
+    if (appError.body?.message) {
+      return { success: false, error: appError.body.message };
     }
-    return { success: false, error: error.message || "Failed to create user" };
+    return {
+      success: false,
+      error: appError.message || "Failed to create user",
+    };
   }
 }
