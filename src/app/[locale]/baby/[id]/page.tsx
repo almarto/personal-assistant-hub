@@ -1,7 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 
 import { DateDisplay } from "@/components/DateDisplay";
 import ShareBabyButton from "@/components/ShareBabyButton";
@@ -41,8 +40,6 @@ export default async function BabyPage({
   if (!baby) {
     notFound();
   }
-
-  const t = await getTranslations("HomePage"); // Using HomePage for now as we don't have BabyDetails translations
 
   return (
     <PageLayout>
