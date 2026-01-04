@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect,useState } from "react";
+import { useState } from "react";
 
 import { createUserAndNotify } from "@/app/actions/admin-users";
 import { authClient } from "@/lib/auth-client";
@@ -28,42 +28,18 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
   const isAdmin = hasRole(session?.user?.role, Role.ADMIN);
 
   const [formData, setFormData] = useState({
-    name: "",
-    username: "",
-    email: "",
+    name: editingUser?.name || "",
+    username: editingUser?.username || "",
+    email: editingUser?.email || "",
     password: "",
     confirmPassword: "",
     currentPassword: "",
-    role: Role.USER,
+    role: (editingUser?.role as Role) || Role.USER,
   });
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-
-  useEffect(() => {
-    if (editingUser) {
-      setFormData({
-        name: editingUser.name,
-        username: editingUser.username || "",
-        email: editingUser.email,
-        password: "",
-        confirmPassword: "",
-        currentPassword: "",
-        role: (editingUser.role as Role) || Role.USER,
-      });
-    } else {
-      setFormData({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        currentPassword: "",
-        role: Role.USER,
-      });
-    }
-  }, [editingUser]);
 
   const isCurrentUser = editingUser?.id === session?.user?.id;
 

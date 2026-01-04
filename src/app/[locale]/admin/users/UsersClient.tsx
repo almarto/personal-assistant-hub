@@ -70,6 +70,7 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
 
       {isCreating && (
         <UserForm
+          key={editingUser?.id || "create"}
           editingUser={editingUser}
           onCancel={handleCancel}
           onSuccess={handleSuccess}
