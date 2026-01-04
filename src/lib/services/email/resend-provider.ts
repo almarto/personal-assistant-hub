@@ -1,4 +1,6 @@
-import { Resend } from "resend";
+import { CreateEmailOptions, Resend } from "resend";
+
+import { AppError } from "@/lib/types/errors";
 
 import { IEmailService, SendEmailOptions, SendEmailResult } from "./types";
 
@@ -16,14 +18,13 @@ export class ResendEmailProvider implements IEmailService {
 
   async sendEmail(options: SendEmailOptions): Promise<SendEmailResult> {
     try {
-      const payload: any = {
+      const payload = {
         from: options.from || this.defaultFrom,
         to: options.to,
         subject: options.subject,
-      };
-
-      if (options.text) payload.text = options.text;
-      if (options.html) payload.html = options.html;
+        ...(options.text ? { text: options.text } : {}),
+        ...(options.html ? { html: options.html } : {}),
+      } as CreateEmailOptions;
 
       if (!payload.text && !payload.html) {
           return {
@@ -46,11 +47,12 @@ export class ResendEmailProvider implements IEmailService {
         success: true,
         messageId: data?.id,
       };
-    } catch (error: any) {
-      console.error("Unexpected error sending email:", error);
+    } catch (error: unknown) {
+      const appError = error as AppError;
+      console.error("Unexpected error sending email:", appError);
       return {
         success: false,
-        error: error.message || "Unknown error occurred",
+        error: appError.message || "Unknown error occurred",
       };
     }
   }
