@@ -1,11 +1,12 @@
 'use client';
 
-import { ChevronDown, ChevronUp,Filter, Search, Trash2 } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronUp,Filter, Search, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { deleteFoodEntryAction } from "@/app/actions/food";
 import { DateDisplay } from "@/components/DateDisplay";
+import { ForbiddenFoodModal } from "@/components/ForbiddenFoodModal";
 import { useRouter } from "@/i18n/routing";
 import { FoodEntry } from "@/lib/services/foods";
 import { Button } from "@/systemUI/components/Button/Button";
@@ -18,6 +19,7 @@ export default function FoodList({ foods, canDelete = false, babyId }: { foods: 
   const t = useTranslations("Food");
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isForbiddenModalOpen, setIsForbiddenModalOpen] = useState(false);
   
   // Filter states
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -77,7 +79,16 @@ export default function FoodList({ foods, canDelete = false, babyId }: { foods: 
   return (
     <div className={styles.foodList}>
       {/* Filter Toggle */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem', gap: '0.5rem' }}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsForbiddenModalOpen(true)}
+          leftIcon={<AlertCircle size={16} />}
+          style={{ borderColor: "#ef4444", color: "#ef4444" }}
+        >
+          {t("forbiddenFoods") || "Prohibidos"}
+        </Button>
         <Button 
           variant="outline" 
           size="sm" 
@@ -235,6 +246,10 @@ export default function FoodList({ foods, canDelete = false, babyId }: { foods: 
           </Card>
         );
       }))}
+      <ForbiddenFoodModal
+        isOpen={isForbiddenModalOpen}
+        onClose={() => setIsForbiddenModalOpen(false)}
+      />
     </div>
   );
 }

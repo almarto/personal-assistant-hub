@@ -94,7 +94,8 @@
     "allReactions": "All Reactions",
     "allFeedback": "All Feedback",
     "noMatchingFoods": "No foods match your filters",
-    "filters": "Filters"
+    "filters": "Filters",
+    "forbiddenFoods": "Forbidden Foods"
   },
   "Baby": {
     "addBaby": "Add Baby",
@@ -151,5 +152,19 @@
     "profile": "Profile",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
+  },
+  "ForbiddenFoods": {
+    "title": "Foods to avoid or delay",
+    "section1Title": "Up to 12 months",
+    "honey": "<strong>Honey</strong> (risk of botulism).",
+    "milk": "<strong>Whole cow's milk</strong> as a main drink (small amounts of yogurt or cheese are allowed from ~9–10 months, depending on tolerance).",
+    "salt": "<strong>Do not add salt</strong> to meals due to renal immaturity; at most a pinch of iodized salt near the first year.",
+    "section2Title": "Until at least 2 years",
+    "sugar": "Added sugar, honey, juices, pastries, cookies, sugary cereals, and other superfluous products.",
+    "section3Title": "Choking hazards (up to 4–5 years)",
+    "choking": "Whole nuts, peanuts, whole grapes, sliced sausages, olives, hard candies, and other round/hard foods.",
+    "chokingAdvice": "Offer crushed, ground, or cut lengthwise, depending on age.",
+    "section4Title": "Others",
+    "mercury": "<strong>Large fish with high mercury content</strong> (bluefin tuna, swordfish/emperor, pike) should be avoided in children under 3 years."
   }
 }

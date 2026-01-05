@@ -94,7 +94,8 @@
     "allReactions": "Todas las reacciones",
     "allFeedback": "Todas las valoraciones",
     "noMatchingFoods": "Ninguna comida coincide con tus filtros",
-    "filters": "Filtros"
+    "filters": "Filtros",
+    "forbiddenFoods": "Alimentos Prohibidos"
   },
   "Baby": {
     "addBaby": "Agregar Bebé",
@@ -151,5 +152,19 @@
     "profile": "Perfil",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
+  },
+  "ForbiddenFoods": {
+    "title": "Alimentos prohibidos o a retrasar",
+    "section1Title": "Hasta 12 meses",
+    "honey": "<strong>Miel</strong> (riesgo de botulismo).",
+    "milk": "<strong>Leche de vaca entera</strong> como bebida principal (sí se pueden pequeñas cantidades de yogur o queso a partir de ~9–10 meses, según tolerancia).",
+    "salt": "<strong>No añadir sal</strong> a las comidas por inmadurez renal; como mucho una pizca de sal yodada cerca del año.",
+    "section2Title": "Hasta al menos 2 años",
+    "sugar": "Azúcar añadido, miel, zumos, bollería, galletas, cereales azucarados y otros productos superfluos.",
+    "section3Title": "Por riesgo de atragantamiento (hasta 4–5 años)",
+    "choking": "Frutos secos enteros, cacahuetes, uvas enteras, salchichas en rodajas, aceitunas, caramelos duros y otros alimentos redondos/duros.",
+    "chokingAdvice": "Ofrecer triturados, molidos o partidos a lo largo, según la edad.",
+    "section4Title": "Otros",
+    "mercury": "<strong>Pescados grandes con mucho mercurio</strong> (atún rojo, pez espada/emperador, lucio) se evitan en menores de 3 años."
   }
 }
