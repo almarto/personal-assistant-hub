@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, HelpCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -11,6 +11,7 @@ import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 
 import styles from "../../../baby.module.css";
+import { CategoryHelpModal } from "../../CategoryHelpModal";
 import { CATEGORY_CONFIG, FEEDBACK_CONFIG, REACTION_CONFIG } from "../../constants";
 
 interface AddFoodFormProps {
@@ -20,6 +21,7 @@ interface AddFoodFormProps {
 export default function AddFoodForm({ babyId }: AddFoodFormProps) {
   const [foodName, setFoodName] = useState("");
   const [category, setCategory] = useState("vegetable");
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [feedbackScore, setFeedbackScore] = useState<number | null>(null);
   const [reactionScore, setReactionScore] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
@@ -108,9 +110,21 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="category" className={styles.label}>
-            {t("category")}
-          </label>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <label htmlFor="category" className={styles.label}>
+              {t("category")}
+            </label>
+            <Button 
+              type="button"
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setIsHelpModalOpen(true)}
+              leftIcon={<HelpCircle size={14} />}
+              style={{ padding: "0 4px", height: "auto", fontSize: "0.8rem", color: "var(--color-primary)" }}
+            >
+              {t("helpChooseCategory")}
+            </Button>
+          </div>
           <select
             id="category"
             value={category}
@@ -197,6 +211,12 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
           </Button>
         </Link>
       </div>
+
+      <CategoryHelpModal 
+        isOpen={isHelpModalOpen} 
+        onClose={() => setIsHelpModalOpen(false)} 
+        onSelectCategory={(cat) => setCategory(cat)}
+      />
     </Card>
   );
 }

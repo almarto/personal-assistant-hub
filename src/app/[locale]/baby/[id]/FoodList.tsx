@@ -1,10 +1,11 @@
 'use client';
 
-import { AlertCircle, ChevronDown, ChevronUp,Filter, Search, Trash2 } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronUp,Filter, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { deleteFoodEntryAction } from "@/app/actions/food";
+import { AllergenicFoodModal } from "@/components/AllergenicFoodModal";
 import { DateDisplay } from "@/components/DateDisplay";
 import { ForbiddenFoodModal } from "@/components/ForbiddenFoodModal";
 import { useRouter } from "@/i18n/routing";
@@ -14,12 +15,14 @@ import { Card } from "@/systemUI/components/Card/Card";
 
 import styles from "../baby.module.css";
 import { CATEGORY_CONFIG, FEEDBACK_CONFIG, REACTION_CONFIG } from "./constants";
+import { FoodListFilters } from "./FoodListFilters";
 
 export default function FoodList({ foods, canDelete = false, babyId }: { foods: FoodEntry[]; canDelete?: boolean; babyId?: string }) {
   const t = useTranslations("Food");
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isForbiddenModalOpen, setIsForbiddenModalOpen] = useState(false);
+  const [isAllergenicModalOpen, setIsAllergenicModalOpen] = useState(false);
   
   // Filter states
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -102,74 +105,16 @@ export default function FoodList({ foods, canDelete = false, babyId }: { foods: 
 
       {/* Filters Section */}
       {isFiltersOpen && (
-        <div className={styles.filterContainer}>
-          <div className={styles.filterRow}>
-            <div className={styles.filterGroup} style={{ flex: 2 }}>
-              <label className={styles.label}>{t("search")}</label>
-              <div style={{ position: "relative" }}>
-                <input
-                  type="text"
-                  className={styles.filterInput}
-                  placeholder={t("searchPlaceholder") || "Search food..."}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ paddingLeft: "32px" }}
-                />
-                <Search size={16} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "#999" }} />
-              </div>
-            </div>
-            
-            <div className={styles.filterGroup}>
-              <label className={styles.label}>{t("category")}</label>
-              <select 
-                className={styles.filterSelect}
-                value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
-              >
-                <option value="">{t("allCategories") || "All Categories"}</option>
-                {Object.keys(CATEGORY_CONFIG).map((cat) => (
-                  <option key={cat} value={cat}>
-                    {CATEGORY_CONFIG[cat].emoji} {t(`categories.${cat}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          
-          <div className={styles.filterRow}>
-            <div className={styles.filterGroup}>
-              <label className={styles.label}>{t("reactionScore")}</label>
-              <select 
-                className={styles.filterSelect}
-                value={filterReaction}
-                onChange={(e) => setFilterReaction(e.target.value)}
-              >
-                <option value="">{t("allReactions") || "All Reactions"}</option>
-                {Object.keys(REACTION_CONFIG).map((score) => (
-                  <option key={score} value={score}>
-                    {REACTION_CONFIG[parseInt(score)].emoji} {t(`reaction.${score}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className={styles.filterGroup}>
-              <label className={styles.label}>{t("feedbackScore")}</label>
-              <select 
-                className={styles.filterSelect}
-                value={filterFeedback}
-                onChange={(e) => setFilterFeedback(e.target.value)}
-              >
-                <option value="">{t("allFeedback") || "All Feedback"}</option>
-                {Object.keys(FEEDBACK_CONFIG).map((score) => (
-                  <option key={score} value={score}>
-                    {FEEDBACK_CONFIG[parseInt(score)].emoji} {t(`feedback.${score}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        <FoodListFilters
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          filterCategory={filterCategory}
+          onCategoryChange={setFilterCategory}
+          filterReaction={filterReaction}
+          onReactionChange={setFilterReaction}
+          filterFeedback={filterFeedback}
+          onFeedbackChange={setFilterFeedback}
+        />
       )}
 
       {filteredFoods.length === 0 ? (
@@ -249,6 +194,10 @@ export default function FoodList({ foods, canDelete = false, babyId }: { foods: 
       <ForbiddenFoodModal
         isOpen={isForbiddenModalOpen}
         onClose={() => setIsForbiddenModalOpen(false)}
+      />
+      <AllergenicFoodModal
+        isOpen={isAllergenicModalOpen}
+        onClose={() => setIsAllergenicModalOpen(false)}
       />
     </div>
   );

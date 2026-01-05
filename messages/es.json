@@ -64,11 +64,23 @@
     "categories": {
       "vegetable": "Verdura",
       "fruit": "Fruta",
-      "grain": "Grano",
-      "protein": "Proteína",
-      "dairy": "Lácteo",
+      "grain": "Cereales y féculas",
+      "animal_protein": "Proteína Animal",
+      "plant_protein": "Proteína Vegetal",
+      "dairy": "Lácteos y alternativas",
       "other": "Otro"
     },
+    "categoryHelp": {
+      "vegetable": "Verduras y hortalizas de todo tipo: calabacín, calabaza, patata, zanahoria, brócoli, etc., bien cocidas y sin sal.",
+      "fruit": "Frutas frescas y maduras (plátano, pera, manzana, melocotón, cítricos según tolerancia…), mejor enteras o en trozos/puré que en zumo.",
+      "grain": "Cereales y féculas: arroz, avena, pan, pasta, maíz, patata, boniato, quinoa… priorizando integrales y sin azúcar añadido.",
+      "animal_protein": "Carne (pollo, pavo, ternera, cerdo), pescado, marisco, huevo, vísceras en poca cantidad.",
+      "plant_protein": "Legumbres (lenteja, garbanzo, alubia, soja) y derivados como tofu; frutos secos y semillas siempre molidos o en crema, nunca enteros.",
+      "dairy": "Para <12 meses: la leche principal es materna o de fórmula; el resto de lácteos (yogur natural, quesos pasteurizados) se usan en pequeñas cantidades. Después del año, leche entera, yogur y queso.",
+      "other": "Grasas saludables (aceite de oliva, aguacate) y alimentos de consumo ocasional (evitar azúcar y procesados)."
+    },
+    "helpChooseCategory": "Ayúdame a elegir categoría",
+    "close": "Cerrar",
     "feedbackScore": "Le Gustó",
     "reactionScore": "Reacción (Severidad)",
     "feedback": {
@@ -95,7 +107,8 @@
     "allFeedback": "Todas las valoraciones",
     "noMatchingFoods": "Ninguna comida coincide con tus filtros",
     "filters": "Filtros",
-    "forbiddenFoods": "Alimentos Prohibidos"
+    "forbiddenFoods": "Alimentos Prohibidos",
+    "allergenicFoods": "Alimentos Alérgenos"
   },
   "Baby": {
     "addBaby": "Agregar Bebé",
@@ -166,5 +179,16 @@
     "chokingAdvice": "Ofrecer triturados, molidos o partidos a lo largo, según la edad.",
     "section4Title": "Otros",
     "mercury": "<strong>Pescados grandes con mucho mercurio</strong> (atún rojo, pez espada/emperador, lucio) se evitan en menores de 3 años."
+  },
+  "AllergenicFoods": {
+    "title": "Alimentos con mayor riesgo de alergia",
+    "description": "Los alimentos con más riesgo de alergia son sobre todo huevo, leche de vaca, cacahuete y otros frutos secos, pescado y marisco, soja, trigo/gluten y sésamo. No hace falta introducir “todos” uno a uno, pero sí conviene hacerlo de forma individual y observando al bebé en estos grupos de alto riesgo.",
+    "listTitle": "Principales alimentos “alérgenos”",
+    "dairy": "<strong>Lácteos de vaca:</strong> leche, yogur, queso, fórmulas estándar (la alergia más frecuente en lactantes).",
+    "egg": "<strong>Huevo de gallina:</strong> sobre todo la clara.",
+    "nuts": "<strong>Cacahuete y frutos secos:</strong> nuez, almendra, avellana, pistacho, anacardo, etc.",
+    "seafood": "<strong>Pescado y marisco:</strong> crustáceos y moluscos.",
+    "gluten": "<strong>Cereales con gluten:</strong> trigo, cebada, centeno; también avena en algunos casos.",
+    "soy": "<strong>Soja y sésamo.</strong>"
   }
 }

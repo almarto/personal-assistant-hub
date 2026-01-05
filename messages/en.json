@@ -64,11 +64,23 @@
     "categories": {
       "vegetable": "Vegetable",
       "fruit": "Fruit",
-      "grain": "Grain",
-      "protein": "Protein",
-      "dairy": "Dairy",
+      "grain": "Grain & Starches",
+      "animal_protein": "Animal Protein",
+      "plant_protein": "Plant Protein",
+      "dairy": "Dairy & Alternatives",
       "other": "Other"
     },
+    "categoryHelp": {
+      "vegetable": "Vegetables of all kinds: zucchini, pumpkin, potato, carrot, broccoli, etc., well cooked and without salt.",
+      "fruit": "Fresh and ripe fruits (banana, pear, apple, peach, citrus...), preferably whole or in pieces/puree rather than juice.",
+      "grain": "Cereals and starches: rice, oats, bread, pasta, corn, potato, sweet potato, quinoa... prioritizing whole grains and no added sugar.",
+      "animal_protein": "Meat (chicken, turkey, beef, pork), fish, seafood, egg, organ meats in small amounts.",
+      "plant_protein": "Legumes (lentils, chickpeas, beans, soy) and derivatives like tofu; nuts and seeds always ground or in cream, never whole.",
+      "dairy": "For <12 months: main milk is breast milk or formula; other dairy (yogurt, cheese) in small amounts. After 1 year, whole milk, yogurt, and cheese.",
+      "other": "Healthy fats (olive oil, avocado) and occasional foods (avoid sugar and processed foods)."
+    },
+    "helpChooseCategory": "Help me choose category",
+    "close": "Close",
     "feedbackScore": "Baby Liked It",
     "reactionScore": "Reaction Severity",
     "feedback": {
@@ -95,7 +107,8 @@
     "allFeedback": "All Feedback",
     "noMatchingFoods": "No foods match your filters",
     "filters": "Filters",
-    "forbiddenFoods": "Forbidden Foods"
+    "forbiddenFoods": "Forbidden Foods",
+    "allergenicFoods": "Allergenic Foods"
   },
   "Baby": {
     "addBaby": "Add Baby",
@@ -166,5 +179,16 @@
     "chokingAdvice": "Offer crushed, ground, or cut lengthwise, depending on age.",
     "section4Title": "Others",
     "mercury": "<strong>Large fish with high mercury content</strong> (bluefin tuna, swordfish/emperor, pike) should be avoided in children under 3 years."
+  },
+  "AllergenicFoods": {
+    "title": "High Allergy Risk Foods",
+    "description": "The foods with the highest allergy risk are mainly eggs, cow's milk, peanuts and other nuts, fish and seafood, soy, wheat/gluten, and sesame. You don't need to introduce \"all\" of them one by one, but it is advisable to do so individually and observe the baby with these high-risk groups.",
+    "listTitle": "Main \"allergenic\" foods",
+    "dairy": "<strong>Cow's milk dairy:</strong> milk, yogurt, cheese, standard formulas (the most frequent allergy in infants).",
+    "egg": "<strong>Chicken egg:</strong> especially the egg white.",
+    "nuts": "<strong>Peanuts and nuts:</strong> walnut, almond, hazelnut, pistachio, cashew, etc.",
+    "seafood": "<strong>Fish and seafood:</strong> crustaceans and mollusks.",
+    "gluten": "<strong>Gluten cereals:</strong> wheat, barley, rye; also oats in some cases.",
+    "soy": "<strong>Soy and sesame.</strong>"
   }
 }
