@@ -70,6 +70,65 @@ export async function createBaby({ userId, name, birthDate, photoUrl = null }: C
   return result.rows[0];
 }
 
+export interface UpdateBabyParams {
+  id: string;
+  userId: string;
+  name?: string;
+  birthDate?: string;
+  photoUrl?: string | null;
+}
+
+export async function updateBaby({
+  id,
+  userId,
+  name,
+  birthDate,
+  photoUrl,
+}: UpdateBabyParams) {
+  // Check permissions (Owner or Parent)
+  const permCheck = await pool.query(
+    `SELECT 1 FROM babies WHERE id = $1 AND user_id = $2
+     UNION
+     SELECT 1 FROM baby_shares WHERE baby_id = $1 AND user_id = $2 AND role = 'parent'`,
+    [id, userId]
+  );
+
+  if (permCheck.rowCount === 0) {
+    throw new Error(
+      "Forbidden: User does not have permission to update this baby"
+    );
+  }
+
+  // Dynamic update
+  const updates: string[] = [];
+  const values: (string | null)[] = [id];
+  let paramIndex = 2;
+
+  if (name !== undefined) {
+    updates.push(`name = $${paramIndex++}`);
+    values.push(name);
+  }
+  if (birthDate !== undefined) {
+    updates.push(`birth_date = $${paramIndex++}`);
+    values.push(birthDate);
+  }
+  if (photoUrl !== undefined) {
+    updates.push(`photo_url = $${paramIndex++}`);
+    values.push(photoUrl);
+  }
+
+  if (updates.length === 0) return null;
+
+  updates.push(`updated_at = NOW()`);
+
+  const result = await pool.query(
+    `UPDATE babies SET ${updates.join(", ")} WHERE id = $1 RETURNING *`,
+    values
+  );
+
+  return result.rows[0];
+}
+
 export async function getPotentialShareUsers(babyId: string) {
   const result = await pool.query(
     `SELECT id, email, name FROM "user" 

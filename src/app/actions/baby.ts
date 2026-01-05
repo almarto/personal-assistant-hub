@@ -1,8 +1,43 @@
 'use server'
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 
-import { getBabyShares, getPotentialShareUsers,shareBaby, unshareBaby } from "@/lib/services/babies";
+import { auth } from "@/lib/auth";
+import {
+  getBabyShares,
+  getPotentialShareUsers,
+  shareBaby,
+  unshareBaby,
+  updateBaby,
+} from "@/lib/services/babies";
+
+export async function updateBabyAction(
+  babyId: string,
+  data: { name?: string; birthDate?: string }
+) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    await updateBaby({
+      id: babyId,
+      userId: session.user.id,
+      ...data,
+    });
+    revalidatePath(`/baby/${babyId}`);
+    revalidatePath("/");
+    return { success: true };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    return { success: false, error: e.message };
+  }
+}
 
 export async function shareBabyAction(babyId: string, targetUserId: string, role: "parent" | "caregiver") {
     try {

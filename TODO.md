@@ -20,10 +20,10 @@
 - [x] **Verify Database Connection**
   - Start Docker containers (`docker compose up -d`).
   - Run migrations (`pnpm migrate`).
-- [ ] **Build Frontend Pages**
-  - Dashboard (Baby list).
-  - Baby Profile & Settings.
-  - Food Tracking Interface.
+- [x] **Build Frontend Pages**
+  - [x] Dashboard (Baby list).
+  - [x] Baby Profile & Settings.
+  - [x] Food Tracking Interface.
 - [ ] **Testing**
   - Configure Playwright.
   - Write unit tests.

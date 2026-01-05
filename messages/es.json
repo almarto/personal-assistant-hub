@@ -47,11 +47,49 @@
   "LanguageSwitcher": {
     "switcher": "Cambiar Idioma"
   },
+  "Food": {
+    "title": "Registro de Comidas",
+    "addFood": "Agregar Comida",
+    "foodName": "Nombre de la Comida",
+    "category": "Categoría",
+    "categories": {
+      "vegetable": "Verdura",
+      "fruit": "Fruta",
+      "grain": "Grano",
+      "protein": "Proteína",
+      "dairy": "Lácteo",
+      "other": "Otro"
+    },
+    "feedbackScore": "Le Gustó",
+    "reactionScore": "Reacción (Severidad)",
+    "feedback": {
+      "1": "Disgusto",
+      "2": "No le gustó",
+      "3": "Neutral",
+      "4": "Le gustó",
+      "5": "Le encantó"
+    },
+    "reaction": {
+      "0": "Ninguna",
+      "1": "Leve",
+      "2": "Suave",
+      "3": "Moderada",
+      "4": "Severa",
+      "5": "Emergencia"
+    },
+    "notes": "Notas",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "error": "Error al agregar comida",
+    "noFoods": "Aún no hay registros de comida."
+  },
   "Baby": {
     "addBaby": "Agregar Bebé",
+    "editBaby": "Editar Bebé",
     "name": "Nombre",
     "birthDate": "Fecha de Nacimiento",
     "save": "Guardar Bebé",
+    "cancel": "Cancelar",
     "success": "Bebé agregado exitosamente",
     "error": "Error al agregar bebé"
   },

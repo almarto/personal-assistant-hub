@@ -35,7 +35,7 @@ export async function addFoodEntry({
   const permCheck = await pool.query(
     `SELECT 1 FROM babies WHERE id = $1 AND user_id = $2
      UNION
-     SELECT 1 FROM caregivers WHERE baby_id = $1 AND user_id = $2 AND permission_level = 'editor'`,
+     SELECT 1 FROM baby_shares WHERE baby_id = $1 AND user_id = $2`,
     [babyId, userId]
   );
 
@@ -58,7 +58,7 @@ export async function getFoodEntries(babyId: string, userId: string): Promise<Fo
   const permCheck = await pool.query(
     `SELECT 1 FROM babies WHERE id = $1 AND user_id = $2
      UNION
-     SELECT 1 FROM caregivers WHERE baby_id = $1 AND user_id = $2`,
+     SELECT 1 FROM baby_shares WHERE baby_id = $1 AND user_id = $2`,
     [babyId, userId]
   );
 

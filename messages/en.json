@@ -47,11 +47,49 @@
   "LanguageSwitcher": {
     "switcher": "Switch Language"
   },
+  "Food": {
+    "title": "Food Log",
+    "addFood": "Add Food Entry",
+    "foodName": "Food Name",
+    "category": "Category",
+    "categories": {
+      "vegetable": "Vegetable",
+      "fruit": "Fruit",
+      "grain": "Grain",
+      "protein": "Protein",
+      "dairy": "Dairy",
+      "other": "Other"
+    },
+    "feedbackScore": "Baby Liked It",
+    "reactionScore": "Reaction Severity",
+    "feedback": {
+      "1": "Dislike",
+      "2": "No",
+      "3": "Neutral",
+      "4": "Like",
+      "5": "Love"
+    },
+    "reaction": {
+      "0": "None",
+      "1": "Slight",
+      "2": "Mild",
+      "3": "Moderate",
+      "4": "Severe",
+      "5": "Emergency"
+    },
+    "notes": "Notes",
+    "save": "Save Entry",
+    "cancel": "Cancel",
+    "error": "Failed to add food entry",
+    "noFoods": "No food entries yet."
+  },
   "Baby": {
     "addBaby": "Add Baby",
+    "editBaby": "Edit Baby",
     "name": "Name",
     "birthDate": "Birth Date",
     "save": "Save Baby",
+    "cancel": "Cancel",
     "success": "Baby added successfully",
     "error": "Failed to add baby"
   },

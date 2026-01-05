@@ -11,7 +11,7 @@ Target users: Parents, caregivers, and healthcare providers managing infant nutr
 | Role                | Registration Method               | Core Permissions                                  |
 | ------------------- | --------------------------------- | ------------------------------------------------- |
 | Primary Parent      | Username/password via Better Auth | Full access to all babies, can manage other users |
-| Secondary Caregiver | Invitation from primary parent    | Can track foods for assigned babies, view history |
+| Shared User         | Invitation from primary parent    | Can track foods for assigned babies (Parent or Caregiver role) |
 | Healthcare Provider | Special registration code         | Read-only access to baby's food history           |
 
 ### 2.2 Feature Module
@@ -24,7 +24,7 @@ Our baby food tracking application consists of the following main pages:
 4. **Food History**: Timeline view of all introduced foods with details
 5. **Analytics**: Progress charts, allergy tracking, preferences summary
 6. **Settings**: User profile, language selection, notification preferences
-7. **User Management**: Invite caregivers, manage permissions
+7. **Baby Sharing**: Invite caregivers/parents, manage permissions
 
 ### 2.3 Page Details
 
@@ -49,8 +49,8 @@ Our baby food tracking application consists of the following main pages:
 | Settings          | User Profile       | Username, email, password management                               |
 | Settings          | Language           | Switch between English and Spanish                                 |
 | Settings          | Notifications      | Push notification preferences for reminders                        |
-| User Management   | Invite Users       | Generate invitation codes for caregivers                           |
-| User Management   | Permission Control | Assign baby access and editing rights                              |
+| Baby Sharing      | Invite Users       | Invite users via email to access baby profile                      |
+| Baby Sharing      | Permission Control | Assign 'Parent' or 'Caregiver' roles                               |
 
 ## 3. Core Process
 

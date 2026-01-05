@@ -155,7 +155,7 @@ erDiagram
     USER ||--o{ INVITATION : creates
     USER ||--o{ FOOD_ENTRY : creates
     BABY ||--o{ FOOD_ENTRY : has
-    BABY ||--o{ CAREGIVER : has
+    BABY ||--o{ BABY_SHARE : has
 
     USER {
         string id PK
@@ -189,11 +189,11 @@ erDiagram
         timestamp created_at
     }
 
-    CAREGIVER {
+    BABY_SHARE {
         string id PK
         string baby_id FK
         string user_id FK
-        string permission_level
+        string role
         timestamp created_at
     }
 
@@ -265,20 +265,20 @@ CREATE INDEX idx_food_entries_created_at ON food_entries(created_at DESC);
 CREATE INDEX idx_food_entries_food_name ON food_entries(food_name);
 ```
 
-**Caregiver Table**
+**Baby Share Table**
 
 ```sql
-CREATE TABLE caregivers (
+CREATE TABLE baby_shares (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     baby_id UUID NOT NULL REFERENCES babies(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    permission_level VARCHAR(20) DEFAULT 'editor' CHECK (permission_level IN ('viewer', 'editor')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('parent', 'caregiver')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(baby_id, user_id)
 );
 
-CREATE INDEX idx_caregivers_baby_id ON caregivers(baby_id);
-CREATE INDEX idx_caregivers_user_id ON caregivers(user_id);
+CREATE INDEX idx_baby_shares_baby_id ON baby_shares(baby_id);
+CREATE INDEX idx_baby_shares_user_id ON baby_shares(user_id);
 ```
 
 ### 6.3 Component Architecture
