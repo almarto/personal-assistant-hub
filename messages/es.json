@@ -33,6 +33,13 @@
     "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
     "default": "Ocurrió un error inesperado"
   },
+  "FoodErrors": {
+    "FORBIDDEN_ADD": "El usuario no tiene permiso para agregar registros de comida para este bebé",
+    "CAREGIVER_RESTRICTION": "Los cuidadores solo pueden registrar alimentos que hayan sido probados antes",
+    "FORBIDDEN_VIEW": "El usuario no tiene permiso para ver los registros de comida de este bebé",
+    "UNAUTHORIZED": "No autorizado",
+    "default": "Ocurrió un error inesperado"
+  },
   "Common": {
     "language": "Idioma",
     "year": "año",
@@ -81,7 +88,9 @@
     "save": "Guardar",
     "cancel": "Cancelar",
     "error": "Error al agregar comida",
-    "noFoods": "Aún no hay registros de comida."
+    "noFoods": "Aún no hay registros de comida.",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar este registro de comida?",
+    "deleteError": "Error al eliminar el registro de comida"
   },
   "Baby": {
     "addBaby": "Agregar Bebé",

@@ -33,6 +33,13 @@
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match",
     "default": "An unexpected error occurred"
   },
+  "FoodErrors": {
+    "FORBIDDEN_ADD": "User does not have permission to add food entries for this baby",
+    "CAREGIVER_RESTRICTION": "Caregivers can only log foods that have been tested before",
+    "FORBIDDEN_VIEW": "User does not have permission to view food entries for this baby",
+    "UNAUTHORIZED": "Unauthorized",
+    "default": "An unexpected error occurred"
+  },
   "Common": {
     "language": "Language",
     "year": "year",
@@ -81,7 +88,9 @@
     "save": "Save Entry",
     "cancel": "Cancel",
     "error": "Failed to add food entry",
-    "noFoods": "No food entries yet."
+    "noFoods": "No food entries yet.",
+    "confirmDelete": "Are you sure you want to delete this food entry?",
+    "deleteError": "Failed to delete food entry"
   },
   "Baby": {
     "addBaby": "Add Baby",

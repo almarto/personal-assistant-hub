@@ -33,14 +33,28 @@ export async function addFoodEntry({
 }: CreateFoodEntryParams): Promise<FoodEntry> {
   // Check permissions
   const permCheck = await pool.query(
-    `SELECT 1 FROM babies WHERE id = $1 AND user_id = $2
+    `SELECT 'owner' as role FROM babies WHERE id = $1 AND user_id = $2
      UNION
-     SELECT 1 FROM baby_shares WHERE baby_id = $1 AND user_id = $2`,
+     SELECT role FROM baby_shares WHERE baby_id = $1 AND user_id = $2`,
     [babyId, userId]
   );
 
   if (permCheck.rowCount === 0) {
-    throw new Error("Forbidden: User does not have permission to add food entries for this baby");
+    throw new Error("FORBIDDEN_ADD");
+  }
+
+  const userRole = permCheck.rows[0].role;
+
+  // Caregivers can only log foods that have been tested before (exist in history)
+  if (userRole === 'caregiver') {
+    const foodCheck = await pool.query(
+      `SELECT 1 FROM food_entries WHERE baby_id = $1 AND LOWER(food_name) = LOWER($2) LIMIT 1`,
+      [babyId, foodName]
+    );
+
+    if (foodCheck.rowCount === 0) {
+      throw new Error("FORBIDDEN_ADD");
+    }
   }
 
   const result = await pool.query(
@@ -63,7 +77,7 @@ export async function getFoodEntries(babyId: string, userId: string): Promise<Fo
   );
 
   if (permCheck.rowCount === 0) {
-    throw new Error("Forbidden: User does not have permission to view food entries for this baby");
+    throw new Error("FORBIDDEN_VIEW");
   }
 
   const result = await pool.query(
@@ -72,4 +86,35 @@ export async function getFoodEntries(babyId: string, userId: string): Promise<Fo
   );
 
   return result.rows;
+}
+
+export async function deleteFoodEntry(foodId: string, userId: string): Promise<void> {
+  // First, get the baby_id for this food entry to check permissions
+  const foodEntry = await pool.query(
+    `SELECT baby_id FROM food_entries WHERE id = $1`,
+    [foodId]
+  );
+
+  if (foodEntry.rowCount === 0) {
+    throw new Error("Food entry not found");
+  }
+
+  const babyId = foodEntry.rows[0].baby_id;
+
+  // Check permissions - only owner and parent can delete
+  const permCheck = await pool.query(
+    `SELECT 'owner' as role FROM babies WHERE id = $1 AND user_id = $2
+     UNION
+     SELECT role FROM baby_shares WHERE baby_id = $1 AND user_id = $2 AND role = 'parent'`,
+    [babyId, userId]
+  );
+
+  if (permCheck.rowCount === 0) {
+    throw new Error("FORBIDDEN_DELETE");
+  }
+
+  await pool.query(
+    `DELETE FROM food_entries WHERE id = $1`,
+    [foodId]
+  );
 }

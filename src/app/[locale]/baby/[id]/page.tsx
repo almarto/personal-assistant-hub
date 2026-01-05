@@ -47,6 +47,9 @@ export default async function BabyPage({
   const foods = await getFoodEntries(id, session.user.id);
   const tFood = await getTranslations("Food");
 
+  const canAddFood = baby.role === "owner" || baby.role === "parent";
+  const canDeleteFood = baby.role === "owner" || baby.role === "parent";
+
   return (
     <PageLayout>
       <Card className={styles.card} variant="elevated">
@@ -79,13 +82,15 @@ export default async function BabyPage({
 
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>{tFood("title")}</h2>
-          <Link href={`/baby/${baby.id}/foods/add`}>
-            <Button size="sm" leftIcon={<Plus size={16} />}>
-              {tFood("addFood")}
-            </Button>
-          </Link>
+          {canAddFood && (
+            <Link href={`/baby/${baby.id}/foods/add`}>
+              <Button size="sm" leftIcon={<Plus size={16} />}>
+                {tFood("addFood")}
+              </Button>
+            </Link>
+          )}
         </div>
-        <FoodList foods={foods} />
+        <FoodList foods={foods} canDelete={canDeleteFood} babyId={baby.id} />
 
         <div className={styles.backLink}>
           <Link href="/">

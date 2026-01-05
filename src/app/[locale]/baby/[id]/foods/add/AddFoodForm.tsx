@@ -19,13 +19,14 @@ interface AddFoodFormProps {
 export default function AddFoodForm({ babyId }: AddFoodFormProps) {
   const [foodName, setFoodName] = useState("");
   const [category, setCategory] = useState("vegetable");
-  const [feedbackScore, setFeedbackScore] = useState(3);
+  const [feedbackScore, setFeedbackScore] = useState(4);
   const [reactionScore, setReactionScore] = useState(0);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const t = useTranslations("Food");
+  const tErrors = useTranslations("FoodErrors");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +45,12 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
       router.push(`/baby/${babyId}`);
       router.refresh();
     } else {
-      setError(result.error || t("error"));
+      let errorMessage = result.error;
+      if (errorMessage && ['FORBIDDEN_ADD', 'CAREGIVER_RESTRICTION', 'FORBIDDEN_VIEW', 'UNAUTHORIZED'].includes(errorMessage)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        errorMessage = tErrors(errorMessage as any);
+      }
+      setError(errorMessage || t("error"));
       setLoading(false);
     }
   };
