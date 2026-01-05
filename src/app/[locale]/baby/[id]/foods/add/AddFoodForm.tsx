@@ -11,6 +11,7 @@ import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 
 import styles from "../../../baby.module.css";
+import { CATEGORY_CONFIG, FEEDBACK_CONFIG, REACTION_CONFIG } from "../../constants";
 
 interface AddFoodFormProps {
   babyId: string;
@@ -19,8 +20,8 @@ interface AddFoodFormProps {
 export default function AddFoodForm({ babyId }: AddFoodFormProps) {
   const [foodName, setFoodName] = useState("");
   const [category, setCategory] = useState("vegetable");
-  const [feedbackScore, setFeedbackScore] = useState(4);
-  const [reactionScore, setReactionScore] = useState(0);
+  const [feedbackScore, setFeedbackScore] = useState<number | null>(null);
+  const [reactionScore, setReactionScore] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +33,18 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    if (feedbackScore === null) {
+      setError(tErrors("feedbackRequired"));
+      setLoading(false);
+      return;
+    }
+
+    if (reactionScore === null) {
+      setError(tErrors("reactionRequired"));
+      setLoading(false);
+      return;
+    }
 
     const result = await addFoodEntryAction(babyId, {
       foodName,
@@ -55,17 +68,23 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
     }
   };
 
-  const feedbackOptions = [
-    { value: 1, label: t("feedback.1"), emoji: "😖" },
-    { value: 4, label: t("feedback.4"), emoji: "🙂" },
-    { value: 5, label: t("feedback.5"), emoji: "😍" },
-  ];
+  const categoryOptions = Object.entries(CATEGORY_CONFIG).map(([key, config]) => ({
+    value: key,
+    label: t(`categories.${key}`),
+    emoji: config.emoji,
+  }));
 
-  const reactionOptions = [
-    { value: 0, label: t("reaction.0"), emoji: "😊" },
-    { value: 1, label: t("reaction.1"), emoji: "🧐" },
-    { value: 4, label: t("reaction.4"), emoji: "😭" },
-  ];
+  const feedbackOptions = Object.entries(FEEDBACK_CONFIG).map(([score, config]) => ({
+    value: Number(score),
+    label: t(`feedback.${score}`),
+    emoji: config.emoji,
+  }));
+
+  const reactionOptions = Object.entries(REACTION_CONFIG).map(([score, config]) => ({
+    value: Number(score),
+    label: t(`reaction.${score}`),
+    emoji: config.emoji,
+  }));
 
   return (
     <Card className={styles.card} variant="elevated">
@@ -99,12 +118,11 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
             className={styles.input}
             required
           >
-            <option value="vegetable">🥦 {t("categories.vegetable")}</option>
-            <option value="fruit">🍎 {t("categories.fruit")}</option>
-            <option value="grain">🌾 {t("categories.grain")}</option>
-            <option value="protein">🍗 {t("categories.protein")}</option>
-            <option value="dairy">🥛 {t("categories.dairy")}</option>
-            <option value="other">🍽️ {t("categories.other")}</option>
+            {categoryOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.emoji} {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -128,7 +146,7 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
             ))}
           </div>
           {/* Hidden input for form submission if needed, but we handle state manually */}
-          <input type="hidden" name="feedbackScore" value={feedbackScore} />
+          <input type="hidden" name="feedbackScore" value={feedbackScore ?? ""} />
         </div>
 
         <div className={styles.formGroup}>
@@ -150,7 +168,8 @@ export default function AddFoodForm({ babyId }: AddFoodFormProps) {
               </div>
             ))}
           </div>
-          <input type="hidden" name="reactionScore" value={reactionScore} />
+          {/* Hidden input for form submission if needed, but we handle state manually */}
+          <input type="hidden" name="reactionScore" value={reactionScore ?? ""} />
         </div>
 
         <div className={styles.formGroup}>

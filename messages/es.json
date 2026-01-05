@@ -38,6 +38,8 @@
     "CAREGIVER_RESTRICTION": "Los cuidadores solo pueden registrar alimentos que hayan sido probados antes",
     "FORBIDDEN_VIEW": "El usuario no tiene permiso para ver los registros de comida de este bebé",
     "UNAUTHORIZED": "No autorizado",
+    "feedbackRequired": "Por favor selecciona una calificación de gusto",
+    "reactionRequired": "Por favor selecciona una calificación de reacción",
     "default": "Ocurrió un error inesperado"
   },
   "Common": {
@@ -71,18 +73,13 @@
     "reactionScore": "Reacción (Severidad)",
     "feedback": {
       "1": "Disgusto",
-      "2": "No le gustó",
-      "3": "Neutral",
-      "4": "Le gustó",
-      "5": "Le encantó"
+      "2": "Le gustó",
+      "3": "Le encantó"
     },
     "reaction": {
-      "0": "Ninguna",
-      "1": "Leve",
-      "2": "Suave",
-      "3": "Moderada",
-      "4": "Severa",
-      "5": "Emergencia"
+      "1": "Ninguna",
+      "2": "Leve",
+      "3": "Severa"
     },
     "notes": "Notas",
     "save": "Guardar",

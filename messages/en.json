@@ -38,6 +38,8 @@
     "CAREGIVER_RESTRICTION": "Caregivers can only log foods that have been tested before",
     "FORBIDDEN_VIEW": "User does not have permission to view food entries for this baby",
     "UNAUTHORIZED": "Unauthorized",
+    "feedbackRequired": "Please select a feedback rating",
+    "reactionRequired": "Please select a reaction rating",
     "default": "An unexpected error occurred"
   },
   "Common": {
@@ -71,18 +73,13 @@
     "reactionScore": "Reaction Severity",
     "feedback": {
       "1": "Dislike",
-      "2": "No",
-      "3": "Neutral",
-      "4": "Like",
-      "5": "Love"
+      "2": "Like",
+      "3": "Love"
     },
     "reaction": {
-      "0": "None",
-      "1": "Slight",
-      "2": "Mild",
-      "3": "Moderate",
-      "4": "Severe",
-      "5": "Emergency"
+      "1": "None",
+      "2": "Slight",
+      "3": "Severe"
     },
     "notes": "Notes",
     "save": "Save Entry",
