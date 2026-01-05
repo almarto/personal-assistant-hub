@@ -87,7 +87,14 @@
     "error": "Error al agregar comida",
     "noFoods": "Aún no hay registros de comida.",
     "confirmDelete": "¿Estás seguro de que quieres eliminar este registro de comida?",
-    "deleteError": "Error al eliminar el registro de comida"
+    "deleteError": "Error al eliminar el registro de comida",
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar comida...",
+    "allCategories": "Todas las categorías",
+    "allReactions": "Todas las reacciones",
+    "allFeedback": "Todas las valoraciones",
+    "noMatchingFoods": "Ninguna comida coincide con tus filtros",
+    "filters": "Filtros"
   },
   "Baby": {
     "addBaby": "Agregar Bebé",

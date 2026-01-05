@@ -87,7 +87,14 @@
     "error": "Failed to add food entry",
     "noFoods": "No food entries yet.",
     "confirmDelete": "Are you sure you want to delete this food entry?",
-    "deleteError": "Failed to delete food entry"
+    "deleteError": "Failed to delete food entry",
+    "search": "Search",
+    "searchPlaceholder": "Search food...",
+    "allCategories": "All Categories",
+    "allReactions": "All Reactions",
+    "allFeedback": "All Feedback",
+    "noMatchingFoods": "No foods match your filters",
+    "filters": "Filters"
   },
   "Baby": {
     "addBaby": "Add Baby",
