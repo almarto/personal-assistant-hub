@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
+
 import styles from "../baby.module.css";
 import { CATEGORY_CONFIG, FEEDBACK_CONFIG, REACTION_CONFIG } from "./constants";
 

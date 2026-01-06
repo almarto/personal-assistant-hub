@@ -1,7 +1,7 @@
 import "../globals.css";
 
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -19,9 +19,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Baby Food Tracker",
   description: "Track your baby's journey to solid foods",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "BabyFood",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default async function LocaleLayout({
