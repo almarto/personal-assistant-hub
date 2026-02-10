@@ -6,11 +6,14 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { createUserAndNotify } from "@/app/actions/admin-users";
+import { updateUserAppRoles } from "@/app/actions/user-roles";
 import { authClient } from "@/lib/auth-client";
-import { hasRole,Role } from "@/lib/types/roles";
+import type { AppRole } from "@/lib/types/roles";
+import { APP_ROLE, isAdmin as checkIsAdmin, Role } from "@/lib/types/roles";
 import { User } from "@/lib/types/user";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
+import { CheckboxChipGroup } from "@/systemUI/components/CheckboxChip/CheckboxChip";
 
 import styles from "./page.module.css";
 
@@ -25,7 +28,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
   const tAuth = useTranslations("AuthErrors");
   const { data: session } = authClient.useSession();
 
-  const isAdmin = hasRole(session?.user?.role, Role.ADMIN);
+  const isAdmin = checkIsAdmin(session?.user?.role);
 
   const [formData, setFormData] = useState({
     name: editingUser?.name || "",
@@ -35,6 +38,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
     confirmPassword: "",
     currentPassword: "",
     role: (editingUser?.role as Role) || Role.USER,
+    appRoles: (editingUser?.appRoles ?? []) as AppRole[],
   });
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -113,6 +117,16 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
               return;
             }
           }
+
+          // Update app roles
+          const rolesResult = await updateUserAppRoles(
+            editingUser.id,
+            formData.appRoles
+          );
+          if (!rolesResult.success) {
+            setError(rolesResult.error || tAuth("default"));
+            return;
+          }
         } else if (isCurrentUser) {
           // Non-admin updating self
           // Update name
@@ -149,6 +163,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           email: formData.email,
           username: formData.username,
           role: formData.role,
+          appRoles: formData.appRoles,
         });
 
         if (!result.success) {
@@ -296,20 +311,35 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           </>
         )}
         {isAdmin && (
-          <div className={styles.formGroup}>
-            <label>{t("role")}</label>
-            <select
-              value={formData.role}
-              onChange={(e) =>
-                setFormData({ ...formData, role: e.target.value as Role })
-              }
-              className={styles.select}
-              disabled={editingUser?.id === session?.user?.id}
-            >
-              <option value={Role.USER}>{t("user")}</option>
-              <option value={Role.ADMIN}>{t("admin")}</option>
-            </select>
-          </div>
+          <>
+            <div className={styles.formGroup}>
+              <label>{t("role")}</label>
+              <select
+                value={formData.role}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.value as Role })
+                }
+                className={styles.select}
+                disabled={editingUser?.id === session?.user?.id}
+              >
+                <option value={Role.USER}>{t("user")}</option>
+                <option value={Role.ADMIN}>{t("admin")}</option>
+              </select>
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("appRoles")}</label>
+              <CheckboxChipGroup
+                options={Object.entries(APP_ROLE).map(([key, value]) => ({
+                  value,
+                  label: t(`appRole_${key.toLowerCase()}`),
+                }))}
+                selected={formData.appRoles}
+                onChange={(appRoles) =>
+                  setFormData({ ...formData, appRoles })
+                }
+              />
+            </div>
+          </>
         )}
         <div className={styles.formActions}>
           <Button type="button" variant="outline" onClick={onCancel}>

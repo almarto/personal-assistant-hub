@@ -2,7 +2,8 @@ import { headers } from "next/headers";
 
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
-import { hasRole, Role } from "@/lib/types/roles";
+import { userHasAppRole } from "@/lib/services/user-roles";
+import { APP_ROLE } from "@/lib/types/roles";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 export default async function ScheduleLayout({
@@ -18,20 +19,26 @@ export default async function ScheduleLayout({
 
   const { locale } = await params;
 
-  if (!session || !hasRole(session.user.role, Role.ADMIN)) {
-    if (!session) {
-      redirect({
-        href: {
-          pathname: "/auth/signin",
-          query: {
-            callbackUrl: "/schedule",
-          },
+  if (!session) {
+    return redirect({
+      href: {
+        pathname: "/auth/signin",
+        query: {
+          callbackUrl: "/schedule",
         },
-        locale,
-      });
-    } else {
-      redirect({ href: "/", locale });
-    }
+      },
+      locale,
+    });
+  }
+
+  const hasAccess = await userHasAppRole(
+    session.user.id,
+    session.user.role,
+    APP_ROLE.SCHEDULE_MANAGER
+  );
+
+  if (!hasAccess) {
+    return redirect({ href: "/", locale });
   }
 
   return <PageLayout>{children}</PageLayout>;

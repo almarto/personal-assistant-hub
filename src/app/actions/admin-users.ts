@@ -6,7 +6,9 @@ import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
 import { emailService } from "@/lib/services/email";
 import { generateWelcomeEmailHtml } from "@/lib/services/email/templates/welcome";
+import { assignAppRole } from "@/lib/services/user-roles";
 import { AppError } from "@/lib/types/errors";
+import type { AppRole } from "@/lib/types/roles";
 import { Role } from "@/lib/types/roles";
 import { generatePassword } from "@/lib/utils/password";
 
@@ -15,6 +17,7 @@ interface CreateUserData {
   email: string;
   username: string;
   role: Role;
+  appRoles?: AppRole[];
 }
 
 async function getBaseUrl() {
@@ -46,6 +49,13 @@ export async function createUserAndNotify(data: CreateUserData) {
 
     if (!newUser) {
       return { success: false, error: "Failed to create user" };
+    }
+
+    // Assign app roles if provided
+    if (data.appRoles?.length) {
+      for (const appRole of data.appRoles) {
+        await assignAppRole(newUser.user.id, appRole);
+      }
     }
 
     // Send email

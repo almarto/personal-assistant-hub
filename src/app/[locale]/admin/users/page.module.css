@@ -21,7 +21,7 @@
   margin-bottom: var(--spacing-md);
 }
 
-.formGroup label {
+.formGroup > label {
   display: block;
   margin-bottom: var(--spacing-xs);
   font-weight: 500;
@@ -149,6 +149,12 @@
   text-overflow: ellipsis;
 }
 
+.roleBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 .role {
   display: inline-flex;
   align-items: center;
@@ -160,6 +166,19 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.appRoleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
   width: fit-content;
 }
 

@@ -4,9 +4,10 @@ import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
+import { useAppRoles } from "@/hooks/use-app-roles";
 import { Link, usePathname } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
-import { hasRole,Role } from "@/lib/types/roles";
+import { APP_ROLE, isAdmin as checkIsAdmin } from "@/lib/types/roles";
 
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
@@ -30,11 +31,13 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     pathname.startsWith("/en/schedule") ||
     pathname.startsWith("/es/schedule");
 
-  const isAdmin = hasRole(session?.user?.role, Role.ADMIN);
+  const { appRoles } = useAppRoles();
+  const isAdmin = checkIsAdmin(session?.user?.role);
+  const hasScheduleAccess =
+    isAdmin || appRoles.includes(APP_ROLE.SCHEDULE_MANAGER);
   const showAdminLink = isAdmin && !isAdminPage;
-  const showScheduleLink = isAdmin && !isSchedulePage;
-  const showProfileLink =
-    session?.user && !hasRole(session?.user?.role, Role.ADMIN);
+  const showScheduleLink = hasScheduleAccess && !isSchedulePage;
+  const showProfileLink = session?.user && !isAdmin;
   const showLogoutBtn = showLogout;
 
   const onlyLanguageSwitcher =

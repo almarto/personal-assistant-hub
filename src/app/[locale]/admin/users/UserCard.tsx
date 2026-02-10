@@ -1,9 +1,10 @@
 "use client";
 
-import { Edit2, Shield, Trash2, User } from "lucide-react";
+import { Calendar, Edit2, Shield, Trash2, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { authClient } from "@/lib/auth-client";
-import { hasRole,Role } from "@/lib/types/roles";
+import { APP_ROLE, isAdmin as checkIsAdmin, Role } from "@/lib/types/roles";
 import { User as UserType } from "@/lib/types/user";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
@@ -22,9 +23,10 @@ export const UserCard = ({
   handleDeleteUser,
 }: UserCardProps) => {
   const { data: session } = authClient.useSession();
+  const t = useTranslations("Admin");
 
   const getRoleIcon = () => {
-    if (hasRole(user.role, Role.ADMIN)) return <Shield size={24} />;
+    if (checkIsAdmin(user.role)) return <Shield size={24} />;
     return <User size={24} />;
   };
 
@@ -35,7 +37,17 @@ export const UserCard = ({
         <div className={styles.userDetails}>
           <h3 className={styles.userName}>{user.username}</h3>
           <p className={styles.email}>{user.email}</p>
-          <span className={styles.role}>{user.role || Role.USER}</span>
+          <div className={styles.roleBadges}>
+            <span className={styles.role}>{user.role || Role.USER}</span>
+            {user.appRoles?.map((appRole) => (
+              <span key={appRole} className={styles.appRoleBadge}>
+                {appRole === APP_ROLE.SCHEDULE_MANAGER && (
+                  <Calendar size={12} />
+                )}
+                {t(`appRole_${appRole}`)}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
       <div className={styles.actions}>

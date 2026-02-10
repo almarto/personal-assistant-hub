@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireAdmin } from "@/lib/auth-guards";
+import { requireScheduleManager } from "@/lib/auth-guards";
 import {
   getWeekSchedule,
   isWeekInPast,
@@ -12,7 +12,7 @@ import {
 } from "@/lib/services/schedule";
 
 export async function getWeekScheduleAction(weekStartDate: string) {
-  await requireAdmin();
+  await requireScheduleManager();
   return await getWeekSchedule(weekStartDate);
 }
 
@@ -32,7 +32,7 @@ export interface SaveDayScheduleParams {
 }
 
 export async function saveDayScheduleAction(params: SaveDayScheduleParams) {
-  await requireAdmin();
+  await requireScheduleManager();
 
   // Check if week is in the past
   if (isWeekInPast(params.weekStartDate)) {

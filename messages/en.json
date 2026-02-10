@@ -158,7 +158,9 @@
     "caregiver": "Caregiver",
     "currentPassword": "Current Password",
     "currentPasswordRequired": "Current password is required to change password",
-    "allFieldsRequired": "Please fill in all required fields"
+    "allFieldsRequired": "Please fill in all required fields",
+    "appRoles": "Feature Roles",
+    "appRole_schedule_manager": "Schedule Manager"
   },
   "Navigation": {
     "admin": "Admin",
