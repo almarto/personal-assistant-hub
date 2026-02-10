@@ -163,6 +163,7 @@
   "Navigation": {
     "admin": "Administrador",
     "profile": "Perfil",
+    "schedule": "Horario",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
   },
@@ -182,13 +183,51 @@
   },
   "AllergenicFoods": {
     "title": "Alimentos con mayor riesgo de alergia",
-    "description": "Los alimentos con más riesgo de alergia son sobre todo huevo, leche de vaca, cacahuete y otros frutos secos, pescado y marisco, soja, trigo/gluten y sésamo. No hace falta introducir “todos” uno a uno, pero sí conviene hacerlo de forma individual y observando al bebé en estos grupos de alto riesgo.",
-    "listTitle": "Principales alimentos “alérgenos”",
+    "description": "Los alimentos con más riesgo de alergia son sobre todo huevo, leche de vaca, cacahuete y otros frutos secos, pescado y marisco, soja, trigo/gluten y sésamo. No hace falta introducir «todos» uno a uno, pero sí conviene hacerlo de forma individual y observando al bebé en estos grupos de alto riesgo.",
+    "listTitle": "Principales alimentos «alérgenos»",
     "dairy": "<strong>Lácteos de vaca:</strong> leche, yogur, queso, fórmulas estándar (la alergia más frecuente en lactantes).",
     "egg": "<strong>Huevo de gallina:</strong> sobre todo la clara.",
     "nuts": "<strong>Cacahuete y frutos secos:</strong> nuez, almendra, avellana, pistacho, anacardo, etc.",
     "seafood": "<strong>Pescado y marisco:</strong> crustáceos y moluscos.",
     "gluten": "<strong>Cereales con gluten:</strong> trigo, cebada, centeno; también avena en algunos casos.",
     "soy": "<strong>Soja y sésamo.</strong>"
+  },
+  "Schedule": {
+    "title": "Horario Semanal",
+    "weekOf": "Semana del {date}",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Semana siguiente",
+    "currentWeek": "Semana actual",
+    "morning": "Mañana",
+    "afternoon": "Tarde",
+    "days": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado"
+    },
+    "people": {
+      "patricia": "Patricia",
+      "alberto": "Alberto"
+    },
+    "locations": {
+      "Manises": "Manises",
+      "Quart": "Quart",
+      "Casa": "Casa"
+    },
+    "parentsNeeded": "Padres necesarios",
+    "parentsNeededTime": "De {start} a {end}",
+    "editDay": "Editar {day}",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "notSet": "Sin asignar",
+    "clickToEdit": "Clic para editar",
+    "readOnly": "Solo lectura (semana pasada)",
+    "selectLocation": "Seleccionar ubicación",
+    "timeRange": "Rango horario",
+    "from": "Desde",
+    "to": "Hasta"
   }
 }

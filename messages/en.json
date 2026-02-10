@@ -163,6 +163,7 @@
   "Navigation": {
     "admin": "Admin",
     "profile": "Profile",
+    "schedule": "Schedule",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -190,5 +191,43 @@
     "seafood": "<strong>Fish and seafood:</strong> crustaceans and mollusks.",
     "gluten": "<strong>Gluten cereals:</strong> wheat, barley, rye; also oats in some cases.",
     "soy": "<strong>Soy and sesame.</strong>"
+  },
+  "Schedule": {
+    "title": "Weekly Schedule",
+    "weekOf": "Week of {date}",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "currentWeek": "Current week",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    },
+    "people": {
+      "patricia": "Patricia",
+      "alberto": "Alberto"
+    },
+    "locations": {
+      "Manises": "Manises",
+      "Quart": "Quart",
+      "Casa": "Home"
+    },
+    "parentsNeeded": "Parents needed",
+    "parentsNeededTime": "From {start} to {end}",
+    "editDay": "Edit {day}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "notSet": "Not set",
+    "clickToEdit": "Click to edit",
+    "readOnly": "Read only (past week)",
+    "selectLocation": "Select location",
+    "timeRange": "Time range",
+    "from": "From",
+    "to": "To"
   }
 }

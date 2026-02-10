@@ -1,4 +1,0 @@
-- Use pnpm as package manager never npm nor yarn nor bun or any other
-- Use strict version control for dependencies
-- Use playwright for E2E testing
-- Use vitest with react-testing-library for unit testing

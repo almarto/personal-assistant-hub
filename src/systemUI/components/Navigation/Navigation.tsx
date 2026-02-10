@@ -25,14 +25,20 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/en/admin") ||
     pathname.startsWith("/es/admin"); // Simple check, better to use localized path check if possible
+  const isSchedulePage =
+    pathname.startsWith("/schedule") ||
+    pathname.startsWith("/en/schedule") ||
+    pathname.startsWith("/es/schedule");
 
-  const showAdminLink = hasRole(session?.user?.role, Role.ADMIN) && !isAdminPage;
+  const isAdmin = hasRole(session?.user?.role, Role.ADMIN);
+  const showAdminLink = isAdmin && !isAdminPage;
+  const showScheduleLink = isAdmin && !isSchedulePage;
   const showProfileLink =
     session?.user && !hasRole(session?.user?.role, Role.ADMIN);
   const showLogoutBtn = showLogout;
 
   const onlyLanguageSwitcher =
-    !showAdminLink && !showProfileLink && !showLogoutBtn;
+    !showAdminLink && !showScheduleLink && !showProfileLink && !showLogoutBtn;
 
   const t = useTranslations("Navigation");
 
@@ -55,6 +61,11 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
         {showAdminLink && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
+          </Link>
+        )}
+        {showScheduleLink && (
+          <Link href="/schedule" className={styles.link}>
+            {t("schedule")}
           </Link>
         )}
         {showProfileLink && (
@@ -90,6 +101,17 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
                       onClick={() => setIsOpen(false)}
                     >
                       {t("admin")}
+                    </Link>
+                  </div>
+                )}
+                {showScheduleLink && (
+                  <div className={styles.mobileMenuItem}>
+                    <Link
+                      href="/schedule"
+                      className={styles.link}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {t("schedule")}
                     </Link>
                   </div>
                 )}

@@ -1,0 +1,180 @@
+.container {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.weekLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  padding: 0 1rem;
+}
+
+.readOnlyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #fef3c7;
+  color: #92400e;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+  overflow-x: auto;
+}
+
+@media (max-width: 1024px) {
+  .calendar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .calendar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.dayColumn {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-width: 180px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dayColumn.clickable {
+  cursor: pointer;
+}
+
+.dayColumn.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dayHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.slotContainer {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.slotContainer:last-child {
+  border-bottom: none;
+}
+
+.slotLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.slotContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emptySlot {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.notSet {
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
+.personLocation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.personBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.locationBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-left: 1rem;
+}
+
+.parentsNeeded {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  background: linear-gradient(135deg, #fecaca 0%, #fde68a 100%);
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #991b1b;
+  margin-top: 0.25rem;
+}
+
+.parentsTime {
+  font-weight: 400;
+  color: #7f1d1d;
+}
+
+.hint {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
