@@ -1,10 +1,10 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Lock, Users } from "lucide-react";
-import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { useRouter } from "@/i18n/routing";
 import {
   type DayOfWeek,
   getDisplayWeekStartDate,
@@ -36,7 +36,7 @@ const DAYS: { key: string; dayOfWeek: DayOfWeek }[] = [
 ];
 
 const LOCATION_COLORS: Record<Location, { bg: string; text: string; emoji: string }> = {
-  Manises: { bg: "#dbeafe", text: "#1e40af", emoji: "🏭" },
+  Manises: { bg: "#f3f4f6", text: "#1f2937", emoji: "🏭" },
   Quart: { bg: "#dcfce7", text: "#166534", emoji: "🏢" },
   Casa: { bg: "#fef3c7", text: "#92400e", emoji: "🏠" },
 };
@@ -131,17 +131,65 @@ export default function ScheduleClient({
       return time.slice(0, 5); // Get HH:MM from HH:MM:SS
     };
 
+    const isSameLocation =
+      slot.patricia_location &&
+      slot.alberto_location &&
+      slot.patricia_location === slot.alberto_location;
+
     return (
       <div className={styles.slotContent}>
-        {renderPersonLocation("patricia", slot.patricia_location)}
-        {renderPersonLocation("alberto", slot.alberto_location)}
+        {isSameLocation ? (
+          <div className={styles.personLocation}>
+            <span
+              className={styles.locationBadge}
+              style={{
+                backgroundColor: LOCATION_COLORS[slot.patricia_location!].bg,
+                color: LOCATION_COLORS[slot.patricia_location!].text,
+                marginLeft: 0,
+              }}
+            >
+              {LOCATION_COLORS[slot.patricia_location!].emoji}{" "}
+              {t(`locations.${slot.patricia_location!}`)}
+            </span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.25rem",
+                paddingLeft: "1rem",
+              }}
+            >
+              {(["patricia", "alberto"] as const).map((person) => {
+                const personColor = PERSON_COLORS[person];
+                return (
+                  <span
+                    key={person}
+                    className={styles.personBadge}
+                    style={{
+                      backgroundColor: personColor.bg,
+                      color: personColor.text,
+                    }}
+                  >
+                    {personColor.emoji} {t(`people.${person}`)}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <>
+            {renderPersonLocation("patricia", slot.patricia_location)}
+            {renderPersonLocation("alberto", slot.alberto_location)}
+          </>
+        )}
         {slot.parents_needed && (
           <div className={styles.parentsNeeded}>
             <Users size={14} />
             <span>{t("parentsNeeded")}</span>
             {slot.parents_needed_start_time && slot.parents_needed_end_time && (
               <span className={styles.parentsTime}>
-                ({formatTime(slot.parents_needed_start_time)} - {formatTime(slot.parents_needed_end_time)})
+                ({formatTime(slot.parents_needed_start_time)} -{" "}
+                {formatTime(slot.parents_needed_end_time)})
               </span>
             )}
           </div>
