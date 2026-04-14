@@ -1,10 +1,13 @@
 "use server";
 
+import crypto from "crypto";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { requireAdmin } from "@/lib/auth-guards";
+import { query } from "@/lib/db";
 import { emailService } from "@/lib/services/email";
+import { generatePasswordResetEmailHtml } from "@/lib/services/email/templates/password-reset";
 import { generateWelcomeEmailHtml } from "@/lib/services/email/templates/welcome";
 import { assignAppRole } from "@/lib/services/user-roles";
 import { AppError } from "@/lib/types/errors";
@@ -100,5 +103,96 @@ export async function createUserAndNotify(data: CreateUserData) {
       success: false,
       error: appError.message || "Failed to create user",
     };
+  }
+}
+
+export async function requestPasswordResetToken(email: string) {
+  // Find user details by email
+  const userResult = await query('SELECT id, name, email FROM "user" WHERE email = $1', [email]);
+  const user = userResult.rows[0];
+
+  if (!user) {
+    return { success: false, error: "User not found" };
+  }
+
+  // Generate 6-digit token safely
+  const token = crypto.randomInt(100000, 999999).toString();
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+
+  try {
+    const identifier = `password_reset_${email}`;
+    await query('DELETE FROM "verification" WHERE identifier = $1', [identifier]);
+
+    await query(
+      `INSERT INTO "verification" (id, identifier, value, "expiresAt", "createdAt", "updatedAt") 
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [crypto.randomUUID(), identifier, token, expiresAt, new Date(), new Date()]
+    );
+
+    const emailHtml = generatePasswordResetEmailHtml({ name: user.name, token });
+    const { error: emailError } = await emailService.sendEmail({
+      to: [email],
+      subject: "Personal Assistant Hub: Restablecer tu contraseña",
+      text: `Tu código de verificación es: ${token}. Caduca en 5 minutos.`,
+      html: emailHtml,
+    });
+
+    if (emailError) {
+      console.error("Failed to send reset email:", emailError);
+      return { success: false, error: "Failed to send reset email" };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to request password reset:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+export async function resetPasswordWithToken(email: string, token: string, newPassword: string) {
+  try {
+    const identifier = `password_reset_${email}`;
+    const tokenResult = await query(
+      `SELECT * FROM "verification" WHERE identifier = $1 AND value = $2 AND "expiresAt" > NOW()`,
+      [identifier, token]
+    );
+
+    if (tokenResult.rows.length === 0) {
+      return { success: false, error: "Código inválido o expirado" };
+    }
+
+    const userResult = await query('SELECT id FROM "user" WHERE email = $1', [email]);
+    const user = userResult.rows[0];
+
+    if (!user) {
+      return { success: false, error: "Usuario no encontrado" };
+    }
+
+    // Use admin secret to authorize this server-side action
+    try {
+      const adminSecret = process.env.BETTER_AUTH_ADMIN_SECRET;
+      
+      await auth.api.setUserPassword({
+        body: {
+          userId: user.id,
+          newPassword: newPassword,
+        },
+        headers: {
+          authorization: `Bearer ${adminSecret}`
+        }
+      });
+
+      // Invalidate the token
+      await query('DELETE FROM "verification" WHERE identifier = $1', [identifier]);
+
+      return { success: true };
+    } catch (error: unknown) {
+      const apiError = error as { message?: string };
+      console.error("Set user password api error:", apiError);
+      return { success: false, error: apiError?.message || "Error al actualizar la contraseña" };
+    }
+  } catch (error) {
+    console.error("Failed to reset password:", error);
+    return { success: false, error: "Un error inesperado ha ocurrido" };
   }
 }

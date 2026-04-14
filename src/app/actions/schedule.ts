@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache";
 
 import { requireScheduleManager } from "@/lib/auth-guards";
 import {
+  type DayOfWeek,
   getWeekSchedule,
   isWeekInPast,
   Location,
   upsertDaySlots,
-  type DayOfWeek,
 } from "@/lib/services/schedule";
 
 export async function getWeekScheduleAction(weekStartDate: string) {

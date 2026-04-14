@@ -1,11 +1,11 @@
 "use client";
 
 import { Loader2, X } from "lucide-react";
-import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { saveDayScheduleAction } from "@/app/actions/schedule";
+import { useRouter } from "@/i18n/routing";
 import {
   type DayOfWeek,
   type Location,

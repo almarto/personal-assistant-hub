@@ -35,7 +35,10 @@ const DAYS: { key: string; dayOfWeek: DayOfWeek }[] = [
   { key: "saturday", dayOfWeek: 6 },
 ];
 
-const LOCATION_COLORS: Record<Location, { bg: string; text: string; emoji: string }> = {
+const LOCATION_COLORS: Record<
+  Location,
+  { bg: string; text: string; emoji: string }
+> = {
   Manises: { bg: "#f3f4f6", text: "#1f2937", emoji: "🏭" },
   Quart: { bg: "#dcfce7", text: "#166534", emoji: "🏢" },
   Casa: { bg: "#fef3c7", text: "#92400e", emoji: "🏠" },
@@ -58,9 +61,14 @@ export default function ScheduleClient({
   const isPast = isWeekInPast(weekSchedule.weekStartDate);
   const currentWeekStart = getWeekStartDate(new Date());
   const displayWeekStart = getDisplayWeekStartDate();
-  const isCurrentWeek = weekSchedule.weekStartDate === currentWeekStart || weekSchedule.weekStartDate === displayWeekStart;
+  const isCurrentWeek =
+    weekSchedule.weekStartDate === currentWeekStart ||
+    weekSchedule.weekStartDate === displayWeekStart;
 
-  const getSlot = (dayOfWeek: DayOfWeek, slotType: SlotType): ScheduleSlot | undefined => {
+  const getSlot = (
+    dayOfWeek: DayOfWeek,
+    slotType: SlotType
+  ): ScheduleSlot | undefined => {
     return weekSchedule.slots.find(
       (s) => s.day_of_week === dayOfWeek && s.slot_type === slotType
     );
@@ -117,7 +125,7 @@ export default function ScheduleClient({
     );
   };
 
-  const renderSlot = (slot: ScheduleSlot | undefined, slotType: SlotType) => {
+  const renderSlot = (slot: ScheduleSlot | undefined) => {
     if (!slot) {
       return (
         <div className={styles.emptySlot}>
@@ -258,13 +266,13 @@ export default function ScheduleClient({
 
               <div className={styles.slotContainer}>
                 <div className={styles.slotLabel}>{t("morning")}</div>
-                {renderSlot(morningSlot, "morning")}
+                {renderSlot(morningSlot)}
               </div>
 
               {!isSaturday && (
                 <div className={styles.slotContainer}>
                   <div className={styles.slotLabel}>{t("afternoon")}</div>
-                  {renderSlot(afternoonSlot, "afternoon")}
+                  {renderSlot(afternoonSlot)}
                 </div>
               )}
             </div>
@@ -272,16 +280,16 @@ export default function ScheduleClient({
         })}
       </div>
 
-      {!isPast && (
-        <p className={styles.hint}>{t("clickToEdit")}</p>
-      )}
+      {!isPast && <p className={styles.hint}>{t("clickToEdit")}</p>}
 
       {editingDay !== null && (
         <SlotEditorModal
           weekStartDate={weekSchedule.weekStartDate}
           dayOfWeek={editingDay}
           morningSlot={getSlot(editingDay, "morning")}
-          afternoonSlot={editingDay !== 6 ? getSlot(editingDay, "afternoon") : undefined}
+          afternoonSlot={
+            editingDay !== 6 ? getSlot(editingDay, "afternoon") : undefined
+          }
           onClose={() => setEditingDay(null)}
         />
       )}

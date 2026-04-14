@@ -29,7 +29,7 @@ export default async function AddBaby({
   }
 
   return (
-    <PageLayout>
+    <PageLayout theme="baby">
       <AddBabyForm />
     </PageLayout>
   );

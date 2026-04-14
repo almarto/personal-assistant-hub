@@ -41,5 +41,5 @@ export default async function ScheduleLayout({
     return redirect({ href: "/", locale });
   }
 
-  return <PageLayout>{children}</PageLayout>;
+  return <PageLayout theme="schedule">{children}</PageLayout>;
 }

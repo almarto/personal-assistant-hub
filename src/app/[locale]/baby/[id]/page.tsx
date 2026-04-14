@@ -51,7 +51,7 @@ export default async function BabyPage({
   const canDeleteFood = baby.role === "owner" || baby.role === "parent";
 
   return (
-    <PageLayout>
+    <PageLayout theme="baby">
       <Card className={styles.card} variant="elevated">
         <div
           style={{

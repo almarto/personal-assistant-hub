@@ -9,19 +9,21 @@ interface PageLayoutProps {
   children: React.ReactNode;
   headerContent?: React.ReactNode;
   showLogo?: boolean;
+  theme?: "hub" | "baby" | "schedule" | "admin" | "profile";
 }
 
 export const PageLayout = ({
   children,
   headerContent,
   showLogo = true,
+  theme = "hub",
 }: PageLayoutProps) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-theme={theme}>
       <header className={styles.header}>
         {showLogo ? (
           <Link href="/" className={styles.logo}>
-            Baby Food Tracker
+            Personal Assistant Hub
           </Link>
         ) : (
           <div className={styles.headerContent}>{headerContent}</div>

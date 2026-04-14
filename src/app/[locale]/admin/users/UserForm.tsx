@@ -5,7 +5,11 @@ import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { createUserAndNotify } from "@/app/actions/admin-users";
+import {
+  createUserAndNotify,
+  requestPasswordResetToken,
+  resetPasswordWithToken,
+} from "@/app/actions/admin-users";
 import { updateUserAppRoles } from "@/app/actions/user-roles";
 import { authClient } from "@/lib/auth-client";
 import type { AppRole } from "@/lib/types/roles";
@@ -44,8 +48,24 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [isRestoringPassword, setIsRestoringPassword] = useState(false);
+  const [resetToken, setResetToken] = useState("");
+  const [isRequestingReset, setIsRequestingReset] = useState(false);
 
   const isCurrentUser = editingUser?.id === session?.user?.id;
+
+  const handleRequestResetToken = async () => {
+    setIsRequestingReset(true);
+    setError("");
+    const res = await requestPasswordResetToken(formData.email);
+    setIsRequestingReset(false);
+    if (res.success) {
+      setIsRestoringPassword(true);
+      setFormData({ ...formData, currentPassword: "" });
+    } else {
+      setError(res.error || tAuth("default"));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,18 +162,34 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
 
           // Update password if provided
           if (formData.password) {
-            if (!formData.currentPassword) {
-              setError(t("currentPasswordRequired"));
-              return;
-            }
-            const { error } = await authClient.changePassword({
-              newPassword: formData.password,
-              currentPassword: formData.currentPassword,
-              revokeOtherSessions: true,
-            });
-            if (error) {
-              handleAuthError(error);
-              return;
+            if (isRestoringPassword) {
+              if (!resetToken) {
+                setError("El código de verificación es requerido");
+                return;
+              }
+              const res = await resetPasswordWithToken(
+                formData.email,
+                resetToken,
+                formData.password
+              );
+              if (!res.success) {
+                setError(res.error || tAuth("default"));
+                return;
+              }
+            } else {
+              if (!formData.currentPassword) {
+                setError(t("currentPasswordRequired"));
+                return;
+              }
+              const { error } = await authClient.changePassword({
+                newPassword: formData.password,
+                currentPassword: formData.currentPassword,
+                revokeOtherSessions: true,
+              });
+              if (error) {
+                handleAuthError(error);
+                return;
+              }
             }
           }
         }
@@ -275,9 +311,34 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
               </div>
             )}
 
-            {!isAdmin && formData.password && (
+            {!isAdmin && formData.password && !isRestoringPassword && (
               <div className={styles.formGroup}>
-                <label>{t("currentPassword")}</label>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <label>{t("currentPassword")}</label>
+                  <button
+                    type="button"
+                    onClick={handleRequestResetToken}
+                    disabled={isRequestingReset}
+                    style={{
+                      fontSize: "0.875rem",
+                      color: "#ff6b6b",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  >
+                    {isRequestingReset
+                      ? t("sending") || "Enviando..."
+                      : t("forgotPassword") || "¿Olvidaste tu contraseña?"}
+                  </button>
+                </div>
                 <div className={styles.passwordWrapper}>
                   <input
                     type={showCurrentPassword ? "text" : "password"}
@@ -308,6 +369,45 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
                 </div>
               </div>
             )}
+
+            {isRestoringPassword && (
+              <>
+                <div className={styles.formGroup}>
+                  <label>Correo Electrónico</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    disabled
+                    className={styles.input}
+                    style={{
+                      backgroundColor: "#f3f4f6",
+                      cursor: "not-allowed",
+                    }}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Código de verificación (6 dígitos)</label>
+                  <input
+                    type="text"
+                    value={resetToken}
+                    onChange={(e) => setResetToken(e.target.value)}
+                    className={styles.input}
+                    required
+                    maxLength={6}
+                    placeholder="123456"
+                  />
+                  <small
+                    style={{
+                      color: "#666",
+                      marginTop: "4px",
+                      display: "block",
+                    }}
+                  >
+                    Te hemos enviado un código a tu correo electrónico.
+                  </small>
+                </div>
+              </>
+            )}
           </>
         )}
         {isAdmin && (
@@ -334,9 +434,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
                   label: t(`appRole_${key.toLowerCase()}`),
                 }))}
                 selected={formData.appRoles}
-                onChange={(appRoles) =>
-                  setFormData({ ...formData, appRoles })
-                }
+                onChange={(appRoles) => setFormData({ ...formData, appRoles })}
               />
             </div>
           </>

@@ -39,14 +39,14 @@ export default async function EditBabyPage({
   // Check permissions: Owner or Parent
   if (baby.role !== "owner" && baby.role !== "parent") {
     return (
-      <PageLayout>
+      <PageLayout theme="baby">
         <div>Unauthorized</div>
       </PageLayout>
     );
   }
 
   return (
-    <PageLayout>
+    <PageLayout theme="baby">
       <EditBabyForm
         babyId={baby.id}
         initialName={baby.name}

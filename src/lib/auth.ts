@@ -13,6 +13,32 @@ const passwordValidator = {
           context.path === "/admin/set-user-password",
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async (ctx: any) => {
+          // Check for admin secret authorization to allow programmatic admin access
+          const authHeader = ctx.headers.get("authorization");
+          if (authHeader === `Bearer ${process.env.BETTER_AUTH_ADMIN_SECRET}`) {
+            ctx.context.session = {
+              user: {
+                id: "system",
+                role: "admin",
+                name: "System",
+                email: "system@auth.local",
+                emailVerified: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              },
+              session: {
+                id: "system",
+                userId: "system",
+                expiresAt: new Date(Date.now() + 1000 * 60 * 60),
+                token: "",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                ipAddress: "",
+                userAgent: "",
+              },
+            };
+          }
+
           const body = ctx.body;
           if (!body) return { context: ctx };
           const password = body.password || body.newPassword;
@@ -39,10 +65,15 @@ export const auth = betterAuth({
   database: new Pool({
     connectionString: process.env.DATABASE_URL,
   }),
+  secret: process.env.BETTER_AUTH_SECRET,
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [username(), admin(), passwordValidator],
+  plugins: [
+    username(),
+    admin(),
+    passwordValidator,
+  ],
   socialProviders: {
     // Add providers here if needed
   },

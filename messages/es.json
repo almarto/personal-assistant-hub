@@ -1,13 +1,24 @@
 {
   "HomePage": {
-    "title": "Rastreador de Alimentos para Bebés",
-    "subtitle": "Sigue el viaje de tu bebé hacia los alimentos sólidos con facilidad. Monitorea reacciones, preferencias y progreso.",
+    "title": "Centro de Asistente Personal",
+    "subtitle": "Tu interfaz central para optimizar las rutinas diarias y mantener todo organizado en un solo lugar.",
     "login": "Iniciar Sesión",
     "register": "Registrarse",
     "welcome": "Bienvenido, {name}",
+    "apps": "Aplicaciones",
     "yourBabies": "Tus Bebés",
     "noBabies": "Aún no has agregado bebés.",
     "addBaby": "Agregar Bebé"
+  },
+  "Launcher": {
+    "babyTracker": {
+      "title": "Rastreador de Alimentos",
+      "description": "Registra comidas, monitorea reacciones y revisa el progreso."
+    },
+    "schedule": {
+      "title": "Horario Semanal",
+      "description": "Gestiona ubicaciones, guardias y planificación semanal."
+    }
   },
   "Auth": {
     "logout": "Cerrar Sesión",

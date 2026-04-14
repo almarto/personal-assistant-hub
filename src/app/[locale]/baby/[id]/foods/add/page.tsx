@@ -37,7 +37,7 @@ export default async function AddFoodPage({
   }
 
   return (
-    <PageLayout>
+    <PageLayout theme="baby">
       <AddFoodForm babyId={baby.id} />
     </PageLayout>
   );

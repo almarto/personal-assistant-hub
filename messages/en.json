@@ -1,13 +1,24 @@
 {
   "HomePage": {
-    "title": "Baby Food Tracker",
-    "subtitle": "Track your baby's journey to solid foods with ease. Monitor reactions, preferences, and progress.",
+    "title": "Personal Assistant Hub",
+    "subtitle": "Your central interface to optimize daily routines and keep everything organized in one place.",
     "login": "Login",
     "register": "Register",
     "welcome": "Welcome, {name}",
+    "apps": "Applications",
     "yourBabies": "Your Babies",
     "noBabies": "No babies added yet.",
     "addBaby": "Add Baby"
+  },
+  "Launcher": {
+    "babyTracker": {
+      "title": "Baby Tracker",
+      "description": "Track solid foods, monitor reactions, and check progression."
+    },
+    "schedule": {
+      "title": "Weekly Schedule",
+      "description": "Manage locations, shifts, and weekly planning."
+    }
   },
   "Auth": {
     "logout": "Logout",

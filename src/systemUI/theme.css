@@ -1,11 +1,13 @@
 :root {
-  /* Colors */
-  --color-primary: #ff6b6b;
-  --color-secondary: #4ecdc4;
+  /* Default Hub Colors (Sophisticated, Muted) */
+  --color-primary: #3b82f6; /* Modern Blue */
+  --color-secondary: #8b5cf6; /* Modern Purple */
   --color-background: #f7f7f7;
   --color-surface: #ffffff;
-  --color-text: #333333;
-  --color-text-secondary: #666666;
+  --color-text: #2d3748;
+  --color-text-secondary: #4a5568;
+  /* App Themes */
+  /* (Moved to end of file) */
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -36,6 +38,17 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* App Themes */
+[data-theme="baby"] {
+  --color-primary: #ff6b6b; /* Warm Red/Pink */
+  --color-secondary: #4ecdc4; /* Soft Teal */
+}
+
+[data-theme="schedule"] {
+  --color-primary: #10b981; /* Emerald Green */
+  --color-secondary: #f59e0b; /* Amber */
 }
 
 body {
