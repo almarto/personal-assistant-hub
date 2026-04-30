@@ -4,10 +4,9 @@ import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
-import { useAppRoles } from "@/hooks/use-app-roles";
 import { Link, usePathname } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
-import { APP_ROLE, isAdmin as checkIsAdmin } from "@/lib/types/roles";
+import { isAdmin as checkIsAdmin } from "@/lib/types/roles";
 
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
@@ -26,22 +25,14 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/en/admin") ||
     pathname.startsWith("/es/admin"); // Simple check, better to use localized path check if possible
-  const isSchedulePage =
-    pathname.startsWith("/schedule") ||
-    pathname.startsWith("/en/schedule") ||
-    pathname.startsWith("/es/schedule");
 
-  const { appRoles } = useAppRoles();
   const isAdmin = checkIsAdmin(session?.user?.role);
-  const hasScheduleAccess =
-    isAdmin || appRoles.includes(APP_ROLE.SCHEDULE_MANAGER);
   const showAdminLink = isAdmin && !isAdminPage;
-  const showScheduleLink = hasScheduleAccess && !isSchedulePage;
   const showProfileLink = session?.user && !isAdmin;
   const showLogoutBtn = showLogout;
 
   const onlyLanguageSwitcher =
-    !showAdminLink && !showScheduleLink && !showProfileLink && !showLogoutBtn;
+    !showAdminLink && !showProfileLink && !showLogoutBtn;
 
   const t = useTranslations("Navigation");
 
@@ -64,11 +55,6 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
         {showAdminLink && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
-          </Link>
-        )}
-        {showScheduleLink && (
-          <Link href="/schedule" className={styles.link}>
-            {t("schedule")}
           </Link>
         )}
         {showProfileLink && (
@@ -104,17 +90,6 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
                       onClick={() => setIsOpen(false)}
                     >
                       {t("admin")}
-                    </Link>
-                  </div>
-                )}
-                {showScheduleLink && (
-                  <div className={styles.mobileMenuItem}>
-                    <Link
-                      href="/schedule"
-                      className={styles.link}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {t("schedule")}
                     </Link>
                   </div>
                 )}

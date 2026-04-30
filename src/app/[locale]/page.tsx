@@ -1,4 +1,4 @@
-import { Activity, Calendar } from "lucide-react";
+import { Activity, Boxes, Calendar } from "lucide-react";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
@@ -60,7 +60,9 @@ export default async function HubHome() {
             <div className={styles.iconWrapper}>
               <Activity size={28} />
             </div>
-            <h3 className={styles.appTitle}>{launcherT("babyTracker.title")}</h3>
+            <h3 className={styles.appTitle}>
+              {launcherT("babyTracker.title")}
+            </h3>
             <p className={styles.appDescription}>
               {launcherT("babyTracker.description")}
             </p>
@@ -75,6 +77,18 @@ export default async function HubHome() {
             <h3 className={styles.appTitle}>{launcherT("schedule.title")}</h3>
             <p className={styles.appDescription}>
               {launcherT("schedule.description")}
+            </p>
+          </Link>
+        </div>
+
+        <div className={styles.appCard}>
+          <Link href="/inventory" className={styles.appCardLink}>
+            <div className={styles.iconWrapper}>
+              <Boxes size={28} />
+            </div>
+            <h3 className={styles.appTitle}>{launcherT("inventory.title")}</h3>
+            <p className={styles.appDescription}>
+              {launcherT("inventory.description")}
             </p>
           </Link>
         </div>

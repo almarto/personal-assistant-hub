@@ -18,6 +18,10 @@
     "schedule": {
       "title": "Horario Semanal",
       "description": "Gestiona ubicaciones, guardias y planificación semanal."
+    },
+    "inventory": {
+      "title": "Inventario de Casa",
+      "description": "Gestiona todo en casa: armarios, cajas, garantías y elementos."
     }
   },
   "Auth": {
@@ -242,5 +246,35 @@
     "timeRange": "Rango horario",
     "from": "Desde",
     "to": "Hasta"
+  },
+  "Inventory": {
+    "title": "Inventario de Casa",
+    "searchPlaceholder": "Buscar elementos...",
+    "search": "Buscar",
+    "addLocation": "Crear Habitación",
+    "addStorage": "Crear Almacenaje",
+    "addItem": "Agregar Elemento",
+    "locations": "Almacenaje",
+    "items": "Elementos",
+    "name": "Nombre",
+    "description": "Descripción",
+    "tags": "Etiquetas",
+    "type": "Tipo",
+    "purchaseDate": "Fecha de Compra",
+    "warrantyExpiry": "Garantía hasta",
+    "types": {
+      "Space": "Habitación",
+      "Furniture": "Mueble/Armario",
+      "Container": "Almacenaje"
+    },
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "emptyLocations": "No hay habitaciones o almacenaje aún.",
+    "emptyItems": "No hay elementos guardados aquí.",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar este elemento? Si es un espacio/caja, se eliminará todo su contenido.",
+    "uploadImages": "Subir Imágenes",
+    "images": "Imágenes",
+    "locationPath": "Encontrado en"
   }
 }

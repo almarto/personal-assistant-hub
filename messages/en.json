@@ -18,6 +18,10 @@
     "schedule": {
       "title": "Weekly Schedule",
       "description": "Manage locations, shifts, and weekly planning."
+    },
+    "inventory": {
+      "title": "Home Inventory",
+      "description": "Track everything in your house: wardrobes, boxes, warranties, and locations."
     }
   },
   "Auth": {
@@ -242,5 +246,36 @@
     "timeRange": "Time range",
     "from": "From",
     "to": "To"
+  },
+  "Inventory": {
+    "title": "Home Inventory",
+    "searchPlaceholder": "Search elements...",
+    "search": "Search",
+    "addLocation": "Create Room",
+    "addStorage": "Create Storage",
+    "addItem": "Add Item",
+    "locations": "Storage",
+    "items": "Items",
+    "name": "Name",
+    "description": "Description",
+    "category": "Category",
+    "tags": "Tags",
+    "type": "Type",
+    "purchaseDate": "Purchase Date",
+    "warrantyExpiry": "Warranty Expiry",
+    "types": {
+      "Space": "Room/Space",
+      "Furniture": "Furniture",
+      "Container": "Box/Container"
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "emptyLocations": "No spaces available here.",
+    "emptyItems": "No items found here.",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this element? If it's a space/storage, all its contents will be deleted.",
+    "uploadImages": "Upload Images",
+    "images": "Images",
+    "locationPath": "Found in"
   }
 }
