@@ -1,0 +1,1 @@
+ALTER TABLE renovation_funds ADD COLUMN IF NOT EXISTS lender VARCHAR(255);

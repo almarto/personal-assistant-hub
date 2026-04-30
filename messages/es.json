@@ -22,6 +22,10 @@
     "inventory": {
       "title": "Inventario de Casa",
       "description": "Gestiona todo en casa: armarios, cajas, garantías y elementos."
+    },
+    "renovations": {
+      "title": "Reformas de Casa",
+      "description": "Gestiona presupuestos, tareas y pagos para la reforma de la nueva casa."
     }
   },
   "Auth": {
@@ -276,5 +280,83 @@
     "uploadImages": "Subir Imágenes",
     "images": "Imágenes",
     "locationPath": "Encontrado en"
+  },
+  "Renovations": {
+    "tabs": {
+      "summary": "Resumen",
+      "budgets": "Presupuestos",
+      "groups": "Grupos",
+      "tasks": "Tareas",
+      "payments": "Pagos"
+    },
+    "title": "Reformas de Casa",
+    "addGroup": "Añadir Grupo",
+    "addFund": "Añadir Fondo",
+    "addTask": "Añadir Tarea",
+    "addPayment": "Añadir Pago",
+    "name": "Nombre",
+    "type": "Tipo",
+    "amount": "Cantidad",
+    "source": "Origen / Notas",
+    "dateReceived": "Fecha de recepción",
+    "lender": "Prestamista",
+    "includeInBudget": "Incluir en presupuesto global",
+    "group": "Grupo",
+    "noGroup": "Sin grupo",
+    "category": "Categoría",
+    "priority": "Prioridad",
+    "status": "Estado",
+    "estimatedCost": "Coste Estimado",
+    "actualCost": "Coste Real",
+    "startDate": "Fecha Inicio",
+    "endDate": "Fecha Fin",
+    "payee": "Beneficiario/Trabajador",
+    "paymentDate": "Fecha Pago",
+    "method": "Método",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Estás seguro de que quieres eliminar esto?",
+    "types": {
+      "savings": "Ahorros",
+      "loan": "Préstamo",
+      "gift": "Regalo"
+    },
+    "priorities": {
+      "mandatory": "Obligatorio (Sí o sí)",
+      "ideal": "Ideal",
+      "future": "Futuro (A futuro)"
+    },
+    "statuses": {
+      "pending": "Pendiente",
+      "in_progress": "En Curso",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
+    },
+    "categories": {
+      "labor": "Mano de obra",
+      "material": "Material",
+      "permit": "Permisos/Licencias",
+      "other": "Otro"
+    },
+    "methods": {
+      "transfer": "Transferencia",
+      "cash": "Efectivo",
+      "card": "Tarjeta"
+    },
+    "summary": {
+      "totalFunds": "Total Fondos",
+      "totalEstimated": "Total Estimado",
+      "totalSpent": "Total Gastado",
+      "remainingFunds": "Fondos Restantes",
+      "estimatedCompletion": "Fin Estimado",
+      "activeDebts": "Deudas Activas",
+      "recommendationsTitle": "Recomendaciones de Ahorro",
+      "recommendationsDesc": "Estás por encima del presupuesto. Aquí tienes opciones de tareas a futuro/ideales que podrías aplazar:",
+      "option": "Opción",
+      "savedAmount": "Ahorro",
+      "newBalance": "Nuevo Saldo",
+      "noRecommendations": "No hay suficientes tareas secundarias para cubrir el déficit."
+    }
   }
 }

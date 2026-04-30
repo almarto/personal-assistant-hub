@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Baby Food Tracker",
-    short_name: "BabyFood",
-    description: "Track your baby's journey to solid foods",
+    name: "Personal Assistant Hub",
+    short_name: "Assistant",
+    description: "Your central hub to streamline daily routines and keep everything organized.",
     start_url: "/",
     display: "standalone",
     background_color: "#f7f7f7",

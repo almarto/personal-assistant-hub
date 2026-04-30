@@ -1,0 +1,1 @@
+ALTER TABLE renovation_funds ADD COLUMN IF NOT EXISTS include_in_budget BOOLEAN DEFAULT TRUE;

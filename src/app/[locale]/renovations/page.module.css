@@ -1,0 +1,214 @@
+.container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 2px solid var(--border-color, #eee);
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted, #666);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
+}
+
+.tab.active {
+  color: var(--primary-color, #0070f3);
+  border-bottom-color: var(--primary-color, #0070f3);
+}
+
+.tab:hover:not(.active) {
+  color: var(--text-color, #333);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color, #eaeaea);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-color, #111);
+}
+
+.cardSubtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted, #666);
+}
+
+.cardAmount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color, #0070f3);
+  margin-top: auto;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge.mandatory { background: #fee2e2; color: #b91c1c; }
+.badge.ideal { background: #fef3c7; color: #b45309; }
+.badge.future { background: #e0f2fe; color: #0369a1; }
+
+.badge.pending { background: #f3f4f6; color: #4b5563; }
+.badge.in_progress { background: #dbeafe; color: #1d4ed8; }
+.badge.completed { background: #dcfce3; color: #15803d; }
+.badge.cancelled { background: #fee2e2; color: #b91c1c; }
+
+.deleteBtn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+.deleteBtn:hover {
+  background: #fee2e2;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: var(--card-bg, #fff);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modalContent h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.formGroup input, .formGroup select, .formGroup textarea {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #ccc);
+  background: var(--bg-color, #fff);
+  color: var(--text-color, #000);
+  font-family: inherit;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.summaryCard {
+  background: linear-gradient(135deg, var(--primary-color, #0070f3), #0051b3);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.summaryCard h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.summaryCard p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}

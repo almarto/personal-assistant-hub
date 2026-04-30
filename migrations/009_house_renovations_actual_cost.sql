@@ -1,0 +1,1 @@
+ALTER TABLE renovation_tasks ADD COLUMN IF NOT EXISTS actual_cost DECIMAL(12,2) DEFAULT 0;

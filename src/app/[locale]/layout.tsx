@@ -26,13 +26,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Baby Food Tracker",
-  description: "Track your baby's journey to solid foods",
+  title: "Personal Assistant Hub",
+  description: "Your central hub to streamline daily routines and keep everything organized.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "BabyFood",
+    title: "Assistant",
   },
   formatDetection: {
     telephone: false,
