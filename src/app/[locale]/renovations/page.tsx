@@ -173,6 +173,13 @@ export default function RenovationsPage() {
     setShowGroupModal(false);
   };
 
+  const handleDeleteGroup = async (id: string) => {
+    if (window.confirm(t("confirmDelete"))) {
+      await deleteGroupAction(id);
+      loadData();
+    }
+  };
+
   const handleSavePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
