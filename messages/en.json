@@ -337,8 +337,7 @@
     "categories": {
       "labor": "Labor",
       "material": "Material",
-      "permit": "Permit",
-      "other": "Other"
+      "allCategories": "All"
     },
     "methods": {
       "transfer": "Transfer",

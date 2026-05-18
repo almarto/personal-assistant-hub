@@ -336,8 +336,7 @@
     "categories": {
       "labor": "Mano de obra",
       "material": "Material",
-      "permit": "Permisos/Licencias",
-      "other": "Otro"
+      "allCategories": "Todas"
     },
     "methods": {
       "transfer": "Transferencia",

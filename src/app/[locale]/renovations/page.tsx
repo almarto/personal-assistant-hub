@@ -65,6 +65,7 @@ export default function RenovationsPage() {
   const [groupStartDate, setGroupStartDate] = useState<string>("");
   const [groupEndDate, setGroupEndDate] = useState<string>("");
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
+  const [filterCategory, setFilterCategory] = useState<string>("");
 
   useEffect(() => {
     loadData();
@@ -672,13 +673,38 @@ export default function RenovationsPage() {
                   gap: "2rem",
                 }}
               >
+                <div className={styles.filterToggles}>
+                  <button
+                    className={`${styles.filterToggle} ${filterCategory === "" ? styles.active : ""}`}
+                    onClick={() => setFilterCategory("")}
+                  >
+                    {t("categories.allCategories")}
+                  </button>
+                  <button
+                    className={`${styles.filterToggle} ${filterCategory === "labor" ? styles.active : ""}`}
+                    onClick={() => setFilterCategory("labor")}
+                  >
+                    {t("categories.labor")}
+                  </button>
+                  <button
+                    className={`${styles.filterToggle} ${filterCategory === "material" ? styles.active : ""}`}
+                    onClick={() => setFilterCategory("material")}
+                  >
+                    {t("categories.material")}
+                  </button>
+                </div>
                 {[...groups, { id: "none", name: t("noGroup") }].map(
                   (group) => {
-                    const groupTasks = tasks.filter((tk) =>
-                      group.id === "none"
-                        ? !tk.group_id
-                        : tk.group_id === group.id
-                    );
+                    const groupTasks = tasks.filter((tk) => {
+                      const matchesGroup =
+                        group.id === "none"
+                          ? !tk.group_id
+                          : tk.group_id === group.id;
+                      const matchesCategory =
+                        !filterCategory ||
+                        tk.category === filterCategory;
+                      return matchesGroup && matchesCategory;
+                    });
 
                     if (groupTasks.length === 0) return null;
 
@@ -723,8 +749,14 @@ export default function RenovationsPage() {
                                       display: "flex",
                                       gap: "0.5rem",
                                       marginTop: "0.5rem",
+                                      flexWrap: "wrap",
                                     }}
                                   >
+                                    <span
+                                      className={`${styles.badge} ${styles[tk.category] ?? ""}`}
+                                    >
+                                      {t(`categories.${tk.category}`)}
+                                    </span>
                                     <span
                                       className={`${styles.badge} ${styles[tk.priority]}`}
                                     >
@@ -1053,8 +1085,6 @@ export default function RenovationsPage() {
                 >
                   <option value="labor">{t("categories.labor")}</option>
                   <option value="material">{t("categories.material")}</option>
-                  <option value="permit">{t("categories.permit")}</option>
-                  <option value="other">{t("categories.other")}</option>
                 </select>
               </div>
               <div className={styles.formGroup}>

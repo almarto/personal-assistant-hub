@@ -115,6 +115,39 @@
 .badge.completed { background: #dcfce3; color: #15803d; }
 .badge.cancelled { background: #fee2e2; color: #b91c1c; }
 
+.badge.labor { background: #fce7f3; color: #9d174d; }
+.badge.material { background: #fef3c7; color: #92400e; }
+
+.filterToggles {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.filterToggle {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color, #ccc);
+  background: var(--card-bg, #fff);
+  color: var(--text-muted, #666);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterToggle:hover {
+  color: var(--text-color, #333);
+  border-color: var(--text-muted, #999);
+}
+
+.filterToggle.active {
+  background: var(--primary-color, #0070f3);
+  color: #fff;
+  border-color: var(--primary-color, #0070f3);
+}
+
 .deleteBtn {
   background: none;
   border: none;
