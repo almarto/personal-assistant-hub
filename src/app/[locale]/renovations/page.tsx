@@ -343,6 +343,7 @@ export default function RenovationsPage() {
         (t) =>
           t.category === "labor" &&
           t.status !== "cancelled" &&
+          t.priority === "mandatory" &&
           t.group_id &&
           contractorGroupIds.includes(t.group_id)
       );
