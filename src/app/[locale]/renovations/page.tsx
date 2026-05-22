@@ -50,6 +50,10 @@ export default function RenovationsPage() {
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+  const [detailModalType, setDetailModalType] = useState<
+    "materials" | "labor" | "ideal" | "future" | null
+  >(null);
+
   const [editingFund, setEditingFund] = useState<RenovationFund | null>(null);
   const [editingTask, setEditingTask] = useState<RenovationTask | null>(null);
   const [editingGroup, setEditingGroup] = useState<RenovationGroup | null>(
@@ -247,12 +251,47 @@ export default function RenovationsPage() {
   const totalFunds = funds
     .filter((f) => f.include_in_budget)
     .reduce((acc, f) => acc + parseFloat(f.amount), 0);
-  const totalEstimated = tasks.reduce(
+
+  const mandatoryTasks = tasks.filter(
+    (t) => t.priority === "mandatory" && t.status !== "cancelled"
+  );
+  const mandatoryMaterialEstimated = mandatoryTasks
+    .filter((t) => t.category === "material")
+    .reduce((acc, tk) => acc + parseFloat(tk.estimated_cost), 0);
+  const mandatoryLaborEstimated = mandatoryTasks
+    .filter((t) => t.category === "labor")
+    .reduce((acc, tk) => acc + parseFloat(tk.estimated_cost), 0);
+  const totalEstimated = mandatoryMaterialEstimated + mandatoryLaborEstimated;
+
+  const totalSpent = payments.reduce((acc, p) => acc + parseFloat(p.amount), 0);
+  const remainingFunds = totalFunds - totalEstimated;
+
+  const idealTasks = tasks.filter(
+    (t) =>
+      t.priority === "ideal" &&
+      t.status !== "cancelled" &&
+      t.status !== "completed"
+  );
+  const idealTotal = idealTasks.reduce(
     (acc, tk) => acc + parseFloat(tk.estimated_cost),
     0
   );
-  const totalSpent = payments.reduce((acc, p) => acc + parseFloat(p.amount), 0);
-  const remainingFunds = totalFunds - totalEstimated;
+  const idealAffordable = remainingFunds >= idealTotal;
+  const idealPartial = remainingFunds > 0 && remainingFunds < idealTotal;
+
+  const futureTasks = tasks.filter(
+    (t) =>
+      t.priority === "future" &&
+      t.status !== "cancelled" &&
+      t.status !== "completed"
+  );
+  const futureTotal = futureTasks.reduce(
+    (acc, tk) => acc + parseFloat(tk.estimated_cost),
+    0
+  );
+  const remainingAfterIdeal = remainingFunds - idealTotal;
+  const futureAffordable = remainingAfterIdeal >= futureTotal;
+  const futurePartial = remainingAfterIdeal > 0 && remainingAfterIdeal < futureTotal;
 
   const estimatedEndDateMs = tasks
     .filter((t) => t.status !== "cancelled" && t.end_date)
@@ -272,8 +311,20 @@ export default function RenovationsPage() {
       {} as Record<string, number>
     );
 
+  const trackedPayees = ["Fernando", "Arturo", "Tio", "Paola", "Samuel", "Carlos"];
+  const paidToLenders = ["Fernando", "Arturo", "Tio", "Paola"];
+  const paymentsByPayee = payments
+    .filter((p) => trackedPayees.includes(p.payee))
+    .reduce(
+      (acc, p) => {
+        acc[p.payee] = (acc[p.payee] || 0) + parseFloat(p.amount);
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
   const deficit = -remainingFunds;
-  let recommendations: RenovationTask[][] = [];
+  const recommendations: RenovationTask[][] = [];
   if (deficit > 0) {
     const candidateTasks = tasks.filter(
       (t) =>
@@ -414,9 +465,29 @@ export default function RenovationsPage() {
                     <h4>{t("summary.totalFunds")}</h4>
                     <p>€{totalFunds.toFixed(2)}</p>
                   </div>
-                  <div className={styles.summaryCard}>
-                    <h4>{t("summary.totalEstimated")}</h4>
-                    <p>€{totalEstimated.toFixed(2)}</p>
+                  <div
+                    className={styles.summaryCard}
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #f59e0b, #d97706)",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setDetailModalType("materials")}
+                  >
+                    <h4>{t("summary.estimatedMaterials")}</h4>
+                    <p>€{mandatoryMaterialEstimated.toFixed(2)}</p>
+                  </div>
+                  <div
+                    className={styles.summaryCard}
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setDetailModalType("labor")}
+                  >
+                    <h4>{t("summary.estimatedWorkers")}</h4>
+                    <p>€{mandatoryLaborEstimated.toFixed(2)}</p>
                   </div>
                   <div className={styles.summaryCard}>
                     <h4>{t("summary.totalSpent")}</h4>
@@ -434,17 +505,65 @@ export default function RenovationsPage() {
                     <h4>{t("summary.remainingFunds")}</h4>
                     <p>€{remainingFunds.toFixed(2)}</p>
                   </div>
-                  {estimatedEndDate && (
-                    <div className={styles.summaryCard}>
-                      <h4>{t("summary.estimatedCompletion")}</h4>
-                      <p>{estimatedEndDate.toLocaleDateString()}</p>
-                    </div>
-                  )}
                 </div>
+
+                {idealTasks.length > 0 && (
+                  <div style={{ marginTop: "0rem", marginBottom: "1.5rem" }}>
+                    <h3
+                      style={{
+                        color:
+                          idealAffordable
+                            ? "#10b981"
+                            : idealPartial
+                              ? "#f59e0b"
+                              : "#ef4444",
+                        marginBottom: "0.5rem",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                      onClick={() => setDetailModalType("ideal")}
+                    >
+                      {t("summary.niceToHave")} (€{idealTotal.toFixed(2)})
+                      {" — "}
+                      {idealAffordable
+                        ? t("summary.fullyAffordable")
+                        : idealPartial
+                          ? t("summary.partiallyAffordable")
+                          : t("summary.notAffordable")}
+                    </h3>
+                  </div>
+                )}
+
+                {futureTasks.length > 0 && (
+                  <div style={{ marginTop: "0rem", marginBottom: "1.5rem" }}>
+                    <h3
+                      style={{
+                        color:
+                          futureAffordable
+                            ? "#10b981"
+                            : futurePartial
+                              ? "#f59e0b"
+                              : "#ef4444",
+                        marginBottom: "0.5rem",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                      onClick={() => setDetailModalType("future")}
+                    >
+                      {t("summary.futureTasks")} (€{futureTotal.toFixed(2)})
+                      {" — "}
+                      {futureAffordable
+                        ? t("summary.fullyAffordable")
+                        : futurePartial
+                          ? t("summary.partiallyAffordable")
+                          : t("summary.notAffordable")}
+                    </h3>
+                  </div>
+                )}
 
                 {Object.keys(loansByLender).length > 0 && (
                   <div style={{ marginTop: "2rem" }}>
-                    <h3>{t("summary.activeDebts")}</h3>
+                    <h3 style={{ marginBottom: "0.75rem" }}>{t("summary.activeDebts")}</h3>
                     <div className={styles.grid}>
                       {Object.entries(loansByLender).map(([lender, amount]) => (
                         <div
@@ -473,6 +592,104 @@ export default function RenovationsPage() {
                         </div>
                       ))}
                     </div>
+                  </div>
+                )}
+
+                {Object.keys(paymentsByPayee).length > 0 && (
+                  <div style={{ marginTop: "2rem" }}>
+                    <h3 style={{ marginBottom: "0.75rem" }}>{t("summary.paidTo")}</h3>
+                    <div style={{ marginBottom: "1.5rem" }}>
+                      <h4
+                        style={{
+                          fontSize: "0.95rem",
+                          fontWeight: 600,
+                          color: "#ef4444",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {t("summary.lenders")}
+                      </h4>
+                      <div className={styles.grid}>
+                        {Object.entries(paymentsByPayee)
+                          .filter(([payee]) => paidToLenders.includes(payee))
+                          .sort(([, a], [, b]) => b - a)
+                          .map(([payee, amount]) => (
+                            <div
+                              key={payee}
+                              className={styles.card}
+                              style={{ borderLeft: "4px solid #ef4444" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <span style={{ fontWeight: 600 }}>{payee}</span>
+                                <span
+                                  style={{
+                                    fontWeight: 700,
+                                    color: "#ef4444",
+                                    fontSize: "1.2rem",
+                                  }}
+                                >
+                                  €{amount.toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                    {paymentsByPayee["Samuel"] !== undefined ||
+                    paymentsByPayee["Carlos"] !== undefined ? (
+                      <div>
+                        <h4
+                          style={{
+                            fontSize: "0.95rem",
+                            fontWeight: 600,
+                            color: "#f59e0b",
+                            marginBottom: "0.5rem",
+                          }}
+                        >
+                          {t("summary.contractors")}
+                        </h4>
+                        <div className={styles.grid}>
+                          {Object.entries(paymentsByPayee)
+                            .filter(
+                              ([payee]) =>
+                                payee === "Samuel" || payee === "Carlos"
+                            )
+                            .sort(([, a], [, b]) => b - a)
+                            .map(([payee, amount]) => (
+                              <div
+                                key={payee}
+                                className={styles.card}
+                                style={{ borderLeft: "4px solid #f59e0b" }}
+                              >
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <span style={{ fontWeight: 600 }}>{payee}</span>
+                                  <span
+                                    style={{
+                                      fontWeight: 700,
+                                      color: "#f59e0b",
+                                      fontSize: "1.2rem",
+                                    }}
+                                  >
+                                    €{amount.toFixed(2)}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 )}
 
@@ -1331,6 +1548,62 @@ export default function RenovationsPage() {
           </div>
         </div>
       )}
+
+      {detailModalType && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setDetailModalType(null)}
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>
+              {detailModalType === "materials"
+                ? t("summary.estimatedMaterials")
+                : detailModalType === "labor"
+                  ? t("summary.estimatedWorkers")
+                  : detailModalType === "ideal"
+                    ? t("summary.niceToHave")
+                    : t("summary.futureTasks")}
+            </h3>
+            <ul style={{ margin: "1rem 0", paddingLeft: "1.5rem" }}>
+              {(detailModalType === "materials"
+                ? mandatoryTasks.filter((t) => t.category === "material")
+                : detailModalType === "labor"
+                  ? mandatoryTasks.filter((t) => t.category === "labor")
+                  : detailModalType === "ideal"
+                    ? idealTasks
+                    : futureTasks
+              ).map((tk) => (
+                <li
+                  key={tk.id}
+                  style={{
+                    marginBottom: "0.5rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>{tk.name}</span>
+                  <span style={{ color: "var(--text-muted)", marginLeft: "1rem" }}>
+                    €{parseFloat(tk.estimated_cost).toFixed(2)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className={styles.modalActions}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setDetailModalType(null)}
+              >
+                {t("cancel")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </PageLayout>
   );
 }
