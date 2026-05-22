@@ -88,12 +88,13 @@ export async function createRenovationGroup(
     name: string;
     start_date?: string | null;
     end_date?: string | null;
+    contractor?: string | null;
   }
 ) {
   const result = await query(
-    `INSERT INTO renovation_groups (user_id, name, start_date, end_date)
-     VALUES ($1, $2, $3, $4) RETURNING *`,
-    [userId, data.name, data.start_date || null, data.end_date || null]
+    `INSERT INTO renovation_groups (user_id, name, start_date, end_date, contractor)
+     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    [userId, data.name, data.start_date || null, data.end_date || null, data.contractor || null]
   );
   return result.rows[0];
 }
@@ -105,13 +106,14 @@ export async function updateRenovationGroup(
     name: string;
     start_date: string | null;
     end_date: string | null;
+    contractor: string | null;
   }>
 ) {
   const sets = [];
   const values: any[] = [id, userId];
   let paramIdx = 3;
 
-  const fields = ['name', 'start_date', 'end_date'] as const;
+  const fields = ['name', 'start_date', 'end_date', 'contractor'] as const;
   for (const field of fields) {
     if (data[field] !== undefined) {
       sets.push(`${field} = $${paramIdx++}`);

@@ -310,6 +310,8 @@
     "actualCost": "Coste Real",
     "startDate": "Fecha Inicio",
     "endDate": "Fecha Fin",
+    "contractor": "Contratista",
+    "toDefine": "Por Definir",
     "payee": "Beneficiario/Trabajador",
     "paymentDate": "Fecha Pago",
     "method": "Método",

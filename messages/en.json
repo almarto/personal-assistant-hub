@@ -311,6 +311,8 @@
     "actualCost": "Actual Cost",
     "startDate": "Start Date",
     "endDate": "End Date",
+    "contractor": "Contractor",
+    "toDefine": "To Define",
     "payee": "Payee",
     "paymentDate": "Payment Date",
     "method": "Method",

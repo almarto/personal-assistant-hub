@@ -63,6 +63,7 @@ export async function createGroupAction(data: {
   name: string;
   start_date?: string | null;
   end_date?: string | null;
+  contractor?: string | null;
 }) {
   const userId = await requireUser();
   await db.createRenovationGroup(userId, data);
@@ -75,6 +76,7 @@ export async function updateGroupAction(
     name: string;
     start_date: string | null;
     end_date: string | null;
+    contractor: string | null;
   }>
 ) {
   const userId = await requireUser();

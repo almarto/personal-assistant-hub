@@ -18,6 +18,7 @@ export interface RenovationGroup {
   name: string;
   start_date: string | null;
   end_date: string | null;
+  contractor: string | null;
   created_at: string;
   updated_at: string;
 }

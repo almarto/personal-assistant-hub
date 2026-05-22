@@ -68,6 +68,7 @@ export default function RenovationsPage() {
   const [taskEndDate, setTaskEndDate] = useState<string>("");
   const [groupStartDate, setGroupStartDate] = useState<string>("");
   const [groupEndDate, setGroupEndDate] = useState<string>("");
+  const [groupContractor, setGroupContractor] = useState<string>("");
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [filterCategory, setFilterCategory] = useState<string>("");
 
@@ -167,6 +168,7 @@ export default function RenovationsPage() {
       name: formData.get("name") as string,
       start_date: (formData.get("start_date") as string) || null,
       end_date: (formData.get("end_date") as string) || null,
+      contractor: (formData.get("contractor") as string) || null,
     };
 
     if (editingGroup) {
@@ -239,6 +241,7 @@ export default function RenovationsPage() {
     setEditingGroup(group || null);
     setGroupStartDate(group?.start_date || "");
     setGroupEndDate(group?.end_date || "");
+    setGroupContractor(group?.contractor || "");
     setShowGroupModal(true);
   };
 
@@ -313,6 +316,7 @@ export default function RenovationsPage() {
 
   const trackedPayees = ["Fernando", "Arturo", "Tio", "Paola", "Samuel", "Carlos"];
   const paidToLenders = ["Fernando", "Arturo", "Tio", "Paola"];
+  const contractorPayees = ["Samuel", "Carlos"];
   const paymentsByPayee = payments
     .filter((p) => trackedPayees.includes(p.payee))
     .reduce(
@@ -322,6 +326,27 @@ export default function RenovationsPage() {
       },
       {} as Record<string, number>
     );
+
+  const contractorsBudget = contractorPayees.reduce(
+    (acc, contractor) => {
+      const contractorGroupIds = groups
+        .filter((g) => g.contractor === contractor)
+        .map((g) => g.id);
+      const laborTasksInGroups = tasks.filter(
+        (t) =>
+          t.category === "labor" &&
+          t.status !== "cancelled" &&
+          t.group_id &&
+          contractorGroupIds.includes(t.group_id)
+      );
+      acc[contractor] = laborTasksInGroups.reduce(
+        (sum, t) => sum + parseFloat(t.estimated_cost),
+        0
+      );
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
   const deficit = -remainingFunds;
   const recommendations: RenovationTask[][] = [];
@@ -641,8 +666,11 @@ export default function RenovationsPage() {
                           ))}
                       </div>
                     </div>
-                    {paymentsByPayee["Samuel"] !== undefined ||
-                    paymentsByPayee["Carlos"] !== undefined ? (
+                    {contractorPayees.some(
+                      (c) =>
+                        paymentsByPayee[c] !== undefined ||
+                        contractorsBudget[c] > 0
+                    ) ? (
                       <div>
                         <h4
                           style={{
@@ -655,38 +683,51 @@ export default function RenovationsPage() {
                           {t("summary.contractors")}
                         </h4>
                         <div className={styles.grid}>
-                          {Object.entries(paymentsByPayee)
+                          {contractorPayees
                             .filter(
-                              ([payee]) =>
-                                payee === "Samuel" || payee === "Carlos"
+                              (c) =>
+                                paymentsByPayee[c] !== undefined ||
+                                contractorsBudget[c] > 0
                             )
-                            .sort(([, a], [, b]) => b - a)
-                            .map(([payee, amount]) => (
-                              <div
-                                key={payee}
-                                className={styles.card}
-                                style={{ borderLeft: "4px solid #f59e0b" }}
-                              >
+                            .map((payee) => {
+                              const paid = paymentsByPayee[payee] || 0;
+                              const budget = contractorsBudget[payee] || 0;
+                              return (
                                 <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                  }}
+                                  key={payee}
+                                  className={styles.card}
+                                  style={{ borderLeft: "4px solid #f59e0b" }}
                                 >
-                                  <span style={{ fontWeight: 600 }}>{payee}</span>
-                                  <span
+                                  <div
                                     style={{
-                                      fontWeight: 700,
-                                      color: "#f59e0b",
-                                      fontSize: "1.2rem",
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
                                     }}
                                   >
-                                    €{amount.toFixed(2)}
-                                  </span>
+                                    <span style={{ fontWeight: 600 }}>{payee}</span>
+                                    <span
+                                      style={{
+                                        fontWeight: 700,
+                                        color: "#f59e0b",
+                                        fontSize: "1.2rem",
+                                      }}
+                                    >
+                                      €{paid.toFixed(2)}{" "}
+                                      <span
+                                        style={{
+                                          fontSize: "0.85rem",
+                                          fontWeight: 500,
+                                          color: "var(--text-muted)",
+                                        }}
+                                      >
+                                        / €{budget.toFixed(2)}
+                                      </span>
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                         </div>
                       </div>
                     ) : null}
@@ -851,15 +892,35 @@ export default function RenovationsPage() {
                     <div className={styles.cardHeader}>
                       <div>
                         <h3 className={styles.cardTitle}>{g.name}</h3>
-                        {(g.start_date || g.end_date) && (
-                          <span className={styles.cardSubtitle}>
-                            {g.start_date
-                              ? new Date(g.start_date).toLocaleDateString()
-                              : "..."}
-                            {g.end_date &&
-                              ` - ${new Date(g.end_date).toLocaleDateString()}`}
-                          </span>
-                        )}
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "0.5rem",
+                            marginTop: "0.5rem",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          {g.contractor && (
+                            <span
+                              className={`${styles.badge}`}
+                              style={{
+                                background: "#fef3c7",
+                                color: "#b45309",
+                              }}
+                            >
+                              {g.contractor}
+                            </span>
+                          )}
+                          {(g.start_date || g.end_date) && (
+                            <span className={styles.cardSubtitle}>
+                              {g.start_date
+                                ? new Date(g.start_date).toLocaleDateString()
+                                : "..."}
+                              {g.end_date &&
+                                ` - ${new Date(g.end_date).toLocaleDateString()}`}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div style={{ display: "flex", gap: "0.25rem" }}>
                         <button
@@ -1263,6 +1324,18 @@ export default function RenovationsPage() {
                     }
                   }}
                 />
+              </div>
+              <div className={styles.formGroup}>
+                <label>{t("contractor")}</label>
+                <select
+                  name="contractor"
+                  value={groupContractor}
+                  onChange={(e) => setGroupContractor(e.target.value)}
+                >
+                  <option value="">{t("toDefine")}</option>
+                  <option value="Samuel">Samuel</option>
+                  <option value="Carlos">Carlos</option>
+                </select>
               </div>
               <div className={styles.modalActions}>
                 <Button
