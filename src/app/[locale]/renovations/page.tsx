@@ -317,8 +317,15 @@ export default function RenovationsPage() {
   const trackedPayees = ["Fernando", "Arturo", "Tio", "Paola", "Samuel", "Carlos"];
   const paidToLenders = ["Fernando", "Arturo", "Tio", "Paola"];
   const contractorPayees = ["Samuel", "Carlos"];
+  const taskMap = new Map(tasks.map((t) => [t.id, t]));
   const paymentsByPayee = payments
     .filter((p) => trackedPayees.includes(p.payee))
+    .filter((p) => {
+      if (paidToLenders.includes(p.payee)) return true;
+      if (!p.task_id) return true;
+      const tk = taskMap.get(p.task_id);
+      return !tk || tk.category === "labor";
+    })
     .reduce(
       (acc, p) => {
         acc[p.payee] = (acc[p.payee] || 0) + parseFloat(p.amount);
