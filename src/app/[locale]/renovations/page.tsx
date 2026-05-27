@@ -71,6 +71,7 @@ export default function RenovationsPage() {
   const [groupContractor, setGroupContractor] = useState<string>("");
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [filterCategory, setFilterCategory] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
 
   useEffect(() => {
     loadData();
@@ -959,25 +960,53 @@ export default function RenovationsPage() {
                   gap: "2rem",
                 }}
               >
-                <div className={styles.filterToggles}>
-                  <button
-                    className={`${styles.filterToggle} ${filterCategory === "" ? styles.active : ""}`}
-                    onClick={() => setFilterCategory("")}
-                  >
-                    {t("categories.allCategories")}
-                  </button>
-                  <button
-                    className={`${styles.filterToggle} ${filterCategory === "labor" ? styles.active : ""}`}
-                    onClick={() => setFilterCategory("labor")}
-                  >
-                    {t("categories.labor")}
-                  </button>
-                  <button
-                    className={`${styles.filterToggle} ${filterCategory === "material" ? styles.active : ""}`}
-                    onClick={() => setFilterCategory("material")}
-                  >
-                    {t("categories.material")}
-                  </button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <div className={styles.filterToggles}>
+                    <button
+                      className={`${styles.filterToggle} ${filterCategory === "" ? styles.active : ""}`}
+                      onClick={() => setFilterCategory("")}
+                    >
+                      {t("categories.allCategories")}
+                    </button>
+                    <button
+                      className={`${styles.filterToggle} ${filterCategory === "labor" ? styles.active : ""}`}
+                      onClick={() => setFilterCategory("labor")}
+                    >
+                      {t("categories.labor")}
+                    </button>
+                    <button
+                      className={`${styles.filterToggle} ${filterCategory === "material" ? styles.active : ""}`}
+                      onClick={() => setFilterCategory("material")}
+                    >
+                      {t("categories.material")}
+                    </button>
+                  </div>
+                  <div className={styles.filterToggles}>
+                    <button
+                      className={`${styles.filterToggle} ${filterStatus === "" ? styles.active : ""}`}
+                      onClick={() => setFilterStatus("")}
+                    >
+                      {t("statuses.allStatuses")}
+                    </button>
+                    <button
+                      className={`${styles.filterToggle} ${filterStatus === "pending" ? styles.active : ""}`}
+                      onClick={() => setFilterStatus("pending")}
+                    >
+                      {t("statuses.pending")}
+                    </button>
+                    <button
+                      className={`${styles.filterToggle} ${filterStatus === "in_progress" ? styles.active : ""}`}
+                      onClick={() => setFilterStatus("in_progress")}
+                    >
+                      {t("statuses.in_progress")}
+                    </button>
+                    <button
+                      className={`${styles.filterToggle} ${filterStatus === "completed" ? styles.active : ""}`}
+                      onClick={() => setFilterStatus("completed")}
+                    >
+                      {t("statuses.completed")}
+                    </button>
+                  </div>
                 </div>
                 {[...groups, { id: "none", name: t("noGroup") }].map(
                   (group) => {
@@ -987,9 +1016,10 @@ export default function RenovationsPage() {
                           ? !tk.group_id
                           : tk.group_id === group.id;
                       const matchesCategory =
-                        !filterCategory ||
-                        tk.category === filterCategory;
-                      return matchesGroup && matchesCategory;
+                        !filterCategory || tk.category === filterCategory;
+                      const matchesStatus =
+                        !filterStatus || tk.status === filterStatus;
+                      return matchesGroup && matchesCategory && matchesStatus;
                     });
 
                     if (groupTasks.length === 0) return null;

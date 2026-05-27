@@ -331,6 +331,7 @@
       "future": "Future (A futuro)"
     },
     "statuses": {
+      "allStatuses": "All Statuses",
       "pending": "Pending",
       "in_progress": "In Progress",
       "completed": "Completed",

@@ -261,12 +261,6 @@ export async function createRenovationPayment(
     ]
   );
   
-  // If payment is linked to a task, we could optionally update the task's actual_cost
-  // But let's leave that to the user to manually update or do it automatically here:
-  if (data.task_id) {
-    await query(`UPDATE renovation_tasks SET actual_cost = actual_cost + $1 WHERE id = $2`, [data.amount, data.task_id]);
-  }
-
   return result.rows[0];
 }
 
@@ -282,9 +276,6 @@ export async function updateRenovationPayment(
     notes: string | null;
   }>
 ) {
-  // Complex case: if amount or task_id changed, we need to adjust task actual_cost.
-  // For simplicity, we just update the fields. In a perfect world we'd revert old cost and add new cost.
-  
   const sets = [];
   const values: any[] = [id, userId];
   let paramIdx = 3;
@@ -306,13 +297,5 @@ export async function updateRenovationPayment(
 }
 
 export async function deleteRenovationPayment(id: string, userId: string) {
-  const payment = await query(`SELECT * FROM renovation_payments WHERE id = $1 AND user_id = $2`, [id, userId]);
-  if (payment.rows.length > 0) {
-    const p = payment.rows[0];
-    if (p.task_id) {
-      await query(`UPDATE renovation_tasks SET actual_cost = actual_cost - $1 WHERE id = $2`, [p.amount, p.task_id]);
-    }
-  }
-
   await query(`DELETE FROM renovation_payments WHERE id = $1 AND user_id = $2`, [id, userId]);
 }

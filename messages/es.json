@@ -284,7 +284,7 @@
   "Renovations": {
     "tabs": {
       "summary": "Resumen",
-      "budgets": "Presupuestos",
+      "budgets": "Fondos",
       "groups": "Grupos",
       "tasks": "Tareas",
       "payments": "Pagos"
@@ -330,6 +330,7 @@
       "future": "Futuro (A futuro)"
     },
     "statuses": {
+      "allStatuses": "Todos los estados",
       "pending": "Pendiente",
       "in_progress": "En Curso",
       "completed": "Completada",
