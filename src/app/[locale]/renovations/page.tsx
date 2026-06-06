@@ -423,7 +423,7 @@ export default function RenovationsPage() {
   }
 
   const renderPaymentCard = (p: RenovationPayment) => {
-    const linkedTask = tasks.find((tk) => tk.id === p.task_id);
+    const linkedTask = p.task_id ? taskMap.get(p.task_id) : undefined;
     return (
       <div key={p.id} className={styles.card}>
         <div className={styles.cardHeader}>
@@ -474,7 +474,7 @@ export default function RenovationsPage() {
   const groupedPayments = (() => {
     const map = new Map<string, { label: string; items: RenovationPayment[] }>();
     for (const p of payments) {
-      const task = tasks.find((tk) => tk.id === p.task_id);
+      const task = p.task_id ? taskMap.get(p.task_id) : undefined;
       const key = task ? task.id : "__unassigned__";
       const label = task ? task.name : t("unassigned");
       if (!map.has(key)) map.set(key, { label, items: [] });
@@ -486,7 +486,7 @@ export default function RenovationsPage() {
         if (bKey === "__unassigned__") return -1;
         return aVal.label.localeCompare(bVal.label);
       })
-      .map(([, val]) => val);
+      .map(([key, val]) => ({ key, ...val }));
   })();
 
   return (
@@ -1253,18 +1253,19 @@ export default function RenovationsPage() {
             {activeTab === "payments" && (
               groupByTask ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-                  {groupedPayments.map(({ label, items }) => {
+                  {groupedPayments.map((group) => {
+                    const { key: groupKey, label, items } = group;
                     const subtotal = items.reduce(
                       (acc, p) => acc + parseFloat(p.amount),
                       0
                     );
                     return (
-                      <div key={label} className={styles.groupSection}>
+                      <div key={groupKey} className={styles.groupSection}>
                         <div className={styles.groupSectionHeader}>
                           <span>{label}</span>
                           <span style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
                             <span style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 400 }}>
-                              {items.length} {items.length === 1 ? "payment" : "payments"}
+                              {items.length}×
                             </span>
                             <span>
                               {t("subtotal")}: €{subtotal.toFixed(2)}
