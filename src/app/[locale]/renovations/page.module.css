@@ -245,3 +245,22 @@
   font-size: 2rem;
   font-weight: 700;
 }
+
+.groupSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.groupSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--card-bg, #fff);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color, #0070f3);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color, #111);
+}
