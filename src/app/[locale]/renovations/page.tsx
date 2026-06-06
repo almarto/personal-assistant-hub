@@ -70,6 +70,7 @@ export default function RenovationsPage() {
   const [groupEndDate, setGroupEndDate] = useState<string>("");
   const [groupContractor, setGroupContractor] = useState<string>("");
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
+  const [groupByTask, setGroupByTask] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<string>("");
 
@@ -443,9 +444,17 @@ export default function RenovationsPage() {
               </Button>
             )}
             {activeTab === "payments" && (
-              <Button onClick={() => openPaymentModal()}>
-                <Plus size={20} /> {t("addPayment")}
-              </Button>
+              <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <button
+                  className={`${styles.filterToggle} ${groupByTask ? styles.active : ""}`}
+                  onClick={() => setGroupByTask((v) => !v)}
+                >
+                  {t("groupByTask")}
+                </button>
+                <Button onClick={() => openPaymentModal()}>
+                  <Plus size={20} /> {t("addPayment")}
+                </Button>
+              </div>
             )}
           </div>
         </div>
