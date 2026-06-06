@@ -422,6 +422,73 @@ export default function RenovationsPage() {
     }
   }
 
+  const renderPaymentCard = (p: RenovationPayment) => {
+    const linkedTask = tasks.find((tk) => tk.id === p.task_id);
+    return (
+      <div key={p.id} className={styles.card}>
+        <div className={styles.cardHeader}>
+          <div>
+            <h3 className={styles.cardTitle}>{p.payee}</h3>
+            <span className={styles.cardSubtitle}>
+              {new Date(p.payment_date).toLocaleDateString()}
+            </span>
+            {linkedTask && (
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "0.8rem",
+                  color: "var(--text-muted)",
+                  marginTop: "0.15rem",
+                }}
+              >
+                {linkedTask.name}
+              </span>
+            )}
+          </div>
+          <div style={{ display: "flex", gap: "0.25rem" }}>
+            <button
+              className={styles.deleteBtn}
+              onClick={() => openPaymentModal(p)}
+              style={{ color: "#0070f3" }}
+            >
+              <Edit2 size={18} />
+            </button>
+            <button
+              className={styles.deleteBtn}
+              onClick={() => handleDeletePayment(p.id)}
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+        </div>
+        <p style={{ margin: "0", fontSize: "0.9rem" }}>
+          {t("method")}: {t(`methods.${p.method}`)}
+        </p>
+        <div className={styles.cardAmount}>
+          €{parseFloat(p.amount).toFixed(2)}
+        </div>
+      </div>
+    );
+  };
+
+  const groupedPayments = (() => {
+    const map = new Map<string, { label: string; items: RenovationPayment[] }>();
+    for (const p of payments) {
+      const task = tasks.find((tk) => tk.id === p.task_id);
+      const key = task ? task.id : "__unassigned__";
+      const label = task ? task.name : t("unassigned");
+      if (!map.has(key)) map.set(key, { label, items: [] });
+      map.get(key)!.items.push(p);
+    }
+    return [...map.entries()]
+      .sort(([aKey, aVal], [bKey, bVal]) => {
+        if (aKey === "__unassigned__") return 1;
+        if (bKey === "__unassigned__") return -1;
+        return aVal.label.localeCompare(bVal.label);
+      })
+      .map(([, val]) => val);
+  })();
+
   return (
     <PageLayout>
       <div className={styles.container}>
@@ -1184,41 +1251,38 @@ export default function RenovationsPage() {
             )}
 
             {activeTab === "payments" && (
-              <div className={styles.grid}>
-                {payments.map((p) => (
-                  <div key={p.id} className={styles.card}>
-                    <div className={styles.cardHeader}>
-                      <div>
-                        <h3 className={styles.cardTitle}>{p.payee}</h3>
-                        <span className={styles.cardSubtitle}>
-                          {new Date(p.payment_date).toLocaleDateString()}
-                        </span>
+              groupByTask ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+                  {groupedPayments.map(({ label, items }) => {
+                    const subtotal = items.reduce(
+                      (acc, p) => acc + parseFloat(p.amount),
+                      0
+                    );
+                    return (
+                      <div key={label} className={styles.groupSection}>
+                        <div className={styles.groupSectionHeader}>
+                          <span>{label}</span>
+                          <span style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
+                            <span style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 400 }}>
+                              {items.length} {items.length === 1 ? "payment" : "payments"}
+                            </span>
+                            <span>
+                              {t("subtotal")}: €{subtotal.toFixed(2)}
+                            </span>
+                          </span>
+                        </div>
+                        <div className={styles.grid}>
+                          {items.map((p) => renderPaymentCard(p))}
+                        </div>
                       </div>
-                      <div style={{ display: "flex", gap: "0.25rem" }}>
-                        <button
-                          className={styles.deleteBtn}
-                          onClick={() => openPaymentModal(p)}
-                          style={{ color: "#0070f3" }}
-                        >
-                          <Edit2 size={18} />
-                        </button>
-                        <button
-                          className={styles.deleteBtn}
-                          onClick={() => handleDeletePayment(p.id)}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </div>
-                    <p style={{ margin: "0", fontSize: "0.9rem" }}>
-                      {t("method")}: {t(`methods.${p.method}`)}
-                    </p>
-                    <div className={styles.cardAmount}>
-                      €{parseFloat(p.amount).toFixed(2)}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className={styles.grid}>
+                  {payments.map((p) => renderPaymentCard(p))}
+                </div>
+              )
             )}
           </>
         )}
