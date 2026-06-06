@@ -346,6 +346,9 @@
       "cash": "Efectivo",
       "card": "Tarjeta"
     },
+    "groupByTask": "Agrupar por tarea",
+    "unassigned": "Sin tarea",
+    "subtotal": "Subtotal",
     "summary": {
       "totalFunds": "Total Fondos",
       "estimatedMaterials": "Est. Materiales",

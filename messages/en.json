@@ -347,6 +347,9 @@
       "cash": "Cash",
       "card": "Card"
     },
+    "groupByTask": "Group by Task",
+    "unassigned": "Unassigned",
+    "subtotal": "Subtotal",
     "summary": {
       "totalFunds": "Total Funds",
       "estimatedMaterials": "Est. Materials",
