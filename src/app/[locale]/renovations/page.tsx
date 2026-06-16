@@ -257,15 +257,23 @@ export default function RenovationsPage() {
     .filter((f) => f.include_in_budget)
     .reduce((acc, f) => acc + parseFloat(f.amount), 0);
 
+  const taskCost = (tk: RenovationTask) => {
+    if (tk.status === "completed") {
+      const actual = parseFloat(tk.actual_cost);
+      if (!isNaN(actual) && actual > 0) return actual;
+    }
+    return parseFloat(tk.estimated_cost);
+  };
+
   const mandatoryTasks = tasks.filter(
     (t) => t.priority === "mandatory" && t.status !== "cancelled"
   );
   const mandatoryMaterialEstimated = mandatoryTasks
     .filter((t) => t.category === "material")
-    .reduce((acc, tk) => acc + parseFloat(tk.estimated_cost), 0);
+    .reduce((acc, tk) => acc + taskCost(tk), 0);
   const mandatoryLaborEstimated = mandatoryTasks
     .filter((t) => t.category === "labor")
-    .reduce((acc, tk) => acc + parseFloat(tk.estimated_cost), 0);
+    .reduce((acc, tk) => acc + taskCost(tk), 0);
   const totalEstimated = mandatoryMaterialEstimated + mandatoryLaborEstimated;
 
   const totalSpent = payments.reduce((acc, p) => acc + parseFloat(p.amount), 0);
@@ -350,7 +358,7 @@ export default function RenovationsPage() {
           contractorGroupIds.includes(t.group_id)
       );
       acc[contractor] = laborTasksInGroups.reduce(
-        (sum, t) => sum + parseFloat(t.estimated_cost),
+        (sum, t) => sum + taskCost(t),
         0
       );
       return acc;
@@ -1771,7 +1779,7 @@ export default function RenovationsPage() {
                 >
                   <span>{tk.name}</span>
                   <span style={{ color: "var(--text-muted)", marginLeft: "1rem" }}>
-                    €{parseFloat(tk.estimated_cost).toFixed(2)}
+                    €{taskCost(tk).toFixed(2)}
                   </span>
                 </li>
               ))}
