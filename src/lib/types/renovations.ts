@@ -1,14 +1,31 @@
-export interface RenovationFund {
+export interface RenovationLoan {
   id: string;
   user_id: string;
   name: string;
-  type: string;
   amount: string; // Decimal comes as string from postgres
-  source: string | null;
-  date_received: string | null;
-  lender: string | null;
-  include_in_budget: boolean;
+  lender: string;
+  date_borrowed: string | null;
   created_at: string;
+  updated_at: string;
+}
+
+export interface RenovationLoanRepayment {
+  id: string;
+  loan_id: string;
+  user_id: string;
+  amount: string; // Decimal
+  repayment_date: string;
+  notes: string | null;
+  created_at: string;
+}
+
+export type RenovationAccountType = "shared" | "personal" | "cash";
+
+export interface RenovationAccount {
+  id: string;
+  user_id: string;
+  account_type: RenovationAccountType;
+  balance: string; // Decimal
   updated_at: string;
 }
 
@@ -28,11 +45,10 @@ export interface RenovationTask {
   user_id: string;
   name: string;
   category: string;
-  priority: string;
   status: string;
   group_id: string | null;
   estimated_cost: string; // Decimal
-  actual_cost: string; // Decimal
+  paid_so_far: string; // Decimal, computed from linked payments
   start_date: string | null;
   end_date: string | null;
   notes: string | null;
@@ -44,11 +60,10 @@ export interface RenovationPayment {
   id: string;
   user_id: string;
   task_id: string | null;
-  fund_id: string | null;
   payee: string;
   amount: string; // Decimal
   payment_date: string;
-  method: string;
+  account_type: RenovationAccountType;
   notes: string | null;
   created_at: string;
   updated_at: string;
