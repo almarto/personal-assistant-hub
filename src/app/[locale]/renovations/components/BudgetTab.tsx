@@ -38,10 +38,14 @@ export function BudgetTab({ accounts, onRefresh }: BudgetTabProps) {
   const handleDeposit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    await depositAction({
+    const result = await depositAction({
       account_type: formData.get("account_type") as string,
       amount: parseFloat(formData.get("amount") as string),
     });
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
     closeModal();
     await onRefresh();
   };
@@ -114,6 +118,7 @@ export function BudgetTab({ accounts, onRefresh }: BudgetTabProps) {
                 <label>{t("amount")}</label>
                 <input name="amount" type="number" step="0.01" min="0.01" required />
               </div>
+              {error && <p style={{ color: "#ef4444" }}>{error}</p>}
               <div className={styles.modalActions}>
                 <Button type="button" variant="secondary" onClick={closeModal}>
                   {t("cancel")}

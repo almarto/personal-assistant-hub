@@ -35,22 +35,20 @@ export function getGroupBudgetByPayee(
   category: string
 ): Map<string, number> {
   const taskMap = new Map(tasks.map((t) => [t.id, t]));
-  const payeesByGroup = new Map<string, Set<string>>();
+  const payeesByTask = new Map<string, Set<string>>();
   for (const p of payments) {
     if (!p.task_id) continue;
     const task = taskMap.get(p.task_id);
-    if (!task || task.category !== category || !task.group_id) continue;
-    if (!payeesByGroup.has(task.group_id)) payeesByGroup.set(task.group_id, new Set());
-    payeesByGroup.get(task.group_id)!.add(p.payee);
+    if (!task || task.category !== category || task.status === "cancelled" || !task.group_id) continue;
+    if (!payeesByTask.has(task.id)) payeesByTask.set(task.id, new Set());
+    payeesByTask.get(task.id)!.add(p.payee);
   }
 
   const budgetByPayee = new Map<string, number>();
-  for (const [groupId, payees] of payeesByGroup) {
-    const groupCost = tasks
-      .filter((t) => t.group_id === groupId && t.category === category && t.status !== "cancelled")
-      .reduce((sum, t) => sum + parseFloat(t.estimated_cost), 0);
+  for (const [taskId, payees] of payeesByTask) {
+    const taskCost = parseFloat(taskMap.get(taskId)!.estimated_cost);
     for (const payee of payees) {
-      budgetByPayee.set(payee, (budgetByPayee.get(payee) || 0) + groupCost);
+      budgetByPayee.set(payee, (budgetByPayee.get(payee) || 0) + taskCost);
     }
   }
   return budgetByPayee;

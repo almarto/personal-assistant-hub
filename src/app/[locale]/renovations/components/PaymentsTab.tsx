@@ -21,11 +21,13 @@ export function PaymentsTab({ payments, tasks, onRefresh }: PaymentsTabProps) {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [editingPayment, setEditingPayment] = useState<RenovationPayment | null>(null);
   const [groupByTask, setGroupByTask] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const taskMap = new Map(tasks.map((tk) => [tk.id, tk]));
 
   const openPaymentModal = (payment?: RenovationPayment) => {
     setEditingPayment(payment || null);
+    setError(null);
     setShowPaymentModal(true);
   };
 
@@ -39,13 +41,16 @@ export function PaymentsTab({ payments, tasks, onRefresh }: PaymentsTabProps) {
       payment_date: formData.get("payment_date") as string,
       task_id: (formData.get("task_id") as string) || null,
     };
-    if (editingPayment) {
-      await updatePaymentAction(editingPayment.id, data);
-    } else {
-      await createPaymentAction(data);
+    const result = editingPayment
+      ? await updatePaymentAction(editingPayment.id, data)
+      : await createPaymentAction(data);
+    if (result.error) {
+      setError(result.error);
+      return;
     }
     setShowPaymentModal(false);
     setEditingPayment(null);
+    setError(null);
     await onRefresh();
   };
 
@@ -164,7 +169,14 @@ export function PaymentsTab({ payments, tasks, onRefresh }: PaymentsTabProps) {
               </div>
               <div className={styles.formGroup}>
                 <label>{t("amount")}</label>
-                <input name="amount" type="number" step="0.01" required defaultValue={editingPayment?.amount} />
+                <input
+                  name="amount"
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  required
+                  defaultValue={editingPayment?.amount}
+                />
               </div>
               <div className={styles.formGroup}>
                 <label>{t("account")}</label>
@@ -198,6 +210,7 @@ export function PaymentsTab({ payments, tasks, onRefresh }: PaymentsTabProps) {
                   ))}
                 </select>
               </div>
+              {error && <p style={{ color: "#ef4444" }}>{error}</p>}
               <div className={styles.modalActions}>
                 <Button
                   type="button"
@@ -205,6 +218,7 @@ export function PaymentsTab({ payments, tasks, onRefresh }: PaymentsTabProps) {
                   onClick={() => {
                     setShowPaymentModal(false);
                     setEditingPayment(null);
+                    setError(null);
                   }}
                 >
                   {t("cancel")}

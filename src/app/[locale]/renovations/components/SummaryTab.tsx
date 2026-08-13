@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import {
   RenovationAccount,
@@ -8,8 +9,15 @@ import {
   RenovationPayment,
   RenovationTask,
 } from "@/lib/types/renovations";
+import { Button } from "@/systemUI/components/Button/Button";
 
-import { getAvailableFunds, getEstimatedRemainingByCategory, getPaidToGroups, getTotalSpent } from "../lib/calculations";
+import {
+  getAvailableFunds,
+  getEstimatedRemainingByCategory,
+  getPaidToGroups,
+  getTaskRemaining,
+  getTotalSpent,
+} from "../lib/calculations";
 import styles from "../page.module.css";
 
 interface SummaryTabProps {
@@ -21,6 +29,7 @@ interface SummaryTabProps {
 
 export function SummaryTab({ accounts, tasks, groups, payments }: SummaryTabProps) {
   const t = useTranslations("Renovations");
+  const [detailModalType, setDetailModalType] = useState<"materials" | "labor" | null>(null);
 
   const availableFunds = getAvailableFunds(accounts);
   const estimatedMaterials = getEstimatedRemainingByCategory(tasks, "material");
@@ -28,6 +37,11 @@ export function SummaryTab({ accounts, tasks, groups, payments }: SummaryTabProp
   const totalSpent = getTotalSpent(payments);
   const remainingFunds = availableFunds - estimatedMaterials - estimatedWorkers;
   const paidTo = getPaidToGroups(tasks, groups, payments);
+
+  const detailTasks = tasks.filter(
+    (tk) =>
+      tk.category === (detailModalType === "materials" ? "material" : "labor") && tk.status !== "cancelled"
+  );
 
   const renderPayeeGroup = (
     title: string,
@@ -66,11 +80,19 @@ export function SummaryTab({ accounts, tasks, groups, payments }: SummaryTabProp
           <h4>{t("summary.availableFunds")}</h4>
           <p>€{availableFunds.toFixed(2)}</p>
         </div>
-        <div className={styles.summaryCard} style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
+        <div
+          className={styles.summaryCard}
+          style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", cursor: "pointer" }}
+          onClick={() => setDetailModalType("materials")}
+        >
           <h4>{t("summary.estimatedMaterials")}</h4>
           <p>€{estimatedMaterials.toFixed(2)}</p>
         </div>
-        <div className={styles.summaryCard} style={{ background: "linear-gradient(135deg, #8b5cf6, #7c3aed)" }}>
+        <div
+          className={styles.summaryCard}
+          style={{ background: "linear-gradient(135deg, #8b5cf6, #7c3aed)", cursor: "pointer" }}
+          onClick={() => setDetailModalType("labor")}
+        >
           <h4>{t("summary.estimatedWorkers")}</h4>
           <p>€{estimatedWorkers.toFixed(2)}</p>
         </div>
@@ -98,6 +120,31 @@ export function SummaryTab({ accounts, tasks, groups, payments }: SummaryTabProp
           {renderPayeeGroup(t("summary.materials"), "#f59e0b", paidTo.materials)}
           {renderPayeeGroup(t("summary.workers"), "#8b5cf6", paidTo.workers)}
           {renderPayeeGroup(t("summary.other"), "#6b7280", paidTo.other)}
+        </div>
+      )}
+
+      {detailModalType && (
+        <div className={styles.modalOverlay} onClick={() => setDetailModalType(null)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <h3>
+              {detailModalType === "materials" ? t("summary.estimatedMaterials") : t("summary.estimatedWorkers")}
+            </h3>
+            <ul style={{ margin: "1rem 0", paddingLeft: "1.5rem" }}>
+              {detailTasks.map((tk) => (
+                <li key={tk.id} style={{ marginBottom: "0.5rem", display: "flex", justifyContent: "space-between" }}>
+                  <span>{tk.name}</span>
+                  <span style={{ color: "var(--text-muted)", marginLeft: "1rem" }}>
+                    €{getTaskRemaining(tk).toFixed(2)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className={styles.modalActions}>
+              <Button type="button" variant="secondary" onClick={() => setDetailModalType(null)}>
+                {t("cancel")}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>
