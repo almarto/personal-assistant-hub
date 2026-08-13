@@ -14,43 +14,112 @@ async function requireUser() {
   return session.user.id;
 }
 
-export async function fetchFundsAction() {
+// Loans
+export async function fetchLoansAction() {
   const userId = await requireUser();
-  return db.getRenovationFunds(userId);
+  return db.getRenovationLoans(userId);
 }
 
-export async function createFundAction(data: {
+export async function createLoanAction(data: {
   name: string;
-  type: string;
+  lender: string;
   amount: number;
-  source?: string;
-  date_received?: string | null;
-  lender?: string | null;
-  include_in_budget?: boolean;
+  date_borrowed?: string | null;
 }) {
   const userId = await requireUser();
-  await db.createRenovationFund(userId, data);
+  await db.createRenovationLoan(userId, data);
   revalidatePath("/renovations");
 }
 
-export async function updateFundAction(id: string, data: {
-  name?: string;
-  type?: string;
-  amount?: number;
-  source?: string | null;
-  date_received?: string | null;
-  lender?: string | null;
-  include_in_budget?: boolean;
-}) {
+export async function updateLoanAction(
+  id: string,
+  data: {
+    name?: string;
+    lender?: string;
+    amount?: number;
+    date_borrowed?: string | null;
+  }
+) {
   const userId = await requireUser();
-  await db.updateRenovationFund(id, userId, data);
+  await db.updateRenovationLoan(id, userId, data);
   revalidatePath("/renovations");
 }
 
-export async function deleteFundAction(id: string) {
+export async function deleteLoanAction(id: string) {
   const userId = await requireUser();
-  await db.deleteRenovationFund(id, userId);
+  await db.deleteRenovationLoan(id, userId);
   revalidatePath("/renovations");
+}
+
+// Loan repayments
+export async function fetchLoanRepaymentsAction() {
+  const userId = await requireUser();
+  return db.getRenovationLoanRepayments(userId);
+}
+
+export async function createLoanRepaymentAction(data: {
+  loan_id: string;
+  amount: number;
+  repayment_date: string;
+  notes?: string | null;
+}) {
+  const userId = await requireUser();
+  await db.createRenovationLoanRepayment(userId, data);
+  revalidatePath("/renovations");
+}
+
+export async function deleteLoanRepaymentAction(id: string) {
+  const userId = await requireUser();
+  await db.deleteRenovationLoanRepayment(id, userId);
+  revalidatePath("/renovations");
+}
+
+// Accounts
+export async function fetchAccountsAction() {
+  const userId = await requireUser();
+  return db.getRenovationAccounts(userId);
+}
+
+export async function depositAction(data: { account_type: string; amount: number }) {
+  const userId = await requireUser();
+  try {
+    await db.depositToAccount(userId, data.account_type, data.amount);
+    revalidatePath("/renovations");
+    return { error: null };
+  } catch (error) {
+    if (error instanceof db.InvalidAccountTypeError) {
+      return { error: error.message };
+    }
+    throw error;
+  }
+}
+
+export async function withdrawAction(data: { account_type: string; amount: number }) {
+  const userId = await requireUser();
+  try {
+    await db.withdrawToCash(userId, data.account_type, data.amount);
+    revalidatePath("/renovations");
+    return { error: null };
+  } catch (error) {
+    if (error instanceof db.InsufficientFundsError || error instanceof db.InvalidAccountTypeError) {
+      return { error: error.message };
+    }
+    throw error;
+  }
+}
+
+export async function adjustAction(data: { account_type: string; amount: number }) {
+  const userId = await requireUser();
+  try {
+    await db.adjustAccount(userId, data.account_type, data.amount);
+    revalidatePath("/renovations");
+    return { error: null };
+  } catch (error) {
+    if (error instanceof db.InsufficientFundsError || error instanceof db.InvalidAccountTypeError) {
+      return { error: error.message };
+    }
+    throw error;
+  }
 }
 
 // Groups
@@ -90,6 +159,7 @@ export async function deleteGroupAction(id: string) {
   revalidatePath("/renovations");
 }
 
+// Tasks
 export async function fetchTasksAction() {
   const userId = await requireUser();
   return db.getRenovationTasks(userId);
@@ -98,11 +168,9 @@ export async function fetchTasksAction() {
 export async function createTaskAction(data: {
   name: string;
   category: string;
-  priority: string;
   status: string;
   group_id?: string | null;
   estimated_cost: number;
-  actual_cost?: number;
   start_date?: string | null;
   end_date?: string | null;
   notes?: string;
@@ -112,18 +180,19 @@ export async function createTaskAction(data: {
   revalidatePath("/renovations");
 }
 
-export async function updateTaskAction(id: string, data: {
-  name?: string;
-  category?: string;
-  priority?: string;
-  status?: string;
-  group_id?: string | null;
-  estimated_cost?: number;
-  actual_cost?: number;
-  start_date?: string | null;
-  end_date?: string | null;
-  notes?: string | null;
-}) {
+export async function updateTaskAction(
+  id: string,
+  data: {
+    name?: string;
+    category?: string;
+    status?: string;
+    group_id?: string | null;
+    estimated_cost?: number;
+    start_date?: string | null;
+    end_date?: string | null;
+    notes?: string | null;
+  }
+) {
   const userId = await requireUser();
   await db.updateRenovationTask(id, userId, data);
   revalidatePath("/renovations");
@@ -135,6 +204,7 @@ export async function deleteTaskAction(id: string) {
   revalidatePath("/renovations");
 }
 
+// Payments
 export async function fetchPaymentsAction() {
   const userId = await requireUser();
   return db.getRenovationPayments(userId);
@@ -143,27 +213,54 @@ export async function fetchPaymentsAction() {
 export async function createPaymentAction(data: {
   payee: string;
   amount: number;
-  method: string;
+  account_type: string;
   payment_date: string;
   task_id?: string | null;
   notes?: string | null;
-}) {
+}): Promise<{ error: string | null }> {
   const userId = await requireUser();
-  await db.createRenovationPayment(userId, data);
-  revalidatePath("/renovations");
+  try {
+    await db.createRenovationPayment(userId, data);
+    revalidatePath("/renovations");
+    return { error: null };
+  } catch (error) {
+    if (
+      error instanceof db.TaskNotFoundError ||
+      error instanceof db.InvalidAccountTypeError ||
+      error instanceof db.InvalidAmountError
+    ) {
+      return { error: error.message };
+    }
+    throw error;
+  }
 }
 
-export async function updatePaymentAction(id: string, data: {
-  payee?: string;
-  amount?: number;
-  method?: string;
-  payment_date?: string;
-  task_id?: string | null;
-  notes?: string | null;
-}) {
+export async function updatePaymentAction(
+  id: string,
+  data: {
+    payee?: string;
+    amount?: number;
+    account_type?: string;
+    payment_date?: string;
+    task_id?: string | null;
+    notes?: string | null;
+  }
+): Promise<{ error: string | null }> {
   const userId = await requireUser();
-  await db.updateRenovationPayment(id, userId, data);
-  revalidatePath("/renovations");
+  try {
+    await db.updateRenovationPayment(id, userId, data);
+    revalidatePath("/renovations");
+    return { error: null };
+  } catch (error) {
+    if (
+      error instanceof db.TaskNotFoundError ||
+      error instanceof db.InvalidAccountTypeError ||
+      error instanceof db.InvalidAmountError
+    ) {
+      return { error: error.message };
+    }
+    throw error;
+  }
 }
 
 export async function deletePaymentAction(id: string) {
