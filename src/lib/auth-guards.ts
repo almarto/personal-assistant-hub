@@ -46,3 +46,7 @@ export async function requireAppRole(appRole: AppRole) {
 export async function requireScheduleManager() {
   return requireAppRole(APP_ROLE.SCHEDULE_MANAGER);
 }
+
+export async function requireFriendsZone() {
+  return requireAppRole(APP_ROLE.FRIENDS_ZONE);
+}

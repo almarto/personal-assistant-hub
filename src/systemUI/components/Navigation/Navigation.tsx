@@ -1,12 +1,14 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
+import { useAppRoles } from "@/hooks/use-app-roles";
 import { Link, usePathname } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
-import { isAdmin as checkIsAdmin } from "@/lib/types/roles";
+import { APP_ROLE, isAdmin as checkIsAdmin } from "@/lib/types/roles";
 
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import LogoutButton from "../LogoutButton/LogoutButton";
@@ -19,7 +21,9 @@ interface NavigationProps {
 export default function Navigation({ showLogout = false }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const { data: session } = authClient.useSession();
+  const { appRoles, isLoading: appRolesLoading } = useAppRoles();
   const pathname = usePathname();
   const isAdminPage =
     pathname.startsWith("/admin") ||
@@ -27,14 +31,25 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     pathname.startsWith("/es/admin"); // Simple check, better to use localized path check if possible
 
   const isAdmin = checkIsAdmin(session?.user?.role);
+  const isImpersonating = !!session?.session?.impersonatedBy;
+  const isFriendsZoneOnly =
+    !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.FRIENDS_ZONE;
+
   const showAdminLink = isAdmin && !isAdminPage;
-  const showProfileLink = session?.user && !isAdmin;
+  const showProfileLink =
+    session?.user && !isAdmin && !appRolesLoading && !isFriendsZoneOnly;
   const showLogoutBtn = showLogout;
 
   const onlyLanguageSwitcher =
-    !showAdminLink && !showProfileLink && !showLogoutBtn;
+    !showAdminLink && !showProfileLink && !showLogoutBtn && !isImpersonating;
 
   const t = useTranslations("Navigation");
+
+  const handleStopImpersonating = async () => {
+    await authClient.admin.stopImpersonating();
+    router.push("/");
+    router.refresh();
+  };
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -52,6 +67,15 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
     <nav className={styles.container} ref={menuRef}>
       {/* Desktop Navigation */}
       <div className={styles.desktopNav}>
+        {isImpersonating && (
+          <button
+            type="button"
+            className={styles.impersonationLink}
+            onClick={handleStopImpersonating}
+          >
+            {t("stopImpersonating")}
+          </button>
+        )}
         {showAdminLink && (
           <Link href="/admin/users" className={styles.link}>
             {t("admin")}
@@ -82,6 +106,20 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
 
             {isOpen && (
               <div className={styles.mobileMenu}>
+                {isImpersonating && (
+                  <div className={styles.mobileMenuItem}>
+                    <button
+                      type="button"
+                      className={styles.impersonationLink}
+                      onClick={() => {
+                        setIsOpen(false);
+                        handleStopImpersonating();
+                      }}
+                    >
+                      {t("stopImpersonating")}
+                    </button>
+                  </div>
+                )}
                 {showAdminLink && (
                   <div className={styles.mobileMenuItem}>
                     <Link

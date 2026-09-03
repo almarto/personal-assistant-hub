@@ -26,6 +26,10 @@
     "renovations": {
       "title": "House Renovations",
       "description": "Manage budgets, tasks, and payments for the new house renovations."
+    },
+    "friendsZone": {
+      "title": "Friends Zone",
+      "description": "A shared space just for friends."
     }
   },
   "Auth": {
@@ -179,14 +183,21 @@
     "currentPasswordRequired": "Current password is required to change password",
     "allFieldsRequired": "Please fill in all required fields",
     "appRoles": "Feature Roles",
-    "appRole_schedule_manager": "Schedule Manager"
+    "appRole_schedule_manager": "Schedule Manager",
+    "appRole_friends_zone": "Friends Zone",
+    "impersonate": "View as this user"
   },
   "Navigation": {
     "admin": "Admin",
     "profile": "Profile",
     "schedule": "Schedule",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "stopImpersonating": "Stop impersonation"
+  },
+  "FriendsZone": {
+    "title": "Friends Zone",
+    "comingSoon": "This section is coming soon."
   },
   "ForbiddenFoods": {
     "title": "Foods to avoid or delay",

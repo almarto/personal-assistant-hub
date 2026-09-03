@@ -1,16 +1,23 @@
-import { Activity, Boxes, Calendar, Hammer } from "lucide-react";
+import { Activity, Boxes, Calendar, Hammer, Users } from "lucide-react";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
+import { redirect } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
+import { getUserAppRoles } from "@/lib/services/user-roles";
+import { APP_ROLE, isAdmin as checkIsAdmin } from "@/lib/types/roles";
 import { Button } from "@/systemUI/components/Button/Button";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 import styles from "./page.module.css";
 
-export default async function HubHome() {
+export default async function HubHome({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -39,6 +46,17 @@ export default async function HubHome() {
         </div>
       </div>
     );
+  }
+
+  const { locale } = await params;
+  const isAdmin = checkIsAdmin(session.user.role);
+  const appRoles = await getUserAppRoles(session.user.id);
+  const hasFriendsZoneAccess = isAdmin || appRoles.includes(APP_ROLE.FRIENDS_ZONE);
+  const isFriendsZoneOnly =
+    !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.FRIENDS_ZONE;
+
+  if (isFriendsZoneOnly) {
+    return redirect({ href: "/friends-zone", locale });
   }
 
   return (
@@ -104,6 +122,22 @@ export default async function HubHome() {
             </p>
           </Link>
         </div>
+
+        {hasFriendsZoneAccess && (
+          <div className={styles.appCard}>
+            <Link href="/friends-zone" className={styles.appCardLink}>
+              <div className={styles.iconWrapper}>
+                <Users size={28} />
+              </div>
+              <h3 className={styles.appTitle}>
+                {launcherT("friendsZone.title")}
+              </h3>
+              <p className={styles.appDescription}>
+                {launcherT("friendsZone.description")}
+              </p>
+            </Link>
+          </div>
+        )}
       </div>
     </PageLayout>
   );

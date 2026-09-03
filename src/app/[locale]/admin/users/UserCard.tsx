@@ -1,6 +1,7 @@
 "use client";
 
-import { Calendar, Edit2, Shield, Trash2, User } from "lucide-react";
+import { Calendar, Edit2, Shield, Trash2, User, VenetianMask } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { authClient } from "@/lib/auth-client";
@@ -23,7 +24,14 @@ export const UserCard = ({
   handleDeleteUser,
 }: UserCardProps) => {
   const { data: session } = authClient.useSession();
+  const router = useRouter();
   const t = useTranslations("Admin");
+
+  const handleImpersonate = async () => {
+    await authClient.admin.impersonateUser({ userId: user.id });
+    router.push("/");
+    router.refresh();
+  };
 
   const getRoleIcon = () => {
     if (checkIsAdmin(user.role)) return <Shield size={24} />;
@@ -51,6 +59,17 @@ export const UserCard = ({
         </div>
       </div>
       <div className={styles.actions}>
+        {!checkIsAdmin(user.role) && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleImpersonate}
+            className={styles.editButton}
+            title={t("impersonate")}
+          >
+            <VenetianMask size={16} />
+          </Button>
+        )}
         <Button
           variant="outline"
           size="sm"

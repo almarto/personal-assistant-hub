@@ -26,6 +26,10 @@
     "renovations": {
       "title": "Reformas de Casa",
       "description": "Gestiona presupuestos, tareas y pagos para la reforma de la nueva casa."
+    },
+    "friendsZone": {
+      "title": "Zona de Amigos",
+      "description": "Un espacio compartido solo para amigos."
     }
   },
   "Auth": {
@@ -179,14 +183,21 @@
     "currentPasswordRequired": "Se requiere la contraseña actual para cambiar la contraseña",
     "allFieldsRequired": "Por favor, complete todos los campos obligatorios",
     "appRoles": "Roles de funcionalidades",
-    "appRole_schedule_manager": "Gestor de horarios"
+    "appRole_schedule_manager": "Gestor de horarios",
+    "appRole_friends_zone": "Zona de Amigos",
+    "impersonate": "Ver como este usuario"
   },
   "Navigation": {
     "admin": "Administrador",
     "profile": "Perfil",
     "schedule": "Horario",
     "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú"
+    "closeMenu": "Cerrar menú",
+    "stopImpersonating": "Dejar de suplantar"
+  },
+  "FriendsZone": {
+    "title": "Zona de Amigos",
+    "comingSoon": "Esta sección estará disponible próximamente."
   },
   "ForbiddenFoods": {
     "title": "Alimentos prohibidos o a retrasar",
