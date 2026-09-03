@@ -1,0 +1,105 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+
+import { assignChecklistItemAction, toggleIndividualChecklistItemAction, toggleSharedChecklistItemAction } from "@/app/actions/trips";
+import { ChecklistIndividualItem, ChecklistSharedItem, TripAttributeValue, TripParticipant } from "@/lib/types/trips";
+
+import styles from "../page.module.css";
+import { AddItemForm } from "./AddItemForm";
+
+interface ChecklistColumnProps {
+  tripId: string;
+  heading: string;
+  kind: "individual" | "shared";
+  items: (ChecklistIndividualItem | ChecklistSharedItem)[];
+  participantId?: string | null;
+  participants?: TripParticipant[];
+  tripAttributeValues: TripAttributeValue[];
+}
+
+export function ChecklistColumn({
+  tripId,
+  heading,
+  kind,
+  items,
+  participantId,
+  participants,
+  tripAttributeValues,
+}: ChecklistColumnProps) {
+  const t = useTranslations("TripPlanner");
+  const [pending, setPending] = useState<Record<string, boolean>>({});
+
+  const total = items.length;
+  const packed = items.filter((i) => pending[i.packingItemId] ?? i.checked).length;
+
+  const handleToggle = async (item: ChecklistIndividualItem | ChecklistSharedItem) => {
+    const next = !(pending[item.packingItemId] ?? item.checked);
+    setPending((p) => ({ ...p, [item.packingItemId]: next }));
+    if (kind === "individual") {
+      await toggleIndividualChecklistItemAction(tripId, item.packingItemId, participantId ?? null, next);
+    } else {
+      await toggleSharedChecklistItemAction(tripId, item.packingItemId, next);
+    }
+    setPending((p) => {
+      const rest = { ...p };
+      delete rest[item.packingItemId];
+      return rest;
+    });
+  };
+
+  const handleAssign = async (packingItemId: string, assignedParticipantId: string) => {
+    await assignChecklistItemAction(tripId, packingItemId, assignedParticipantId || null);
+  };
+
+  return (
+    <div className={styles.column}>
+      <div className={styles.columnHeader}>
+        <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: 0 }}>{heading}</h2>
+        <span style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>
+          {packed}/{total}
+        </span>
+      </div>
+
+      {items.length === 0 ? (
+        <div style={{ marginBottom: "1rem" }}>
+          <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9rem" }}>{t("addItemPrompt")}</p>
+          <AddItemForm tripId={tripId} defaultIsShared={kind === "shared"} tripAttributeValues={tripAttributeValues} />
+        </div>
+      ) : (
+        <>
+          {items.map((item) => {
+            const checked = pending[item.packingItemId] ?? item.checked;
+            const assignedParticipantId = "assignedParticipantId" in item ? item.assignedParticipantId : undefined;
+            return (
+              <div key={item.packingItemId} className={styles.itemRow}>
+                <input type="checkbox" checked={checked} onChange={() => handleToggle(item)} style={{ width: 18, height: 18, cursor: "pointer" }} />
+                <label className={checked ? styles.itemLabelChecked : styles.itemLabel} onClick={() => handleToggle(item)}>
+                  {item.name}
+                </label>
+                {kind === "shared" && participants && (
+                  <select
+                    value={assignedParticipantId || ""}
+                    onChange={(e) => handleAssign(item.packingItemId, e.target.value)}
+                    style={{ fontSize: "0.8rem", padding: "2px 4px" }}
+                  >
+                    <option value="">{t("unassigned")}</option>
+                    {participants.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.display_name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            );
+          })}
+          <div className={styles.addItemRow}>
+            <AddItemForm tripId={tripId} defaultIsShared={kind === "shared"} tripAttributeValues={tripAttributeValues} compact />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
