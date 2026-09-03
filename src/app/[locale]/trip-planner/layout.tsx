@@ -24,7 +24,7 @@ export default async function FriendsZoneLayout({
       href: {
         pathname: "/auth/signin",
         query: {
-          callbackUrl: "/friends-zone",
+          callbackUrl: "/trip-planner",
         },
       },
       locale,

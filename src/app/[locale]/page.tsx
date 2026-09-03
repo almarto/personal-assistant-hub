@@ -56,7 +56,7 @@ export default async function HubHome({
     !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.FRIENDS_ZONE;
 
   if (isFriendsZoneOnly) {
-    return redirect({ href: "/friends-zone", locale });
+    return redirect({ href: "/trip-planner", locale });
   }
 
   return (
@@ -125,7 +125,7 @@ export default async function HubHome({
 
         {hasFriendsZoneAccess && (
           <div className={styles.appCard}>
-            <Link href="/friends-zone" className={styles.appCardLink}>
+            <Link href="/trip-planner" className={styles.appCardLink}>
               <div className={styles.iconWrapper}>
                 <Users size={28} />
               </div>
