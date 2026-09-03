@@ -65,6 +65,15 @@ export interface CreateTripInput {
   activity_value_ids: string[];
 }
 
+/**
+ * Deliberate deviation from the spec's single discriminated `ChecklistEntry` union:
+ * the checklist is naturally produced and consumed *by column*, not as one mixed list.
+ * `getTripChecklist` already groups individual items by participant and shared items
+ * separately, and `ChecklistColumn` already knows which kind it's rendering from its
+ * own `kind` prop. A `kind` discriminant on every item would be redundant in both
+ * places. `ChecklistIndividualItem` / `ChecklistSharedItem` carry exactly the fields
+ * each column needs instead.
+ */
 export interface ChecklistIndividualItem {
   packingItemId: string;
   name: string;
