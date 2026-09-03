@@ -9,6 +9,12 @@ of trip it is, (b) splits into "bring your own" vs "shared" items, (c) tracks wh
 packed what, and (d) doesn't require re-typing the same item list every time a similar trip comes
 up. Participants may or may not already have an account in the app.
 
+As part of this feature, the route/section itself is renamed from `friends-zone` to `trip-planner`
+(directory, page, API route) and its display heading becomes "Luggage Trip Planner" — the
+`FRIENDS_ZONE` app-role key and `APP_ROLE.FRIENDS_ZONE` constant are left as-is since they're
+referenced elsewhere (`auth-guards.ts`, `user-roles` service); only the section's own files/routes
+and user-facing name change.
+
 ## Goals
 
 - Admin creates a trip: name, dates, a vehicle, an overnight style, and one or more activities —
@@ -23,6 +29,8 @@ up. Participants may or may not already have an account in the app.
   catalog.
 - Admin invites participants by email; no account required. An invite with a matching account links
   to it; an invite with no account gets a token-based guest link (no login) scoped to that one trip.
+  If that person later creates an account with the same email, they're linked automatically the next
+  time they access a trip they were invited to — no separate "claim" step.
 - Any trip viewer — admin, logged-in participant, or guest — can add new catalog items from the trip
   page (tagged to that trip's current attributes). Only admins can introduce new attribute *values*
   (new vehicle/overnight/activity types) or create/edit/delete trips and participants.
@@ -41,8 +49,6 @@ up. Participants may or may not already have an account in the app.
 - No standalone catalog-management screen — items are only created/edited inline from a trip. Can
   be added later if the catalog grows unwieldy.
 - No reminder emails — a single invite email per participant, sent once, on invite.
-- No retroactive account linking — if a guest participant later creates an account with the same
-  email, their existing `trip_participants.user_id` stays `NULL`; they keep using their guest link.
 - No down-migrations (matches existing repo convention).
 
 ## Data Model
@@ -175,9 +181,14 @@ match, a per-trip guest cookie (`tp_guest_<tripId>`, set by the invite link belo
 
 1. Session + admin role → full access.
 2. Session + a `trip_participants` row for `(tripId, user_id)` → participant access.
-3. No/non-matching session, but the `tp_guest_<tripId>` cookie value matches a
+3. Session, no `user_id` match, but a `trip_participants` row for `(tripId, email = session.user
+   .email, user_id IS NULL)` → **opportunistic link**: `UPDATE trip_participants SET user_id = $1
+   WHERE id = $2`, then participant access. This is what makes a guest who later creates (or already
+   had) an account with the invited email pick up real participant access automatically, the next
+   time they open a trip they were invited to — no separate "claim" flow, no signup hook needed.
+4. No/non-matching session, but the `tp_guest_<tripId>` cookie value matches a
    `trip_participants.invite_token` for this trip → guest access.
-4. Otherwise → redirect to sign-in (session case) or 404 (no session, no valid guest cookie — avoids
+5. Otherwise → redirect to sign-in (session case) or 404 (no session, no valid guest cookie — avoids
    leaking trip existence to randoms).
 
 Trip creation, editing, deletion, participant invite/removal, and new attribute values keep using
@@ -186,7 +197,7 @@ need `requireTripAccess(tripId)` — any admin, participant, or guest.
 
 ### Guest invite link
 
-`src/app/api/friends-zone/invite/[token]/route.ts` (`GET`) — the one plain Route Handler in this
+`src/app/api/trip-planner/invite/[token]/route.ts` (`GET`) — the one plain Route Handler in this
 feature, needed because a clicked email link can't submit a Server Action. Resolves the participant
 by token:
 
@@ -199,7 +210,7 @@ by token:
 ### Email
 
 `src/lib/services/email/templates/trip-invite.ts`, following `welcome.ts`'s shape: subject + body
-with the participant's display name, the trip name, and the `/api/friends-zone/invite/<token>` link.
+with the participant's display name, the trip name, and the `/api/trip-planner/invite/<token>` link.
 Sent once from `inviteParticipant`.
 
 ### `src/app/actions/trips.ts`
@@ -220,8 +231,8 @@ assignedParticipantId: string | null; ... }` for the two checklist row shapes.
 ### File structure
 
 ```
-src/app/[locale]/friends-zone/
-  layout.tsx              # unchanged: session + FRIENDS_ZONE role gate (admin bypasses)
+src/app/[locale]/trip-planner/    # renamed from the existing friends-zone/ placeholder
+  layout.tsx              # unchanged logic: session + FRIENDS_ZONE role gate (admin bypasses)
   page.tsx                 # trip list, heading "Luggage Trip Planner"
   page.module.css
   trips/new/
@@ -242,20 +253,20 @@ src/app/[locale]/trips/
       InviteParticipantModal.tsx     # admin only
       EditTripModal.tsx              # admin only
 
-src/app/api/friends-zone/invite/[token]/route.ts
+src/app/api/trip-planner/invite/[token]/route.ts
 ```
 
-`/trips/[id]` lives outside the `/friends-zone` subtree specifically so its layout can grant access
+`/trips/[id]` lives outside the `/trip-planner` subtree specifically so its layout can grant access
 by trip participation instead of the blanket `FRIENDS_ZONE` role — a guest or a plain participant
 without that role still needs to open their trip.
 
-### Trip list (`/friends-zone`)
+### Trip list (`/trip-planner`)
 
 Cards grouped Upcoming / Past (by `end_date` vs today). Admins see every trip plus a "New trip"
 button; everyone else sees only trips they participate in. Each card: name, dates, vehicle +
 overnight + activity badges, a small "your checklist: 8/12" progress hint.
 
-### New trip (`/friends-zone/trips/new`, admin only)
+### New trip (`/trip-planner/trips/new`, admin only)
 
 Single form: name, dates, notes, then the three pickers described in Goals (vehicle/overnight
 single-select combobox with inline "+ create", activities multi-select tag input with inline "+
@@ -292,10 +303,15 @@ Planner"), `upcoming`, `past`, `newTrip`, `vehicle`, `overnightStyle`, `activiti
 
 - New migration `019_trip_planner.sql`.
 - New `src/lib/services/trips.ts`, `src/app/actions/trips.ts`, `src/lib/types/trips.ts`.
-- New `src/app/api/friends-zone/invite/[token]/route.ts`.
+- New `src/app/api/trip-planner/invite/[token]/route.ts`.
 - New email template `src/lib/services/email/templates/trip-invite.ts`.
-- `src/lib/auth-guards.ts` gets `requireTripAccess`.
-- `src/app/[locale]/friends-zone/page.tsx` rewritten (list); new `trips/new/` under it.
+- `src/lib/auth-guards.ts` gets `requireTripAccess` (with the opportunistic-link step above).
+- `src/app/[locale]/friends-zone/` renamed to `src/app/[locale]/trip-planner/`; `page.tsx` rewritten
+  (list, admin-vs-participant view); new `trips/new/` under it. `APP_ROLE.FRIENDS_ZONE` and its
+  usages in `auth-guards.ts`/`user-roles` service are untouched — only this section's own directory
+  moves.
 - New `src/app/[locale]/trips/[id]/` tree with its own `layout.tsx`.
 - `messages/en.json` / `messages/es.json`: replace `FriendsZone` namespace with `TripPlanner`.
+- `Navigation.tsx`'s Friends Zone link target updated from `/friends-zone` to `/trip-planner` (label
+  can stay "Friends Zone" in the nav, or change to match — implementer's call at build time).
 - No new dependencies.
