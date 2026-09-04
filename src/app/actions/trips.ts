@@ -121,6 +121,33 @@ export async function createPackingItemAction(data: {
   }
 }
 
+export async function updatePackingItemAction(data: {
+  tripId: string;
+  packingItemId: string;
+  name: string;
+  is_shared: boolean;
+  attributeValueIds: string[];
+}) {
+  await requireTripAccess(data.tripId);
+  try {
+    await db.updatePackingItem(data.packingItemId, {
+      name: data.name.trim(),
+      is_shared: data.is_shared,
+      attributeValueIds: data.attributeValueIds,
+    });
+    revalidatePath(`/trips/${data.tripId}`);
+    return { error: null };
+  } catch (error) {
+    if (error instanceof db.AttributeValueNotFoundError) {
+      return { error: error.message };
+    }
+    if (error instanceof db.PackingItemNotFoundError) {
+      return { error: error.message };
+    }
+    throw error;
+  }
+}
+
 export async function toggleIndividualChecklistItemAction(
   tripId: string,
   packingItemId: string,

@@ -48,6 +48,8 @@ export interface PackingItem {
   created_at: string;
 }
 
+export type PackingItemTag = Pick<TripAttributeValue, "id" | "category" | "name">;
+
 export interface TripWithDetails extends Trip {
   vehicle: TripAttributeValue | null;
   overnight: TripAttributeValue | null;
@@ -78,6 +80,7 @@ export interface ChecklistIndividualItem {
   packingItemId: string;
   name: string;
   checked: boolean;
+  tags: PackingItemTag[];
 }
 
 export interface ChecklistSharedItem {
@@ -85,6 +88,7 @@ export interface ChecklistSharedItem {
   name: string;
   checked: boolean;
   assignedParticipantId: string | null;
+  tags: PackingItemTag[];
 }
 
 export interface TripChecklist {

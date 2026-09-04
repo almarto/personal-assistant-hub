@@ -6,6 +6,7 @@ import { generateTripInviteEmailHtml } from "@/lib/services/email/templates/trip
 import type {
   CreateTripInput,
   PackingItem,
+  PackingItemTag,
   ParticipantProgress,
   TripAttributeCategory,
   TripAttributeValue,
@@ -500,6 +501,42 @@ export async function createPackingItem(data: {
   }
 }
 
+export async function updatePackingItem(
+  itemId: string,
+  data: {
+    name: string;
+    is_shared: boolean;
+    attributeValueIds: string[];
+  }
+): Promise<PackingItem> {
+  await assertAttributeValuesExist(data.attributeValueIds);
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const itemRes = await client.query(
+      `UPDATE packing_items SET name = $2, is_shared = $3 WHERE id = $1 RETURNING *`,
+      [itemId, data.name, data.is_shared]
+    );
+    const item = itemRes.rows[0];
+    if (!item) throw new PackingItemNotFoundError(itemId);
+    await client.query(`DELETE FROM packing_item_tags WHERE packing_item_id = $1`, [itemId]);
+    for (const attributeValueId of data.attributeValueIds) {
+      await client.query(
+        `INSERT INTO packing_item_tags (packing_item_id, attribute_value_id) VALUES ($1, $2)`,
+        [itemId, attributeValueId]
+      );
+    }
+    await client.query("COMMIT");
+    return item;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 // ---------- Checklist ----------
 
 async function getTripAttributeIds(tripId: string): Promise<string[]> {
@@ -525,14 +562,17 @@ export async function getTripChecklist(
 
   if (attrIds.length > 0) {
     const individualRes = await query(
-      `SELECT DISTINCT pi.id AS packing_item_id, pi.name, tp.id AS participant_id,
-              COALESCE(cs.checked, false) AS checked
+      `SELECT pi.id AS packing_item_id, pi.name, tp.id AS participant_id,
+              COALESCE(bool_or(cs.checked), false) AS checked,
+              jsonb_agg(DISTINCT jsonb_build_object('id', av.id, 'category', av.category, 'name', av.name)) AS tags
        FROM trip_participants tp
        CROSS JOIN packing_items pi
-       JOIN packing_item_tags pit ON pit.packing_item_id = pi.id
+       JOIN packing_item_tags pit ON pit.packing_item_id = pi.id AND pit.attribute_value_id = ANY($2::uuid[])
+       JOIN trip_attribute_values av ON av.id = pit.attribute_value_id
        LEFT JOIN trip_checklist_state cs
          ON cs.trip_id = $1 AND cs.packing_item_id = pi.id AND cs.participant_id = tp.id
-       WHERE tp.trip_id = $1 AND pi.is_shared = false AND pit.attribute_value_id = ANY($2::uuid[])
+       WHERE tp.trip_id = $1 AND pi.is_shared = false
+       GROUP BY pi.id, pi.name, tp.id
        ORDER BY pi.name`,
       [tripId, attrIds]
     );
@@ -541,6 +581,7 @@ export async function getTripChecklist(
         packingItemId: row.packing_item_id,
         name: row.name,
         checked: row.checked,
+        tags: row.tags as PackingItemTag[],
       });
     }
   }
@@ -548,13 +589,16 @@ export async function getTripChecklist(
   let shared: TripChecklist["shared"] = [];
   if (attrIds.length > 0) {
     const sharedRes = await query(
-      `SELECT DISTINCT pi.id AS packing_item_id, pi.name, COALESCE(cs.checked, false) AS checked,
-              cs.assigned_participant_id
+      `SELECT pi.id AS packing_item_id, pi.name, COALESCE(bool_or(cs.checked), false) AS checked,
+              (array_agg(cs.assigned_participant_id))[1] AS assigned_participant_id,
+              jsonb_agg(DISTINCT jsonb_build_object('id', av.id, 'category', av.category, 'name', av.name)) AS tags
        FROM packing_items pi
-       JOIN packing_item_tags pit ON pit.packing_item_id = pi.id
+       JOIN packing_item_tags pit ON pit.packing_item_id = pi.id AND pit.attribute_value_id = ANY($2::uuid[])
+       JOIN trip_attribute_values av ON av.id = pit.attribute_value_id
        LEFT JOIN trip_checklist_state cs
          ON cs.trip_id = $1 AND cs.packing_item_id = pi.id AND cs.participant_id IS NULL
-       WHERE pi.is_shared = true AND pit.attribute_value_id = ANY($2::uuid[])
+       WHERE pi.is_shared = true
+       GROUP BY pi.id, pi.name
        ORDER BY pi.name`,
       [tripId, attrIds]
     );
@@ -563,6 +607,7 @@ export async function getTripChecklist(
       name: row.name,
       checked: row.checked,
       assignedParticipantId: row.assigned_participant_id,
+      tags: row.tags as PackingItemTag[],
     }));
   }
 

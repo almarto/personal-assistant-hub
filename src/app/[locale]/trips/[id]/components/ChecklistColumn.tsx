@@ -1,13 +1,22 @@
 "use client";
 
+import { Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { assignChecklistItemAction, toggleIndividualChecklistItemAction, toggleSharedChecklistItemAction } from "@/app/actions/trips";
-import { ChecklistIndividualItem, ChecklistSharedItem, TripAttributeValue, TripParticipant } from "@/lib/types/trips";
+import { ChecklistIndividualItem, ChecklistSharedItem, PackingItemTag, TripAttributeCategory, TripAttributeValue, TripParticipant } from "@/lib/types/trips";
+import { Badge } from "@/systemUI/components/Badge/Badge";
 
 import styles from "../page.module.css";
 import { AddItemForm } from "./AddItemForm";
+import { EditItemModal } from "./EditItemModal";
+
+const BADGE_VARIANT_BY_CATEGORY: Record<TripAttributeCategory, "primary" | "secondary" | "outline"> = {
+  vehicle: "primary",
+  overnight_style: "secondary",
+  activity: "outline",
+};
 
 interface ChecklistColumnProps {
   tripId: string;
@@ -39,6 +48,12 @@ export function ChecklistColumn({
 }: ChecklistColumnProps) {
   const t = useTranslations("TripPlanner");
   const [pending, setPending] = useState<Record<string, boolean>>({});
+  const [editingItem, setEditingItem] = useState<{
+    packingItemId: string;
+    name: string;
+    isShared: boolean;
+    tags: PackingItemTag[];
+  } | null>(null);
 
   const total = items.length;
   const packed = items.filter((i) => pending[i.packingItemId] ?? i.checked).length;
@@ -89,6 +104,28 @@ export function ChecklistColumn({
                 <label className={checked ? styles.itemLabelChecked : styles.itemLabel} onClick={() => handleToggle(item)}>
                   {item.name}
                 </label>
+                <div style={{ display: "flex", gap: "0.25rem" }}>
+                  {item.tags.map((tag) => (
+                    <Badge key={tag.id} variant={BADGE_VARIANT_BY_CATEGORY[tag.category]}>
+                      {tag.name}
+                    </Badge>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setEditingItem({
+                      packingItemId: item.packingItemId,
+                      name: item.name,
+                      isShared: kind === "shared",
+                      tags: item.tags,
+                    })
+                  }
+                  aria-label={t("editItem")}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 2, display: "inline-flex" }}
+                >
+                  <Pencil size={14} />
+                </button>
                 {kind === "shared" && participants && (
                   <select
                     value={assignedParticipantId || ""}
@@ -112,6 +149,20 @@ export function ChecklistColumn({
             </div>
           )}
         </>
+      )}
+
+      {editingItem && (
+        <EditItemModal
+          tripId={tripId}
+          item={{
+            packingItemId: editingItem.packingItemId,
+            name: editingItem.name,
+            isShared: editingItem.isShared,
+            tagIds: editingItem.tags.map((tag) => tag.id),
+          }}
+          tripAttributeValues={tripAttributeValues}
+          onClose={() => setEditingItem(null)}
+        />
       )}
     </div>
   );
