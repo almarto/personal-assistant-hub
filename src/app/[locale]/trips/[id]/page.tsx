@@ -32,12 +32,22 @@ export default async function TripDetailPage({
   const isAdmin = access.type === "admin";
   const viewerParticipantId = access.participantId;
 
+  const assignedToViewer = viewerParticipantId
+    ? checklist.shared.filter((item) => item.assignedParticipantId === viewerParticipantId)
+    : [];
+  const viewerGroupTotal = assignedToViewer.length;
+  const viewerGroupMissing = assignedToViewer.filter((item) => !item.checked).length;
+
   return (
     <div className={styles.container}>
       <AutoRefresh />
       <TripHeader trip={trip} attributeValues={attributeValues} isAdmin={isAdmin} />
 
-      <ParticipantSummaryBar progress={checklist.progress} />
+      <ParticipantSummaryBar
+        progress={checklist.progress}
+        groupItemsTotal={viewerGroupTotal}
+        groupItemsMissing={viewerGroupMissing}
+      />
 
       <div className={styles.columns}>
         {/* Everyone with a stake in the trip (including the creator, who is

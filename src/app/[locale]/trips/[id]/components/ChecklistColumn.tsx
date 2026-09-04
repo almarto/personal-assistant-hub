@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil } from "lucide-react";
+import { AlertCircle, Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -98,10 +98,15 @@ export function ChecklistColumn({
           {items.map((item) => {
             const checked = pending[item.packingItemId] ?? item.checked;
             const assignedParticipantId = "assignedParticipantId" in item ? item.assignedParticipantId : undefined;
+            const isUnassigned = kind === "shared" && !assignedParticipantId && !checked;
             return (
               <div key={item.packingItemId} className={styles.itemRow}>
                 <input type="checkbox" checked={checked} onChange={() => handleToggle(item)} style={{ width: 18, height: 18, cursor: "pointer" }} />
-                <label className={checked ? styles.itemLabelChecked : styles.itemLabel} onClick={() => handleToggle(item)}>
+                {isUnassigned && <AlertCircle size={16} className={styles.unassignedIcon} aria-hidden="true" />}
+                <label
+                  className={checked ? styles.itemLabelChecked : isUnassigned ? styles.itemLabelUnassigned : styles.itemLabel}
+                  onClick={() => handleToggle(item)}
+                >
                   {item.name}
                 </label>
                 <div style={{ display: "flex", gap: "0.25rem" }}>

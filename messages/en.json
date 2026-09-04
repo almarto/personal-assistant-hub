@@ -232,6 +232,10 @@
     "selectAtLeastOneTag": "Select at least one tag for this item.",
     "assignedTo": "Assigned to",
     "unassigned": "Unassigned",
+    "missingGroupItems": "You're missing {count, plural, one {# item} other {# items}} from the group",
+    "missingGroupItemsHint": "Check the group list — your friends are counting on you.",
+    "groupItemsComplete": "Yay, you made it! 🎉",
+    "groupItemsCompleteHint": "You've packed everything the group needs from you.",
     "create": "Create trip",
     "errors": {
       "tripNotFound": "Trip not found.",

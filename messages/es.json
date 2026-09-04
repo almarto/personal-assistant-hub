@@ -232,6 +232,10 @@
     "selectAtLeastOneTag": "Selecciona al menos una etiqueta para este artículo.",
     "assignedTo": "Asignado a",
     "unassigned": "Sin asignar",
+    "missingGroupItems": "Te {count, plural, one {falta # artículo} other {faltan # artículos}} del grupo",
+    "missingGroupItemsHint": "Revisa la lista de grupo — tus amigos cuentan contigo.",
+    "groupItemsComplete": "¡Ya lo tienes! 🎉",
+    "groupItemsCompleteHint": "Has preparado todo lo que el grupo necesita de ti.",
     "create": "Crear viaje",
     "errors": {
       "tripNotFound": "Viaje no encontrado.",

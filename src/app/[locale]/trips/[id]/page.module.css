@@ -204,3 +204,60 @@
   border-radius: 9999px;
   background-color: var(--color-primary);
 }
+
+.groupBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  min-width: 240px;
+  border: 1px solid transparent;
+}
+
+.groupBannerAttention {
+  background-color: #fff7ed;
+  border-color: #fed7aa;
+  color: #9a3412;
+}
+
+.groupBannerSuccess {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.groupBannerIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.groupBannerAttention .groupBannerIcon {
+  color: #ea580c;
+}
+
+.groupBannerSuccess .groupBannerIcon {
+  color: #059669;
+}
+
+.groupBannerTitle {
+  font-weight: var(--font-weight-semibold);
+  font-size: 0.9rem;
+}
+
+.groupBannerSubtitle {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.itemLabelUnassigned {
+  composes: itemLabel;
+  color: #c2410c;
+  font-weight: var(--font-weight-medium);
+}
+
+.unassignedIcon {
+  color: #ea580c;
+  flex-shrink: 0;
+}
