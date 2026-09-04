@@ -62,7 +62,7 @@ export class TripAccessDeniedError extends Error {
 }
 
 export type TripAccessResult =
-  | { type: "admin"; userId: string; participantId: null }
+  | { type: "admin"; userId: string; participantId: string | null }
   | { type: "participant"; userId: string; participantId: string }
   | { type: "guest"; participantId: string };
 
@@ -88,7 +88,18 @@ export async function requireTripAccess(tripId: string): Promise<TripAccessResul
 
   if (session) {
     if (session.user.role === Role.ADMIN) {
-      return { type: "admin", userId: session.user.id, participantId: null };
+      // The admin is usually also a guest on their own trip (createTrip adds
+      // them as a trip_participants row) - resolve that so the page can show
+      // their own checklist instead of treating them as a pure overseer.
+      const ownParticipant = await query(
+        `SELECT id FROM trip_participants WHERE trip_id = $1 AND user_id = $2`,
+        [tripId, session.user.id]
+      );
+      return {
+        type: "admin",
+        userId: session.user.id,
+        participantId: ownParticipant.rows[0]?.id ?? null,
+      };
     }
 
     const byUserId = await query(

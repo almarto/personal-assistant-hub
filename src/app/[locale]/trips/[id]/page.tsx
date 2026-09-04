@@ -5,6 +5,8 @@ import { requireTripAccess } from "@/lib/auth-guards";
 import { getAttributeValues, getTripById, getTripChecklist } from "@/lib/services/trips";
 import { TripAttributeValue } from "@/lib/types/trips";
 
+import { AddItemForm } from "./components/AddItemForm";
+import { AutoRefresh } from "./components/AutoRefresh";
 import { ChecklistColumn } from "./components/ChecklistColumn";
 import { ParticipantSummaryBar } from "./components/ParticipantSummaryBar";
 import { TripHeader } from "./components/TripHeader";
@@ -28,15 +30,21 @@ export default async function TripDetailPage({
   );
 
   const isAdmin = access.type === "admin";
-  const viewerParticipantId = access.type === "admin" ? null : access.participantId;
+  const viewerParticipantId = access.participantId;
 
   return (
     <div className={styles.container}>
+      <AutoRefresh />
       <TripHeader trip={trip} attributeValues={attributeValues} isAdmin={isAdmin} />
 
       <ParticipantSummaryBar progress={checklist.progress} />
 
       <div className={styles.columns}>
+        {/* Everyone with a stake in the trip (including the creator, who is
+            always also a participant) sees only their own list - the
+            summary bar above already covers everyone else's progress. The
+            all-participants overview below is a fallback for an admin who
+            isn't a participant on this particular trip. */}
         {viewerParticipantId ? (
           <ChecklistColumn
             tripId={id}
@@ -48,6 +56,15 @@ export default async function TripDetailPage({
           />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div className={styles.column}>
+              <div className={styles.columnHeader}>
+                <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: 0 }}>{t("addIndividualItem")}</h2>
+              </div>
+              <p style={{ color: "var(--color-text-secondary)", fontSize: "0.85rem", marginTop: 0 }}>
+                {t("addIndividualItemHint")}
+              </p>
+              <AddItemForm tripId={id} defaultIsShared={false} tripAttributeValues={tripAttributeValues} />
+            </div>
             {trip.participants.map((p) => (
               <ChecklistColumn
                 key={p.id}
@@ -57,6 +74,7 @@ export default async function TripDetailPage({
                 items={checklist.individualByParticipant[p.id] || []}
                 participantId={p.id}
                 tripAttributeValues={tripAttributeValues}
+                showAddForm={false}
               />
             ))}
           </div>

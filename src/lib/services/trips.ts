@@ -306,6 +306,19 @@ export async function createTrip(
         activityId,
       ]);
     }
+
+    // The creator is a guest on their own trip too - give them a
+    // trip_participants row so their own packing list, shared-item
+    // assignment, and progress tracking work the same as any other
+    // participant's.
+    const creatorRes = await client.query('SELECT email, name FROM "user" WHERE id = $1', [userId]);
+    const creator = creatorRes.rows[0];
+    await client.query(
+      `INSERT INTO trip_participants (trip_id, user_id, email, display_name, invite_token)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [tripId, userId, creator.email, creator.name, crypto.randomBytes(32).toString("hex")]
+    );
+
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");

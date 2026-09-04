@@ -17,6 +17,14 @@ interface ChecklistColumnProps {
   participantId?: string | null;
   participants?: TripParticipant[];
   tripAttributeValues: TripAttributeValue[];
+  /**
+   * An individual item applies to every participant (see getTripChecklist's
+   * cross join) - only each item's checked state is per-participant. So
+   * when several individual columns render side by side (the admin
+   * overview), only one of them should offer an add form; the others would
+   * just be redundant paths to the same shared item pool.
+   */
+  showAddForm?: boolean;
 }
 
 export function ChecklistColumn({
@@ -27,6 +35,7 @@ export function ChecklistColumn({
   participantId,
   participants,
   tripAttributeValues,
+  showAddForm = true,
 }: ChecklistColumnProps) {
   const t = useTranslations("TripPlanner");
   const [pending, setPending] = useState<Record<string, boolean>>({});
@@ -65,7 +74,9 @@ export function ChecklistColumn({
       {items.length === 0 ? (
         <div style={{ marginBottom: "1rem" }}>
           <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9rem" }}>{t("addItemPrompt")}</p>
-          <AddItemForm tripId={tripId} defaultIsShared={kind === "shared"} tripAttributeValues={tripAttributeValues} />
+          {showAddForm && (
+            <AddItemForm tripId={tripId} defaultIsShared={kind === "shared"} tripAttributeValues={tripAttributeValues} />
+          )}
         </div>
       ) : (
         <>
@@ -95,9 +106,11 @@ export function ChecklistColumn({
               </div>
             );
           })}
-          <div className={styles.addItemRow}>
-            <AddItemForm tripId={tripId} defaultIsShared={kind === "shared"} tripAttributeValues={tripAttributeValues} compact />
-          </div>
+          {showAddForm && (
+            <div className={styles.addItemRow}>
+              <AddItemForm tripId={tripId} defaultIsShared={kind === "shared"} tripAttributeValues={tripAttributeValues} compact />
+            </div>
+          )}
         </>
       )}
     </div>

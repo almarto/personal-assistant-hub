@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { getTrips } from "@/lib/services/trips";
 import { isAdmin } from "@/lib/types/roles";
 import { TripListItem } from "@/lib/types/trips";
+import { formatTripDate } from "@/lib/utils/format-date";
 import { Badge } from "@/systemUI/components/Badge/Badge";
 import { Button } from "@/systemUI/components/Button/Button";
 
@@ -23,8 +24,8 @@ function TripGrid({ trips, t }: { trips: TripListItem[]; t: Translate }) {
         <Link key={trip.id} href={`/trips/${trip.id}`} className={styles.card}>
           <h3 className={styles.cardTitle}>{trip.name}</h3>
           <p className={styles.cardSubtitle}>
-            {trip.start_date ? new Date(trip.start_date).toLocaleDateString() : "?"}
-            {trip.end_date && ` - ${new Date(trip.end_date).toLocaleDateString()}`}
+            {trip.start_date ? formatTripDate(trip.start_date) : "?"}
+            {trip.end_date && ` - ${formatTripDate(trip.end_date)}`}
           </p>
           <div className={styles.badges}>
             {trip.vehicleName && <Badge variant="primary">{trip.vehicleName}</Badge>}

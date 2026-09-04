@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { Link } from "@/i18n/routing";
 import { TripAttributeValue, TripWithDetails } from "@/lib/types/trips";
+import { formatTripDate } from "@/lib/utils/format-date";
 import { Badge } from "@/systemUI/components/Badge/Badge";
 import { Button } from "@/systemUI/components/Button/Button";
 
@@ -31,8 +32,8 @@ export function TripHeader({ trip, attributeValues, isAdmin }: TripHeaderProps) 
         <div>
           <h1 className={styles.title}>{trip.name}</h1>
           <div className={styles.subtitle}>
-            {trip.start_date ? new Date(trip.start_date).toLocaleDateString() : "?"}
-            {trip.end_date && ` - ${new Date(trip.end_date).toLocaleDateString()}`}
+            {trip.start_date ? formatTripDate(trip.start_date) : "?"}
+            {trip.end_date && ` - ${formatTripDate(trip.end_date)}`}
           </div>
           <div className={styles.badges}>
             {trip.vehicle && <Badge variant="primary">{trip.vehicle.name}</Badge>}

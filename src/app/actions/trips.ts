@@ -109,7 +109,7 @@ export async function createPackingItemAction(data: {
       name: data.name.trim(),
       is_shared: data.is_shared,
       attributeValueIds: data.attributeValueIds,
-      createdByParticipantId: access.type === "admin" ? null : access.participantId,
+      createdByParticipantId: access.participantId,
     });
     revalidatePath(`/trips/${data.tripId}`);
     return { error: null };

@@ -7,6 +7,8 @@ import { createPackingItemAction } from "@/app/actions/trips";
 import { TripAttributeValue } from "@/lib/types/trips";
 import { Button } from "@/systemUI/components/Button/Button";
 
+import styles from "../page.module.css";
+
 interface AddItemFormProps {
   tripId: string;
   defaultIsShared: boolean;
@@ -17,8 +19,7 @@ interface AddItemFormProps {
 export function AddItemForm({ tripId, defaultIsShared, tripAttributeValues, compact }: AddItemFormProps) {
   const t = useTranslations("TripPlanner");
   const [name, setName] = useState("");
-  const [isShared, setIsShared] = useState(defaultIsShared);
-  const [tagIds, setTagIds] = useState<string[]>(tripAttributeValues.map((v) => v.id));
+  const [tagIds, setTagIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(!compact);
 
@@ -29,10 +30,17 @@ export function AddItemForm({ tripId, defaultIsShared, tripAttributeValues, comp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+    // An item only ever shows up on a checklist when it shares at least one
+    // tag with the trip (see the checklist query's JOIN) - zero tags would
+    // silently create an item nobody ever sees.
+    if (tagIds.length === 0) {
+      setError(t("selectAtLeastOneTag"));
+      return;
+    }
     const result = await createPackingItemAction({
       tripId,
       name: name.trim(),
-      is_shared: isShared,
+      is_shared: defaultIsShared,
       attributeValueIds: tagIds,
     });
     if (result.error) {
@@ -64,16 +72,17 @@ export function AddItemForm({ tripId, defaultIsShared, tripAttributeValues, comp
         placeholder={t("itemName")}
         style={{ padding: "0.5rem" }}
       />
-      <label style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.85rem" }}>
-        <input type="checkbox" checked={isShared} onChange={(e) => setIsShared(e.target.checked)} />
-        {t("shared")}
-      </label>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+      <div className={styles.chipGroup}>
         {tripAttributeValues.map((v) => (
-          <label key={v.id} style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.85rem" }}>
-            <input type="checkbox" checked={tagIds.includes(v.id)} onChange={() => toggleTag(v.id)} />
+          <button
+            key={v.id}
+            type="button"
+            aria-pressed={tagIds.includes(v.id)}
+            className={tagIds.includes(v.id) ? styles.chipSelected : styles.chip}
+            onClick={() => toggleTag(v.id)}
+          >
             {v.name}
-          </label>
+          </button>
         ))}
       </div>
       {error && <p style={{ color: "#ef4444", fontSize: "0.85rem" }}>{error}</p>}
