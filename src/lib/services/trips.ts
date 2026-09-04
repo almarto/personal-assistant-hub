@@ -440,6 +440,7 @@ export async function inviteParticipant(
     inviteUrl,
   });
   const { error: emailError } = await emailService.sendEmail({
+    from: "Luggage Trip Planner <no-reply@almarto.es>",
     to: [data.email],
     subject: `You're invited: ${trip.name}`,
     text: `${data.display_name}, you've been invited to "${trip.name}". Open your trip: ${inviteUrl}`,
