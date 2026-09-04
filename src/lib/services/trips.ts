@@ -15,6 +15,16 @@ import type {
   TripWithDetails,
 } from "@/lib/types/trips";
 
+// node-pg parses Postgres DATE columns (oid 1082) into JS `Date` objects by
+// default. This repo's `Trip`/`TripListItem` types declare start_date/end_date
+// as `string | null` (YYYY-MM-DD), so normalize at the service boundary
+// wherever a DATE column's raw row value crosses into a returned object.
+function toDateString(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return value as string;
+}
+
 export class TripNotFoundError extends Error {
   constructor(tripId: string) {
     super(`Trip not found: ${tripId}`);
@@ -162,7 +172,7 @@ export async function getTrips(userId: string, isAdmin: boolean): Promise<TripLi
     LEFT JOIN trip_attribute_values o ON o.id = t.overnight_value_id
     LEFT JOIN viewer_participant vp ON vp.trip_id = t.id
     LEFT JOIN LATERAL (
-      SELECT COUNT(*) AS total, COUNT(*) FILTER (WHERE cs.checked) AS packed
+      SELECT COUNT(DISTINCT pi.id) AS total, COUNT(DISTINCT pi.id) FILTER (WHERE cs.checked) AS packed
       FROM packing_items pi
       JOIN packing_item_tags pit
         ON pit.packing_item_id = pi.id AND pit.attribute_value_id = ANY(tas.attr_ids)
@@ -171,7 +181,7 @@ export async function getTrips(userId: string, isAdmin: boolean): Promise<TripLi
       WHERE pi.is_shared = false AND vp.participant_id IS NOT NULL
     ) ind ON true
     LEFT JOIN LATERAL (
-      SELECT COUNT(*) AS total, COUNT(*) FILTER (WHERE cs.checked) AS packed
+      SELECT COUNT(DISTINCT pi.id) AS total, COUNT(DISTINCT pi.id) FILTER (WHERE cs.checked) AS packed
       FROM packing_items pi
       JOIN packing_item_tags pit
         ON pit.packing_item_id = pi.id AND pit.attribute_value_id = ANY(tas.attr_ids)
@@ -189,8 +199,8 @@ export async function getTrips(userId: string, isAdmin: boolean): Promise<TripLi
   return result.rows.map((row) => ({
     id: row.id,
     name: row.name,
-    start_date: row.start_date,
-    end_date: row.end_date,
+    start_date: toDateString(row.start_date),
+    end_date: toDateString(row.end_date),
     vehicleName: row.vehicle_name,
     overnightName: row.overnight_name,
     activityNames: row.activity_names,
@@ -236,8 +246,8 @@ export async function getTripById(tripId: string): Promise<TripWithDetails | nul
   return {
     id: row.id,
     name: row.name,
-    start_date: row.start_date,
-    end_date: row.end_date,
+    start_date: toDateString(row.start_date),
+    end_date: toDateString(row.end_date),
     notes: row.notes,
     vehicle_value_id: row.vehicle_value_id,
     overnight_value_id: row.overnight_value_id,

@@ -111,8 +111,6 @@ export async function requireTripAccess(tripId: string): Promise<TripAccessResul
       ]);
       return { type: "participant", userId: session.user.id, participantId };
     }
-
-    throw new TripAccessDeniedError("signin_required");
   }
 
   const cookieStore = await cookies();
@@ -127,5 +125,6 @@ export async function requireTripAccess(tripId: string): Promise<TripAccessResul
     }
   }
 
+  if (session) throw new TripAccessDeniedError("signin_required");
   throw new TripAccessDeniedError("not_found");
 }
