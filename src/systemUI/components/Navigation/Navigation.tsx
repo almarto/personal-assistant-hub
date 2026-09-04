@@ -32,12 +32,12 @@ export default function Navigation({ showLogout = false }: NavigationProps) {
 
   const isAdmin = checkIsAdmin(session?.user?.role);
   const isImpersonating = !!session?.session?.impersonatedBy;
-  const isFriendsZoneOnly =
-    !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.FRIENDS_ZONE;
+  const isTripPlannerOnly =
+    !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.TRIP_PLANNER;
 
   const showAdminLink = isAdmin && !isAdminPage;
   const showProfileLink =
-    session?.user && !isAdmin && !appRolesLoading && !isFriendsZoneOnly;
+    session?.user && !isAdmin && !appRolesLoading && !isTripPlannerOnly;
   const showLogoutBtn = showLogout;
 
   const onlyLanguageSwitcher =

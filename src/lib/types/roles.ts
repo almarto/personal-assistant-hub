@@ -5,7 +5,7 @@
  */
 export const APP_ROLE = {
   SCHEDULE_MANAGER: "schedule_manager",
-  FRIENDS_ZONE: "friends_zone",
+  TRIP_PLANNER: "trip_planner",
 } as const;
 
 export type AppRole = (typeof APP_ROLE)[keyof typeof APP_ROLE];

@@ -27,9 +27,9 @@
       "title": "House Renovations",
       "description": "Manage budgets, tasks, and payments for the new house renovations."
     },
-    "friendsZone": {
-      "title": "Friends Zone",
-      "description": "A shared space just for friends."
+    "tripPlanner": {
+      "title": "Luggage Trip Planner",
+      "description": "Plan trips and coordinate packing with friends."
     }
   },
   "Auth": {
@@ -184,7 +184,7 @@
     "allFieldsRequired": "Please fill in all required fields",
     "appRoles": "Feature Roles",
     "appRole_schedule_manager": "Schedule Manager",
-    "appRole_friends_zone": "Friends Zone",
+    "appRole_trip_planner": "Trip Planner",
     "impersonate": "View as this user"
   },
   "Navigation": {

@@ -51,11 +51,11 @@ export default async function HubHome({
   const { locale } = await params;
   const isAdmin = checkIsAdmin(session.user.role);
   const appRoles = await getUserAppRoles(session.user.id);
-  const hasFriendsZoneAccess = isAdmin || appRoles.includes(APP_ROLE.FRIENDS_ZONE);
-  const isFriendsZoneOnly =
-    !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.FRIENDS_ZONE;
+  const hasTripPlannerAccess = isAdmin || appRoles.includes(APP_ROLE.TRIP_PLANNER);
+  const isTripPlannerOnly =
+    !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.TRIP_PLANNER;
 
-  if (isFriendsZoneOnly) {
+  if (isTripPlannerOnly) {
     return redirect({ href: "/trip-planner", locale });
   }
 
@@ -123,17 +123,17 @@ export default async function HubHome({
           </Link>
         </div>
 
-        {hasFriendsZoneAccess && (
+        {hasTripPlannerAccess && (
           <div className={styles.appCard}>
             <Link href="/trip-planner" className={styles.appCardLink}>
               <div className={styles.iconWrapper}>
                 <Users size={28} />
               </div>
               <h3 className={styles.appTitle}>
-                {launcherT("friendsZone.title")}
+                {launcherT("tripPlanner.title")}
               </h3>
               <p className={styles.appDescription}>
-                {launcherT("friendsZone.description")}
+                {launcherT("tripPlanner.description")}
               </p>
             </Link>
           </div>

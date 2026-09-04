@@ -27,9 +27,9 @@
       "title": "Reformas de Casa",
       "description": "Gestiona presupuestos, tareas y pagos para la reforma de la nueva casa."
     },
-    "friendsZone": {
-      "title": "Zona de Amigos",
-      "description": "Un espacio compartido solo para amigos."
+    "tripPlanner": {
+      "title": "Planificador de Viajes",
+      "description": "Planifica viajes y coordina el equipaje con amigos."
     }
   },
   "Auth": {
@@ -184,7 +184,7 @@
     "allFieldsRequired": "Por favor, complete todos los campos obligatorios",
     "appRoles": "Roles de funcionalidades",
     "appRole_schedule_manager": "Gestor de horarios",
-    "appRole_friends_zone": "Zona de Amigos",
+    "appRole_trip_planner": "Planificador de Viajes",
     "impersonate": "Ver como este usuario"
   },
   "Navigation": {

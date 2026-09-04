@@ -48,8 +48,8 @@ export async function requireScheduleManager() {
   return requireAppRole(APP_ROLE.SCHEDULE_MANAGER);
 }
 
-export async function requireFriendsZone() {
-  return requireAppRole(APP_ROLE.FRIENDS_ZONE);
+export async function requireTripPlanner() {
+  return requireAppRole(APP_ROLE.TRIP_PLANNER);
 }
 
 export class TripAccessDeniedError extends Error {

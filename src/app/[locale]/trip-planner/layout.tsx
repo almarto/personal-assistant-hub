@@ -6,7 +6,7 @@ import { userHasAppRole } from "@/lib/services/user-roles";
 import { APP_ROLE } from "@/lib/types/roles";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
-export default async function FriendsZoneLayout({
+export default async function TripPlannerLayout({
   children,
   params,
 }: {
@@ -34,7 +34,7 @@ export default async function FriendsZoneLayout({
   const hasAccess = await userHasAppRole(
     session.user.id,
     session.user.role,
-    APP_ROLE.FRIENDS_ZONE
+    APP_ROLE.TRIP_PLANNER
   );
 
   if (!hasAccess) {
