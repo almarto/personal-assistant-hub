@@ -21,7 +21,18 @@ import type {
 // wherever a DATE column's raw row value crosses into a returned object.
 function toDateString(value: unknown): string | null {
   if (value === null || value === undefined) return null;
-  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  if (value instanceof Date) {
+    // node-pg's DATE parser builds this Date from the stored calendar date's
+    // own year/month/day, interpreted as local time - NOT as a UTC instant.
+    // Reading it back via toISOString() would convert through UTC and can
+    // shift the day by one on any server with a non-zero UTC offset. Read the
+    // local calendar components directly instead, since those already match
+    // the date Postgres stored.
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, "0");
+    const day = String(value.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
   return value as string;
 }
 
