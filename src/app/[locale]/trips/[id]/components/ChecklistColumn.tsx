@@ -34,6 +34,12 @@ interface ChecklistColumnProps {
    * just be redundant paths to the same shared item pool.
    */
   showAddForm?: boolean;
+  /**
+   * Filters which items are *displayed* by name, but the packed/total count
+   * in the header always reflects the full list - search narrows the view,
+   * it doesn't change progress.
+   */
+  searchQuery?: string;
 }
 
 export function ChecklistColumn({
@@ -45,6 +51,7 @@ export function ChecklistColumn({
   participants,
   tripAttributeValues,
   showAddForm = true,
+  searchQuery = "",
 }: ChecklistColumnProps) {
   const t = useTranslations("TripPlanner");
   const [pending, setPending] = useState<Record<string, boolean>>({});
@@ -57,6 +64,9 @@ export function ChecklistColumn({
 
   const total = items.length;
   const packed = items.filter((i) => pending[i.packingItemId] ?? i.checked).length;
+
+  const trimmedQuery = searchQuery.trim().toLowerCase();
+  const visibleItems = trimmedQuery ? items.filter((i) => i.name.toLowerCase().includes(trimmedQuery)) : items;
 
   const handleToggle = async (item: ChecklistIndividualItem | ChecklistSharedItem) => {
     const next = !(pending[item.packingItemId] ?? item.checked);
@@ -95,7 +105,10 @@ export function ChecklistColumn({
         </div>
       ) : (
         <>
-          {items.map((item) => {
+          {visibleItems.length === 0 && (
+            <p className={styles.noSearchResults}>{t("noSearchResults", { query: searchQuery.trim() })}</p>
+          )}
+          {visibleItems.map((item) => {
             const checked = pending[item.packingItemId] ?? item.checked;
             const assignedParticipantId = "assignedParticipantId" in item ? item.assignedParticipantId : undefined;
             const isUnassigned = kind === "shared" && !assignedParticipantId && !checked;
@@ -109,7 +122,7 @@ export function ChecklistColumn({
                 >
                   {item.name}
                 </label>
-                <div style={{ display: "flex", gap: "0.25rem" }}>
+                <div className={styles.itemTags}>
                   {item.tags.map((tag) => (
                     <Badge key={tag.id} variant={BADGE_VARIANT_BY_CATEGORY[tag.category]}>
                       {tag.name}
