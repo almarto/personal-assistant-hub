@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #f7f7f7;
+      color: #2d3748;
+    }
+    a { color: #3b82f6; text-decoration: none; }
+    a:hover { color: #2563eb; text-decoration: underline; }
+    .trip-card { transition: all 0.2s ease; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+    .trip-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); border-color: #3b82f6 !important; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background-color: #f7f7f7;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 24px;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <span style="font-size: 24px; font-weight: 700; color: #3b82f6;">Personal Assistant Hub</span>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="#" style="font-weight: 500; color: #2d3748; padding: 8px 12px; border-radius: 4px;">Home</a>
+        <a href="#" style="font-weight: 700; color: #3b82f6; padding: 8px 12px; border-radius: 4px; background: rgba(59,130,246,0.08);">Trip Planner</a>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 32px;">
+      <div>
+        <h1 style="margin: 0 0 4px; font-size: 24px; font-weight: 700; color: #2d3748;">Luggage Trip Planner</h1>
+        <p style="margin: 0; font-size: 14px; color: #4a5568;">Trips you're part of, and what's left to pack.</p>
+      </div>
+      <button style="display: inline-flex; align-items: center; justify-content: center; border: none; background-color: #3b82f6; color: white; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 44px; padding: 0 24px; font-size: 16px;">+ New trip</button>
+    </div>
+
+    <div style="margin-bottom: 40px;">
+      <h2 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 0 0 16px;">Upcoming</h2>
+      <div style="display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));">
+
+        <div class="trip-card" style="display: flex; flex-direction: column; padding: 24px; background-color: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;">
+          <h3 style="margin: 0 0 4px; font-size: 1.1rem; font-weight: 600; color: #2d3748;">Picos de Europa</h3>
+          <p style="margin: 0 0 12px; font-size: 0.85rem; color: #4a5568;">Oct 10 &ndash; Oct 12, 2026</p>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background-color: #3b82f6; color: white;">Motorbike</span>
+            <span style="display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background-color: #e0e0e0; color: #2d3748;">Camping</span>
+          </div>
+          <div style="display: flex; align-items: center; margin-bottom: 12px;">
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid white;">A</div>
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background: #8b5cf6; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid white; margin-left: -8px;">M</div>
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background: #10b981; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid white; margin-left: -8px;">L</div>
+          </div>
+          <div style="height: 6px; border-radius: 9999px; background: rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 6px;">
+            <div style="height: 100%; border-radius: 9999px; background-color: #3b82f6; width: 62%;"></div>
+          </div>
+          <span style="font-size: 0.8rem; color: #4a5568;">21/34 packed</span>
+        </div>
+
+        <div class="trip-card" style="display: flex; flex-direction: column; padding: 24px; background-color: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;">
+          <h3 style="margin: 0 0 4px; font-size: 1.1rem; font-weight: 600; color: #2d3748;">Canyoning Weekend</h3>
+          <p style="margin: 0 0 12px; font-size: 0.85rem; color: #4a5568;">Nov 21 &ndash; Nov 22, 2026</p>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background-color: #3b82f6; color: white;">Car</span>
+            <span style="display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background-color: #e0e0e0; color: #2d3748;">Hotel</span>
+          </div>
+          <div style="display: flex; align-items: center; margin-bottom: 12px;">
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid white;">A</div>
+            <div style="width: 28px; height: 28px; border-radius: 9999px; background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid white; margin-left: -8px;">S</div>
+          </div>
+          <div style="height: 6px; border-radius: 9999px; background: rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 6px;">
+            <div style="height: 100%; border-radius: 9999px; background-color: #3b82f6; width: 10%;"></div>
+          </div>
+          <span style="font-size: 0.8rem; color: #4a5568;">2/19 packed</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <h2 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 0 0 16px;">Past</h2>
+      <div style="display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));">
+
+        <div class="trip-card" style="display: flex; flex-direction: column; padding: 24px; background-color: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; opacity: 0.7;">
+          <h3 style="margin: 0 0 4px; font-size: 1.1rem; font-weight: 600; color: #2d3748;">Pyrenees Rally</h3>
+          <p style="margin: 0 0 12px; font-size: 0.85rem; color: #4a5568;">Jun 6 &ndash; Jun 9, 2026</p>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background-color: #3b82f6; color: white;">Motorbike</span>
+            <span style="display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; background-color: #e0e0e0; color: #2d3748;">Camping</span>
+          </div>
+          <div style="height: 6px; border-radius: 9999px; background: rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 6px;">
+            <div style="height: 100%; border-radius: 9999px; background-color: #10b981; width: 100%;"></div>
+          </div>
+          <span style="font-size: 0.8rem; color: #4a5568;">28/28 packed</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

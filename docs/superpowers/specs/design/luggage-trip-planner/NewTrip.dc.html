@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #f7f7f7;
+      color: #2d3748;
+    }
+    a { color: #3b82f6; text-decoration: none; }
+    a:hover { color: #2563eb; text-decoration: underline; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-weight: 400;
+      font-size: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background-color 0.15s;
+      background: white;
+      color: #2d3748;
+    }
+    .chip:hover { border-color: #3b82f6; background-color: rgba(255,107,107,0.04); }
+    .chip-checked { border-color: #3b82f6 !important; background-color: rgba(255,107,107,0.08) !important; font-weight: 500; }
+    input:focus, .chip:focus { outline: 2px solid #3b82f6; outline-offset: 1px; }
+    .field-label { font-weight: 500; font-size: 0.9rem; display: block; margin-bottom: 8px; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background-color: #f7f7f7;">
+  <div style="max-width: 720px; margin: 0 auto; padding: 24px;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <span style="font-size: 24px; font-weight: 700; color: #3b82f6;">Personal Assistant Hub</span>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="#" style="font-weight: 500; color: #2d3748; padding: 8px 12px; border-radius: 4px;">Home</a>
+        <a href="#" style="font-weight: 700; color: #3b82f6; padding: 8px 12px; border-radius: 4px; background: rgba(59,130,246,0.08);">Trip Planner</a>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <a href="#" style="font-size: 14px; font-weight: 500;">&larr; Back to trips</a>
+    </div>
+
+    <h1 style="margin: 0 0 24px; font-size: 24px; font-weight: 700; color: #2d3748;">New trip</h1>
+
+    <div style="background: #ffffff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); padding: 32px; display: flex; flex-direction: column; gap: 24px;">
+
+      <div>
+        <label class="field-label">Trip name</label>
+        <input type="text" value="{{tripName}}" onChange="{{onTripNameChange}}" placeholder="e.g. Picos de Europa" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; font-family: inherit; color: #2d3748;" />
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label class="field-label">Start date</label>
+          <input type="date" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; font-family: inherit; color: #2d3748;" />
+        </div>
+        <div>
+          <label class="field-label">End date</label>
+          <input type="date" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; font-family: inherit; color: #2d3748;" />
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label">Vehicle</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{vehicleOptions}}" as="opt" hint-placeholder-count="4">
+            <div class="chip {{opt.checkedClass}}" onClick="{{opt.select}}">{{opt.label}}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label">Overnight style</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{overnightOptions}}" as="opt" hint-placeholder-count="4">
+            <div class="chip {{opt.checkedClass}}" onClick="{{opt.select}}">{{opt.label}}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label">Activities</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{activityOptions}}" as="opt" hint-placeholder-count="6">
+            <div class="chip {{opt.checkedClass}}" onClick="{{opt.select}}">{{opt.label}}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background: rgba(59,130,246,0.06); border-radius: 8px; padding: 12px 16px;">
+        <p style="margin: 0; font-size: 13px; color: #4a5568;">Packing items appear automatically on the trip page based on what you select here. First time with this combination? You'll be prompted to add the starting items there &mdash; every trip like it after that reuses them.</p>
+      </div>
+
+      <div>
+        <label class="field-label">Participants</label>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <input type="email" value="{{emailInput}}" onChange="{{onEmailInputChange}}" placeholder="name@example.com" style="flex: 1; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; font-family: inherit; color: #2d3748;" />
+          <button onClick="{{addParticipant}}" style="display: inline-flex; align-items: center; justify-content: center; border: 1px solid #3b82f6; background: transparent; color: #3b82f6; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 40px; padding: 0 16px; font-size: 14px;">Add</button>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{participants}}" as="p" hint-placeholder-count="2">
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 0.25rem 0.5rem 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; background-color: #e0e0e0; color: #2d3748;">
+              {{p.email}}
+              <span onClick="{{p.remove}}" style="cursor: pointer; font-weight: 700; padding: 0 2px;">&times;</span>
+            </span>
+          </sc-for>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 12px; color: #a0aec0;">No account needed &mdash; invited people without one get a guest link. If they later sign up with the same email, they're linked automatically.</p>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+        <button style="display: inline-flex; align-items: center; justify-content: center; border: none; background: transparent; color: #2d3748; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 44px; padding: 0 24px; font-size: 16px;">Cancel</button>
+        <button style="display: inline-flex; align-items: center; justify-content: center; border: none; background-color: #3b82f6; color: white; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 44px; padding: 0 24px; font-size: 16px;">Create trip</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tripName: 'Picos de Europa',
+      vehicle: 'motorbike',
+      overnight: 'camping',
+      activities: ['hiking'],
+      participants: ['miguel@example.com', 'laura@example.com'],
+      emailInput: '',
+    };
+  }
+
+  onTripNameChange = (e) => this.setState({ tripName: e.target.value });
+  onEmailInputChange = (e) => this.setState({ emailInput: e.target.value });
+
+  selectVehicle = (id) => this.setState({ vehicle: id });
+  selectOvernight = (id) => this.setState({ overnight: id });
+
+  toggleActivity = (id) => {
+    const activities = this.state.activities.includes(id)
+      ? this.state.activities.filter((a) => a !== id)
+      : [...this.state.activities, id];
+    this.setState({ activities });
+  };
+
+  addParticipant = () => {
+    const email = (this.state.emailInput || '').trim();
+    if (!email || this.state.participants.includes(email)) return;
+    this.setState({
+      participants: [...this.state.participants, email],
+      emailInput: '',
+    });
+  };
+
+  removeParticipant = (email) => {
+    this.setState({
+      participants: this.state.participants.filter((p) => p !== email),
+    });
+  };
+
+  renderVals() {
+    const buildSingle = (options, current, select) =>
+      options.map((opt) => ({
+        ...opt,
+        checkedClass: current === opt.id ? 'chip-checked' : '',
+        select: () => select(opt.id),
+      }));
+
+    const vehicleOptions = buildSingle(
+      [
+        { id: 'motorbike', label: 'Motorbike' },
+        { id: 'car', label: 'Car' },
+        { id: 'van', label: 'Van' },
+        { id: 'foot', label: 'On foot' },
+      ],
+      this.state.vehicle,
+      this.selectVehicle
+    );
+
+    const overnightOptions = buildSingle(
+      [
+        { id: 'camping', label: 'Camping' },
+        { id: 'hotel', label: 'Hotel' },
+        { id: 'hostel', label: 'Hostel' },
+        { id: 'mixed', label: 'Mixed' },
+      ],
+      this.state.overnight,
+      this.selectOvernight
+    );
+
+    const activityOptions = [
+      { id: 'hiking', label: 'Hiking' },
+      { id: 'canyoning', label: 'Canyoning' },
+      { id: 'rally', label: 'Rally / riding' },
+      { id: 'sightseeing', label: 'Sightseeing' },
+      { id: 'relax', label: 'Relax' },
+      { id: 'photography', label: 'Photography' },
+    ].map((opt) => ({
+      ...opt,
+      checkedClass: this.state.activities.includes(opt.id) ? 'chip-checked' : '',
+      select: () => this.toggleActivity(opt.id),
+    }));
+
+    const participants = this.state.participants.map((email) => ({
+      email,
+      remove: () => this.removeParticipant(email),
+    }));
+
+    return {
+      tripName: this.state.tripName,
+      onTripNameChange: this.onTripNameChange,
+      vehicleOptions,
+      overnightOptions,
+      activityOptions,
+      participants,
+      emailInput: this.state.emailInput,
+      onEmailInputChange: this.onEmailInputChange,
+      addParticipant: this.addParticipant,
+    };
+  }
+}
+</script>
+</body>
+</html>

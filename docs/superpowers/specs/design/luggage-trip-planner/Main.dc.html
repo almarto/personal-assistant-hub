@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #f7f7f7;
+      color: #2d3748;
+    }
+    a { color: #3b82f6; text-decoration: none; }
+    a:hover { color: #2563eb; text-decoration: underline; }
+    input[type="checkbox"] { accent-color: #3b82f6; }
+    select:focus, input:focus { outline: 2px solid #3b82f6; outline-offset: 1px; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background-color: #f7f7f7;">
+
+  <div style="max-width: 1200px; margin: 0 auto; padding: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <span style="font-size: 24px; font-weight: 700; color: #3b82f6;">Personal Assistant Hub</span>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="#" style="font-weight: 500; color: #2d3748; padding: 8px 12px; border-radius: 4px;">Home</a>
+        <a href="#" style="font-weight: 700; color: #3b82f6; padding: 8px 12px; border-radius: 4px; background: rgba(59,130,246,0.08);">Trip Planner</a>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <a href="#" style="font-size: 14px; font-weight: 500;">&larr; Back to trips</a>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <div>
+        <h1 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #2d3748;">Picos de Europa &mdash; Motorbike Camping</h1>
+        <div style="font-size: 14px; color: #4a5568; margin-bottom: 12px;">Oct 10 &ndash; Oct 12, 2026 &middot; 3 participants</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; line-height: 1; background-color: #3b82f6; color: white;">Motorbike</span>
+          <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; line-height: 1; background-color: #e0e0e0; color: #2d3748;">Camping</span>
+          <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; line-height: 1; border: 1px solid #3b82f6; color: #3b82f6; background: transparent;">Hiking</span>
+          <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; line-height: 1; border: 1px solid #3b82f6; color: #3b82f6; background: transparent;">Campfire</span>
+        </div>
+      </div>
+      <button style="display: inline-flex; align-items: center; justify-content: center; border: 1px solid #3b82f6; background: transparent; color: #3b82f6; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 44px; padding: 0 24px; font-size: 16px;">Edit trip</button>
+    </div>
+
+    <div style="margin-bottom: 32px;">
+      <h2 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 0 0 12px;">Participants</h2>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <sc-for list="{{participants}}" as="p" hint-placeholder-count="3">
+          <div style="{{p.cardStyle}}">
+            <div style="{{p.avatarStyle}}">{{p.initials}}</div>
+            <div style="flex: 1; min-width: 120px;">
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <span style="font-weight: 600; font-size: 14px; color: #2d3748;">{{p.name}}</span>
+                <sc-if value="{{p.isMe}}" hint-placeholder-val="{{true}}">
+                  <span style="font-size: 10px; font-weight: 700; color: #3b82f6; background: rgba(59,130,246,0.1); padding: 1px 6px; border-radius: 9999px;">YOU</span>
+                </sc-if>
+              </div>
+              <div style="height: 6px; border-radius: 9999px; background: rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 4px;">
+                <div style="{{p.barStyle}}"></div>
+              </div>
+              <span style="font-size: 12px; color: #4a5568;">{{p.done}}/{{p.total}} packed</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+
+      <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); padding: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <h2 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 0;">Individual &mdash; your checklist</h2>
+          <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background-color: #e0e0e0; color: #2d3748;">{{individualDone}}/{{individualTotal}}</span>
+        </div>
+
+        <sc-for list="{{individualItems}}" as="item" hint-placeholder-count="8">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+            <input type="checkbox" checked="{{item.checked}}" onChange="{{item.toggle}}" style="width: 18px; height: 18px; cursor: pointer; flex-shrink: 0;" />
+            <label style="{{item.labelStyle}}" onClick="{{item.toggle}}">{{item.label}}</label>
+          </div>
+        </sc-for>
+
+        <div style="display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed rgba(0,0,0,0.15);">
+          <input type="text" placeholder="Add an item&hellip;" value="{{newIndividualLabel}}" onChange="{{onNewIndividualChange}}" style="flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; color: #2d3748;" />
+          <button onClick="{{addIndividualItem}}" style="display: inline-flex; align-items: center; justify-content: center; border: none; background-color: #3b82f6; color: white; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 36px; padding: 0 16px; font-size: 14px;">Add</button>
+        </div>
+      </div>
+
+      <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); padding: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <h2 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 0;">Group &mdash; shared checklist</h2>
+          <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background-color: #e0e0e0; color: #2d3748;">{{groupDone}}/{{groupTotal}}</span>
+        </div>
+
+        <sc-for list="{{groupItems}}" as="item" hint-placeholder-count="8">
+          <div style="{{item.rowStyle}}">
+            <input type="checkbox" checked="{{item.checked}}" onChange="{{item.toggle}}" style="width: 18px; height: 18px; cursor: pointer; flex-shrink: 0;" />
+            <label style="{{item.labelStyle}}" onClick="{{item.toggle}}">{{item.label}}</label>
+            <select value="{{item.assignedTo}}" onChange="{{item.setAssignee}}" style="font-family: inherit; font-size: 12px; color: #4a5568; border: 1px solid #ddd; border-radius: 8px; padding: 4px 6px; background: white; flex-shrink: 0;">
+              <option value="">Unassigned</option>
+              <sc-for list="{{participantsOptions}}" as="p" hint-placeholder-count="3">
+                <option value="{{p.id}}">{{p.name}}</option>
+              </sc-for>
+            </select>
+          </div>
+        </sc-for>
+
+        <div style="display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed rgba(0,0,0,0.15);">
+          <input type="text" placeholder="Add an item&hellip;" value="{{newGroupLabel}}" onChange="{{onNewGroupChange}}" style="flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; color: #2d3748;" />
+          <button onClick="{{addGroupItem}}" style="display: inline-flex; align-items: center; justify-content: center; border: none; background-color: #3b82f6; color: white; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 500; height: 36px; padding: 0 16px; font-size: 14px;">Add</button>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="margin-top: 32px; font-size: 12px; color: #a0aec0;">Sample data for this prototype &mdash; checkboxes, item entry and the assignee picker are fully interactive; your own progress bar (Alberto) recalculates live as you check items and reassign them. Miguel's and Laura's numbers are static sample data.</p>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      individualItems: [
+        { id: 'i1', label: 'Tent', checked: true },
+        { id: 'i2', label: 'Sleeping bag', checked: true },
+        { id: 'i3', label: 'Sleeping mat', checked: true },
+        { id: 'i4', label: 'Headlamp', checked: false },
+        { id: 'i5', label: 'Rain gear', checked: true },
+        { id: 'i6', label: 'Motorbike jacket', checked: true },
+        { id: 'i7', label: 'Off-road gloves', checked: false },
+        { id: 'i8', label: 'Riding boots', checked: true },
+        { id: 'i9', label: 'First aid kit (personal)', checked: false },
+        { id: 'i10', label: 'Water bottle', checked: true },
+        { id: 'i11', label: 'Power bank', checked: false },
+        { id: 'i12', label: 'Hiking boots', checked: false },
+      ],
+      groupItems: [
+        { id: 'g1', label: 'Coffee machine', checked: true, assignedTo: 'alberto' },
+        { id: 'g2', label: 'Gas stove', checked: true, assignedTo: 'miguel' },
+        { id: 'g3', label: 'Camping table', checked: false, assignedTo: 'miguel' },
+        { id: 'g4', label: 'Group first aid kit', checked: true, assignedTo: 'laura' },
+        { id: 'g5', label: 'Spare tent poles', checked: false, assignedTo: '' },
+        { id: 'g6', label: 'Cooking pots', checked: false, assignedTo: 'alberto' },
+        { id: 'g7', label: 'Tarp / shelter', checked: true, assignedTo: 'laura' },
+        { id: 'g8', label: 'Firewood axe', checked: false, assignedTo: '' },
+      ],
+      newIndividualLabel: '',
+      newGroupLabel: '',
+    };
+  }
+
+  toggleIndividual = (id) => {
+    this.setState({
+      individualItems: this.state.individualItems.map((i) =>
+        i.id === id ? { ...i, checked: !i.checked } : i
+      ),
+    });
+  };
+
+  toggleGroup = (id) => {
+    this.setState({
+      groupItems: this.state.groupItems.map((g) =>
+        g.id === id ? { ...g, checked: !g.checked } : g
+      ),
+    });
+  };
+
+  setAssignee = (id, value) => {
+    this.setState({
+      groupItems: this.state.groupItems.map((g) =>
+        g.id === id ? { ...g, assignedTo: value } : g
+      ),
+    });
+  };
+
+  onNewIndividualChange = (e) => {
+    this.setState({ newIndividualLabel: e.target.value });
+  };
+
+  onNewGroupChange = (e) => {
+    this.setState({ newGroupLabel: e.target.value });
+  };
+
+  addIndividualItem = () => {
+    const label = (this.state.newIndividualLabel || '').trim();
+    if (!label) return;
+    this.setState({
+      individualItems: [
+        ...this.state.individualItems,
+        { id: 'custom-i-' + Date.now(), label, checked: false },
+      ],
+      newIndividualLabel: '',
+    });
+  };
+
+  addGroupItem = () => {
+    const label = (this.state.newGroupLabel || '').trim();
+    if (!label) return;
+    this.setState({
+      groupItems: [
+        ...this.state.groupItems,
+        { id: 'custom-g-' + Date.now(), label, checked: false, assignedTo: '' },
+      ],
+      newGroupLabel: '',
+    });
+  };
+
+  renderVals() {
+    const participantsList = [
+      { id: 'alberto', name: 'Alberto' },
+      { id: 'miguel', name: 'Miguel' },
+      { id: 'laura', name: 'Laura' },
+    ];
+
+    const labelStyle = (checked) =>
+      checked
+        ? 'flex: 1; font-size: 14px; cursor: pointer; color: #a0aec0; text-decoration: line-through;'
+        : 'flex: 1; font-size: 14px; cursor: pointer; color: #2d3748; text-decoration: none;';
+
+    const individualItems = this.state.individualItems.map((item) => ({
+      ...item,
+      toggle: () => this.toggleIndividual(item.id),
+      labelStyle: labelStyle(item.checked),
+    }));
+
+    const groupItems = this.state.groupItems.map((item) => {
+      const isMine = item.assignedTo === 'alberto';
+      const rowStyle = isMine
+        ? 'display: flex; align-items: center; gap: 12px; padding: 10px 8px; margin: 0 -8px; border-bottom: 1px solid rgba(0,0,0,0.05); background: rgba(59,130,246,0.04); border-radius: 6px;'
+        : 'display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid rgba(0,0,0,0.05);';
+      return {
+        ...item,
+        toggle: () => this.toggleGroup(item.id),
+        setAssignee: (e) => this.setAssignee(item.id, e.target.value),
+        labelStyle: labelStyle(item.checked),
+        rowStyle,
+      };
+    });
+
+    const individualDone = individualItems.filter((i) => i.checked).length;
+    const individualTotal = individualItems.length;
+    const groupDone = groupItems.filter((g) => g.checked).length;
+    const groupTotal = groupItems.length;
+
+    const myGroupItems = groupItems.filter((g) => g.assignedTo === 'alberto');
+    const myGroupDone = myGroupItems.filter((g) => g.checked).length;
+    const albertoDone = individualDone + myGroupDone;
+    const albertoTotal = individualTotal + myGroupItems.length;
+
+    const barStyle = (pct, color) =>
+      'height: 100%; border-radius: 9999px; background-color: ' + color + '; width: ' + pct + '%;';
+    const avatarStyle = (color) =>
+      'width: 40px; height: 40px; border-radius: 9999px; background-color: ' + color + '; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;';
+    const cardStyle = (isMe) =>
+      'display: flex; align-items: center; gap: 12px; background: #ffffff; border-radius: 12px; padding: 12px 16px; border: 1px solid ' +
+      (isMe ? '#3b82f6' : 'rgba(0,0,0,0.05)') +
+      '; min-width: 220px;';
+
+    const rawParticipants = [
+      { id: 'alberto', name: 'Alberto', initials: 'A', done: albertoDone, total: albertoTotal, color: '#3b82f6', isMe: true },
+      { id: 'miguel', name: 'Miguel', initials: 'M', done: 12, total: 15, color: '#8b5cf6', isMe: false },
+      { id: 'laura', name: 'Laura', initials: 'L', done: 9, total: 13, color: '#10b981', isMe: false },
+    ];
+
+    const participants = rawParticipants.map((p) => {
+      const pct = p.total ? Math.round((p.done / p.total) * 100) : 0;
+      return {
+        ...p,
+        avatarStyle: avatarStyle(p.color),
+        barStyle: barStyle(pct, p.color),
+        cardStyle: cardStyle(p.isMe),
+      };
+    });
+
+    return {
+      individualItems,
+      groupItems,
+      participants,
+      participantsOptions: participantsList,
+      individualDone,
+      individualTotal,
+      groupDone,
+      groupTotal,
+      newIndividualLabel: this.state.newIndividualLabel,
+      newGroupLabel: this.state.newGroupLabel,
+      onNewIndividualChange: this.onNewIndividualChange,
+      onNewGroupChange: this.onNewGroupChange,
+      addIndividualItem: this.addIndividualItem,
+      addGroupItem: this.addGroupItem,
+    };
+  }
+}
+</script>
+</body>
+</html>
