@@ -7,6 +7,7 @@ import { TripAttributeValue } from "@/lib/types/trips";
 import { AutoRefresh } from "./components/AutoRefresh";
 import { ChecklistSection } from "./components/ChecklistSection";
 import { ParticipantSummaryBar } from "./components/ParticipantSummaryBar";
+import { TripCountdown } from "./components/TripCountdown";
 import { TripHeader } from "./components/TripHeader";
 import styles from "./page.module.css";
 
@@ -38,6 +39,7 @@ export default async function TripDetailPage({
   return (
     <div className={styles.container}>
       <AutoRefresh />
+      <TripCountdown startDate={trip.start_date} />
       <TripHeader trip={trip} attributeValues={attributeValues} isAdmin={isAdmin} />
 
       <ParticipantSummaryBar
