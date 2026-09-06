@@ -4,7 +4,7 @@ import { join } from 'path';
 
 const rootDir = process.cwd();
 const envFile = join(rootDir, '.env');
-const envDev = join(rootDir, '.env.back');
+const envDev = join(rootDir, '.env.back_');
 const envProd = join(rootDir, '.env.production');
 
 console.log('🔄 Starting production migration...\n');

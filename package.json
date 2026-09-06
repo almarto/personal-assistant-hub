@@ -9,8 +9,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "migrate": "npx @better-auth/cli migrate --yes && tsx --env-file=.env scripts/migrate.ts",
-    "migrate:prod": "tsx scripts/migrateProduction.ts",
-    "seed:wellness": "tsx --env-file=.env scripts/seedWellnessPlan.ts"
+    "migrate:prod": "tsx scripts/migrateProduction.ts"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "10.2.9",
