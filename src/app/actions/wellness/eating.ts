@@ -9,8 +9,13 @@ export async function toggleMealCompletionAction(
   familyPlanMealId: string,
   dateStr: string
 ): Promise<boolean> {
-  const { userId } = await requireFamilyMembership();
-  const completed = await toggleMealCompletion(familyPlanMealId, userId, new Date(`${dateStr}T00:00:00`));
+  const { userId, familyId } = await requireFamilyMembership();
+  const completed = await toggleMealCompletion(
+    familyPlanMealId,
+    userId,
+    familyId,
+    new Date(`${dateStr}T00:00:00`)
+  );
   revalidatePath("/wellness/comer");
   return completed;
 }

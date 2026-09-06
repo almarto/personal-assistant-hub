@@ -55,9 +55,20 @@ export async function getDayForUser(
 export async function toggleMealCompletion(
   familyPlanMealId: string,
   userId: string,
+  familyId: string,
   date: Date
 ): Promise<boolean> {
   const dateStr = date.toISOString().slice(0, 10);
+  const mealCheck = await query(
+    `SELECT fpm.id FROM family_plan_meals fpm
+     JOIN family_plan_assignments fpa ON fpa.id = fpm.assignment_id
+     WHERE fpm.id = $1 AND fpa.family_id = $2 AND fpa.is_active = true`,
+    [familyPlanMealId, familyId]
+  );
+  if (mealCheck.rows.length === 0) {
+    throw new Error("Meal not found in this family's active plan");
+  }
+
   const existing = await query(
     `SELECT id FROM meal_completion_logs WHERE family_plan_meal_id = $1 AND user_id = $2 AND log_date = $3`,
     [familyPlanMealId, userId, dateStr]

@@ -81,6 +81,7 @@ export async function getSessionLogForDate(
 export async function saveTrainingSessionLog(
   exerciseDayId: string,
   userId: string,
+  familyId: string,
   date: Date,
   notes: string | null,
   sets: { exercise_id: string; set_order: number; weight_kg: number | null; reps: number | null }[]
@@ -89,6 +90,25 @@ export async function saveTrainingSessionLog(
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    const dayCheck = await client.query(
+      `SELECT fped.id FROM family_plan_exercise_days fped
+       JOIN family_plan_assignments fpa ON fpa.id = fped.assignment_id
+       WHERE fped.id = $1 AND fpa.family_id = $2 AND fpa.is_active = true`,
+      [exerciseDayId, familyId]
+    );
+    if (dayCheck.rows.length === 0) {
+      throw new Error("Exercise day not found in this family's active plan");
+    }
+    if (sets.length > 0) {
+      const exerciseIds = [...new Set(sets.map((s) => s.exercise_id))];
+      const exerciseCheck = await client.query(
+        `SELECT id FROM family_plan_exercises WHERE exercise_day_id = $1 AND id = ANY($2::uuid[])`,
+        [exerciseDayId, exerciseIds]
+      );
+      if (exerciseCheck.rows.length !== exerciseIds.length) {
+        throw new Error("One or more exercises do not belong to this exercise day");
+      }
+    }
     const upsert = await client.query(
       `INSERT INTO training_session_logs (exercise_day_id, user_id, log_date, notes)
        VALUES ($1,$2,$3,$4)
