@@ -3,6 +3,7 @@ import { cookies, headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { query } from "@/lib/db";
 import { userHasAppRole } from "@/lib/services/user-roles";
+import { getFamilyIdForUser } from "@/lib/services/wellness/families";
 import type { AppRole } from "@/lib/types/roles";
 import { APP_ROLE, Role } from "@/lib/types/roles";
 
@@ -50,6 +51,26 @@ export async function requireScheduleManager() {
 
 export async function requireTripPlanner() {
   return requireAppRole(APP_ROLE.TRIP_PLANNER);
+}
+
+export class NotInFamilyError extends Error {
+  constructor() {
+    super("User does not belong to any family");
+    this.name = "NotInFamilyError";
+  }
+}
+
+export async function requireFamilyMembership(): Promise<{ userId: string; familyId: string }> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) throw new Error("Unauthorized: Authentication required");
+
+  const familyId = await getFamilyIdForUser(session.user.id);
+  if (!familyId) throw new NotInFamilyError();
+
+  return { userId: session.user.id, familyId };
 }
 
 export class TripAccessDeniedError extends Error {
