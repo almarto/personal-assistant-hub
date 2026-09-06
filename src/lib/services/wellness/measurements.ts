@@ -2,9 +2,11 @@ import { query } from "@/lib/db";
 import type { MeasurementLog } from "@/lib/types/wellness";
 
 export async function getMeasurements(userId: string): Promise<MeasurementLog[]> {
-  const result = await query(`SELECT * FROM measurement_logs WHERE user_id = $1 ORDER BY log_date DESC`, [
-    userId,
-  ]);
+  const result = await query(
+    `SELECT id, user_id, to_char(log_date, 'YYYY-MM-DD') AS log_date, weight_kg, waist_cm, hip_cm, neck_cm
+     FROM measurement_logs WHERE user_id = $1 ORDER BY log_date DESC`,
+    [userId]
+  );
   return result.rows;
 }
 
@@ -23,7 +25,7 @@ export async function upsertMeasurement(
        waist_cm = EXCLUDED.waist_cm,
        hip_cm = EXCLUDED.hip_cm,
        neck_cm = EXCLUDED.neck_cm
-     RETURNING *`,
+     RETURNING id, user_id, to_char(log_date, 'YYYY-MM-DD') AS log_date, weight_kg, waist_cm, hip_cm, neck_cm`,
     [userId, dateStr, data.weight_kg, data.waist_cm, data.hip_cm, data.neck_cm]
   );
   return result.rows[0];
