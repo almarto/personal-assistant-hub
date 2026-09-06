@@ -42,4 +42,4 @@ next-env.d.ts
 .env*.local
 
 
-.claude/worktrees/*
+.claude/worktrees
