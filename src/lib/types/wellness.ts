@@ -32,10 +32,20 @@ export interface FamilyMemberWithUser {
   email: string;
 }
 
+export type CookMethod =
+  | "plancha"
+  | "horno"
+  | "airfryer"
+  | "estofado"
+  | "cocido"
+  | "crudo"
+  | "otro";
+
 export interface Dish {
   id: string;
   name: string;
   description: string | null;
+  cook_method: CookMethod;
 }
 
 export interface PlanTemplateProfile {
@@ -136,4 +146,37 @@ export interface MeasurementLog {
   waist_cm: string | null;
   hip_cm: string | null;
   neck_cm: string | null;
+}
+
+export type IngredientUnit = "g" | "ml" | "ud";
+
+export type IngredientCategory =
+  | "fruta_verdura"
+  | "carne_pescado_huevos"
+  | "lacteos_refrigerados"
+  | "pan_cereales_legumbres"
+  | "conservas_salsas_condimentos"
+  | "otros";
+
+export interface MealIngredientForUser {
+  ingredient_id: string;
+  name: string;
+  quantity: string;
+  unit: IngredientUnit;
+}
+
+export interface MealDetailForUser {
+  family_plan_meal_id: string;
+  dish_name: string;
+  cook_method: CookMethod;
+  ingredients: MealIngredientForUser[];
+}
+
+export interface ShoppingListRow {
+  id: string;
+  name: string;
+  category: IngredientCategory;
+  quantity: string;
+  unit: IngredientUnit;
+  checked: boolean;
 }
