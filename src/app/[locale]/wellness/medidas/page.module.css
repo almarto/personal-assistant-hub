@@ -1,0 +1,108 @@
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-xl);
+}
+
+.hero {
+  padding: var(--spacing-sm) 0 var(--spacing-md);
+}
+
+.heroLabel {
+  font-family: var(--font-wellness-serif), serif;
+  font-size: 32px;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.formCard {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.fieldInput {
+  height: 44px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0 var(--spacing-md);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+}
+
+.saveBtn {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  border: none;
+  background-color: var(--color-primary);
+  color: white;
+  font-family: inherit;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+.saveBtn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.sectionLabel {
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 10px 8px;
+  text-align: left;
+  font-size: 12.5px;
+}
+
+.table th {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.table tr:not(:last-child) td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
