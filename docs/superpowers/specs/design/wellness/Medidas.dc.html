@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg: oklch(97% 0.012 75);
+      --surface: oklch(99% 0.006 75);
+      --surface-2: oklch(95% 0.014 75);
+      --text: oklch(23% 0.02 50);
+      --text-secondary: oklch(45% 0.02 50);
+      --primary: oklch(58% 0.16 45);
+      --primary-strong: oklch(48% 0.17 45);
+      --primary-wash: oklch(93% 0.03 45);
+      --secondary: oklch(38% 0.09 310);
+      --border: oklch(90% 0.012 75);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: var(--primary); }
+    a:hover { color: var(--primary-strong); }
+    .screen {
+      width: 390px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Archivo', system-ui, sans-serif;
+      min-height: 1000px;
+      padding-bottom: var(--space-xl);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
+    }
+    .wordmark { font-family: 'Instrument Serif', serif; font-size: 20px; }
+    .menuBtn { background: none; border: none; padding: 4px; color: var(--text); cursor: pointer; display: flex; }
+    .menuPanel { margin: 0 var(--space-lg) var(--space-md); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-sm); display: flex; flex-direction: column; gap: 2px; }
+    .menuItem { padding: 10px var(--space-md); border-radius: var(--radius-md); font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+    .hero { padding: var(--space-sm) var(--space-lg) var(--space-md); }
+    .heroLabel { font-family: 'Instrument Serif', serif; font-size: 34px; line-height: 1.05; margin: 0 0 var(--space-xs); }
+    .heroSub { font-size: 14px; color: var(--text-secondary); }
+    .formCard {
+      margin: 0 var(--space-lg) var(--space-lg);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+    }
+    .fieldGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .fieldLabel { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .fieldInput {
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      padding: 0 var(--space-md);
+      font-family: 'Archivo', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+    }
+    .saveBtn {
+      width: 100%;
+      height: 48px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .sectionLabel {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0 var(--space-lg);
+      margin-bottom: var(--space-sm);
+    }
+    .tableWrap { padding: 0 var(--space-lg); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    th, td { padding: 10px 8px; text-align: left; font-size: 12.5px; }
+    th { color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 10px; border-bottom: 1px solid var(--border); }
+    tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+    .newRow td { font-weight: 700; color: var(--primary-strong); }
+  </style>
+</helmet>
+
+<div class="screen">
+  <div class="topbar">
+    <span class="wordmark">wellness</span>
+    <button class="menuBtn" onClick="{{toggleMenu}}" aria-label="Menú">
+      <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </sc-if>
+      <sc-if value="{{menuClosed}}" hint-placeholder-val="{{true}}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+      </sc-if>
+    </button>
+  </div>
+
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+    <div class="menuPanel">
+      <sc-for list="{{menuItems}}" as="mi" hint-placeholder-count="5">
+        <div class="menuItem" style="{{mi.style}}">{{mi.label}}</div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div class="hero">
+    <h1 class="heroLabel">Medidas</h1>
+    <div class="heroSub">Registro semanal de Alberto</div>
+  </div>
+
+  <div class="formCard">
+    <div class="fieldGrid">
+      <div class="field">
+        <span class="fieldLabel">Peso (kg)</span>
+        <input class="fieldInput" type="number" placeholder="ej. 111.4" value="{{form.weight}}" onChange="{{onWeight}}">
+      </div>
+      <div class="field">
+        <span class="fieldLabel">Cintura, ombligo (cm)</span>
+        <input class="fieldInput" type="number" placeholder="ej. 108" value="{{form.waist}}" onChange="{{onWaist}}">
+      </div>
+      <div class="field">
+        <span class="fieldLabel">Cadera (cm)</span>
+        <input class="fieldInput" type="number" placeholder="ej. 112" value="{{form.hip}}" onChange="{{onHip}}">
+      </div>
+      <div class="field">
+        <span class="fieldLabel">Cuello (cm)</span>
+        <input class="fieldInput" type="number" placeholder="ej. 41" value="{{form.neck}}" onChange="{{onNeck}}">
+      </div>
+    </div>
+    <button class="saveBtn" onClick="{{save}}">Guardar medición</button>
+  </div>
+
+  <div class="sectionLabel">Histórico</div>
+  <div class="tableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Peso</th>
+          <th>Cintura</th>
+          <th>Cadera</th>
+          <th>Cuello</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{entries}}" as="row" hint-placeholder-count="4">
+          <tr style="{{row.rowStyle}}">
+            <td>{{row.date}}</td>
+            <td>{{row.weight}}</td>
+            <td>{{row.waist}}</td>
+            <td>{{row.hip}}</td>
+            <td>{{row.neck}}</td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      form: { weight: "", waist: "", hip: "", neck: "" },
+      entries: [
+        { date: "24 ago", weight: "112.8", waist: "110", hip: "114", neck: "42" },
+        { date: "17 ago", weight: "113.6", waist: "111", hip: "115", neck: "42" },
+        { date: "10 ago", weight: "114.5", waist: "112", hip: "115", neck: "43" }
+      ],
+      menuOpen: false
+    };
+  }
+
+  toggleMenu() {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
+
+  setField(field, value) {
+    const form = Object.assign({}, this.state.form);
+    form[field] = value;
+    this.setState({ form: form });
+  }
+
+  save() {
+    const f = this.state.form;
+    if (!f.weight && !f.waist && !f.hip && !f.neck) return;
+    const entries = [
+      { date: "hoy", weight: f.weight || "-", waist: f.waist || "-", hip: f.hip || "-", neck: f.neck || "-", isNew: true }
+    ].concat(this.state.entries);
+    this.setState({ entries: entries, form: { weight: "", waist: "", hip: "", neck: "" } });
+  }
+
+  renderVals() {
+    const entries = this.state.entries.map((e) => ({
+      date: e.date,
+      weight: e.weight,
+      waist: e.waist,
+      hip: e.hip,
+      neck: e.neck,
+      rowStyle: e.isNew ? "background: var(--surface-2);" : ""
+    }));
+
+    const menuItems = ["Hoy", "Entreno", "Cocinar", "Compra", "Medidas"].map((label) => ({
+      label: label,
+      style: label === "Medidas" ? "background: var(--primary-wash); color: var(--primary-strong);" : ""
+    }));
+
+    return {
+      menuOpen: this.state.menuOpen,
+      menuClosed: !this.state.menuOpen,
+      toggleMenu: () => this.toggleMenu(),
+      menuItems: menuItems,
+      form: this.state.form,
+      entries: entries,
+      onWeight: (e) => this.setField("weight", e.target.value),
+      onWaist: (e) => this.setField("waist", e.target.value),
+      onHip: (e) => this.setField("hip", e.target.value),
+      onNeck: (e) => this.setField("neck", e.target.value),
+      save: () => this.save()
+    };
+  }
+}
+</script>
+</x-dc>
+</body>
+</html>

@@ -582,6 +582,35 @@ src/app/[locale]/admin/familias/
 Diseño visual detallado (tipografía, estados de "hecho", jerarquía) se hace en la fase de Claude
 Design, siguiente paso tras este spec.
 
+## Design
+
+Prototipo clicable en `docs/superpowers/specs/design/wellness/` (Design Components de Claude
+Design): `Main.dc.html` (Hoy — comidas del día, progreso, tira de días de la semana),
+`Entreno.dc.html` (sesión con acordeón por ejercicio, última vez, registro de series),
+`Cocinar.dc.html` y `CocinarTablet.dc.html` (cronograma guiado con carriles de horno/airfryer y
+montaje de tapers por %, en versión móvil y en la variante apaisada de tablet que se usa apoyada en
+la encimera mientras se cocina), `Compra.dc.html` (lista agrupada por sección con progreso de
+comprados) y `Medidas.dc.html` (formulario + histórico). `canvas.json` define el lienzo;
+`wellness-diet-training.html` es el fichero ya sembrado y publicado.
+
+Decisiones de diseño a mantener en la implementación:
+
+- Mismo chrome del hub (header, `PageLayout`) pero con acento propio (terracota `oklch(58% 0.16 45)`
+  como primario, ciruela `oklch(38% 0.09 310)` como secundario) y tipografía distintiva: 'Instrument
+  Serif' para titulares/números grandes, 'Archivo' para el resto — mismos tokens de espaciado, radio
+  y altura de botón (44px) que `src/systemUI/theme.css`.
+  Escala de referencia añadida por el prototipo: `--radius-lg: 16px` (frente a los 12px del hub) y
+  espaciados xl/2xl para las pantallas de tablet.
+- Mobile-first para Hoy, Entreno, Compra y Medidas (390px); **Cocinar necesita además una variante de
+  tablet apaisada** (1024×768) con tipografía y controles más grandes — se usa en la cocina, apoyada
+  en la encimera, con las manos ocupadas. Las demás pantallas no necesitan adaptación de escritorio
+  (uso confirmado: cocina/gimnasio, casi nunca portátil).
+- "Comer" y "Semana" del spec original se resolvieron en una sola pantalla (`Main.dc.html`): la tira
+  de 7 días hace de selector, no hace falta una ruta separada para la vista semanal.
+  "Entreno de hoy" se muestra como tarjeta informativa al final de Hoy, sin pretender ser un enlace
+  (el prototipo no soporta navegación entre pantallas — cada una es una isla independiente en el
+  lienzo).
+
 ## Scope
 
 - Nueva migración `021_wellness.sql` con todas las tablas de arriba.

@@ -1,0 +1,445 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg: oklch(97% 0.012 75);
+      --surface: oklch(99% 0.006 75);
+      --surface-2: oklch(95% 0.014 75);
+      --text: oklch(23% 0.02 50);
+      --text-secondary: oklch(45% 0.02 50);
+      --primary: oklch(58% 0.16 45);
+      --primary-strong: oklch(48% 0.17 45);
+      --primary-wash: oklch(93% 0.03 45);
+      --secondary: oklch(38% 0.09 310);
+      --border: oklch(90% 0.012 75);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: var(--primary); }
+    a:hover { color: var(--primary-strong); }
+    .screen {
+      width: 390px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Archivo', system-ui, sans-serif;
+      min-height: 900px;
+      padding-bottom: var(--space-xl);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
+    }
+    .wordmark {
+      font-family: 'Instrument Serif', serif;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+    }
+    .menuBtn {
+      background: none;
+      border: none;
+      padding: 4px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+    }
+    .menuPanel {
+      margin: 0 var(--space-lg) var(--space-md);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .menuItem {
+      padding: 10px var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .hero {
+      padding: var(--space-sm) var(--space-lg) var(--space-md);
+    }
+    .heroLabel {
+      font-family: 'Instrument Serif', serif;
+      font-size: 44px;
+      line-height: 1;
+      margin: 0 0 var(--space-xs);
+    }
+    .heroDate {
+      font-size: 15px;
+      color: var(--text-secondary);
+      text-transform: capitalize;
+    }
+    .progress {
+      margin: 0 var(--space-lg) var(--space-lg);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+    }
+    .progressLabel {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: var(--space-sm);
+    }
+    .progressTrack {
+      height: 8px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progressFill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+    .weekStrip {
+      display: flex;
+      gap: var(--space-sm);
+      padding: 0 var(--space-lg) var(--space-lg);
+      overflow-x: auto;
+    }
+    .dayChip {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: currentColor;
+      display: block;
+    }
+    .sectionLabel {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0 var(--space-lg);
+      margin-bottom: var(--space-sm);
+    }
+    .mealList {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: 0 var(--space-lg);
+    }
+    .mealCard {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      border: 1px solid var(--border);
+    }
+    .mealInfo { flex: 1; min-width: 0; }
+    .mealSlot {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+    .mealTitle {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .mealMeta {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .checkBtn {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .trainingTeaser {
+      margin: var(--space-lg) var(--space-lg) 0;
+      background: var(--secondary);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .trainingTeaserLabel {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.75;
+      margin-bottom: 2px;
+    }
+    .trainingTeaserTitle {
+      font-family: 'Instrument Serif', serif;
+      font-size: 20px;
+    }
+  </style>
+</helmet>
+
+<div class="screen">
+  <div class="topbar">
+    <span class="wordmark">wellness</span>
+    <button class="menuBtn" onClick="{{toggleMenu}}" aria-label="Menú">
+      <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </sc-if>
+      <sc-if value="{{menuClosed}}" hint-placeholder-val="{{true}}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+      </sc-if>
+    </button>
+  </div>
+
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+    <div class="menuPanel">
+      <sc-for list="{{menuItems}}" as="mi" hint-placeholder-count="5">
+        <div class="menuItem" style="{{mi.style}}">{{mi.label}}</div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div class="hero">
+    <h1 class="heroLabel">Hoy</h1>
+    <div class="heroDate">{{dayDate}}</div>
+  </div>
+
+  <div class="progress">
+    <div class="progressLabel">{{totalKcal}} / {{targetKcal}} kcal &middot; {{totalProtein}} / {{targetProtein}} g proteína</div>
+    <div class="progressTrack"><div class="progressFill" style="{{pctStyle}}"></div></div>
+  </div>
+
+  <div class="weekStrip">
+    <sc-for list="{{weekChips}}" as="d" hint-placeholder-count="7">
+      <button class="dayChip" onClick="{{d.pick}}" style="{{d.chipStyle}}">
+        <span>{{d.short}}</span>
+        <sc-if value="{{d.complete}}" hint-placeholder-val="{{false}}">
+          <span class="dot" style="{{d.dotStyle}}"></span>
+        </sc-if>
+      </button>
+    </sc-for>
+  </div>
+
+  <div class="sectionLabel">{{dayLabel}}</div>
+  <div class="mealList">
+    <sc-for list="{{meals}}" as="m" hint-placeholder-count="4">
+      <div class="mealCard" style="{{m.cardStyle}}">
+        <div class="mealInfo">
+          <div class="mealSlot">{{m.slot}}</div>
+          <div class="mealTitle">{{m.title}}</div>
+          <div class="mealMeta">{{m.kcal}} kcal &middot; {{m.protein}} g proteína</div>
+        </div>
+        <button class="checkBtn" onClick="{{m.toggle}}" style="{{m.checkStyle}}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 18 20 6"></polyline></svg>
+        </button>
+      </div>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{hasTraining}}" hint-placeholder-val="{{true}}">
+    <div class="trainingTeaser">
+      <div>
+        <div class="trainingTeaserLabel">Entreno de hoy</div>
+        <div class="trainingTeaserTitle">{{trainingLabel}}</div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+<script data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dayIndex: 0,
+      done: { "lunes-Desayuno": true },
+      menuOpen: false
+    };
+  }
+
+  toggleMenu() {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
+
+  toggleMeal(key) {
+    const done = Object.assign({}, this.state.done);
+    done[key] = !done[key];
+    this.setState({ done: done });
+  }
+
+  selectDay(i) {
+    this.setState({ dayIndex: i });
+  }
+
+  renderVals() {
+    const WEEK = [
+      { id: "lunes", label: "Lunes", short: "L", dateFull: "Lunes, 6 de septiembre", training: "Tren inferior A",
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con tomate, aguacate, pavo y queso cottage", kcal: 520, protein: 39 },
+          { slot: "Comida", title: "Pollo al pimentón con arroz y verduras", kcal: 720, protein: 62 },
+          { slot: "Merienda", title: "Batido de proteína y fruta", kcal: 370, protein: 31 },
+          { slot: "Cena", title: "Merluza en airfryer, patata gajo y ensalada", kcal: 635, protein: 51 }
+        ] },
+      { id: "martes", label: "Martes", short: "M", dateFull: "Martes, 7 de septiembre", training: "Tren superior A",
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con tortilla francesa, tomate y aguacate", kcal: 555, protein: 40 },
+          { slot: "Comida", title: "Albóndigas de pavo al tomate con cuscús", kcal: 700, protein: 61 },
+          { slot: "Merienda", title: "Crema de arroz con proteína y canela", kcal: 390, protein: 35 },
+          { slot: "Cena", title: "Salteado de ternera con noodles y verduras", kcal: 610, protein: 47 }
+        ] },
+      { id: "miercoles", label: "Miércoles", short: "X", dateFull: "Miércoles, 8 de septiembre", training: "Cardio + core",
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con tomate, atún y aguacate", kcal: 535, protein: 39 },
+          { slot: "Comida", title: "Pasta integral con boloñesa de ternera y lentejas", kcal: 735, protein: 60 },
+          { slot: "Merienda", title: "Queso fresco batido con fruta y almendras", kcal: 375, protein: 31 },
+          { slot: "Cena", title: "Tortilla de patata ligera con ensalada", kcal: 595, protein: 50 }
+        ] },
+      { id: "jueves", label: "Jueves", short: "J", dateFull: "Jueves, 9 de septiembre", training: "Tren inferior B",
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con tomate, jamón serrano y queso cottage", kcal: 525, protein: 39 },
+          { slot: "Comida", title: "Salmón al limón, patata asada y brócoli", kcal: 740, protein: 50 },
+          { slot: "Merienda", title: "Batido de proteína y fruta", kcal: 400, protein: 39 },
+          { slot: "Cena", title: "Fajitas de pollo", kcal: 595, protein: 52 }
+        ] },
+      { id: "viernes", label: "Viernes", short: "V", dateFull: "Viernes, 10 de septiembre", training: "Tren superior B",
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con aguacate, huevo y claras", kcal: 550, protein: 42 },
+          { slot: "Comida", title: "Lomo de cerdo, boniato y pimientos", kcal: 710, protein: 61 },
+          { slot: "Merienda", title: "Crema de arroz con proteína y canela", kcal: 395, protein: 28 },
+          { slot: "Cena", title: "Pizza rápida de wrap con mozzarella y jamón", kcal: 590, protein: 50 }
+        ] },
+      { id: "sabado", label: "Sábado", short: "S", dateFull: "Sábado, 11 de septiembre", training: null,
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con revuelto y tomate", kcal: 495, protein: 39 },
+          { slot: "Comida", title: "Ensalada templada de quinoa y pollo", kcal: 630, protein: 58 },
+          { slot: "Merienda", title: "Queso fresco batido con fruta y almendras", kcal: 330, protein: 30 },
+          { slot: "Cena", title: "Cena fuera (presupuesto)", kcal: 795, protein: 53 }
+        ] },
+      { id: "domingo", label: "Domingo", short: "D", dateFull: "Domingo, 12 de septiembre", training: null,
+        meals: [
+          { slot: "Desayuno", title: "Tostadas con tomate, pavo, queso cottage y aguacate", kcal: 570, protein: 39 },
+          { slot: "Comida", title: "Poke de salmón", kcal: 760, protein: 55 },
+          { slot: "Merienda", title: "Queso fresco batido con fruta, nueces y queso", kcal: 365, protein: 27 },
+          { slot: "Cena", title: "Crema de calabacín + tortilla francesa", kcal: 560, protein: 59 }
+        ] }
+    ];
+
+    const day = WEEK[this.state.dayIndex];
+    const doneMap = this.state.done;
+
+    const meals = day.meals.map((m) => {
+      const key = day.id + "-" + m.slot;
+      const isDone = !!doneMap[key];
+      const cardStyle = isDone
+        ? "background: var(--primary-wash); border-color: var(--primary-wash);"
+        : "background: var(--surface); border-color: var(--border);";
+      const checkStyle = isDone
+        ? "background: var(--primary); color: white;"
+        : "background: var(--surface-2); color: var(--text-secondary);";
+      return {
+        slot: m.slot,
+        title: m.title,
+        kcal: m.kcal,
+        protein: m.protein,
+        cardStyle: cardStyle,
+        checkStyle: checkStyle,
+        toggle: () => this.toggleMeal(key)
+      };
+    });
+
+    const totalKcal = meals.reduce((s, m) => s + (doneMap[day.id + "-" + m.slot] ? m.kcal : 0), 0);
+    const totalProtein = meals.reduce((s, m) => s + (doneMap[day.id + "-" + m.slot] ? m.protein : 0), 0);
+    const targetKcal = 2250;
+    const pct = Math.max(0, Math.min(100, Math.round((totalKcal / targetKcal) * 100)));
+
+    const weekChips = WEEK.map((d, i) => {
+      const allDone = d.meals.every((m) => !!doneMap[d.id + "-" + m.slot]);
+      const selected = i === this.state.dayIndex;
+      const chipStyle = selected
+        ? "background: var(--primary); color: white; border-color: var(--primary);"
+        : "background: var(--surface); color: var(--text); border-color: var(--border);";
+      const dotStyle = selected ? "background: white;" : "background: var(--primary);";
+      return {
+        short: d.short,
+        complete: allDone,
+        chipStyle: chipStyle,
+        dotStyle: dotStyle,
+        pick: () => this.selectDay(i)
+      };
+    });
+
+    const menuItems = ["Hoy", "Entreno", "Cocinar", "Compra", "Medidas"].map((label) => ({
+      label: label,
+      style: label === "Hoy" ? "background: var(--primary-wash); color: var(--primary-strong);" : ""
+    }));
+
+    return {
+      menuOpen: this.state.menuOpen,
+      menuClosed: !this.state.menuOpen,
+      toggleMenu: () => this.toggleMenu(),
+      menuItems: menuItems,
+      dayLabel: day.label,
+      dayDate: day.dateFull,
+      totalKcal: totalKcal,
+      totalProtein: totalProtein,
+      targetKcal: targetKcal,
+      targetProtein: 180,
+      pctStyle: "width: " + pct + "%;",
+      meals: meals,
+      weekChips: weekChips,
+      hasTraining: !!day.training,
+      trainingLabel: day.training || ""
+    };
+  }
+}
+</script>
+</x-dc>
+</body>
+</html>

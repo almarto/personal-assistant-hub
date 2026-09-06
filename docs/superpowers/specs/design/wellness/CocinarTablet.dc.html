@@ -1,0 +1,362 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg: oklch(97% 0.012 75);
+      --surface: oklch(99% 0.006 75);
+      --surface-2: oklch(95% 0.014 75);
+      --text: oklch(23% 0.02 50);
+      --text-secondary: oklch(45% 0.02 50);
+      --primary: oklch(58% 0.16 45);
+      --primary-strong: oklch(48% 0.17 45);
+      --primary-wash: oklch(93% 0.03 45);
+      --secondary: oklch(38% 0.09 310);
+      --border: oklch(90% 0.012 75);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 20px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: var(--primary); }
+    a:hover { color: var(--primary-strong); }
+    .screen {
+      width: 1024px;
+      min-height: 768px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Archivo', system-ui, sans-serif;
+      padding-bottom: var(--space-2xl);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-lg) var(--space-2xl) var(--space-md);
+    }
+    .wordmark { font-family: 'Instrument Serif', serif; font-size: 24px; }
+    .menuBtn { background: none; border: none; padding: 6px; color: var(--text); cursor: pointer; display: flex; }
+    .menuPanel {
+      position: absolute;
+      right: var(--space-2xl);
+      margin-top: 4px;
+      width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    }
+    .menuItem { padding: 12px var(--space-md); border-radius: var(--radius-md); font-size: 15px; font-weight: 600; color: var(--text-secondary); }
+    .hero { padding: var(--space-sm) var(--space-2xl) var(--space-lg); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-lg); }
+    .heroLabel { font-family: 'Instrument Serif', serif; font-size: 44px; line-height: 1; margin: 0; }
+    .heroSub { font-size: 16px; color: var(--text-secondary); }
+    .tabs {
+      display: flex;
+      gap: var(--space-md);
+      padding: 0 var(--space-2xl) var(--space-xl);
+      max-width: 560px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 17px;
+      cursor: pointer;
+      border: 2px solid var(--border);
+    }
+    .cronoGrid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: var(--space-lg);
+      padding: 0 var(--space-2xl);
+    }
+    .stepCard {
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-2xl);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 340px;
+    }
+    .stepEyebrow { font-size: 15px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; margin-bottom: var(--space-md); }
+    .stepText { font-family: 'Instrument Serif', serif; font-size: 44px; line-height: 1.2; margin-bottom: var(--space-xl); }
+    .stepBtn {
+      align-self: flex-start;
+      height: 68px;
+      padding: 0 var(--space-2xl);
+      border-radius: var(--radius-md);
+      border: none;
+      background: white;
+      color: var(--primary-strong);
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .lanesCol { display: flex; flex-direction: column; gap: var(--space-lg); }
+    .lane {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .laneLabel { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); margin-bottom: var(--space-sm); }
+    .laneStatus { font-size: 22px; font-weight: 700; }
+    .doneCard {
+      grid-column: 1 / -1;
+      background: var(--secondary);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-2xl);
+      text-align: center;
+    }
+    .doneTitle { font-family: 'Instrument Serif', serif; font-size: 36px; margin-bottom: var(--space-md); }
+    .doneSub { font-size: 18px; opacity: 0.9; }
+    .montajeGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+      padding: 0 var(--space-2xl);
+    }
+    .ingCard {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+    .ingName { font-size: 22px; font-weight: 700; margin-bottom: var(--space-lg); }
+    .ingInputRow { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl); }
+    .ingInput {
+      flex: 1;
+      height: 56px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      padding: 0 var(--space-lg);
+      font-family: 'Archivo', sans-serif;
+      font-size: 20px;
+      color: var(--text);
+    }
+    .ingUnit { font-size: 16px; color: var(--text-secondary); }
+    .splitRow { display: flex; gap: var(--space-md); }
+    .splitBox {
+      flex: 1;
+      background: var(--surface-2);
+      border-radius: var(--radius-md);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .splitName { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 4px; }
+    .splitGrams { font-family: 'Instrument Serif', serif; font-size: 32px; }
+  </style>
+</helmet>
+
+<div class="screen">
+  <div class="topbar">
+    <span class="wordmark">wellness</span>
+    <button class="menuBtn" onClick="{{toggleMenu}}" aria-label="Menú">
+      <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </sc-if>
+      <sc-if value="{{menuClosed}}" hint-placeholder-val="{{true}}">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+      </sc-if>
+    </button>
+  </div>
+
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position: relative;">
+      <div class="menuPanel">
+        <sc-for list="{{menuItems}}" as="mi" hint-placeholder-count="5">
+          <div class="menuItem" style="{{mi.style}}">{{mi.label}}</div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <div class="hero">
+    <h1 class="heroLabel">Cocinar</h1>
+    <div class="heroSub">Pollo al pimentón (lunes) + patata y brócoli (jueves) &middot; para Alberto y Patri &middot; en tablet, apoyada en la encimera</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab" style="{{cronoTabStyle}}" onClick="{{goCrono}}">Cronograma</div>
+    <div class="tab" style="{{montajeTabStyle}}" onClick="{{goMontaje}}">Montaje de tapers</div>
+  </div>
+
+  <sc-if value="{{showCrono}}" hint-placeholder-val="{{true}}">
+    <div class="cronoGrid">
+      <sc-if value="{{finished}}" hint-placeholder-val="{{false}}">
+        <div class="doneCard">
+          <div class="doneTitle">Todo cocinado</div>
+          <div class="doneSub">Pasa a "Montaje de tapers" para repartir por peso cocinado.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{notFinished}}" hint-placeholder-val="{{true}}">
+        <div class="stepCard">
+          <div>
+            <div class="stepEyebrow">Paso {{stepNumber}} de {{stepTotal}}</div>
+            <div class="stepText">{{stepText}}</div>
+          </div>
+          <button class="stepBtn" onClick="{{nextStep}}">Hecho, siguiente paso</button>
+        </div>
+        <div class="lanesCol">
+          <div class="lane">
+            <div class="laneLabel">Horno</div>
+            <div class="laneStatus">{{hornoStatus}}</div>
+          </div>
+          <div class="lane">
+            <div class="laneLabel">Airfryer</div>
+            <div class="laneStatus">{{airfryerStatus}}</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{showMontaje}}" hint-placeholder-val="{{false}}">
+    <div class="montajeGrid">
+      <sc-for list="{{ingredients}}" as="ing" hint-placeholder-count="2">
+        <div class="ingCard">
+          <div class="ingName">{{ing.name}}</div>
+          <div class="ingInputRow">
+            <input class="ingInput" type="number" placeholder="Peso cocinado total" value="{{ing.valueStr}}" onChange="{{ing.onChange}}">
+            <span class="ingUnit">g</span>
+          </div>
+          <div class="splitRow">
+            <div class="splitBox">
+              <div class="splitName">Alberto &middot; {{ing.pctA}}%</div>
+              <div class="splitGrams">{{ing.gramsA}} g</div>
+            </div>
+            <div class="splitBox">
+              <div class="splitName">Patri &middot; {{ing.pctP}}%</div>
+              <div class="splitGrams">{{ing.gramsP}} g</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+</div>
+
+<script data-dc-script>
+const COOKING_STEPS = [
+  { text: "Lava y corta 640 g de patata en gajos.", horno: "Libre", airfryer: "Libre" },
+  { text: "Mete la patata en el horno a 210°C.", horno: "Patata · 22 min", airfryer: "Libre" },
+  { text: "Adoba 370 g de pechuga con pimentón, ajo y limón.", horno: "Patata · quedan ~14 min", airfryer: "Libre" },
+  { text: "Corta 200 g de brócoli.", horno: "Patata · quedan ~10 min", airfryer: "Libre" },
+  { text: "Mete el pollo adobado en la airfryer a 195°C.", horno: "Patata · quedan ~6 min", airfryer: "Pollo · 15 min" },
+  { text: "Añade el brócoli a la patata y sigue 18 min más.", horno: "Patata + brócoli · 18 min", airfryer: "Pollo · quedan ~11 min" },
+  { text: "Saca el pollo de la airfryer y resérvalo.", horno: "Patata + brócoli · quedan ~14 min", airfryer: "Listo" },
+  { text: "Saca la patata y el brócoli del horno.", horno: "Listo", airfryer: "Listo" }
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: "cronograma", step: 0, cooked: {}, menuOpen: false };
+  }
+
+  goCrono() { this.setState({ tab: "cronograma" }); }
+  goMontaje() { this.setState({ tab: "montaje" }); }
+  toggleMenu() { this.setState({ menuOpen: !this.state.menuOpen }); }
+  nextStep() { this.setState({ step: Math.min(this.state.step + 1, COOKING_STEPS.length) }); }
+
+  setCooked(key, value) {
+    const cooked = Object.assign({}, this.state.cooked);
+    cooked[key] = value;
+    this.setState({ cooked: cooked });
+  }
+
+  renderVals() {
+    const STEPS = COOKING_STEPS;
+
+    const step = this.state.step;
+    const isFinished = step >= STEPS.length;
+    const currentIndex = Math.min(step, STEPS.length - 1);
+    const current = STEPS[currentIndex];
+
+    const tab = this.state.tab;
+
+    const cooked = this.state.cooked;
+    const INGREDIENTS = [
+      { key: "patata", name: "Patata (horno)", pctA: 44, pctP: 56 },
+      { key: "pollo", name: "Pollo (airfryer)", pctA: 59, pctP: 41 }
+    ];
+    const ingredients = INGREDIENTS.map((ing) => {
+      const raw = cooked[ing.key];
+      const total = raw ? parseFloat(raw) : 0;
+      const gramsA = total ? Math.round(total * (ing.pctA / 100)) : 0;
+      const gramsP = total ? Math.round(total * (ing.pctP / 100)) : 0;
+      return {
+        name: ing.name,
+        pctA: ing.pctA,
+        pctP: ing.pctP,
+        valueStr: raw || "",
+        gramsA: gramsA,
+        gramsP: gramsP,
+        onChange: (e) => this.setCooked(ing.key, e.target.value)
+      };
+    });
+
+    const menuItems = ["Hoy", "Entreno", "Cocinar", "Compra", "Medidas"].map((label) => ({
+      label: label,
+      style: label === "Cocinar" ? "background: var(--primary-wash); color: var(--primary-strong);" : ""
+    }));
+
+    return {
+      menuOpen: this.state.menuOpen,
+      menuClosed: !this.state.menuOpen,
+      toggleMenu: () => this.toggleMenu(),
+      menuItems: menuItems,
+      showCrono: tab === "cronograma",
+      showMontaje: tab === "montaje",
+      cronoTabStyle: tab === "cronograma"
+        ? "background: var(--primary); color: white; border-color: var(--primary);"
+        : "background: var(--surface); color: var(--text); border-color: var(--border);",
+      montajeTabStyle: tab === "montaje"
+        ? "background: var(--primary); color: white; border-color: var(--primary);"
+        : "background: var(--surface); color: var(--text); border-color: var(--border);",
+      finished: isFinished,
+      notFinished: !isFinished,
+      stepNumber: currentIndex + 1,
+      stepTotal: STEPS.length,
+      stepText: current.text,
+      hornoStatus: current.horno,
+      airfryerStatus: current.airfryer,
+      nextStep: () => this.nextStep(),
+      goCrono: () => this.goCrono(),
+      goMontaje: () => this.goMontaje(),
+      ingredients: ingredients
+    };
+  }
+}
+</script>
+</x-dc>
+</body>
+</html>

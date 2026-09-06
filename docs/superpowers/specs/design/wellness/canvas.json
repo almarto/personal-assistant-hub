@@ -1,0 +1,15 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 390, "h": 950, "title": "Hoy" },
+    { "file": "Entreno.dc.html", "x": 470, "y": 0, "w": 390, "h": 1450, "title": "Entreno" },
+    { "file": "Cocinar.dc.html", "x": 940, "y": 0, "w": 390, "h": 1050, "title": "Cocinar (móvil)" },
+    { "file": "Compra.dc.html", "x": 1410, "y": 0, "w": 390, "h": 1300, "title": "Compra" },
+    { "file": "Medidas.dc.html", "x": 1880, "y": 0, "w": 390, "h": 1050, "title": "Medidas" },
+    { "file": "CocinarTablet.dc.html", "x": 0, "y": 1620, "w": 1024, "h": 850, "title": "Cocinar (tablet)" }
+  ],
+  "annotations": [
+    { "id": "brief-summary", "x": 0, "y": -140, "w": 900, "text": "Wellness — prototipo clicable\nMismo chrome del hub, acento propio (terracota + ciruela) y más carácter dentro. Marca comidas, expande ejercicios, avanza el cronograma de cocinado, escribe un peso cocinado, marca la compra, guarda una medición — todo funciona." },
+    { "id": "tablet-note", "x": 0, "y": 1480, "w": 500, "text": "Cocinar se usa en tablet, apoyada en la encimera — variante apaisada con tipografía y botones más grandes." }
+  ],
+  "launch": { "view": "canvas" }
+}

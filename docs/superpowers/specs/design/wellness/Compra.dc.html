@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg: oklch(97% 0.012 75);
+      --surface: oklch(99% 0.006 75);
+      --surface-2: oklch(95% 0.014 75);
+      --text: oklch(23% 0.02 50);
+      --text-secondary: oklch(45% 0.02 50);
+      --primary: oklch(58% 0.16 45);
+      --primary-strong: oklch(48% 0.17 45);
+      --primary-wash: oklch(93% 0.03 45);
+      --secondary: oklch(38% 0.09 310);
+      --border: oklch(90% 0.012 75);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: var(--primary); }
+    a:hover { color: var(--primary-strong); }
+    .screen {
+      width: 390px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Archivo', system-ui, sans-serif;
+      min-height: 1250px;
+      padding-bottom: var(--space-xl);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg) var(--space-sm);
+    }
+    .wordmark { font-family: 'Instrument Serif', serif; font-size: 20px; }
+    .menuBtn { background: none; border: none; padding: 4px; color: var(--text); cursor: pointer; display: flex; }
+    .menuPanel { margin: 0 var(--space-lg) var(--space-md); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-sm); display: flex; flex-direction: column; gap: 2px; }
+    .menuItem { padding: 10px var(--space-md); border-radius: var(--radius-md); font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+    .hero { padding: var(--space-sm) var(--space-lg) var(--space-md); }
+    .heroLabel { font-family: 'Instrument Serif', serif; font-size: 34px; line-height: 1.05; margin: 0 0 var(--space-xs); }
+    .heroSub { font-size: 14px; color: var(--text-secondary); }
+    .progress {
+      margin: 0 var(--space-lg) var(--space-lg);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+    }
+    .progressLabel { font-size: 14px; font-weight: 600; margin-bottom: var(--space-sm); }
+    .progressTrack { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+    .progressFill { height: 100%; background: var(--primary); border-radius: 999px; transition: width 0.3s ease; }
+    .category { padding: 0 var(--space-lg) var(--space-lg); }
+    .categoryLabel {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+    .itemRow {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .itemRow:last-child { border-bottom: none; }
+    .itemCheck {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .itemInfo { flex: 1; }
+    .itemName { font-size: 15px; font-weight: 600; }
+    .itemQty { font-size: 13px; color: var(--text-secondary); }
+  </style>
+</helmet>
+
+<div class="screen">
+  <div class="topbar">
+    <span class="wordmark">wellness</span>
+    <button class="menuBtn" onClick="{{toggleMenu}}" aria-label="Menú">
+      <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+      </sc-if>
+      <sc-if value="{{menuClosed}}" hint-placeholder-val="{{true}}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+      </sc-if>
+    </button>
+  </div>
+
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+    <div class="menuPanel">
+      <sc-for list="{{menuItems}}" as="mi" hint-placeholder-count="5">
+        <div class="menuItem" style="{{mi.style}}">{{mi.label}}</div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div class="hero">
+    <h1 class="heroLabel">Compra</h1>
+    <div class="heroSub">Alberto y Patri &middot; próximos 5 días</div>
+  </div>
+
+  <div class="progress">
+    <div class="progressLabel">{{purchasedCount}} de {{totalCount}} comprados</div>
+    <div class="progressTrack"><div class="progressFill" style="{{pctStyle}}"></div></div>
+  </div>
+
+  <sc-for list="{{categories}}" as="cat" hint-placeholder-count="6">
+    <div class="category">
+      <div class="categoryLabel">{{cat.name}}</div>
+      <sc-for list="{{cat.items}}" as="it" hint-placeholder-count="2">
+        <div class="itemRow">
+          <button class="itemCheck" onClick="{{it.toggle}}" style="{{it.checkStyle}}">
+            <sc-if value="{{it.bought}}" hint-placeholder-val="{{false}}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 18 20 6"></polyline></svg>
+            </sc-if>
+          </button>
+          <div class="itemInfo" style="{{it.textStyle}}">
+            <div class="itemName">{{it.name}}</div>
+            <div class="itemQty">{{it.qty}}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-for>
+</div>
+
+<script data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { bought: {}, menuOpen: false };
+  }
+
+  toggleMenu() {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
+
+  toggle(id) {
+    const bought = Object.assign({}, this.state.bought);
+    bought[id] = !bought[id];
+    this.setState({ bought: bought });
+  }
+
+  renderVals() {
+    const CATEGORIES = [
+      { name: "Fruta y verdura", items: [
+        { id: "patata", name: "Patata", qty: "2,0 kg" },
+        { id: "calabacin", name: "Calabacín", qty: "1,4 kg" },
+        { id: "tomate", name: "Tomate fresco", qty: "1,8 kg" },
+        { id: "aguacates", name: "Aguacates", qty: "5 unidades" }
+      ] },
+      { name: "Carne, pescado y huevos", items: [
+        { id: "pollo", name: "Pechuga de pollo", qty: "1,35 kg" },
+        { id: "salmon", name: "Salmón", qty: "400 g" },
+        { id: "huevos", name: "Huevos", qty: "30 unidades" }
+      ] },
+      { name: "Lácteos y refrigerados", items: [
+        { id: "leche", name: "Leche semidesnatada", qty: "5 litros" },
+        { id: "quesofresco", name: "Queso fresco batido 0%", qty: "2 kg" }
+      ] },
+      { name: "Pan, cereales y legumbres", items: [
+        { id: "pan", name: "Pan integral", qty: "1,8 kg" },
+        { id: "arroz", name: "Arroz", qty: "500 g" }
+      ] },
+      { name: "Conservas, salsas y condimentos", items: [
+        { id: "aove", name: "AOVE", qty: "500 ml" },
+        { id: "whey", name: "Proteína whey", qty: "250 g" }
+      ] },
+      { name: "Para el fin de semana", items: [
+        { id: "salmonpoke", name: "Salmón (poke del domingo)", qty: "350 g" }
+      ] }
+    ];
+
+    const boughtMap = this.state.bought;
+    let purchasedCount = 0;
+    let totalCount = 0;
+
+    const categories = CATEGORIES.map((cat) => {
+      const items = cat.items.map((it) => {
+        totalCount++;
+        const isBought = !!boughtMap[it.id];
+        if (isBought) purchasedCount++;
+        return {
+          name: it.name,
+          qty: it.qty,
+          bought: isBought,
+          checkStyle: isBought ? "background: var(--primary); border-color: var(--primary); color: white;" : "background: var(--surface); color: transparent;",
+          textStyle: isBought ? "opacity: 0.4; text-decoration: line-through;" : "opacity: 1;",
+          toggle: () => this.toggle(it.id)
+        };
+      });
+      return { name: cat.name, items: items };
+    });
+
+    const pct = totalCount ? Math.round((purchasedCount / totalCount) * 100) : 0;
+
+    const menuItems = ["Hoy", "Entreno", "Cocinar", "Compra", "Medidas"].map((label) => ({
+      label: label,
+      style: label === "Compra" ? "background: var(--primary-wash); color: var(--primary-strong);" : ""
+    }));
+
+    return {
+      menuOpen: this.state.menuOpen,
+      menuClosed: !this.state.menuOpen,
+      toggleMenu: () => this.toggleMenu(),
+      menuItems: menuItems,
+      categories: categories,
+      purchasedCount: purchasedCount,
+      totalCount: totalCount,
+      pctStyle: "width: " + pct + "%;"
+    };
+  }
+}
+</script>
+</x-dc>
+</body>
+</html>
