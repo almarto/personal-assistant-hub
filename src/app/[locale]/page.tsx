@@ -1,4 +1,4 @@
-import { Activity, Boxes, Calendar, Hammer, Users } from "lucide-react";
+import { Activity, Boxes, Calendar, Hammer, Salad, Users } from "lucide-react";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
@@ -6,6 +6,7 @@ import { redirect } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { getUserAppRoles } from "@/lib/services/user-roles";
+import { getFamilyIdForUser } from "@/lib/services/wellness/families";
 import { APP_ROLE, isAdmin as checkIsAdmin } from "@/lib/types/roles";
 import { Button } from "@/systemUI/components/Button/Button";
 import Navigation from "@/systemUI/components/Navigation/Navigation";
@@ -54,6 +55,7 @@ export default async function HubHome({
   const hasTripPlannerAccess = isAdmin || appRoles.includes(APP_ROLE.TRIP_PLANNER);
   const isTripPlannerOnly =
     !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.TRIP_PLANNER;
+  const wellnessFamilyId = await getFamilyIdForUser(session.user.id);
 
   if (isTripPlannerOnly) {
     return redirect({ href: "/trip-planner", locale });
@@ -122,6 +124,20 @@ export default async function HubHome({
             </p>
           </Link>
         </div>
+
+        {wellnessFamilyId && (
+          <div className={styles.appCard}>
+            <Link href="/wellness" className={styles.appCardLink}>
+              <div className={styles.iconWrapper}>
+                <Salad size={28} />
+              </div>
+              <h3 className={styles.appTitle}>{launcherT("wellness.title")}</h3>
+              <p className={styles.appDescription}>
+                {launcherT("wellness.description")}
+              </p>
+            </Link>
+          </div>
+        )}
 
         {hasTripPlannerAccess && (
           <div className={styles.appCard}>

@@ -1,0 +1,148 @@
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-xl);
+}
+
+.hero {
+  padding: var(--spacing-sm) 0 var(--spacing-md);
+}
+
+.heroLabel {
+  font-family: var(--font-wellness-serif), serif;
+  font-size: 40px;
+  line-height: 1;
+  margin: 0 0 var(--spacing-xs);
+}
+
+.heroDate {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+}
+
+.progress {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.progressLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.progressTrack {
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.weekStrip {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+}
+
+.dayChip {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-md);
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.dayChip[data-selected="true"] {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.mealList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.mealCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--color-surface);
+}
+
+.mealCard[data-done="true"] {
+  background-color: color-mix(in oklch, var(--color-primary) 12%, white);
+  border-color: color-mix(in oklch, var(--color-primary) 25%, white);
+}
+
+.mealInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.mealSlot {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+}
+
+.mealTitle {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.mealMeta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.checkBtn {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: var(--color-text-secondary);
+}
+
+.checkBtn[data-done="true"] {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.checkBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

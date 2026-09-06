@@ -27,6 +27,10 @@
       "title": "Reformas de Casa",
       "description": "Gestiona presupuestos, tareas y pagos para la reforma de la nueva casa."
     },
+    "wellness": {
+      "title": "Dieta y Entrenamiento",
+      "description": "Sigue tu plan de comidas y entreno, registra el progreso y organiza la compra."
+    },
     "tripPlanner": {
       "title": "Planificador de Viajes",
       "description": "Planifica viajes y coordina el equipaje con amigos."

@@ -1,0 +1,162 @@
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-xl);
+}
+
+.hero {
+  padding: var(--spacing-sm) 0 var(--spacing-md);
+}
+
+.heroLabel {
+  font-family: var(--font-wellness-serif), serif;
+  font-size: 32px;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.cardioCard {
+  background-color: color-mix(in oklch, var(--color-secondary) 10%, white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.cardioTitle {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.cardioMeta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.exCard {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.exHead {
+  padding: var(--spacing-md);
+  cursor: pointer;
+}
+
+.exName {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 4px;
+}
+
+.exMeta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.exBody {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.lastTime {
+  margin-top: var(--spacing-md);
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.lastTimeLabel {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+}
+
+.cue {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-sm);
+  line-height: 1.4;
+}
+
+.setRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.setNum {
+  width: 20px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+}
+
+.setInput {
+  flex: 1;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+}
+
+.notesBox {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.notesLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.notesInput {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm);
+  resize: none;
+}
+
+.saveBtn {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  border: none;
+  background-color: var(--color-primary);
+  color: white;
+  font-family: inherit;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+.saveBtn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}

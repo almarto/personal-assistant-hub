@@ -1,0 +1,46 @@
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.newFamilyRow {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-lg) 0;
+}
+
+.newFamilyRow input {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius-md);
+}
+
+.familyCard {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.familyCard ul {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-sm) 0;
+}
+
+.familyCard li {
+  padding: var(--spacing-xs) 0;
+}
+
+.addMemberRow {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.error {
+  color: #b91c1c;
+}

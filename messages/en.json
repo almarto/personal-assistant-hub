@@ -27,6 +27,10 @@
       "title": "House Renovations",
       "description": "Manage budgets, tasks, and payments for the new house renovations."
     },
+    "wellness": {
+      "title": "Diet & Training",
+      "description": "Follow your meal and training plan, track progress, and organize shopping."
+    },
     "tripPlanner": {
       "title": "Luggage Trip Planner",
       "description": "Plan trips and coordinate packing with friends."
