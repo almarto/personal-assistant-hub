@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 
 import { ACTIVE_DIET_PLAN } from "../src/lib/dietPlan/data/plan-2026-09";
-import { WEEKDAYS } from "../src/lib/dietPlan/types";
 import type { ProfileId } from "../src/lib/dietPlan/types";
+import { WEEKDAYS } from "../src/lib/dietPlan/types";
 
 const FAMILY_NAME = "Familia Alberto y Patri";
 const PROFILE_EMAILS: Record<ProfileId, string> = {
