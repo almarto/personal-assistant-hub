@@ -27,7 +27,7 @@ export default async function MealDetailPage({
         &larr; {t("mealDetail.back")}
       </Link>
       <h1 className={styles.title}>{detail.dish_name}</h1>
-      <div className={styles.cookMethod}>{t(`cookMethods.${detail.cook_method}`)}</div>
+      {/* <div className={styles.cookMethod}>{t(`cookMethods.${detail.cook_method}`)}</div> */}
       {detail.ingredients.length === 0 ? (
         <p className={styles.empty}>{t("mealDetail.noIngredients")}</p>
       ) : (
