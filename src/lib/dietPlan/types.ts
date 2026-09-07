@@ -11,32 +11,25 @@ export type ProfileId = "alberto" | "patri";
 export const PROFILE_IDS: readonly ProfileId[] = ["alberto", "patri"];
 
 export type Weekday =
-  | "lunes"
-  | "martes"
-  | "miercoles"
-  | "jueves"
-  | "viernes"
-  | "sabado"
-  | "domingo";
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
 
 export const WEEKDAYS: readonly Weekday[] = [
-  "lunes",
-  "martes",
-  "miercoles",
-  "jueves",
-  "viernes",
-  "sabado",
-  "domingo",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
 ];
 
-export type MealSlot = "desayuno" | "comida" | "merienda" | "cena";
-
-export const MEAL_SLOTS: readonly MealSlot[] = [
-  "desayuno",
-  "comida",
-  "merienda",
-  "cena",
-];
+export type MealSlot = "breakfast" | "lunch" | "snack" | "dinner";
 
 /** Objetivo de macros. Los campos opcionales no siempre están disponibles a nivel de comida individual. */
 export interface MacroTargets {
@@ -72,11 +65,11 @@ export interface Meal {
 }
 
 export type TrainingSessionId =
-  | "lunes-inferior-a"
-  | "martes-superior-a"
-  | "miercoles-cardio-core"
-  | "jueves-inferior-b"
-  | "viernes-superior-b";
+  | "monday-lower-a"
+  | "tuesday-upper-a"
+  | "wednesday-cardio-core"
+  | "thursday-lower-b"
+  | "friday-upper-b";
 
 export interface DayPlan {
   weekday: Weekday;
@@ -98,7 +91,7 @@ export interface Exercise {
 }
 
 export interface StrengthSession {
-  type: "fuerza";
+  type: "strength";
   id: TrainingSessionId;
   weekday: Weekday;
   label: string;
@@ -123,8 +116,8 @@ export interface CardioBlock {
 
 export interface CardioCoreSession {
   type: "cardio_core";
-  id: "miercoles-cardio-core";
-  weekday: "miercoles";
+  id: "wednesday-cardio-core";
+  weekday: "wednesday";
   label: string;
   cardio: CardioBlock;
   core: Exercise[];
@@ -159,27 +152,10 @@ export interface ProgressionPlan {
   equipmentNote: string;
 }
 
-export type ShoppingCategory =
-  | "fruta_verdura"
-  | "carne_pescado_huevos"
-  | "lacteos_refrigerados"
-  | "pan_cereales_legumbres"
-  | "conservas_salsas_condimentos"
-  | "fin_de_semana";
-
-export const SHOPPING_CATEGORY_LABELS: Record<ShoppingCategory, string> = {
-  fruta_verdura: "Fruta y verdura",
-  carne_pescado_huevos: "Carne, pescado y huevos",
-  lacteos_refrigerados: "Lácteos y refrigerados",
-  pan_cereales_legumbres: "Pan, cereales y legumbres",
-  conservas_salsas_condimentos: "Conservas, salsas y condimentos",
-  fin_de_semana: "Para el fin de semana",
-};
-
 export interface ShoppingListItem {
   id: string;
   name: string;
-  category: ShoppingCategory;
+  category: string;
   quantityLabel: string;
   /** Cantidad en gramos o ml cuando es convertible, para poder restar del inventario. */
   quantityValue?: number;

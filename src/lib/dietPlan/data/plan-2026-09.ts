@@ -51,13 +51,13 @@ export const DIET_PLAN_2026_09: DietPlan = {
   },
 
   days: {
-    lunes: {
-      weekday: "lunes",
+    monday: {
+      weekday: "monday",
       label: "Lunes",
-      trainingSessionId: "lunes-inferior-a",
+      trainingSessionId: "monday-lower-a",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con tomate rallado, aguacate, pavo y queso cottage. Café con leche.",
           "90 g pan integral + 120 g queso cottage + 50 g pavo + 30 g aguacate + 150 ml leche",
           "120 g pan + 50 g queso cottage + 20 g pavo + 30 g aguacate + 150 ml leche",
@@ -65,7 +65,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 490, proteinG: 29 },
         ),
         meal(
-          "comida",
+          "lunch",
           "Pollo al pimentón con arroz y verduras: 200 g calabacín/pimiento/cebolla + 10 g AOVE. Taper.",
           "220 g pechuga + 80 g arroz",
           "150 g pechuga + 90 g arroz",
@@ -73,7 +73,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 650, proteinG: 43 },
         ),
         meal(
-          "merienda",
+          "snack",
           "Batido de proteína y fruta; llevar el polvo separado y mezclar al tomar.",
           "25 g whey + 250 ml leche + 70 g plátano + 14 g nueces",
           "15 g whey + 250 ml leche + 120 g plátano + 18 g nueces",
@@ -81,7 +81,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 400, proteinG: 23 },
         ),
         meal(
-          "cena",
+          "dinner",
           "Merluza en airfryer, patata gajo y ensalada de tomate/pepino (200 g) con 10 g AOVE. 1 onza de chocolate.",
           "250 g merluza + 300 g patata",
           "180 g merluza + 350 g patata",
@@ -95,13 +95,13 @@ export const DIET_PLAN_2026_09: DietPlan = {
       },
     },
 
-    martes: {
-      weekday: "martes",
+    tuesday: {
+      weekday: "tuesday",
       label: "Martes",
-      trainingSessionId: "martes-superior-a",
+      trainingSessionId: "tuesday-upper-a",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con tortilla francesa, tomate rallado y aguacate. Café con leche.",
           "90 g pan integral + 2 huevos + 120 g claras + 30 g aguacate + 150 ml leche",
           "110 g pan + 2 huevos + 50 g claras + 30 g aguacate + 150 ml leche",
@@ -109,7 +109,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 545, proteinG: 29 },
         ),
         meal(
-          "comida",
+          "lunch",
           "Albóndigas de pavo al tomate con cuscús: carne 5% grasa, salsa casera de tomate/cebolla/zanahoria 180 g y 10 g AOVE. Taper.",
           "230 g pavo + 75 g cuscús",
           "160 g pavo + 90 g cuscús",
@@ -117,7 +117,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 660, proteinG: 43 },
         ),
         meal(
-          "merienda",
+          "snack",
           "Crema de arroz con proteína y canela; llevar en taper y tomar fría o calentar 60-90 s.",
           "48 g crema de arroz + 30 g whey + 200 ml leche",
           "52 g crema de arroz + 24 g whey + 200 ml leche",
@@ -125,7 +125,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 380, proteinG: 26 },
         ),
         meal(
-          "cena",
+          "dinner",
           "Salteado Mambo/sartén de ternera, noodles y verduras (200 g), soja baja en sal y 10 g aceite.",
           "200 g ternera magra + 70 g noodles",
           "130 g ternera + 85 g noodles",
@@ -139,13 +139,13 @@ export const DIET_PLAN_2026_09: DietPlan = {
       },
     },
 
-    miercoles: {
-      weekday: "miercoles",
+    wednesday: {
+      weekday: "wednesday",
       label: "Miércoles",
-      trainingSessionId: "miercoles-cardio-core",
+      trainingSessionId: "wednesday-cardio-core",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con tomate, atún al natural y aguacate. Café con leche.",
           "100 g pan integral + 100 g atún escurrido + 50 g aguacate + 150 ml leche",
           "120 g pan + 40 g atún + 65 g aguacate + 150 ml leche",
@@ -153,7 +153,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 525, proteinG: 28 },
         ),
         meal(
-          "comida",
+          "lunch",
           "Pasta integral con boloñesa de ternera y lentejas: 120 g salsa de tomate/verduras + 10 g AOVE. Taper.",
           "180 g ternera 5% + 100 g lentejas cocidas + 75 g pasta",
           "110 g ternera + 100 g lentejas + 90 g pasta",
@@ -161,7 +161,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 675, proteinG: 41 },
         ),
         meal(
-          "merienda",
+          "snack",
           "Queso fresco batido con fruta y almendras, en taper.",
           "300 g queso fresco batido 0% + 150 g fruta + 20 g almendras",
           "250 g queso fresco batido 0% + 200 g fruta + 27 g almendras",
@@ -169,7 +169,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 410, proteinG: 24 },
         ),
         meal(
-          "cena",
+          "dinner",
           "Tortilla de patata ligera: patata y cebolla hechas en airfryer, cuajada en sartén; ensalada 200 g con 10 g AOVE.",
           "2 huevos + 220 g claras + 250 g patata",
           "2 huevos + 100 g claras + 320 g patata",
@@ -183,13 +183,13 @@ export const DIET_PLAN_2026_09: DietPlan = {
       },
     },
 
-    jueves: {
-      weekday: "jueves",
+    thursday: {
+      weekday: "thursday",
       label: "Jueves",
-      trainingSessionId: "jueves-inferior-b",
+      trainingSessionId: "thursday-lower-b",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con tomate, jamón serrano magro y queso cottage. Café con leche.",
           "90 g pan + 50 g jamón + 80 g queso cottage + 150 ml leche",
           "130 g pan + 20 g jamón + 30 g queso cottage + 5 g AOVE + 150 ml leche",
@@ -197,7 +197,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 520, proteinG: 28 },
         ),
         meal(
-          "comida",
+          "lunch",
           "Salmón al limón, patata asada y brócoli (200 g), con 5 g AOVE. Taper.",
           "200 g salmón + 280 g patata",
           "140 g salmón + 360 g patata",
@@ -205,7 +205,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 680, proteinG: 36 },
         ),
         meal(
-          "merienda",
+          "snack",
           "Batido de proteína y fruta; llevar el polvo separado y mezclar al tomar.",
           "35 g whey + 250 ml leche + 70 g plátano + 12 g almendras",
           "22 g whey + 250 ml leche + 110 g plátano + 15 g almendras",
@@ -213,7 +213,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 405, proteinG: 29 },
         ),
         meal(
-          "cena",
+          "dinner",
           "Fajitas de pollo: pimiento/cebolla 200 g, yogur-lima, 10 g AOVE.",
           "200 g pollo + 2 tortillas (120 g)",
           "130 g pollo + 2 tortillas (150 g)",
@@ -227,13 +227,13 @@ export const DIET_PLAN_2026_09: DietPlan = {
       },
     },
 
-    viernes: {
-      weekday: "viernes",
+    friday: {
+      weekday: "friday",
       label: "Viernes",
-      trainingSessionId: "viernes-superior-b",
+      trainingSessionId: "friday-upper-b",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con aguacate, huevo y claras. Café con leche.",
           "80 g pan integral + 2 huevos + 160 g claras + 30 g aguacate + 150 ml leche",
           "110 g pan + 2 huevos + 50 g aguacate + 150 ml leche",
@@ -241,7 +241,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 570, proteinG: 31 },
         ),
         meal(
-          "comida",
+          "lunch",
           "Lomo de cerdo, boniato y pimientos (200 g), 10 g AOVE, mostaza y romero. Taper.",
           "230 g lomo + 300 g boniato",
           "160 g lomo + 370 g boniato",
@@ -249,7 +249,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 665, proteinG: 43 },
         ),
         meal(
-          "merienda",
+          "snack",
           "Crema de arroz con proteína y canela; llevar en taper y tomar fría o recalentar.",
           "54 g crema de arroz + 20 g whey + 250 ml leche",
           "75 g crema de arroz + 10 g whey + 250 ml leche",
@@ -257,7 +257,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 430, proteinG: 22 },
         ),
         meal(
-          "cena",
+          "dinner",
           "Pizza rápida con base de wrap, tomate, mozzarella, champiñón y jamón cocido. Ensalada 150 g con 5 g AOVE. 1 onza chocolate.",
           "2 wraps (120 g) + 100 g jamón + 100 g mozzarella light",
           "2 wraps (150 g) + 60 g jamón + 80 g mozzarella",
@@ -271,15 +271,15 @@ export const DIET_PLAN_2026_09: DietPlan = {
       },
     },
 
-    sabado: {
-      weekday: "sabado",
+    saturday: {
+      weekday: "saturday",
       label: "Sábado",
       trainingSessionId: null,
       dayNote:
         "Cena fuera: la cena tiene un presupuesto, no una cifra exacta. Elegir un restaurante con carta visible y apuntar a un principal de proteína a la plancha/horno + patata/arroz + verdura; compartir un entrante; una bebida alcohólica como máximo. Evitar sumar a la vez pan, fritura, salsa cremosa, postre y varias copas. Si la cena supera el presupuesto, no compensar saltándose comidas al día siguiente; volver al plan y mirar el promedio semanal.",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con revuelto y tomate. Café con leche.",
           "70 g pan + 2 huevos + 180 g claras + 150 ml leche",
           "95 g pan + 2 huevos + 80 g claras + 150 ml leche",
@@ -287,7 +287,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 485, proteinG: 28 },
         ),
         meal(
-          "comida",
+          "lunch",
           "Ensalada templada de quinoa, pollo, tomate, pepino y zanahoria (250 g), 10 g AOVE y limón.",
           "200 g pollo + 65 g quinoa",
           "130 g pollo + 85 g quinoa",
@@ -295,7 +295,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 610, proteinG: 39 },
         ),
         meal(
-          "merienda",
+          "snack",
           "Queso fresco batido con fruta y almendras, en taper.",
           "350 g queso fresco batido 0% + 70 g fruta + 15 g almendras",
           "250 g queso fresco batido 0% + 180 g fruta + 17 g almendras",
@@ -303,7 +303,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 340, proteinG: 22 },
         ),
         {
-          slot: "cena",
+          slot: "dinner",
           title:
             "Cena fuera. Presupuesto orientativo: principal + guarnición + verdura, y 1 cerveza de 330 ml o 1 copa de vino. Ejemplo: lubina/solomillo a la plancha, patata asada, ensalada, compartir entrante.",
           quantities: {
@@ -325,15 +325,15 @@ export const DIET_PLAN_2026_09: DietPlan = {
       },
     },
 
-    domingo: {
-      weekday: "domingo",
+    sunday: {
+      weekday: "sunday",
       label: "Domingo",
       trainingSessionId: null,
       dayNote:
         "Comida a domicilio: se reserva un margen realista para delivery. Para asegurar la segunda toma semanal de pescado azul, elegir poke de salmón con cantidad controlable, edamame, verduras y salsa aparte. Pescado azul de la semana: jueves (salmón al limón) y domingo (poke de salmón); así quedan cubiertas dos tomas sin suplemento de omega-3.",
       meals: [
         meal(
-          "desayuno",
+          "breakfast",
           "Tostadas con tomate, pavo, queso cottage y aguacate. Café con leche.",
           "100 g pan + 50 g pavo + 120 g queso cottage + 30 g aguacate + 150 ml leche",
           "130 g pan + 20 g pavo + 50 g queso cottage + 60 g aguacate + 150 ml leche",
@@ -341,7 +341,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 560, proteinG: 28 },
         ),
         {
-          slot: "comida",
+          slot: "lunch",
           title:
             "Poke de salmón: arroz, salmón, edamame, verduras, 1/2 aguacate compartido y salsa aparte.",
           quantities: {
@@ -357,7 +357,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
             "Por defecto se cocina en casa: sus ingredientes (salmón, arroz, edamame, verduras) se incluyen en la lista de la compra. También puede pedirse a domicilio.",
         },
         meal(
-          "merienda",
+          "snack",
           "Queso fresco batido con fruta, nueces y una pieza de queso, en taper.",
           "250 g queso fresco batido 0% + 150 g fruta + 10 g nueces + 20 g queso",
           "200 g queso fresco batido 0% + 200 g fruta + 15 g nueces + 20 g queso",
@@ -365,7 +365,7 @@ export const DIET_PLAN_2026_09: DietPlan = {
           { kcal: 385, proteinG: 20 },
         ),
         meal(
-          "cena",
+          "dinner",
           "Crema de calabacín en Mambo + tortilla francesa. 1 onza de chocolate. Crema: 300 g calabacín/puerro por persona y 10 g AOVE.",
           "3 huevos + 180 g claras + 40 g pan",
           "2 huevos + 100 g claras + 70 g pan",
@@ -381,10 +381,10 @@ export const DIET_PLAN_2026_09: DietPlan = {
   },
 
   trainingSessions: {
-    "lunes-inferior-a": {
-      type: "fuerza",
-      id: "lunes-inferior-a",
-      weekday: "lunes",
+    "monday-lower-a": {
+      type: "strength",
+      id: "monday-lower-a",
+      weekday: "monday",
       label: "Lunes · Tren inferior A",
       exercises: [
         {
@@ -432,10 +432,10 @@ export const DIET_PLAN_2026_09: DietPlan = {
       ],
     },
 
-    "martes-superior-a": {
-      type: "fuerza",
-      id: "martes-superior-a",
-      weekday: "martes",
+    "tuesday-upper-a": {
+      type: "strength",
+      id: "tuesday-upper-a",
+      weekday: "tuesday",
       label: "Martes · Tren superior A",
       exercises: [
         {
@@ -476,10 +476,10 @@ export const DIET_PLAN_2026_09: DietPlan = {
       ],
     },
 
-    "miercoles-cardio-core": {
+    "wednesday-cardio-core": {
       type: "cardio_core",
-      id: "miercoles-cardio-core",
-      weekday: "miercoles",
+      id: "wednesday-cardio-core",
+      weekday: "wednesday",
       label: "Miércoles · Cardio + core",
       cardio: {
         title: "Bicicleta · 35-40 min",
@@ -524,10 +524,10 @@ export const DIET_PLAN_2026_09: DietPlan = {
       note: "Día fácil a propósito. No convertir los intervalos en una prueba. La prioridad es llegar recuperados al jueves.",
     },
 
-    "jueves-inferior-b": {
-      type: "fuerza",
-      id: "jueves-inferior-b",
-      weekday: "jueves",
+    "thursday-lower-b": {
+      type: "strength",
+      id: "thursday-lower-b",
+      weekday: "thursday",
       label: "Jueves · Tren inferior B",
       exercises: [
         {
@@ -561,10 +561,10 @@ export const DIET_PLAN_2026_09: DietPlan = {
       ],
     },
 
-    "viernes-superior-b": {
-      type: "fuerza",
-      id: "viernes-superior-b",
-      weekday: "viernes",
+    "friday-upper-b": {
+      type: "strength",
+      id: "friday-upper-b",
+      weekday: "friday",
       label: "Viernes · Tren superior B",
       exercises: [
         {
@@ -688,71 +688,71 @@ export const DIET_PLAN_2026_09: DietPlan = {
 
   shoppingList: [
     // Fruta y verdura
-    { id: "patata", name: "Patata", category: "fruta_verdura", quantityLabel: "2,0 kg", quantityValue: 2000, quantityUnit: "g", source: "pdf" },
-    { id: "boniato", name: "Boniato", category: "fruta_verdura", quantityLabel: "750 g", quantityValue: 750, quantityUnit: "g", source: "pdf" },
-    { id: "calabacin", name: "Calabacín", category: "fruta_verdura", quantityLabel: "1,4 kg", quantityValue: 1400, quantityUnit: "g", source: "pdf" },
-    { id: "pimientos", name: "Pimientos variados", category: "fruta_verdura", quantityLabel: "1,3 kg", quantityValue: 1300, quantityUnit: "g", source: "pdf" },
-    { id: "cebolla", name: "Cebolla", category: "fruta_verdura", quantityLabel: "1,0 kg", quantityValue: 1000, quantityUnit: "g", source: "pdf" },
-    { id: "zanahoria", name: "Zanahoria", category: "fruta_verdura", quantityLabel: "500 g", quantityValue: 500, quantityUnit: "g", source: "pdf" },
-    { id: "brocoli", name: "Brócoli", category: "fruta_verdura", quantityLabel: "450 g", quantityValue: 450, quantityUnit: "g", source: "pdf" },
-    { id: "champinon", name: "Champiñón", category: "fruta_verdura", quantityLabel: "250 g", quantityValue: 250, quantityUnit: "g", source: "pdf" },
-    { id: "puerro", name: "Puerro", category: "fruta_verdura", quantityLabel: "300 g", quantityValue: 300, quantityUnit: "g", source: "pdf" },
-    { id: "tomate-fresco", name: "Tomate fresco", category: "fruta_verdura", quantityLabel: "1,8 kg", quantityValue: 1800, quantityUnit: "g", source: "pdf" },
-    { id: "pepino", name: "Pepino", category: "fruta_verdura", quantityLabel: "2 unidades (500-600 g)", quantityUnit: "ud", source: "pdf" },
-    { id: "hojas-lechuga", name: "Mezcla de hojas/lechuga, sin espinaca", category: "fruta_verdura", quantityLabel: "600 g", quantityValue: 600, quantityUnit: "g", source: "pdf" },
-    { id: "ajo", name: "Ajo", category: "fruta_verdura", quantityLabel: "1 cabeza", quantityUnit: "ud", source: "pdf" },
-    { id: "limones-limas", name: "Limones/limas", category: "fruta_verdura", quantityLabel: "5 unidades", quantityUnit: "ud", source: "pdf" },
-    { id: "platanos", name: "Plátanos", category: "fruta_verdura", quantityLabel: "8-10 unidades", quantityUnit: "ud", source: "pdf" },
-    { id: "fruta-meriendas", name: "Fruta variada para meriendas", category: "fruta_verdura", quantityLabel: "2,0-2,2 kg", quantityValue: 2100, quantityUnit: "g", source: "pdf" },
-    { id: "aguacates", name: "Aguacates", category: "fruta_verdura", quantityLabel: "5 unidades", quantityUnit: "ud", source: "pdf" },
-    { id: "hierbas", name: "Hierbas: perejil/cilantro", category: "fruta_verdura", quantityLabel: "opcional", source: "pdf" },
+    { id: "patata", name: "Patata", category: "produce", quantityLabel: "2,0 kg", quantityValue: 2000, quantityUnit: "g", source: "pdf" },
+    { id: "boniato", name: "Boniato", category: "produce", quantityLabel: "750 g", quantityValue: 750, quantityUnit: "g", source: "pdf" },
+    { id: "calabacin", name: "Calabacín", category: "produce", quantityLabel: "1,4 kg", quantityValue: 1400, quantityUnit: "g", source: "pdf" },
+    { id: "pimientos", name: "Pimientos variados", category: "produce", quantityLabel: "1,3 kg", quantityValue: 1300, quantityUnit: "g", source: "pdf" },
+    { id: "cebolla", name: "Cebolla", category: "produce", quantityLabel: "1,0 kg", quantityValue: 1000, quantityUnit: "g", source: "pdf" },
+    { id: "zanahoria", name: "Zanahoria", category: "produce", quantityLabel: "500 g", quantityValue: 500, quantityUnit: "g", source: "pdf" },
+    { id: "brocoli", name: "Brócoli", category: "produce", quantityLabel: "450 g", quantityValue: 450, quantityUnit: "g", source: "pdf" },
+    { id: "champinon", name: "Champiñón", category: "produce", quantityLabel: "250 g", quantityValue: 250, quantityUnit: "g", source: "pdf" },
+    { id: "puerro", name: "Puerro", category: "produce", quantityLabel: "300 g", quantityValue: 300, quantityUnit: "g", source: "pdf" },
+    { id: "tomate-fresco", name: "Tomate fresco", category: "produce", quantityLabel: "1,8 kg", quantityValue: 1800, quantityUnit: "g", source: "pdf" },
+    { id: "pepino", name: "Pepino", category: "produce", quantityLabel: "2 unidades (500-600 g)", quantityUnit: "ud", source: "pdf" },
+    { id: "hojas-lechuga", name: "Mezcla de hojas/lechuga, sin espinaca", category: "produce", quantityLabel: "600 g", quantityValue: 600, quantityUnit: "g", source: "pdf" },
+    { id: "ajo", name: "Ajo", category: "produce", quantityLabel: "1 cabeza", quantityUnit: "ud", source: "pdf" },
+    { id: "limones-limas", name: "Limones/limas", category: "produce", quantityLabel: "5 unidades", quantityUnit: "ud", source: "pdf" },
+    { id: "platanos", name: "Plátanos", category: "produce", quantityLabel: "8-10 unidades", quantityUnit: "ud", source: "pdf" },
+    { id: "fruta-meriendas", name: "Fruta variada para meriendas", category: "produce", quantityLabel: "2,0-2,2 kg", quantityValue: 2100, quantityUnit: "g", source: "pdf" },
+    { id: "aguacates", name: "Aguacates", category: "produce", quantityLabel: "5 unidades", quantityUnit: "ud", source: "pdf" },
+    { id: "hierbas", name: "Hierbas: perejil/cilantro", category: "produce", quantityLabel: "opcional", source: "pdf" },
 
     // Carne, pescado y huevos
-    { id: "pechuga-pollo", name: "Pechuga de pollo", category: "carne_pescado_huevos", quantityLabel: "1,35 kg", quantityValue: 1350, quantityUnit: "g", source: "pdf" },
-    { id: "pavo-picado", name: "Carne picada de pavo 5%", category: "carne_pescado_huevos", quantityLabel: "450 g", quantityValue: 450, quantityUnit: "g", source: "pdf" },
-    { id: "ternera-magra", name: "Ternera magra 5%, picada + tiras", category: "carne_pescado_huevos", quantityLabel: "700 g", quantityValue: 700, quantityUnit: "g", source: "pdf" },
-    { id: "lomo-cerdo", name: "Lomo de cerdo limpio", category: "carne_pescado_huevos", quantityLabel: "450 g", quantityValue: 450, quantityUnit: "g", source: "pdf" },
-    { id: "salmon-jueves", name: "Salmón para el jueves", category: "carne_pescado_huevos", quantityLabel: "400 g", quantityValue: 400, quantityUnit: "g", source: "pdf" },
-    { id: "merluza", name: "Merluza", category: "carne_pescado_huevos", quantityLabel: "500 g", quantityValue: 500, quantityUnit: "g", source: "pdf" },
-    { id: "fiambre-pavo", name: "Fiambre de pavo alto % de carne", category: "carne_pescado_huevos", quantityLabel: "400 g", quantityValue: 400, quantityUnit: "g", source: "pdf" },
-    { id: "jamon-serrano", name: "Jamón serrano magro", category: "carne_pescado_huevos", quantityLabel: "180 g", quantityValue: 180, quantityUnit: "g", source: "pdf" },
-    { id: "jamon-cocido", name: "Jamón cocido alto % de carne", category: "carne_pescado_huevos", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "atun-natural", name: "Atún al natural", category: "carne_pescado_huevos", quantityLabel: "4 latas, unos 220 g escurridos", source: "pdf" },
-    { id: "huevos", name: "Huevos", category: "carne_pescado_huevos", quantityLabel: "30 unidades", quantityUnit: "ud", source: "pdf" },
-    { id: "claras", name: "Claras pasteurizadas", category: "carne_pescado_huevos", quantityLabel: "1,5 kg", quantityValue: 1500, quantityUnit: "g", source: "pdf" },
+    { id: "pechuga-pollo", name: "Pechuga de pollo", category: "meat_fish_eggs", quantityLabel: "1,35 kg", quantityValue: 1350, quantityUnit: "g", source: "pdf" },
+    { id: "pavo-picado", name: "Carne picada de pavo 5%", category: "meat_fish_eggs", quantityLabel: "450 g", quantityValue: 450, quantityUnit: "g", source: "pdf" },
+    { id: "ternera-magra", name: "Ternera magra 5%, picada + tiras", category: "meat_fish_eggs", quantityLabel: "700 g", quantityValue: 700, quantityUnit: "g", source: "pdf" },
+    { id: "lomo-cerdo", name: "Lomo de cerdo limpio", category: "meat_fish_eggs", quantityLabel: "450 g", quantityValue: 450, quantityUnit: "g", source: "pdf" },
+    { id: "salmon-jueves", name: "Salmón para el jueves", category: "meat_fish_eggs", quantityLabel: "400 g", quantityValue: 400, quantityUnit: "g", source: "pdf" },
+    { id: "merluza", name: "Merluza", category: "meat_fish_eggs", quantityLabel: "500 g", quantityValue: 500, quantityUnit: "g", source: "pdf" },
+    { id: "fiambre-pavo", name: "Fiambre de pavo alto % de carne", category: "meat_fish_eggs", quantityLabel: "400 g", quantityValue: 400, quantityUnit: "g", source: "pdf" },
+    { id: "jamon-serrano", name: "Jamón serrano magro", category: "meat_fish_eggs", quantityLabel: "180 g", quantityValue: 180, quantityUnit: "g", source: "pdf" },
+    { id: "jamon-cocido", name: "Jamón cocido alto % de carne", category: "meat_fish_eggs", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "atun-natural", name: "Atún al natural", category: "meat_fish_eggs", quantityLabel: "4 latas, unos 220 g escurridos", source: "pdf" },
+    { id: "huevos", name: "Huevos", category: "meat_fish_eggs", quantityLabel: "30 unidades", quantityUnit: "ud", source: "pdf" },
+    { id: "claras", name: "Claras pasteurizadas", category: "meat_fish_eggs", quantityLabel: "1,5 kg", quantityValue: 1500, quantityUnit: "g", source: "pdf" },
 
     // Lácteos y refrigerados
-    { id: "leche", name: "Leche semidesnatada", category: "lacteos_refrigerados", quantityLabel: "5 litros", quantityValue: 5000, quantityUnit: "ml", source: "pdf" },
-    { id: "queso-fresco-batido", name: "Queso fresco batido 0%", category: "lacteos_refrigerados", quantityLabel: "2 kg", quantityValue: 2000, quantityUnit: "g", source: "pdf" },
-    { id: "queso-cottage", name: "Queso cottage", category: "lacteos_refrigerados", quantityLabel: "500 g", quantityValue: 500, quantityUnit: "g", source: "pdf" },
-    { id: "queso-pieza", name: "Queso en pieza para la merienda", category: "lacteos_refrigerados", quantityLabel: "100 g", quantityValue: 100, quantityUnit: "g", source: "pdf" },
-    { id: "queso-lonchas", name: "Queso en lonchas o rallado light", category: "lacteos_refrigerados", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "mozzarella", name: "Mozzarella light", category: "lacteos_refrigerados", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "yogur-natural", name: "Yogur natural para salsa", category: "lacteos_refrigerados", quantityLabel: "2 unidades", quantityUnit: "ud", source: "pdf" },
+    { id: "leche", name: "Leche semidesnatada", category: "dairy_chilled", quantityLabel: "5 litros", quantityValue: 5000, quantityUnit: "ml", source: "pdf" },
+    { id: "queso-fresco-batido", name: "Queso fresco batido 0%", category: "dairy_chilled", quantityLabel: "2 kg", quantityValue: 2000, quantityUnit: "g", source: "pdf" },
+    { id: "queso-cottage", name: "Queso cottage", category: "dairy_chilled", quantityLabel: "500 g", quantityValue: 500, quantityUnit: "g", source: "pdf" },
+    { id: "queso-pieza", name: "Queso en pieza para la merienda", category: "dairy_chilled", quantityLabel: "100 g", quantityValue: 100, quantityUnit: "g", source: "pdf" },
+    { id: "queso-lonchas", name: "Queso en lonchas o rallado light", category: "dairy_chilled", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "mozzarella", name: "Mozzarella light", category: "dairy_chilled", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "yogur-natural", name: "Yogur natural para salsa", category: "dairy_chilled", quantityLabel: "2 unidades", quantityUnit: "ud", source: "pdf" },
 
     // Pan, cereales y legumbres
-    { id: "pan-integral", name: "Pan integral (congelar rebanado)", category: "pan_cereales_legumbres", quantityLabel: "1,8 kg", quantityValue: 1800, quantityUnit: "g", source: "pdf" },
-    { id: "wraps", name: "Tortillas integrales/wraps", category: "pan_cereales_legumbres", quantityLabel: "8-10 unidades, aprox. 600 g", quantityValue: 600, quantityUnit: "g", source: "pdf" },
-    { id: "crema-arroz", name: "Crema de arroz", category: "pan_cereales_legumbres", quantityLabel: "300 g", quantityValue: 300, quantityUnit: "g", source: "pdf" },
-    { id: "arroz-seco", name: "Arroz (seco)", category: "pan_cereales_legumbres", quantityLabel: "500 g seco", quantityValue: 500, quantityUnit: "g", source: "pdf" },
-    { id: "pasta-integral", name: "Pasta integral", category: "pan_cereales_legumbres", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "cuscus", name: "Cuscús", category: "pan_cereales_legumbres", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "quinoa", name: "Quinoa", category: "pan_cereales_legumbres", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "noodles", name: "Noodles", category: "pan_cereales_legumbres", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
-    { id: "lentejas", name: "Lentejas cocidas", category: "pan_cereales_legumbres", quantityLabel: "1 bote de 400 g, unos 240 g escurridos", quantityValue: 400, quantityUnit: "g", source: "pdf" },
+    { id: "pan-integral", name: "Pan integral (congelar rebanado)", category: "bread_grains_legumes", quantityLabel: "1,8 kg", quantityValue: 1800, quantityUnit: "g", source: "pdf" },
+    { id: "wraps", name: "Tortillas integrales/wraps", category: "bread_grains_legumes", quantityLabel: "8-10 unidades, aprox. 600 g", quantityValue: 600, quantityUnit: "g", source: "pdf" },
+    { id: "crema-arroz", name: "Crema de arroz", category: "bread_grains_legumes", quantityLabel: "300 g", quantityValue: 300, quantityUnit: "g", source: "pdf" },
+    { id: "arroz-seco", name: "Arroz (seco)", category: "bread_grains_legumes", quantityLabel: "500 g seco", quantityValue: 500, quantityUnit: "g", source: "pdf" },
+    { id: "pasta-integral", name: "Pasta integral", category: "bread_grains_legumes", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "cuscus", name: "Cuscús", category: "bread_grains_legumes", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "quinoa", name: "Quinoa", category: "bread_grains_legumes", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "noodles", name: "Noodles", category: "bread_grains_legumes", quantityLabel: "200 g", quantityValue: 200, quantityUnit: "g", source: "pdf" },
+    { id: "lentejas", name: "Lentejas cocidas", category: "bread_grains_legumes", quantityLabel: "1 bote de 400 g, unos 240 g escurridos", quantityValue: 400, quantityUnit: "g", source: "pdf" },
 
     // Conservas, salsas y condimentos
-    { id: "tomate-triturado", name: "Tomate triturado/passata", category: "conservas_salsas_condimentos", quantityLabel: "3 botes de 400 g", source: "pdf" },
-    { id: "soja-baja-sal", name: "Salsa de soja baja en sal", category: "conservas_salsas_condimentos", quantityLabel: "1 botella", quantityUnit: "ud", source: "pdf" },
-    { id: "mostaza", name: "Mostaza", category: "conservas_salsas_condimentos", quantityLabel: "1 frasco pequeño", quantityUnit: "ud", source: "pdf" },
-    { id: "whey", name: "Proteína whey", category: "conservas_salsas_condimentos", quantityLabel: "250 g", quantityValue: 250, quantityUnit: "g", source: "pdf" },
-    { id: "chocolate", name: "Chocolate negro 72%", category: "conservas_salsas_condimentos", quantityLabel: "1 tableta", quantityUnit: "ud", source: "pdf" },
-    { id: "almendras-nueces", name: "Almendras/nueces", category: "conservas_salsas_condimentos", quantityLabel: "250 g", quantityValue: 250, quantityUnit: "g", source: "pdf" },
-    { id: "aove", name: "AOVE", category: "conservas_salsas_condimentos", quantityLabel: "500 ml", quantityValue: 500, quantityUnit: "ml", source: "pdf" },
+    { id: "tomate-triturado", name: "Tomate triturado/passata", category: "pantry_condiments", quantityLabel: "3 botes de 400 g", source: "pdf" },
+    { id: "soja-baja-sal", name: "Salsa de soja baja en sal", category: "pantry_condiments", quantityLabel: "1 botella", quantityUnit: "ud", source: "pdf" },
+    { id: "mostaza", name: "Mostaza", category: "pantry_condiments", quantityLabel: "1 frasco pequeño", quantityUnit: "ud", source: "pdf" },
+    { id: "whey", name: "Proteína whey", category: "pantry_condiments", quantityLabel: "250 g", quantityValue: 250, quantityUnit: "g", source: "pdf" },
+    { id: "chocolate", name: "Chocolate negro 72%", category: "pantry_condiments", quantityLabel: "1 tableta", quantityUnit: "ud", source: "pdf" },
+    { id: "almendras-nueces", name: "Almendras/nueces", category: "pantry_condiments", quantityLabel: "250 g", quantityValue: 250, quantityUnit: "g", source: "pdf" },
+    { id: "aove", name: "AOVE", category: "pantry_condiments", quantityLabel: "500 ml", quantityValue: 500, quantityUnit: "ml", source: "pdf" },
     {
       id: "especias",
       name: "Especias",
-      category: "conservas_salsas_condimentos",
+      category: "pantry_condiments",
       quantityLabel: "surtido",
       note: "Pimentón, ajo en polvo, comino, orégano, romero, curry (opcional), canela, pimienta y sal.",
       source: "pdf",

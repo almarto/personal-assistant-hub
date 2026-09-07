@@ -196,11 +196,11 @@ async function main() {
       const dayRes = await client.query(
         `INSERT INTO plan_template_exercise_days (plan_template_id, weekday, label, day_type)
          VALUES ($1,$2,$3,$4) RETURNING id`,
-        [templateId, weekday, session.label, session.type === "fuerza" ? "fuerza" : "cardio_core"]
+        [templateId, weekday, session.label, session.type === "strength" ? "strength" : "cardio_core"]
       );
       const exerciseDayId = dayRes.rows[0].id;
 
-      const exercises = session.type === "fuerza" ? session.exercises : session.core;
+      const exercises = session.type === "strength" ? session.exercises : session.core;
       for (let i = 0; i < exercises.length; i++) {
         const ex = exercises[i];
         await client.query(
