@@ -46,13 +46,13 @@ export async function generateShoppingListAction(
 
   const { userId, familyId } = await requireFamilyMembership();
   const rows = await generateShoppingList(userId, familyId, rangeStart, rangeEnd);
-  revalidatePath("/wellness/compra");
+  revalidatePath("/wellness/shopping");
   return rows;
 }
 
 export async function toggleShoppingItemAction(itemId: string): Promise<boolean> {
   const { userId } = await requireFamilyMembership();
   const checked = await toggleShoppingItem(itemId, userId);
-  revalidatePath("/wellness/compra");
+  revalidatePath("/wellness/shopping");
   return checked;
 }

@@ -2,10 +2,10 @@ import { requireFamilyMembership } from "@/lib/auth-guards";
 import { offsetDateStr, parseDateStr, todayDateStr } from "@/lib/services/wellness/date";
 import { generateShoppingList, getShoppingList } from "@/lib/services/wellness/shoppingList";
 
-import CompraClient from "./CompraClient";
+import ShoppingClient from "./ShoppingClient";
 
 // Stable Monday-Sunday range for "this week" — same weekday math as
-// ComerClient.tsx's own week-strip navigation, adapted to a full week span
+// EatingClient.tsx's own week-strip navigation, adapted to a full week span
 // instead of a single day. Recomputes identically all week, so it only
 // changes once per week (unlike "tomorrow through +6 days", which drifted
 // to a different window every calendar day).
@@ -18,17 +18,14 @@ function getDefaultWeekRange(): { start: string; end: string } {
   return { start: weekStart, end: weekEnd };
 }
 
-export default async function CompraPage() {
+export default async function ShoppingPage() {
   const { userId, familyId } = await requireFamilyMembership();
   const { start: rangeStart, end: rangeEnd } = getDefaultWeekRange();
 
-  // Read-only first: only fall back to the destructive generate/regenerate
-  // when nothing has been generated yet for this exact range, so a plain
-  // render never wipes an already-populated range.
   let items = await getShoppingList(userId, rangeStart, rangeEnd);
   if (items.length === 0) {
     items = await generateShoppingList(userId, familyId, rangeStart, rangeEnd);
   }
 
-  return <CompraClient initialItems={items} initialRangeStart={rangeStart} initialRangeEnd={rangeEnd} />;
+  return <ShoppingClient initialItems={items} initialRangeStart={rangeStart} initialRangeEnd={rangeEnd} />;
 }

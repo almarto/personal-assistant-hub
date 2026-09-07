@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { generateShoppingListAction, toggleShoppingItemAction } from "@/app/actions/wellness/shopping";
@@ -7,25 +8,25 @@ import type { IngredientCategory, ShoppingListRow } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
 
-const CATEGORY_LABELS: Record<IngredientCategory, string> = {
-  fruta_verdura: "Fruta y verdura",
-  carne_pescado_huevos: "Carne, pescado y huevos",
-  lacteos_refrigerados: "Lácteos y refrigerados",
-  pan_cereales_legumbres: "Pan, cereales y legumbres",
-  conservas_salsas_condimentos: "Conservas, salsas y condimentos",
-  otros: "Otros",
-};
-
 const CATEGORY_ORDER: IngredientCategory[] = [
-  "fruta_verdura",
-  "carne_pescado_huevos",
-  "lacteos_refrigerados",
-  "pan_cereales_legumbres",
-  "conservas_salsas_condimentos",
-  "otros",
+  "produce",
+  "meat_fish_eggs",
+  "dairy_chilled",
+  "bread_grains_legumes",
+  "pantry_condiments",
+  "other",
 ];
 
-export default function CompraClient({
+const CATEGORY_I18N_KEY: Record<IngredientCategory, string> = {
+  produce: "produce",
+  meat_fish_eggs: "meatFishEggs",
+  dairy_chilled: "dairyChilled",
+  bread_grains_legumes: "breadGrainsLegumes",
+  pantry_condiments: "pantryCondiments",
+  other: "other",
+};
+
+export default function ShoppingClient({
   initialItems,
   initialRangeStart,
   initialRangeEnd,
@@ -34,6 +35,7 @@ export default function CompraClient({
   initialRangeStart: string;
   initialRangeEnd: string;
 }) {
+  const t = useTranslations("Wellness");
   const [items, setItems] = useState(initialItems);
   const [rangeStart, setRangeStart] = useState(initialRangeStart);
   const [rangeEnd, setRangeEnd] = useState(initialRangeEnd);
@@ -47,7 +49,7 @@ export default function CompraClient({
       const rows = await generateShoppingListAction(rangeStart, rangeEnd);
       setItems(rows);
     } catch {
-      setError("No se ha podido actualizar la lista. Revisa el rango de fechas.");
+      setError(t("shopping.updateError"));
     } finally {
       setLoading(false);
     }
@@ -65,11 +67,11 @@ export default function CompraClient({
 
   return (
     <div className={styles.screen}>
-      <h2 className={styles.heroLabel}>Lista de la compra</h2>
+      <h2 className={styles.heroLabel}>{t("shopping.title")}</h2>
 
       <div className={styles.rangePicker}>
         <label className={styles.rangeLabel}>
-          Desde
+          {t("shopping.from")}
           <input
             type="date"
             value={rangeStart}
@@ -78,7 +80,7 @@ export default function CompraClient({
           />
         </label>
         <label className={styles.rangeLabel}>
-          Hasta
+          {t("shopping.to")}
           <input
             type="date"
             value={rangeEnd}
@@ -87,18 +89,20 @@ export default function CompraClient({
           />
         </label>
         <button type="button" onClick={handleRangeSubmit} disabled={loading} className={styles.updateBtn}>
-          {loading ? "Actualizando..." : "Actualizar"}
+          {loading ? t("shopping.updating") : t("shopping.update")}
         </button>
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
 
       {grouped.length === 0 ? (
-        <p className={styles.empty}>No hay ingredientes para este rango.</p>
+        <p className={styles.empty}>{t("shopping.empty")}</p>
       ) : (
         grouped.map(({ category, rows }) => (
           <div key={category} className={styles.categoryGroup}>
-            <h3 className={styles.categoryTitle}>{CATEGORY_LABELS[category]}</h3>
+            <h3 className={styles.categoryTitle}>
+              {t(`ingredientCategories.${CATEGORY_I18N_KEY[category]}`)}
+            </h3>
             <ul className={styles.itemList}>
               {rows.map((row) => (
                 <li key={row.id} className={styles.itemRow} data-checked={row.checked}>
