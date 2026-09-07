@@ -1,10 +1,10 @@
 import { requireFamilyMembership } from "@/lib/auth-guards";
 import { getMeasurements } from "@/lib/services/wellness/measurements";
 
-import MedidasClient from "./MedidasClient";
+import MeasurementsClient from "./MeasurementsClient";
 
-export default async function MedidasPage() {
+export default async function MeasurementsPage() {
   const { userId } = await requireFamilyMembership();
   const entries = await getMeasurements(userId);
-  return <MedidasClient initialEntries={entries} />;
+  return <MeasurementsClient initialEntries={entries} />;
 }

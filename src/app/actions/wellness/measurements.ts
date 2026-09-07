@@ -14,6 +14,6 @@ export async function upsertMeasurementAction(data: {
 }): Promise<MeasurementLog> {
   const { userId } = await requireFamilyMembership();
   const row = await upsertMeasurement(userId, new Date(), data);
-  revalidatePath("/wellness/medidas");
+  revalidatePath("/wellness/measurements");
   return row;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { upsertMeasurementAction } from "@/app/actions/wellness/measurements";
@@ -8,7 +9,8 @@ import type { MeasurementLog } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
 
-export default function MedidasClient({ initialEntries }: { initialEntries: MeasurementLog[] }) {
+export default function MeasurementsClient({ initialEntries }: { initialEntries: MeasurementLog[] }) {
+  const t = useTranslations("Wellness");
   const [entries, setEntries] = useState(initialEntries);
   const [form, setForm] = useState({ weight: "", waist: "", hip: "", neck: "" });
   const [saving, setSaving] = useState(false);
@@ -34,13 +36,13 @@ export default function MedidasClient({ initialEntries }: { initialEntries: Meas
   return (
     <div className={styles.screen}>
       <div className={styles.hero}>
-        <h1 className={styles.heroLabel}>Medidas</h1>
+        <h1 className={styles.heroLabel}>{t("measurements.title")}</h1>
       </div>
 
       <div className={styles.formCard}>
         <div className={styles.fieldGrid}>
           <label className={styles.field}>
-            <span className={styles.fieldLabel}>Peso (kg)</span>
+            <span className={styles.fieldLabel}>{t("measurements.weight")}</span>
             <input
               className={styles.fieldInput}
               type="number"
@@ -49,7 +51,7 @@ export default function MedidasClient({ initialEntries }: { initialEntries: Meas
             />
           </label>
           <label className={styles.field}>
-            <span className={styles.fieldLabel}>Cintura, ombligo (cm)</span>
+            <span className={styles.fieldLabel}>{t("measurements.waist")}</span>
             <input
               className={styles.fieldInput}
               type="number"
@@ -58,7 +60,7 @@ export default function MedidasClient({ initialEntries }: { initialEntries: Meas
             />
           </label>
           <label className={styles.field}>
-            <span className={styles.fieldLabel}>Cadera (cm)</span>
+            <span className={styles.fieldLabel}>{t("measurements.hip")}</span>
             <input
               className={styles.fieldInput}
               type="number"
@@ -67,7 +69,7 @@ export default function MedidasClient({ initialEntries }: { initialEntries: Meas
             />
           </label>
           <label className={styles.field}>
-            <span className={styles.fieldLabel}>Cuello (cm)</span>
+            <span className={styles.fieldLabel}>{t("measurements.neck")}</span>
             <input
               className={styles.fieldInput}
               type="number"
@@ -77,19 +79,19 @@ export default function MedidasClient({ initialEntries }: { initialEntries: Meas
           </label>
         </div>
         <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
-          Guardar medición
+          {t("measurements.save")}
         </button>
       </div>
 
-      <div className={styles.sectionLabel}>Histórico</div>
+      <div className={styles.sectionLabel}>{t("measurements.history")}</div>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Fecha</th>
-            <th>Peso</th>
-            <th>Cintura</th>
-            <th>Cadera</th>
-            <th>Cuello</th>
+            <th>{t("measurements.table.date")}</th>
+            <th>{t("measurements.table.weight")}</th>
+            <th>{t("measurements.table.waist")}</th>
+            <th>{t("measurements.table.hip")}</th>
+            <th>{t("measurements.table.neck")}</th>
           </tr>
         </thead>
         <tbody>
