@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { generateShoppingListAction, toggleShoppingItemAction } from "@/app/actions/wellness/shopping";
+import { useRouter } from "@/i18n/routing";
 import type { IngredientCategory, ShoppingListRow } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
