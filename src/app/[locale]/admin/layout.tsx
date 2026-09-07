@@ -1,9 +1,11 @@
 import { headers } from "next/headers";
+import { getTranslations } from "next-intl/server";
 
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
-import { hasRole,Role } from "@/lib/types/roles";
+import { hasRole, Role } from "@/lib/types/roles";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
+import { SectionSubNav } from "@/systemUI/components/SectionSubNav/SectionSubNav";
 
 export default async function AdminLayout({
   children,
@@ -34,5 +36,17 @@ export default async function AdminLayout({
     }
   }
 
-  return <PageLayout>{children}</PageLayout>;
+  const t = await getTranslations("Admin");
+
+  return (
+    <PageLayout>
+      <SectionSubNav
+        tabs={[
+          { label: t("users"), href: "/admin/users" },
+          { label: t("familias"), href: "/admin/familias" },
+        ]}
+      />
+      {children}
+    </PageLayout>
+  );
 }

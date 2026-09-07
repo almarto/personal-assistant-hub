@@ -1,7 +1,10 @@
 import { Pool } from "pg";
 
+import { COOK_METHOD_BY_DAY_SLOT } from "../src/lib/dietPlan/data/cook-methods-2026-09";
+import { categoryForIngredient } from "../src/lib/dietPlan/data/ingredient-categories";
 import { ACTIVE_DIET_PLAN } from "../src/lib/dietPlan/data/plan-2026-09";
-import type { ProfileId } from "../src/lib/dietPlan/types";
+import { parseQuantityString, UnparsableQuantityError } from "../src/lib/dietPlan/parseQuantities";
+import type { ProfileId, Weekday } from "../src/lib/dietPlan/types";
 import { WEEKDAYS } from "../src/lib/dietPlan/types";
 
 const FAMILY_NAME = "Familia Alberto y Patri";
@@ -109,22 +112,46 @@ async function main() {
     }
 
     const dishIdByTitle = new Map<string, string>();
-    async function getOrCreateDish(title: string): Promise<string> {
+    async function getOrCreateDish(title: string, cookMethod: string): Promise<string> {
       const cached = dishIdByTitle.get(title);
       if (cached) return cached;
-      const existing = await client.query(`SELECT id FROM dishes WHERE name = $1`, [title]);
-      const dishId: string =
-        existing.rows[0]?.id ??
-        (await client.query(`INSERT INTO dishes (name) VALUES ($1) RETURNING id`, [title])).rows[0].id;
+      // Upsert on the `dishes.name` UNIQUE constraint so an existing row
+      // (e.g. seeded under an older migration, before cook_method existed)
+      // also gets its cook_method updated instead of being left untouched.
+      const res = await client.query(
+        `INSERT INTO dishes (name, cook_method) VALUES ($1,$2)
+         ON CONFLICT (name) DO UPDATE SET cook_method = EXCLUDED.cook_method
+         RETURNING id`,
+        [title, cookMethod]
+      );
+      const dishId: string = res.rows[0].id;
       dishIdByTitle.set(title, dishId);
       return dishId;
+    }
+
+    const ingredientIdByName = new Map<string, string>();
+    async function getOrCreateIngredient(name: string, unit: string): Promise<string> {
+      const cached = ingredientIdByName.get(name);
+      if (cached) return cached;
+      const existing = await client.query(`SELECT id FROM ingredients WHERE name = $1`, [name]);
+      const ingredientId: string =
+        existing.rows[0]?.id ??
+        (
+          await client.query(
+            `INSERT INTO ingredients (name, category, default_unit) VALUES ($1,$2,$3) RETURNING id`,
+            [name, categoryForIngredient(name), unit]
+          )
+        ).rows[0].id;
+      ingredientIdByName.set(name, ingredientId);
+      return ingredientId;
     }
 
     for (const weekday of WEEKDAYS) {
       const day = ACTIVE_DIET_PLAN.days[weekday];
 
       for (const meal of day.meals) {
-        const dishId = await getOrCreateDish(meal.title);
+        const cookMethod = COOK_METHOD_BY_DAY_SLOT[weekday as Weekday][meal.slot];
+        const dishId = await getOrCreateDish(meal.title, cookMethod);
         const mealRes = await client.query(
           `INSERT INTO plan_template_meals (plan_template_id, weekday, slot, dish_id, is_flexible, flexible_note)
            VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`,
@@ -138,6 +165,28 @@ async function main() {
              VALUES ($1,$2,$3,$4)`,
             [mealId, profileIdByProfileId[profileId], macros.kcal, macros.proteinG]
           );
+        }
+        for (const profileId of Object.keys(meal.quantities) as ProfileId[]) {
+          let ingredients;
+          try {
+            ingredients = parseQuantityString(meal.quantities[profileId]);
+          } catch (err) {
+            if (err instanceof UnparsableQuantityError) {
+              console.log(`Sin ingredientes estructurados para ${weekday}/${meal.slot}/${profileId}: ${err.message}`);
+              continue;
+            }
+            throw err;
+          }
+          for (const ing of ingredients) {
+            const ingredientId = await getOrCreateIngredient(ing.name, ing.unit);
+            await client.query(
+              `INSERT INTO plan_template_meal_ingredients
+                 (plan_template_meal_id, plan_template_profile_id, ingredient_id, quantity, unit)
+               VALUES ($1,$2,$3,$4,$5)
+               ON CONFLICT (plan_template_meal_id, plan_template_profile_id, ingredient_id) DO NOTHING`,
+              [mealId, profileIdByProfileId[profileId], ingredientId, ing.quantity, ing.unit]
+            );
+          }
         }
       }
 
@@ -244,6 +293,24 @@ async function main() {
           `INSERT INTO family_plan_meal_targets (family_plan_meal_id, family_plan_profile_id, kcal, protein_g)
            VALUES ($1,$2,$3,$4)`,
           [familyMealId, familyProfileIdByTemplateProfileId.get(t.plan_template_profile_id), t.kcal, t.protein_g]
+        );
+      }
+      const templateIngredients = await client.query(
+        `SELECT * FROM plan_template_meal_ingredients WHERE plan_template_meal_id = $1`,
+        [tm.id]
+      );
+      for (const ti of templateIngredients.rows) {
+        await client.query(
+          `INSERT INTO family_plan_meal_ingredients
+             (family_plan_meal_id, family_plan_profile_id, ingredient_id, quantity, unit)
+           VALUES ($1,$2,$3,$4,$5)`,
+          [
+            familyMealId,
+            familyProfileIdByTemplateProfileId.get(ti.plan_template_profile_id),
+            ti.ingredient_id,
+            ti.quantity,
+            ti.unit,
+          ]
         );
       }
     }

@@ -163,6 +163,7 @@
   "Admin": {
     "dashboard": "Panel de Administración",
     "users": "Usuarios",
+    "familias": "Familias",
     "createUser": "Crear Usuario",
     "editUser": "Editar Usuario",
     "deleteUser": "Eliminar Usuario",
