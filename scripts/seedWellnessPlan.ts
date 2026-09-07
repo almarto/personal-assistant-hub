@@ -115,15 +115,16 @@ async function main() {
     async function getOrCreateDish(title: string, cookMethod: string): Promise<string> {
       const cached = dishIdByTitle.get(title);
       if (cached) return cached;
-      const existing = await client.query(`SELECT id FROM dishes WHERE name = $1`, [title]);
-      const dishId: string =
-        existing.rows[0]?.id ??
-        (
-          await client.query(`INSERT INTO dishes (name, cook_method) VALUES ($1,$2) RETURNING id`, [
-            title,
-            cookMethod,
-          ])
-        ).rows[0].id;
+      // Upsert on the `dishes.name` UNIQUE constraint so an existing row
+      // (e.g. seeded under an older migration, before cook_method existed)
+      // also gets its cook_method updated instead of being left untouched.
+      const res = await client.query(
+        `INSERT INTO dishes (name, cook_method) VALUES ($1,$2)
+         ON CONFLICT (name) DO UPDATE SET cook_method = EXCLUDED.cook_method
+         RETURNING id`,
+        [title, cookMethod]
+      );
+      const dishId: string = res.rows[0].id;
       dishIdByTitle.set(title, dishId);
       return dishId;
     }
