@@ -1,5 +1,6 @@
 import { Archivo, Instrument_Serif } from "next/font/google";
 import { headers } from "next/headers";
+import { getTranslations } from "next-intl/server";
 
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
@@ -18,13 +19,6 @@ const archivo = Archivo({
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-wellness-sans",
 });
-
-const WELLNESS_TABS = [
-  { label: "Comer", href: "/wellness/comer" },
-  { label: "Entreno", href: "/wellness/entreno" },
-  { label: "Medidas", href: "/wellness/medidas" },
-  { label: "Compra", href: "/wellness/compra" },
-];
 
 export default async function WellnessLayout({
   children,
@@ -48,13 +42,21 @@ export default async function WellnessLayout({
     }
   }
 
+  const t = await getTranslations("Wellness");
+  const wellnessTabs = [
+    { label: t("tabs.eating"), href: "/wellness/eating" },
+    { label: t("tabs.training"), href: "/wellness/training" },
+    { label: t("tabs.measurements"), href: "/wellness/measurements" },
+    { label: t("tabs.shopping"), href: "/wellness/shopping" },
+  ];
+
   return (
     <PageLayout theme="wellness">
       <div
         className={`${instrumentSerif.variable} ${archivo.variable}`}
         style={{ fontFamily: "var(--font-wellness-sans), system-ui, sans-serif" }}
       >
-        <SectionSubNav title="Wellness" tabs={WELLNESS_TABS} />
+        <SectionSubNav title="Wellness" tabs={wellnessTabs} />
         {children}
       </div>
     </PageLayout>

@@ -6,5 +6,5 @@ export default async function WellnessIndexPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  redirect({ href: "/wellness/comer", locale });
+  redirect({ href: "/wellness/eating", locale });
 }
