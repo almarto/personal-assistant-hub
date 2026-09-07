@@ -1,24 +1,24 @@
 export type Weekday =
-  | "lunes"
-  | "martes"
-  | "miercoles"
-  | "jueves"
-  | "viernes"
-  | "sabado"
-  | "domingo";
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
 
 export const WEEKDAYS: readonly Weekday[] = [
-  "lunes",
-  "martes",
-  "miercoles",
-  "jueves",
-  "viernes",
-  "sabado",
-  "domingo",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
 ];
 
-export type MealSlot = "desayuno" | "comida" | "merienda" | "cena";
-export type ExerciseDayType = "fuerza" | "cardio_core";
+export type MealSlot = "breakfast" | "lunch" | "snack" | "dinner";
+export type ExerciseDayType = "strength" | "cardio_core";
 
 export interface Family {
   id: string;
@@ -33,13 +33,13 @@ export interface FamilyMemberWithUser {
 }
 
 export type CookMethod =
-  | "plancha"
-  | "horno"
+  | "griddle"
+  | "oven"
   | "airfryer"
-  | "estofado"
-  | "cocido"
-  | "crudo"
-  | "otro";
+  | "stewed"
+  | "boiled"
+  | "raw"
+  | "other";
 
 export interface Dish {
   id: string;
@@ -150,12 +150,12 @@ export interface MeasurementLog {
 export type IngredientUnit = "g" | "ml" | "ud";
 
 export type IngredientCategory =
-  | "fruta_verdura"
-  | "carne_pescado_huevos"
-  | "lacteos_refrigerados"
-  | "pan_cereales_legumbres"
-  | "conservas_salsas_condimentos"
-  | "otros";
+  | "produce"
+  | "meat_fish_eggs"
+  | "dairy_chilled"
+  | "bread_grains_legumes"
+  | "pantry_condiments"
+  | "other";
 
 export interface MealIngredientForUser {
   ingredient_id: string;
