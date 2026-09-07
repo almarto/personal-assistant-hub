@@ -7,16 +7,29 @@ function toDateStr(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
-export default async function CompraPage() {
+export default async function CompraPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ start?: string; end?: string }>;
+}) {
   const { userId, familyId } = await requireFamilyMembership();
+  const { start: startParam, end: endParam } = await searchParams;
 
-  const start = new Date();
-  start.setDate(start.getDate() + 1);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 6);
+  let rangeStart: string;
+  let rangeEnd: string;
 
-  const rangeStart = toDateStr(start);
-  const rangeEnd = toDateStr(end);
+  if (startParam && endParam) {
+    rangeStart = startParam;
+    rangeEnd = endParam;
+  } else {
+    const start = new Date();
+    start.setDate(start.getDate() + 1);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 6);
+
+    rangeStart = toDateStr(start);
+    rangeEnd = toDateStr(end);
+  }
 
   const items = await generateShoppingList(userId, familyId, rangeStart, rangeEnd);
 

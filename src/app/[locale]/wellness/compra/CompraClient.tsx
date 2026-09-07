@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { generateShoppingListAction, toggleShoppingItemAction } from "@/app/actions/wellness/shopping";
@@ -34,6 +35,7 @@ export default function CompraClient({
   initialRangeStart: string;
   initialRangeEnd: string;
 }) {
+  const router = useRouter();
   const [items, setItems] = useState(initialItems);
   const [rangeStart, setRangeStart] = useState(initialRangeStart);
   const [rangeEnd, setRangeEnd] = useState(initialRangeEnd);
@@ -44,6 +46,7 @@ export default function CompraClient({
     try {
       const rows = await generateShoppingListAction(rangeStart, rangeEnd);
       setItems(rows);
+      router.push(`/wellness/compra?start=${rangeStart}&end=${rangeEnd}`);
     } finally {
       setLoading(false);
     }
