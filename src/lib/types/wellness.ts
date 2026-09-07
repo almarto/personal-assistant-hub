@@ -119,7 +119,6 @@ export interface DayMeal {
   dish_description: string | null;
   kcal: number;
   protein_g: number;
-  completed: boolean;
 }
 
 export interface SetLogEntry {

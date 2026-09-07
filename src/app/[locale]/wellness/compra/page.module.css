@@ -52,6 +52,11 @@
   color: var(--color-text-secondary);
 }
 
+.error {
+  color: var(--color-error, #c0392b);
+  margin: 0 0 var(--spacing-md);
+}
+
 .categoryGroup {
   margin-bottom: var(--spacing-lg);
 }

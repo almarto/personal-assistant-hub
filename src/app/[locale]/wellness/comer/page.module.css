@@ -92,11 +92,6 @@
   background-color: var(--color-surface);
 }
 
-.mealCard[data-done="true"] {
-  background-color: color-mix(in oklch, var(--color-primary) 12%, white);
-  border-color: color-mix(in oklch, var(--color-primary) 25%, white);
-}
-
 .mealInfo {
   flex: 1;
   min-width: 0;
@@ -121,28 +116,4 @@
 .mealMeta {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-}
-
-.checkBtn {
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.06);
-  color: var(--color-text-secondary);
-}
-
-.checkBtn[data-done="true"] {
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.checkBtn:disabled {
-  opacity: 0.6;
-  cursor: default;
 }

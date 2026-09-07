@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { generateShoppingListAction, toggleShoppingItemAction } from "@/app/actions/wellness/shopping";
-import { useRouter } from "@/i18n/routing";
 import type { IngredientCategory, ShoppingListRow } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
@@ -35,18 +34,20 @@ export default function CompraClient({
   initialRangeStart: string;
   initialRangeEnd: string;
 }) {
-  const router = useRouter();
   const [items, setItems] = useState(initialItems);
   const [rangeStart, setRangeStart] = useState(initialRangeStart);
   const [rangeEnd, setRangeEnd] = useState(initialRangeEnd);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleRangeSubmit() {
     setLoading(true);
+    setError(null);
     try {
       const rows = await generateShoppingListAction(rangeStart, rangeEnd);
       setItems(rows);
-      router.push(`/wellness/compra?start=${rangeStart}&end=${rangeEnd}`);
+    } catch {
+      setError("No se ha podido actualizar la lista. Revisa el rango de fechas.");
     } finally {
       setLoading(false);
     }
@@ -86,9 +87,11 @@ export default function CompraClient({
           />
         </label>
         <button type="button" onClick={handleRangeSubmit} disabled={loading} className={styles.updateBtn}>
-          Actualizar
+          {loading ? "Actualizando..." : "Actualizar"}
         </button>
       </div>
+
+      {error && <p className={styles.error}>{error}</p>}
 
       {grouped.length === 0 ? (
         <p className={styles.empty}>No hay ingredientes para este rango.</p>

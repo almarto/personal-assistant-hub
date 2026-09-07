@@ -1,9 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-import { toggleMealCompletionAction } from "@/app/actions/wellness/eating";
+import { useRouter } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
 import type { DayMeal } from "@/lib/types/wellness";
 
@@ -24,14 +21,6 @@ function offsetDate(dateStr: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-function CheckIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="4 12 9 18 20 6" />
-    </svg>
-  );
-}
-
 export default function ComerClient({
   dateStr,
   weekdayLabel,
@@ -46,24 +35,10 @@ export default function ComerClient({
   dailyTargetProtein: number;
 }) {
   const router = useRouter();
-  const [pendingId, setPendingId] = useState<string | null>(null);
-  const [localMeals, setLocalMeals] = useState(meals);
 
-  const totalKcal = localMeals.reduce((sum, m) => sum + (m.completed ? m.kcal : 0), 0);
-  const totalProtein = localMeals.reduce((sum, m) => sum + (m.completed ? m.protein_g : 0), 0);
+  const totalKcal = meals.reduce((sum, m) => sum + m.kcal, 0);
+  const totalProtein = meals.reduce((sum, m) => sum + m.protein_g, 0);
   const pct = dailyTargetKcal > 0 ? Math.min(100, Math.round((totalKcal / dailyTargetKcal) * 100)) : 0;
-
-  async function handleToggle(mealId: string) {
-    setPendingId(mealId);
-    setLocalMeals((prev) =>
-      prev.map((m) => (m.family_plan_meal_id === mealId ? { ...m, completed: !m.completed } : m))
-    );
-    try {
-      await toggleMealCompletionAction(mealId, dateStr);
-    } finally {
-      setPendingId(null);
-    }
-  }
 
   const jsDay = new Date(`${dateStr}T00:00:00`).getDay();
   const mondayOffset = -((jsDay + 6) % 7);
@@ -100,25 +75,20 @@ export default function ComerClient({
       </div>
 
       <div className={styles.mealList}>
-        {localMeals.map((m) => (
-          <div key={m.family_plan_meal_id} className={styles.mealCard} data-done={m.completed}>
-            <Link href={`/wellness/comer/${m.family_plan_meal_id}`} className={styles.mealInfo}>
+        {meals.map((m) => (
+          <Link
+            key={m.family_plan_meal_id}
+            href={`/wellness/comer/${m.family_plan_meal_id}`}
+            className={styles.mealCard}
+          >
+            <div className={styles.mealInfo}>
               <div className={styles.mealSlot}>{SLOT_LABELS[m.slot]}</div>
               <div className={styles.mealTitle}>{m.dish_name}</div>
               <div className={styles.mealMeta}>
                 {m.kcal} kcal &middot; {m.protein_g} g proteína
               </div>
-            </Link>
-            <button
-              className={styles.checkBtn}
-              data-done={m.completed}
-              disabled={pendingId === m.family_plan_meal_id}
-              onClick={() => handleToggle(m.family_plan_meal_id)}
-              aria-label={m.completed ? "Marcar como no hecha" : "Marcar como hecha"}
-            >
-              <CheckIcon />
-            </button>
-          </div>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
