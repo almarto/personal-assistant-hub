@@ -5,6 +5,7 @@ import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { getFamilyIdForUser } from "@/lib/services/wellness/families";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
+import { SectionSubNav } from "@/systemUI/components/SectionSubNav/SectionSubNav";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -17,6 +18,13 @@ const archivo = Archivo({
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-wellness-sans",
 });
+
+const WELLNESS_TABS = [
+  { label: "Comer", href: "/wellness/comer" },
+  { label: "Entreno", href: "/wellness/entreno" },
+  { label: "Medidas", href: "/wellness/medidas" },
+  { label: "Compra", href: "/wellness/compra" },
+];
 
 export default async function WellnessLayout({
   children,
@@ -41,8 +49,12 @@ export default async function WellnessLayout({
   }
 
   return (
-    <PageLayout theme="wellness" showLogo={false} headerContent="Wellness">
-      <div className={`${instrumentSerif.variable} ${archivo.variable}`} style={{ fontFamily: "var(--font-wellness-sans), system-ui, sans-serif" }}>
+    <PageLayout theme="wellness">
+      <div
+        className={`${instrumentSerif.variable} ${archivo.variable}`}
+        style={{ fontFamily: "var(--font-wellness-sans), system-ui, sans-serif" }}
+      >
+        <SectionSubNav title="Wellness" tabs={WELLNESS_TABS} />
         {children}
       </div>
     </PageLayout>
