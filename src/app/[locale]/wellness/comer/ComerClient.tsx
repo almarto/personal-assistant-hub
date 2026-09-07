@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { toggleMealCompletionAction } from "@/app/actions/wellness/eating";
+import { Link } from "@/i18n/routing";
 import type { DayMeal } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
@@ -101,13 +102,13 @@ export default function ComerClient({
       <div className={styles.mealList}>
         {localMeals.map((m) => (
           <div key={m.family_plan_meal_id} className={styles.mealCard} data-done={m.completed}>
-            <div className={styles.mealInfo}>
+            <Link href={`/wellness/comer/${m.family_plan_meal_id}`} className={styles.mealInfo}>
               <div className={styles.mealSlot}>{SLOT_LABELS[m.slot]}</div>
               <div className={styles.mealTitle}>{m.dish_name}</div>
               <div className={styles.mealMeta}>
                 {m.kcal} kcal &middot; {m.protein_g} g proteína
               </div>
-            </div>
+            </Link>
             <button
               className={styles.checkBtn}
               data-done={m.completed}
