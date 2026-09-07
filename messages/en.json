@@ -163,7 +163,13 @@
   "Admin": {
     "dashboard": "Admin Dashboard",
     "users": "Users",
-    "familias": "Families",
+    "families": "Families",
+    "createFamily": "Create family",
+    "familyNamePlaceholder": "Family name",
+    "removeMember": "Remove",
+    "chooseUser": "Choose user…",
+    "addMember": "Add",
+    "addMemberError": "Error adding member",
     "createUser": "Create User",
     "editUser": "Edit User",
     "deleteUser": "Delete User",
@@ -437,6 +443,100 @@
       "materials": "Materials",
       "workers": "Workers",
       "other": "Other"
+    }
+  },
+  "Wellness": {
+    "tabs": {
+      "eating": "Eating",
+      "training": "Training",
+      "measurements": "Measurements",
+      "shopping": "Shopping"
+    },
+    "weekdays": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "weekdaysShort": {
+      "monday": "Mo",
+      "tuesday": "Tu",
+      "wednesday": "We",
+      "thursday": "Th",
+      "friday": "Fr",
+      "saturday": "Sa",
+      "sunday": "Su"
+    },
+    "mealSlots": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "snack": "Snack",
+      "dinner": "Dinner"
+    },
+    "cookMethods": {
+      "griddle": "Griddled",
+      "oven": "Oven-baked",
+      "airfryer": "Air fryer",
+      "stewed": "Stewed",
+      "boiled": "Boiled",
+      "raw": "Raw / no cooking",
+      "other": "Other"
+    },
+    "ingredientCategories": {
+      "produce": "Produce",
+      "meatFishEggs": "Meat, fish & eggs",
+      "dairyChilled": "Dairy & chilled",
+      "breadGrainsLegumes": "Bread, grains & legumes",
+      "pantryCondiments": "Pantry & condiments",
+      "other": "Other"
+    },
+    "eating": {
+      "today": "Today",
+      "macroProgress": "{kcal} / {kcalTarget} kcal · {protein} / {proteinTarget} g protein",
+      "mealMacros": "{kcal} kcal · {protein} g protein"
+    },
+    "mealDetail": {
+      "back": "Back",
+      "noIngredients": "No ingredients recorded for this meal."
+    },
+    "training": {
+      "noSessionToday": "No training session scheduled for today.",
+      "lastTime": "Last time",
+      "sessionNotes": "Session notes",
+      "notesPlaceholder": "Energy, soreness, how it went...",
+      "saved": "Saved",
+      "saving": "Saving...",
+      "saveSession": "Save session",
+      "cardioSummary": "{warmup} min easy · {rounds} rounds of {hard} min hard ({hardEffort}) + {easy} min easy ({easyEffort}) · {cooldown} min easy · total {total} min",
+      "exerciseMeta": "{seriesReps} · rest {restLabel} · tempo {tempo}"
+    },
+    "measurements": {
+      "title": "Measurements",
+      "weight": "Weight (kg)",
+      "waist": "Waist, navel (cm)",
+      "hip": "Hip (cm)",
+      "neck": "Neck (cm)",
+      "save": "Save measurement",
+      "history": "History",
+      "table": {
+        "date": "Date",
+        "weight": "Weight",
+        "waist": "Waist",
+        "hip": "Hip",
+        "neck": "Neck"
+      }
+    },
+    "shopping": {
+      "title": "Shopping list",
+      "from": "From",
+      "to": "To",
+      "update": "Update",
+      "updating": "Updating...",
+      "updateError": "Couldn't update the list. Check the date range.",
+      "empty": "No ingredients for this range."
     }
   }
 }

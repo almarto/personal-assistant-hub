@@ -163,7 +163,13 @@
   "Admin": {
     "dashboard": "Panel de Administración",
     "users": "Usuarios",
-    "familias": "Familias",
+    "families": "Familias",
+    "createFamily": "Crear familia",
+    "familyNamePlaceholder": "Nombre de la familia",
+    "removeMember": "Quitar",
+    "chooseUser": "Elegir usuario…",
+    "addMember": "Añadir",
+    "addMemberError": "Error al añadir miembro",
     "createUser": "Crear Usuario",
     "editUser": "Editar Usuario",
     "deleteUser": "Eliminar Usuario",
@@ -436,6 +442,100 @@
       "materials": "Materiales",
       "workers": "Mano de Obra",
       "other": "Otros"
+    }
+  },
+  "Wellness": {
+    "tabs": {
+      "eating": "Comer",
+      "training": "Entreno",
+      "measurements": "Medidas",
+      "shopping": "Compra"
+    },
+    "weekdays": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    },
+    "weekdaysShort": {
+      "monday": "Lu",
+      "tuesday": "Ma",
+      "wednesday": "Mi",
+      "thursday": "Ju",
+      "friday": "Vi",
+      "saturday": "Sá",
+      "sunday": "Do"
+    },
+    "mealSlots": {
+      "breakfast": "Desayuno",
+      "lunch": "Comida",
+      "snack": "Merienda",
+      "dinner": "Cena"
+    },
+    "cookMethods": {
+      "griddle": "A la plancha",
+      "oven": "Al horno",
+      "airfryer": "Airfryer",
+      "stewed": "Estofado / guisado",
+      "boiled": "Cocido",
+      "raw": "Sin cocinar",
+      "other": "Otro"
+    },
+    "ingredientCategories": {
+      "produce": "Fruta y verdura",
+      "meatFishEggs": "Carne, pescado y huevos",
+      "dairyChilled": "Lácteos y refrigerados",
+      "breadGrainsLegumes": "Pan, cereales y legumbres",
+      "pantryCondiments": "Conservas, salsas y condimentos",
+      "other": "Otros"
+    },
+    "eating": {
+      "today": "Hoy",
+      "macroProgress": "{kcal} / {kcalTarget} kcal · {protein} / {proteinTarget} g proteína",
+      "mealMacros": "{kcal} kcal · {protein} g proteína"
+    },
+    "mealDetail": {
+      "back": "Volver",
+      "noIngredients": "Sin ingredientes registrados para esta comida."
+    },
+    "training": {
+      "noSessionToday": "No hay entreno programado para hoy.",
+      "lastTime": "Última vez",
+      "sessionNotes": "Notas de la sesión",
+      "notesPlaceholder": "Energía, molestias, cómo ha ido...",
+      "saved": "Guardado",
+      "saving": "Guardando...",
+      "saveSession": "Guardar sesión",
+      "cardioSummary": "{warmup} min suave · {rounds} rondas de {hard} min fuerte ({hardEffort}) + {easy} min suave ({easyEffort}) · {cooldown} min suave · total {total} min",
+      "exerciseMeta": "{seriesReps} · descanso {restLabel} · tempo {tempo}"
+    },
+    "measurements": {
+      "title": "Medidas",
+      "weight": "Peso (kg)",
+      "waist": "Cintura, ombligo (cm)",
+      "hip": "Cadera (cm)",
+      "neck": "Cuello (cm)",
+      "save": "Guardar medición",
+      "history": "Histórico",
+      "table": {
+        "date": "Fecha",
+        "weight": "Peso",
+        "waist": "Cintura",
+        "hip": "Cadera",
+        "neck": "Cuello"
+      }
+    },
+    "shopping": {
+      "title": "Lista de la compra",
+      "from": "Desde",
+      "to": "Hasta",
+      "update": "Actualizar",
+      "updating": "Actualizando...",
+      "updateError": "No se ha podido actualizar la lista. Revisa el rango de fechas.",
+      "empty": "No hay ingredientes para este rango."
     }
   }
 }
