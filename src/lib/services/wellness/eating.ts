@@ -26,7 +26,7 @@ export async function getDayForUser(
        ON fpmt.family_plan_meal_id = fpm.id AND fpmt.family_plan_profile_id = fpp.id
      WHERE fpa.family_id = $2 AND fpa.is_active = true AND fpm.weekday = $3
      ORDER BY CASE fpm.slot
-       WHEN 'desayuno' THEN 1 WHEN 'comida' THEN 2 WHEN 'merienda' THEN 3 WHEN 'cena' THEN 4
+       WHEN 'breakfast' THEN 1 WHEN 'lunch' THEN 2 WHEN 'snack' THEN 3 WHEN 'dinner' THEN 4
      END`,
     [userId, familyId, weekday]
   );

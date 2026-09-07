@@ -2,24 +2,24 @@ import { pool, query } from "@/lib/db";
 import type { IngredientUnit, ShoppingListRow, Weekday } from "@/lib/types/wellness";
 
 const WEEKDAY_BY_JS_DAY: Weekday[] = [
-  "domingo",
-  "lunes",
-  "martes",
-  "miercoles",
-  "jueves",
-  "viernes",
-  "sabado",
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
 ];
 
 function countWeekdaysInRange(start: Date, end: Date): Record<Weekday, number> {
   const counts: Record<Weekday, number> = {
-    lunes: 0,
-    martes: 0,
-    miercoles: 0,
-    jueves: 0,
-    viernes: 0,
-    sabado: 0,
-    domingo: 0,
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    saturday: 0,
+    sunday: 0,
   };
   const cursor = new Date(start);
   while (cursor <= end) {
