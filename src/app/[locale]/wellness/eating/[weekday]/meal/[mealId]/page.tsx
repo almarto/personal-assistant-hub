@@ -1,22 +1,12 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
 import { requireFamilyMembership } from "@/lib/auth-guards";
-import { slugToWeekday } from "@/lib/services/wellness/date";
+import { isWeekday } from "@/lib/services/wellness/date";
 import { getMealDetailForUser } from "@/lib/services/wellness/ingredients";
-import type { CookMethod } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
-
-const COOK_METHOD_LABELS: Record<CookMethod, string> = {
-  plancha: "A la plancha",
-  horno: "Al horno",
-  airfryer: "Airfryer",
-  estofado: "Estofado / guisado",
-  cocido: "Cocido",
-  crudo: "Sin cocinar",
-  otro: "Otro",
-};
 
 export default async function MealDetailPage({
   params,
@@ -24,20 +14,22 @@ export default async function MealDetailPage({
   params: Promise<{ weekday: string; mealId: string }>;
 }) {
   const { userId, familyId } = await requireFamilyMembership();
-  const { weekday: weekdaySlug, mealId } = await params;
-  if (!slugToWeekday(weekdaySlug)) notFound();
+  const { weekday: weekdayParam, mealId } = await params;
+  if (!isWeekday(weekdayParam)) notFound();
   const detail = await getMealDetailForUser(mealId, userId, familyId);
   if (!detail) notFound();
 
+  const t = await getTranslations("Wellness");
+
   return (
     <div className={styles.screen}>
-      <Link href={`/wellness/comer/${weekdaySlug}`} className={styles.back}>
-        &larr; Volver
+      <Link href={`/wellness/eating/${weekdayParam}`} className={styles.back}>
+        &larr; {t("mealDetail.back")}
       </Link>
       <h1 className={styles.title}>{detail.dish_name}</h1>
-      <div className={styles.cookMethod}>{COOK_METHOD_LABELS[detail.cook_method]}</div>
+      <div className={styles.cookMethod}>{t(`cookMethods.${detail.cook_method}`)}</div>
       {detail.ingredients.length === 0 ? (
-        <p className={styles.empty}>Sin ingredientes registrados para esta comida.</p>
+        <p className={styles.empty}>{t("mealDetail.noIngredients")}</p>
       ) : (
         <ul className={styles.ingredientList}>
           {detail.ingredients.map((ing) => (

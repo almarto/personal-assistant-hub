@@ -1,36 +1,28 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Link } from "@/i18n/routing";
-import { WEEKDAY_SLUGS } from "@/lib/services/wellness/date";
-import type { DayMeal } from "@/lib/types/wellness";
+import { WEEKDAYS } from "@/lib/services/wellness/date";
+import type { DayMeal, Weekday } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
 
-const SLOT_LABELS: Record<DayMeal["slot"], string> = {
-  desayuno: "Desayuno",
-  comida: "Comida",
-  merienda: "Merienda",
-  cena: "Cena",
-};
-
-// Matches WEEKDAY_SLUGS order (Monday..Sunday).
-const WEEK_SHORT = ["L", "M", "X", "J", "V", "S", "D"];
-
-export default function ComerClient({
-  weekdaySlug,
-  weekdayLabel,
+export default function EatingClient({
+  weekday,
   isToday,
   meals,
   dailyTargetKcal,
   dailyTargetProtein,
 }: {
-  weekdaySlug: string;
-  weekdayLabel: string;
+  weekday: Weekday;
   isToday: boolean;
   meals: DayMeal[];
   dailyTargetKcal: number;
   dailyTargetProtein: number;
 }) {
+  const t = useTranslations("Wellness");
+
   const totalKcal = meals.reduce((sum, m) => sum + m.kcal, 0);
   const totalProtein = meals.reduce((sum, m) => sum + m.protein_g, 0);
   const pct = dailyTargetKcal > 0 ? Math.min(100, Math.round((totalKcal / dailyTargetKcal) * 100)) : 0;
@@ -38,13 +30,18 @@ export default function ComerClient({
   return (
     <div className={styles.screen}>
       <div className={styles.hero}>
-        <h1 className={styles.heroLabel}>{weekdayLabel}</h1>
-        {isToday && <div className={styles.heroDate}>Hoy</div>}
+        <h1 className={styles.heroLabel}>{t(`weekdays.${weekday}`)}</h1>
+        {isToday && <div className={styles.heroDate}>{t("eating.today")}</div>}
       </div>
 
       <div className={styles.progress}>
         <div className={styles.progressLabel}>
-          {totalKcal} / {dailyTargetKcal} kcal &middot; {totalProtein} / {dailyTargetProtein} g proteína
+          {t("eating.macroProgress", {
+            kcal: totalKcal,
+            kcalTarget: dailyTargetKcal,
+            protein: totalProtein,
+            proteinTarget: dailyTargetProtein,
+          })}
         </div>
         <div className={styles.progressTrack}>
           <div className={styles.progressFill} style={{ width: `${pct}%` }} />
@@ -52,14 +49,14 @@ export default function ComerClient({
       </div>
 
       <div className={styles.weekStrip}>
-        {WEEKDAY_SLUGS.map((slug, i) => (
+        {WEEKDAYS.map((wd) => (
           <Link
-            key={slug}
-            href={`/wellness/comer/${slug}`}
+            key={wd}
+            href={`/wellness/eating/${wd}`}
             className={styles.dayChip}
-            data-selected={slug === weekdaySlug}
+            data-selected={wd === weekday}
           >
-            {WEEK_SHORT[i]}
+            {t(`weekdaysShort.${wd}`)}
           </Link>
         ))}
       </div>
@@ -68,14 +65,14 @@ export default function ComerClient({
         {meals.map((m) => (
           <Link
             key={m.family_plan_meal_id}
-            href={`/wellness/comer/${weekdaySlug}/meal/${m.family_plan_meal_id}`}
+            href={`/wellness/eating/${weekday}/meal/${m.family_plan_meal_id}`}
             className={styles.mealCard}
           >
             <div className={styles.mealInfo}>
-              <div className={styles.mealSlot}>{SLOT_LABELS[m.slot]}</div>
+              <div className={styles.mealSlot}>{t(`mealSlots.${m.slot}`)}</div>
               <div className={styles.mealTitle}>{m.dish_name}</div>
               <div className={styles.mealMeta}>
-                {m.kcal} kcal &middot; {m.protein_g} g proteína
+                {t("eating.mealMacros", { kcal: m.kcal, protein: m.protein_g })}
               </div>
             </div>
           </Link>
