@@ -163,6 +163,7 @@
   "Admin": {
     "dashboard": "Admin Dashboard",
     "users": "Users",
+    "familias": "Families",
     "createUser": "Create User",
     "editUser": "Edit User",
     "deleteUser": "Delete User",
