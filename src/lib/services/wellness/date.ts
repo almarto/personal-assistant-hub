@@ -1,4 +1,7 @@
 import type { Weekday } from "@/lib/types/wellness";
+import { WEEKDAYS } from "@/lib/types/wellness";
+
+export { WEEKDAYS };
 
 const WEEKDAY_BY_UTC_DAY: Weekday[] = [
   "sunday",
@@ -39,20 +42,6 @@ export function offsetDateStr(dateStr: string, days: number): string {
 export function weekdayForDate(date: Date): Weekday {
   return WEEKDAY_BY_UTC_DAY[date.getUTCDay()];
 }
-
-// The diet/training plan repeats every week and isn't tied to a calendar
-// date at all, so Eating navigates by weekday (English URL segment,
-// identical to the Weekday type's own values after the DB/type rename —
-// no separate slug-mapping layer needed).
-export const WEEKDAYS: readonly Weekday[] = [
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
-];
 
 export function isWeekday(value: string): value is Weekday {
   return (WEEKDAYS as readonly string[]).includes(value);

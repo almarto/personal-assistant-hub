@@ -2,7 +2,7 @@ import { Skeleton } from "@/systemUI/components/Skeleton/Skeleton";
 
 import styles from "../page.module.css";
 
-export default function ComerDayLoading() {
+export default function EatingDayLoading() {
   return (
     <div className={styles.screen}>
       <div className={styles.hero}>

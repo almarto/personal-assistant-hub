@@ -2,7 +2,7 @@ import { Skeleton } from "@/systemUI/components/Skeleton/Skeleton";
 
 import styles from "./page.module.css";
 
-export default function CompraLoading() {
+export default function ShoppingLoading() {
   return (
     <div className={styles.screen}>
       <Skeleton style={{ width: 200, height: 32, marginBottom: "var(--spacing-md)" }} />

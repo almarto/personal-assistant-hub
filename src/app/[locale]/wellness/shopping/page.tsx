@@ -22,6 +22,9 @@ export default async function ShoppingPage() {
   const { userId, familyId } = await requireFamilyMembership();
   const { start: rangeStart, end: rangeEnd } = getDefaultWeekRange();
 
+  // Read-only first: only fall back to the destructive generate/regenerate
+  // when nothing has been generated yet for this exact range, so a plain
+  // render never wipes an already-populated range.
   let items = await getShoppingList(userId, rangeStart, rangeEnd);
   if (items.length === 0) {
     items = await generateShoppingList(userId, familyId, rangeStart, rangeEnd);

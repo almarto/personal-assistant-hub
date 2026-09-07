@@ -2,7 +2,7 @@ import { Skeleton } from "@/systemUI/components/Skeleton/Skeleton";
 
 import styles from "./page.module.css";
 
-export default function EntrenoLoading() {
+export default function TrainingLoading() {
   return (
     <div className={styles.screen}>
       <div className={styles.hero}>
