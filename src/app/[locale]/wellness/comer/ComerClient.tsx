@@ -2,6 +2,7 @@
 
 import { useRouter } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
+import { offsetDateStr, parseDateStr } from "@/lib/services/wellness/date";
 import type { DayMeal } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
@@ -14,12 +15,6 @@ const SLOT_LABELS: Record<DayMeal["slot"], string> = {
 };
 
 const WEEK_SHORT = ["L", "M", "X", "J", "V", "S", "D"];
-
-function offsetDate(dateStr: string, days: number): string {
-  const d = new Date(`${dateStr}T00:00:00`);
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
-}
 
 export default function ComerClient({
   dateStr,
@@ -40,10 +35,10 @@ export default function ComerClient({
   const totalProtein = meals.reduce((sum, m) => sum + m.protein_g, 0);
   const pct = dailyTargetKcal > 0 ? Math.min(100, Math.round((totalKcal / dailyTargetKcal) * 100)) : 0;
 
-  const jsDay = new Date(`${dateStr}T00:00:00`).getDay();
-  const mondayOffset = -((jsDay + 6) % 7);
-  const weekStart = offsetDate(dateStr, mondayOffset);
-  const weekDates = Array.from({ length: 7 }, (_, i) => offsetDate(weekStart, i));
+  const utcDay = parseDateStr(dateStr).getUTCDay();
+  const mondayOffset = -((utcDay + 6) % 7);
+  const weekStart = offsetDateStr(dateStr, mondayOffset);
+  const weekDates = Array.from({ length: 7 }, (_, i) => offsetDateStr(weekStart, i));
 
   return (
     <div className={styles.screen}>

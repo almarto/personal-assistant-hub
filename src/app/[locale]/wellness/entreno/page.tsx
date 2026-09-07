@@ -1,5 +1,5 @@
 import { requireFamilyMembership } from "@/lib/auth-guards";
-import { weekdayForDate } from "@/lib/services/wellness/eating";
+import { formatDateStr, parseDateStr, weekdayForDate } from "@/lib/services/wellness/date";
 import {
   getExerciseDayForUser,
   getLastSetLog,
@@ -16,8 +16,8 @@ export default async function EntrenoPage({
 }) {
   const { userId, familyId } = await requireFamilyMembership();
   const { date: dateParam } = await searchParams;
-  const date = dateParam ? new Date(`${dateParam}T00:00:00`) : new Date();
-  const dateStr = date.toISOString().slice(0, 10);
+  const date = dateParam ? parseDateStr(dateParam) : new Date();
+  const dateStr = formatDateStr(date);
   const weekday = weekdayForDate(date);
 
   const day = await getExerciseDayForUser(familyId, weekday);

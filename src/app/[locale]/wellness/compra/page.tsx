@@ -1,17 +1,8 @@
 import { requireFamilyMembership } from "@/lib/auth-guards";
+import { offsetDateStr, parseDateStr, todayDateStr } from "@/lib/services/wellness/date";
 import { generateShoppingList, getShoppingList } from "@/lib/services/wellness/shoppingList";
 
 import CompraClient from "./CompraClient";
-
-function toDateStr(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
-function offsetDate(dateStr: string, days: number): string {
-  const d = new Date(`${dateStr}T00:00:00`);
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
-}
 
 // Stable Monday-Sunday range for "this week" — same weekday math as
 // ComerClient.tsx's own week-strip navigation, adapted to a full week span
@@ -19,11 +10,11 @@ function offsetDate(dateStr: string, days: number): string {
 // changes once per week (unlike "tomorrow through +6 days", which drifted
 // to a different window every calendar day).
 function getDefaultWeekRange(): { start: string; end: string } {
-  const todayStr = toDateStr(new Date());
-  const jsDay = new Date(`${todayStr}T00:00:00`).getDay();
-  const mondayOffset = -((jsDay + 6) % 7);
-  const weekStart = offsetDate(todayStr, mondayOffset);
-  const weekEnd = offsetDate(weekStart, 6);
+  const todayStr = todayDateStr();
+  const utcDay = parseDateStr(todayStr).getUTCDay();
+  const mondayOffset = -((utcDay + 6) % 7);
+  const weekStart = offsetDateStr(todayStr, mondayOffset);
+  const weekEnd = offsetDateStr(weekStart, 6);
   return { start: weekStart, end: weekEnd };
 }
 

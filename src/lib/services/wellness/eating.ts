@@ -1,19 +1,7 @@
 import { query } from "@/lib/db";
 import type { DayMeal, Weekday } from "@/lib/types/wellness";
 
-const WEEKDAY_BY_JS_DAY: Weekday[] = [
-  "domingo",
-  "lunes",
-  "martes",
-  "miercoles",
-  "jueves",
-  "viernes",
-  "sabado",
-];
-
-export function weekdayForDate(date: Date): Weekday {
-  return WEEKDAY_BY_JS_DAY[date.getDay()];
-}
+import { weekdayForDate } from "./date";
 
 export async function getDayForUser(
   userId: string,

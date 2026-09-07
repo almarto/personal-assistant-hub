@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { upsertMeasurementAction } from "@/app/actions/wellness/measurements";
+import { todayDateStr } from "@/lib/services/wellness/date";
 import type { MeasurementLog } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
@@ -15,7 +16,7 @@ export default function MedidasClient({ initialEntries }: { initialEntries: Meas
   async function handleSave() {
     if (!form.weight && !form.waist && !form.hip && !form.neck) return;
     setSaving(true);
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = todayDateStr();
     try {
       const saved = await upsertMeasurementAction({
         weight_kg: form.weight ? parseFloat(form.weight) : null,

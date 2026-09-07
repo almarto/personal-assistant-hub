@@ -1,4 +1,5 @@
 import { requireFamilyMembership } from "@/lib/auth-guards";
+import { formatDateStr, parseDateStr } from "@/lib/services/wellness/date";
 import { getDayForUser } from "@/lib/services/wellness/eating";
 import { getActivePlanProfiles } from "@/lib/services/wellness/plans";
 
@@ -21,7 +22,7 @@ export default async function ComerPage({
 }) {
   const { userId, familyId } = await requireFamilyMembership();
   const { date: dateParam } = await searchParams;
-  const date = dateParam ? new Date(`${dateParam}T00:00:00`) : new Date();
+  const date = dateParam ? parseDateStr(dateParam) : new Date();
 
   const { weekday, meals } = await getDayForUser(userId, familyId, date);
   const profiles = await getActivePlanProfiles(familyId);
@@ -29,7 +30,7 @@ export default async function ComerPage({
 
   return (
     <ComerClient
-      dateStr={date.toISOString().slice(0, 10)}
+      dateStr={formatDateStr(date)}
       weekdayLabel={WEEKDAY_LABELS[weekday]}
       meals={meals}
       dailyTargetKcal={myProfile?.daily_kcal ?? 0}
