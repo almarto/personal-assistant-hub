@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { Link } from "@/i18n/routing";
 import { requireFamilyMembership } from "@/lib/auth-guards";
+import { slugToWeekday } from "@/lib/services/wellness/date";
 import { getMealDetailForUser } from "@/lib/services/wellness/ingredients";
 import type { CookMethod } from "@/lib/types/wellness";
 
@@ -20,16 +21,17 @@ const COOK_METHOD_LABELS: Record<CookMethod, string> = {
 export default async function MealDetailPage({
   params,
 }: {
-  params: Promise<{ mealId: string }>;
+  params: Promise<{ weekday: string; mealId: string }>;
 }) {
   const { userId, familyId } = await requireFamilyMembership();
-  const { mealId } = await params;
+  const { weekday: weekdaySlug, mealId } = await params;
+  if (!slugToWeekday(weekdaySlug)) notFound();
   const detail = await getMealDetailForUser(mealId, userId, familyId);
   if (!detail) notFound();
 
   return (
     <div className={styles.screen}>
-      <Link href="/wellness/comer" className={styles.back}>
+      <Link href={`/wellness/comer/${weekdaySlug}`} className={styles.back}>
         &larr; Volver
       </Link>
       <h1 className={styles.title}>{detail.dish_name}</h1>

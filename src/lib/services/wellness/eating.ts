@@ -1,15 +1,13 @@
 import { query } from "@/lib/db";
 import type { DayMeal, Weekday } from "@/lib/types/wellness";
 
-import { weekdayForDate } from "./date";
+export { weekdayForDate } from "./date";
 
 export async function getDayForUser(
   userId: string,
   familyId: string,
-  date: Date
-): Promise<{ weekday: Weekday; meals: DayMeal[] }> {
-  const weekday = weekdayForDate(date);
-
+  weekday: Weekday
+): Promise<{ meals: DayMeal[] }> {
   const result = await query(
     `SELECT
        fpm.id AS family_plan_meal_id,
@@ -33,5 +31,5 @@ export async function getDayForUser(
     [userId, familyId, weekday]
   );
 
-  return { weekday, meals: result.rows };
+  return { meals: result.rows };
 }

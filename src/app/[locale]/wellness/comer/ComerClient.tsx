@@ -1,8 +1,7 @@
 "use client";
 
-import { useRouter } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
-import { offsetDateStr, parseDateStr } from "@/lib/services/wellness/date";
+import { WEEKDAY_SLUGS } from "@/lib/services/wellness/date";
 import type { DayMeal } from "@/lib/types/wellness";
 
 import styles from "./page.module.css";
@@ -14,37 +13,33 @@ const SLOT_LABELS: Record<DayMeal["slot"], string> = {
   cena: "Cena",
 };
 
+// Matches WEEKDAY_SLUGS order (Monday..Sunday).
 const WEEK_SHORT = ["L", "M", "X", "J", "V", "S", "D"];
 
 export default function ComerClient({
-  dateStr,
+  weekdaySlug,
   weekdayLabel,
+  isToday,
   meals,
   dailyTargetKcal,
   dailyTargetProtein,
 }: {
-  dateStr: string;
+  weekdaySlug: string;
   weekdayLabel: string;
+  isToday: boolean;
   meals: DayMeal[];
   dailyTargetKcal: number;
   dailyTargetProtein: number;
 }) {
-  const router = useRouter();
-
   const totalKcal = meals.reduce((sum, m) => sum + m.kcal, 0);
   const totalProtein = meals.reduce((sum, m) => sum + m.protein_g, 0);
   const pct = dailyTargetKcal > 0 ? Math.min(100, Math.round((totalKcal / dailyTargetKcal) * 100)) : 0;
 
-  const utcDay = parseDateStr(dateStr).getUTCDay();
-  const mondayOffset = -((utcDay + 6) % 7);
-  const weekStart = offsetDateStr(dateStr, mondayOffset);
-  const weekDates = Array.from({ length: 7 }, (_, i) => offsetDateStr(weekStart, i));
-
   return (
     <div className={styles.screen}>
       <div className={styles.hero}>
-        <h1 className={styles.heroLabel}>Hoy</h1>
-        <div className={styles.heroDate}>{weekdayLabel}</div>
+        <h1 className={styles.heroLabel}>{weekdayLabel}</h1>
+        {isToday && <div className={styles.heroDate}>Hoy</div>}
       </div>
 
       <div className={styles.progress}>
@@ -57,15 +52,15 @@ export default function ComerClient({
       </div>
 
       <div className={styles.weekStrip}>
-        {weekDates.map((d, i) => (
-          <button
-            key={d}
+        {WEEKDAY_SLUGS.map((slug, i) => (
+          <Link
+            key={slug}
+            href={`/wellness/comer/${slug}`}
             className={styles.dayChip}
-            data-selected={d === dateStr}
-            onClick={() => router.push(`/wellness/comer?date=${d}`)}
+            data-selected={slug === weekdaySlug}
           >
             {WEEK_SHORT[i]}
-          </button>
+          </Link>
         ))}
       </div>
 
@@ -73,7 +68,7 @@ export default function ComerClient({
         {meals.map((m) => (
           <Link
             key={m.family_plan_meal_id}
-            href={`/wellness/comer/${m.family_plan_meal_id}`}
+            href={`/wellness/comer/${weekdaySlug}/meal/${m.family_plan_meal_id}`}
             className={styles.mealCard}
           >
             <div className={styles.mealInfo}>

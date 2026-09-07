@@ -39,3 +39,60 @@ export function offsetDateStr(dateStr: string, days: number): string {
 export function weekdayForDate(date: Date): Weekday {
   return WEEKDAY_BY_UTC_DAY[date.getUTCDay()];
 }
+
+// The diet/training plan repeats every week and isn't tied to a calendar
+// date at all, so Comer navigates by weekday slug (English URL, matching
+// the eventual English-routes direction) rather than a ?date= query param.
+export const WEEKDAY_SLUGS = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+] as const;
+
+export type WeekdaySlug = (typeof WEEKDAY_SLUGS)[number];
+
+export const WEEKDAY_LABELS: Record<Weekday, string> = {
+  lunes: "Lunes",
+  martes: "Martes",
+  miercoles: "Miércoles",
+  jueves: "Jueves",
+  viernes: "Viernes",
+  sabado: "Sábado",
+  domingo: "Domingo",
+};
+
+const SLUG_TO_WEEKDAY: Record<WeekdaySlug, Weekday> = {
+  monday: "lunes",
+  tuesday: "martes",
+  wednesday: "miercoles",
+  thursday: "jueves",
+  friday: "viernes",
+  saturday: "sabado",
+  sunday: "domingo",
+};
+
+const WEEKDAY_TO_SLUG: Record<Weekday, WeekdaySlug> = {
+  lunes: "monday",
+  martes: "tuesday",
+  miercoles: "wednesday",
+  jueves: "thursday",
+  viernes: "friday",
+  sabado: "saturday",
+  domingo: "sunday",
+};
+
+export function slugToWeekday(slug: string): Weekday | null {
+  return (SLUG_TO_WEEKDAY as Record<string, Weekday>)[slug] ?? null;
+}
+
+export function weekdayToSlug(weekday: Weekday): WeekdaySlug {
+  return WEEKDAY_TO_SLUG[weekday];
+}
+
+export function todayWeekdaySlug(): WeekdaySlug {
+  return weekdayToSlug(weekdayForDate(new Date()));
+}

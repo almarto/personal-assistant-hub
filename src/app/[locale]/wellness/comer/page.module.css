@@ -57,6 +57,9 @@
 }
 
 .dayChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
   width: 44px;
   height: 44px;
@@ -67,6 +70,7 @@
   font-family: inherit;
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
+  text-decoration: none;
   cursor: pointer;
 }
 
