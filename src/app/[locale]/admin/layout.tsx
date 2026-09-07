@@ -43,7 +43,7 @@ export default async function AdminLayout({
       <SectionSubNav
         tabs={[
           { label: t("users"), href: "/admin/users" },
-          { label: t("familias"), href: "/admin/familias" },
+          { label: t("families"), href: "/admin/families" },
         ]}
       />
       {children}

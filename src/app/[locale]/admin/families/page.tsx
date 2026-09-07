@@ -3,9 +3,9 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { getFamilyWithMembers, listFamilies } from "@/lib/services/wellness/families";
 
-import FamiliasClient from "./FamiliasClient";
+import FamiliesClient from "./FamiliesClient";
 
-export default async function AdminFamiliasPage() {
+export default async function AdminFamiliesPage() {
   const sessionHeaders = await headers();
   const usersData = await auth.api.listUsers({
     headers: sessionHeaders,
@@ -25,5 +25,5 @@ export default async function AdminFamiliasPage() {
     })
   );
 
-  return <FamiliasClient initialFamilies={families} allUsers={allUsers} />;
+  return <FamiliesClient initialFamilies={families} allUsers={allUsers} />;
 }

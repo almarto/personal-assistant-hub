@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import {
@@ -28,13 +29,14 @@ interface UserOption {
   email: string;
 }
 
-export default function FamiliasClient({
+export default function FamiliesClient({
   initialFamilies,
   allUsers,
 }: {
   initialFamilies: FamilyWithMembers[];
   allUsers: UserOption[];
 }) {
+  const t = useTranslations("Admin");
   const [families, setFamilies] = useState(initialFamilies);
   const [newFamilyName, setNewFamilyName] = useState("");
   const [selectedUserByFamily, setSelectedUserByFamily] = useState<Record<string, string>>({});
@@ -63,7 +65,7 @@ export default function FamiliasClient({
         )
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al añadir miembro");
+      setError(err instanceof Error ? err.message : t("addMemberError"));
     }
   }
 
@@ -80,15 +82,15 @@ export default function FamiliasClient({
 
   return (
     <div className={styles.container}>
-      <h1>Familias</h1>
+      <h1>{t("families")}</h1>
 
       <div className={styles.newFamilyRow}>
         <input
           value={newFamilyName}
           onChange={(e) => setNewFamilyName(e.target.value)}
-          placeholder="Nombre de la familia"
+          placeholder={t("familyNamePlaceholder")}
         />
-        <button onClick={handleCreateFamily}>Crear familia</button>
+        <button onClick={handleCreateFamily}>{t("createFamily")}</button>
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
@@ -100,7 +102,7 @@ export default function FamiliasClient({
             {family.members.map((m) => (
               <li key={m.user_id}>
                 {m.name} ({m.email}){" "}
-                <button onClick={() => handleRemoveMember(family.id, m.user_id)}>Quitar</button>
+                <button onClick={() => handleRemoveMember(family.id, m.user_id)}>{t("removeMember")}</button>
               </li>
             ))}
           </ul>
@@ -111,7 +113,7 @@ export default function FamiliasClient({
                 setSelectedUserByFamily({ ...selectedUserByFamily, [family.id]: e.target.value })
               }
             >
-              <option value="">Elegir usuario…</option>
+              <option value="">{t("chooseUser")}</option>
               {allUsers
                 .filter((u) => !assignedUserIds.has(u.id))
                 .map((u) => (
@@ -120,7 +122,7 @@ export default function FamiliasClient({
                   </option>
                 ))}
             </select>
-            <button onClick={() => handleAddMember(family.id)}>Añadir</button>
+            <button onClick={() => handleAddMember(family.id)}>{t("addMember")}</button>
           </div>
         </div>
       ))}
