@@ -13,5 +13,5 @@ export async function saveTrainingSessionLogAction(
 ): Promise<void> {
   const { userId, familyId } = await requireFamilyMembership();
   await saveTrainingSessionLog(exerciseDayId, userId, familyId, new Date(`${dateStr}T00:00:00`), notes, sets);
-  revalidatePath("/wellness/entreno");
+  revalidatePath("/wellness/training");
 }

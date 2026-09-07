@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { saveTrainingSessionLogAction } from "@/app/actions/wellness/training";
@@ -7,7 +8,7 @@ import type { FamilyPlanCardioBlock, FamilyPlanExercise, SetLogEntry } from "@/l
 
 import styles from "./page.module.css";
 
-export default function EntrenoClient({
+export default function TrainingClient({
   exerciseDayId,
   dateStr,
   label,
@@ -26,6 +27,7 @@ export default function EntrenoClient({
   existingSetsByExercise: Record<string, SetLogEntry[]>;
   existingNotes: string | null;
 }) {
+  const t = useTranslations("Wellness");
   const [expanded, setExpanded] = useState<string | null>(exercises[0]?.id ?? null);
   const [sets, setSets] = useState<Record<string, { weight: string; reps: string }[]>>(() => {
     const initial: Record<string, { weight: string; reps: string }[]> = {};
@@ -80,10 +82,16 @@ export default function EntrenoClient({
         <div className={styles.cardioCard}>
           <div className={styles.cardioTitle}>{cardioBlock.title}</div>
           <div className={styles.cardioMeta}>
-            {cardioBlock.warmup_minutes} min suave &middot; {cardioBlock.rounds_count} rondas de{" "}
-            {cardioBlock.hard_minutes} min fuerte ({cardioBlock.hard_effort}) + {cardioBlock.easy_minutes} min
-            suave ({cardioBlock.easy_effort}) &middot; {cardioBlock.cooldown_minutes} min suave &middot; total{" "}
-            {cardioBlock.total_minutes} min
+            {t("training.cardioSummary", {
+              warmup: cardioBlock.warmup_minutes,
+              rounds: cardioBlock.rounds_count,
+              hard: cardioBlock.hard_minutes,
+              hardEffort: cardioBlock.hard_effort,
+              easy: cardioBlock.easy_minutes,
+              easyEffort: cardioBlock.easy_effort,
+              cooldown: cardioBlock.cooldown_minutes,
+              total: cardioBlock.total_minutes,
+            })}
           </div>
         </div>
       )}
@@ -98,7 +106,11 @@ export default function EntrenoClient({
                 <div>
                   <div className={styles.exName}>{ex.name}</div>
                   <div className={styles.exMeta}>
-                    {ex.series_reps} &middot; descanso {ex.rest_label} &middot; tempo {ex.tempo}
+                    {t("training.exerciseMeta", {
+                      seriesReps: ex.series_reps,
+                      restLabel: ex.rest_label,
+                      tempo: ex.tempo,
+                    })}
                   </div>
                 </div>
               </div>
@@ -106,7 +118,7 @@ export default function EntrenoClient({
                 <div className={styles.exBody}>
                   {last.length > 0 && (
                     <div className={styles.lastTime}>
-                      <div className={styles.lastTimeLabel}>Última vez</div>
+                      <div className={styles.lastTimeLabel}>{t("training.lastTime")}</div>
                       <div>{last.map((s) => `${s.weight_kg ?? "-"}kg × ${s.reps ?? "-"}`).join(", ")}</div>
                     </div>
                   )}
@@ -138,7 +150,7 @@ export default function EntrenoClient({
       </div>
 
       <div className={styles.notesBox}>
-        <div className={styles.notesLabel}>Notas de la sesión</div>
+        <div className={styles.notesLabel}>{t("training.sessionNotes")}</div>
         <textarea
           className={styles.notesInput}
           rows={3}
@@ -147,12 +159,12 @@ export default function EntrenoClient({
             setNotes(e.target.value);
             setSaved(false);
           }}
-          placeholder="Energía, molestias, cómo ha ido..."
+          placeholder={t("training.notesPlaceholder")}
         />
       </div>
 
       <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
-        {saved ? "Guardado" : saving ? "Guardando..." : "Guardar sesión"}
+        {saved ? t("training.saved") : saving ? t("training.saving") : t("training.saveSession")}
       </button>
     </div>
   );

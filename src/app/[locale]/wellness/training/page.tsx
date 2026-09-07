@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import { requireFamilyMembership } from "@/lib/auth-guards";
 import { formatDateStr, parseDateStr, weekdayForDate } from "@/lib/services/wellness/date";
 import {
@@ -7,9 +9,9 @@ import {
 } from "@/lib/services/wellness/training";
 import type { SetLogEntry } from "@/lib/types/wellness";
 
-import EntrenoClient from "./EntrenoClient";
+import TrainingClient from "./TrainingClient";
 
-export default async function EntrenoPage({
+export default async function TrainingPage({
   searchParams,
 }: {
   searchParams: Promise<{ date?: string }>;
@@ -22,9 +24,10 @@ export default async function EntrenoPage({
 
   const day = await getExerciseDayForUser(familyId, weekday);
   if (!day) {
+    const t = await getTranslations("Wellness");
     return (
       <div style={{ padding: 24 }}>
-        <p>No hay entreno programado para hoy.</p>
+        <p>{t("training.noSessionToday")}</p>
       </div>
     );
   }
@@ -45,7 +48,7 @@ export default async function EntrenoPage({
   }
 
   return (
-    <EntrenoClient
+    <TrainingClient
       exerciseDayId={day.exercise_day_id}
       dateStr={dateStr}
       label={day.label}
