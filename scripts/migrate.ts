@@ -1,8 +1,50 @@
+import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { Pool } from "pg";
 
+function parseEnvFile(content: string): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const rawLine of content.split("\n")) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+
+    const separatorIndex = line.indexOf("=");
+    if (separatorIndex === -1) continue;
+
+    const key = line.slice(0, separatorIndex).trim();
+    let value = line.slice(separatorIndex + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    result[key] = value;
+  }
+  return result;
+}
+
+// better-auth CLI has no --env-file flag and only auto-loads .env/.env.local,
+// and Node's own --env-file never overrides a var already present in
+// process.env, so the target env file is loaded explicitly here (mutating
+// process.env directly) rather than relying on either of those mechanisms.
+function loadEnvFile(envFileName: string) {
+  const envPath = path.join(process.cwd(), envFileName);
+  if (!fs.existsSync(envPath)) {
+    console.error(`❌ ${envFileName} file not found!`);
+    process.exit(1);
+  }
+  Object.assign(process.env, parseEnvFile(fs.readFileSync(envPath, "utf8")));
+}
+
 async function migrate() {
+  const isProd = process.argv.includes("--prod");
+  loadEnvFile(isProd ? ".env.production" : ".env");
+
+  console.log("Running better-auth migrations...");
+  execSync("npx @better-auth/cli migrate --yes", { stdio: "inherit" });
+
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     console.error("DATABASE_URL is not set");
@@ -24,8 +66,8 @@ async function migrate() {
     // Check if schema_migrations table exists
     const tableExistsRes = await client.query(`
       SELECT EXISTS (
-        SELECT FROM information_schema.tables 
-        WHERE table_schema = 'public' 
+        SELECT FROM information_schema.tables
+        WHERE table_schema = 'public'
         AND table_name = 'schema_migrations'
       );
     `);
