@@ -1,38 +1,41 @@
 import { describe, expect, it } from "vitest";
 
 import { pickRecommendedRoute } from "./decision";
-import type { DistrustRule, RouteMinutes } from "./types";
+import type { RouteMinutes } from "./types";
 
-function route(id: string, liveMinutes: number, typicalMinutes: number): RouteMinutes {
-  return { id, label: id, liveMinutes, typicalMinutes };
+function route(
+  id: string,
+  liveMinutes: number,
+  typicalMinutes: number,
+  distrustMultiplier?: number
+): RouteMinutes {
+  return { id, label: id, liveMinutes, typicalMinutes, distrustMultiplier };
 }
 
-const ALBERTO_DISTRUST: DistrustRule = { routeId: "fast", multiplier: 1.25 };
-
-describe("pickRecommendedRoute (Alberto — with a distrust rule)", () => {
+describe("pickRecommendedRoute (route with its own distrust multiplier)", () => {
   it("picks Fast when it has a clear margin over the buffered comparison", () => {
-    const routes = [route("long", 42, 42), route("mid", 32, 32), route("fast", 22, 22)];
-    expect(pickRecommendedRoute(routes, ALBERTO_DISTRUST)).toBe("fast");
+    const routes = [route("long", 42, 42), route("mid", 32, 32), route("fast", 22, 22, 1.25)];
+    expect(pickRecommendedRoute(routes)).toBe("fast");
   });
 
   it("picks Mid when Fast is jammed enough that its buffered time loses", () => {
-    const routes = [route("long", 42, 42), route("mid", 32, 32), route("fast", 35, 22)];
-    expect(pickRecommendedRoute(routes, ALBERTO_DISTRUST)).toBe("mid");
+    const routes = [route("long", 42, 42), route("mid", 32, 32), route("fast", 35, 22, 1.25)];
+    expect(pickRecommendedRoute(routes)).toBe("mid");
   });
 
   it("picks Long when the shared segment jam drags both Mid and Fast down", () => {
-    const routes = [route("long", 42, 42), route("mid", 55, 32), route("fast", 50, 22)];
-    expect(pickRecommendedRoute(routes, ALBERTO_DISTRUST)).toBe("long");
+    const routes = [route("long", 42, 42), route("mid", 55, 32), route("fast", 50, 22, 1.25)];
+    expect(pickRecommendedRoute(routes)).toBe("long");
   });
 
   it("favors Mid on an exact tie at the buffer boundary", () => {
     // fast.live (24) * 1.25 === mid.live (30) exactly
-    const routes = [route("long", 42, 42), route("mid", 30, 30), route("fast", 24, 24)];
-    expect(pickRecommendedRoute(routes, ALBERTO_DISTRUST)).toBe("mid");
+    const routes = [route("long", 42, 42), route("mid", 30, 30), route("fast", 24, 24, 1.25)];
+    expect(pickRecommendedRoute(routes)).toBe("mid");
   });
 });
 
-describe("pickRecommendedRoute (Patricia — no distrust rule)", () => {
+describe("pickRecommendedRoute (no distrust multiplier set)", () => {
   it("picks whichever route has the lower live minutes, unadjusted", () => {
     const routes = [route("route-a", 30, 25), route("route-b", 28, 28)];
     expect(pickRecommendedRoute(routes)).toBe("route-b");

@@ -1,5 +1,3 @@
-export type ProfileId = "alberto" | "patricia";
-
 export type RouteId = string;
 
 export interface LatLng {
@@ -11,18 +9,13 @@ export interface RouteDefinition {
   id: RouteId;
   label: string;
   waypoints: LatLng[];
-}
-
-export interface DistrustRule {
-  routeId: RouteId;
-  multiplier: number;
+  distrustMultiplier?: number;
 }
 
 export interface CommuteConfig {
   origin: LatLng;
   destination: LatLng;
   routes: RouteDefinition[];
-  distrust?: DistrustRule;
 }
 
 export interface RouteLeg {
@@ -35,10 +28,10 @@ export interface RouteMinutes {
   label: string;
   liveMinutes: number;
   typicalMinutes: number;
+  distrustMultiplier?: number;
 }
 
 export interface CommuteStatus {
-  profile: ProfileId;
   generatedAt: string;
   routes: Array<{
     id: RouteId;

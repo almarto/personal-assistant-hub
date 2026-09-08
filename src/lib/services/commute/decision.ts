@@ -1,22 +1,19 @@
-import type { DistrustRule, RouteId, RouteMinutes } from "./types";
+import type { RouteId, RouteMinutes } from "./types";
 
-export function adjustedMinutes(route: RouteMinutes, distrust?: DistrustRule): number {
-  if (distrust && route.id === distrust.routeId) {
-    return route.liveMinutes * distrust.multiplier;
-  }
-  return route.liveMinutes;
+export function adjustedMinutes(route: RouteMinutes): number {
+  return route.liveMinutes * (route.distrustMultiplier ?? 1);
 }
 
-export function pickRecommendedRoute(routes: RouteMinutes[], distrust?: DistrustRule): RouteId {
+export function pickRecommendedRoute(routes: RouteMinutes[]): RouteId {
   if (routes.length === 0) {
     throw new Error("Cannot pick a recommended route from an empty list");
   }
 
   let best = routes[0];
-  let bestAdjusted = adjustedMinutes(best, distrust);
+  let bestAdjusted = adjustedMinutes(best);
 
   for (const route of routes.slice(1)) {
-    const candidateAdjusted = adjustedMinutes(route, distrust);
+    const candidateAdjusted = adjustedMinutes(route);
     if (candidateAdjusted < bestAdjusted) {
       best = route;
       bestAdjusted = candidateAdjusted;
