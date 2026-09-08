@@ -166,10 +166,7 @@ function RouteList({ origin, destination, routes, onRoutesChange }: RouteListPro
       setNewWaypoints("");
       setNewMultiplier("");
       setVerifyResult(null);
-      onRoutesChange([
-        ...routes,
-        { id: crypto.randomUUID(), name: newName, waypoints, distrustMultiplier: distrustMultiplier ?? null },
-      ]);
+      onRoutesChange([...routes, result.route]);
     });
   }
 

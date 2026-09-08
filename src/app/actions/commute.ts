@@ -58,11 +58,11 @@ export async function addCommuteRouteAction(input: { name: string; waypoints: La
     if (!commuteConfigId) {
       throw new Error("Save your origin and destination before adding routes");
     }
-    await addCommuteRoute({ commuteConfigId, ...input });
+    const route = await addCommuteRoute({ commuteConfigId, ...input });
     revalidatePath("/commute");
-    return { success: true };
+    return { success: true as const, route };
   } catch (error) {
-    return { success: false, error: errorMessage(error) };
+    return { success: false as const, error: errorMessage(error) };
   }
 }
 
