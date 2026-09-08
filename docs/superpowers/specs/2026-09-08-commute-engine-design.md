@@ -157,5 +157,17 @@ This repo currently has no Vitest setup despite CLAUDE.md specifying it as the u
 - UI page (sub-project 2).
 - Alexa Skill / voice trigger (sub-project 3).
 - Historical logging/analytics of past commute decisions.
-- Multi-user support (this is single-family/personal data).
 - Retry/backoff, caching, or scheduled pre-fetching.
+
+## Amendment (2026-09-08): two-profile support
+
+Discovered before implementation started: this needs to serve **two people**, not one — the user (3 routes, as designed above) and their wife (2 routes, different origin/destination, no shared-segment/distrust nuance). Reusing this app's existing family-member naming (`schedule.ts` already models `albertoLocation`/`patriciaLocation`), each person gets a **profile**: `alberto` and `patricia`.
+
+This changes the design as follows:
+
+- **Route identifiers generalize.** `RouteId` is no longer the fixed literal union `"long" | "mid" | "fast"` — it's a plain `string`, scoped to a profile. Alberto's profile still uses `"long"`/`"mid"`/`"fast"`; Patricia's uses her own two route ids.
+- **Config becomes per-profile.** Origin, destination, and routes all live under a profile, not globally. A new `src/lib/services/commute/profiles.ts` holds the *structural* shape of both profiles in code (route ids, labels, which env var holds each route's waypoints, the optional distrust rule) — this isn't sensitive and doesn't need to be an env var. Only actual coordinates, user ids, and API keys are read from env vars, now namespaced per profile (e.g. `COMMUTE_ORIGIN_ALBERTO`, `COMMUTE_WAYPOINTS_PATRICIA_A`).
+- **The distrust buffer becomes a per-profile, per-route config value**, not a hardcoded constant tied to the literal id `"fast"`. Alberto's profile declares `{ routeId: "fast", multiplier: 1.25 }`; Patricia's profile declares none (confirmed: her decision is a plain "whichever live time is lower," no buffer).
+- **Spoken-text reasoning generalizes.** The route-specific narrative ("bad jam on the usual way in") is replaced by a fully generic rule: name any *other* route whose live time exceeds its typical time by more than 15% ("the X route currently has heavy traffic"); say nothing extra if none are jammed. This applies identically to both profiles without hardcoding route identities.
+- **Auth resolves a profile, not a boolean.** Browser calls: look up the authenticated user's id (via better-auth) against each profile's configured user id (`COMMUTE_USER_ID_ALBERTO` / `_PATRICIA`) to find which profile they are. Server-to-server calls (Alexa, later): each profile gets its own API key (`COMMUTE_API_KEY_ALBERTO` / `_PATRICIA`) rather than one shared secret — the key itself identifies the profile.
+- **API contract**: `GET /api/commute` now requires resolving a profile before doing anything else; the response gains a top-level `"profile"` field. No new endpoint or path segment — the same URL now serves whichever profile the caller authenticates as.
