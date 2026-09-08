@@ -171,3 +171,108 @@ This changes the design as follows:
 - **Spoken-text reasoning generalizes.** The route-specific narrative ("bad jam on the usual way in") is replaced by a fully generic rule: name any *other* route whose live time exceeds its typical time by more than 15% ("the X route currently has heavy traffic"); say nothing extra if none are jammed. This applies identically to both profiles without hardcoding route identities.
 - **Auth resolves a profile, not a boolean.** Browser calls: look up the authenticated user's id (via better-auth) against each profile's configured user id (`COMMUTE_USER_ID_ALBERTO` / `_PATRICIA`) to find which profile they are. Server-to-server calls (Alexa, later): each profile gets its own API key (`COMMUTE_API_KEY_ALBERTO` / `_PATRICIA`) rather than one shared secret — the key itself identifies the profile.
 - **API contract**: `GET /api/commute` now requires resolving a profile before doing anything else; the response gains a top-level `"profile"` field. No new endpoint or path segment — the same URL now serves whichever profile the caller authenticates as.
+
+## Amendment 2 (2026-09-08): DB-backed, user-owned routes with a config UI — supersedes Amendment 1's profile model
+
+Discovered mid-implementation (after Tasks 1-4 of the original plan were built and reviewed): env vars are too inflexible for something the user wants to tune from a UI — add/edit/remove routes, name them descriptively, and sanity-check a new waypoint's live time against Google Maps before saving. This also exposed that the "alberto"/"patricia" fixed-profile model from Amendment 1 was the wrong shape: routes should belong to whichever account created them, the same way this app already owns babies/inventory/etc. by `user_id`. **Amendment 1's profile concept (`ProfileId`, `profiles.ts`, per-profile env vars) is fully replaced by what follows** — it is no longer part of the design.
+
+### Data model
+
+Two new tables (migration `migrations/025_commute.sql`), following this repo's existing conventions (UUID PKs via `gen_random_uuid()`, `TIMESTAMP WITH TIME ZONE`, JSONB for small structured lists — see `migrations/022_wellness_nav_history_ingredients.sql`):
+
+```sql
+CREATE TABLE IF NOT EXISTS commute_configs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT NOT NULL UNIQUE REFERENCES "user"(id) ON DELETE CASCADE,
+    name VARCHAR(150) NOT NULL,
+    origin_lat DOUBLE PRECISION NOT NULL,
+    origin_lng DOUBLE PRECISION NOT NULL,
+    destination_lat DOUBLE PRECISION NOT NULL,
+    destination_lng DOUBLE PRECISION NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS commute_routes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    commute_config_id UUID NOT NULL REFERENCES commute_configs(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    waypoints JSONB NOT NULL,               -- ordered [{ "lat": number, "lng": number }, ...], at least 1
+    distrust_multiplier DOUBLE PRECISION,   -- nullable; NULL = no buffer, matches Alberto's "fast" or Patricia's "no buffer" cases
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS commute_api_keys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT NOT NULL UNIQUE REFERENCES "user"(id) ON DELETE CASCADE,
+    api_key TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+One `commute_configs` row per user (their single origin→destination commute); `commute_routes` holds however many named route variants they've defined under it (was fixed at 3/2; now open-ended). `commute_api_keys` replaces the old per-profile env-var secret — one generated key per user, for the future Alexa integration (sub-project 3) to authenticate as that user without a browser session.
+
+### Type changes
+
+- `ProfileId` and `DistrustRule` (as a separate `{routeId, multiplier}` object) are deleted.
+- `RouteDefinition` gains `distrustMultiplier?: number` directly on the route (was profile-level, keyed by route id — now it's just a property of the route itself, which is both simpler and matches the DB column).
+- `CommuteConfig` drops its `distrust?: DistrustRule` field (moved onto each route).
+- `RouteMinutes` gains `distrustMultiplier?: number`, carried through from `RouteDefinition` by the orchestration step.
+- `CommuteStatus` drops its `profile: ProfileId` field — the endpoint is inherently scoped to "the authenticated caller's own data," nothing to echo back.
+- `RouteDefinition.id` / `RouteMinutes.id` / the `recommended` field are now DB-generated UUIDs (`commute_routes.id`) rather than semantic strings like `"fast"` — the human-readable identity lives entirely in `label`/`name`.
+
+### Decision algorithm simplification
+
+Because the distrust multiplier now lives on each `RouteMinutes` directly, `decision.ts` no longer takes a separate `distrust` parameter:
+
+```ts
+export function adjustedMinutes(route: RouteMinutes): number {
+  return route.liveMinutes * (route.distrustMultiplier ?? 1);
+}
+
+export function pickRecommendedRoute(routes: RouteMinutes[]): RouteId {
+  // same minimum-of-adjusted logic as before, just one fewer parameter
+}
+```
+
+Behavior is identical to the already-reviewed Task 4 logic; only the signature drops the second argument. `spoken-text.ts`'s generic jam-detection logic (Task 5, not yet built at the point of this amendment) is unaffected — it already worked purely off each route's own `liveMinutes`/`typicalMinutes`, never off profile identity.
+
+### Config loading → DB queries
+
+`src/lib/services/commute/config.ts` (Task 2, already built) gets rewritten:
+
+- `loadCommuteConfig(profileId)` → `getCommuteConfigForUser(userId: string): Promise<CommuteConfig | null>` — one query joining `commute_configs` + `commute_routes` for that user; `null` if they haven't set anything up yet (API returns a clear "not configured" response rather than a 502).
+- `resolveProfileFromUserId` / `resolveProfileFromApiKey` → a single `resolveUserIdFromApiKey(apiKey: string): Promise<string | null>` querying `commute_api_keys`. Browser calls no longer need any resolution step at all — the session's `user.id` **is** the key used to query `commute_configs` directly.
+- `getGoogleRoutesApiKey()` is unchanged — still a single `GOOGLE_ROUTES_API_KEY` env var, since that's infrastructure, not per-user data.
+
+### Server actions (new) and the config UI (new)
+
+Reads/writes from the app's own UI go through Next.js server actions (`"use server"`, matching `src/app/actions/admin-users.ts`'s pattern of `requireAdmin()`-style guards — here using a plain "must be logged in" check via `auth.api.getSession`), in a new `src/app/actions/commute.ts`:
+
+- `getMyCommuteConfig()` — the current user's config + routes, or `null`.
+- `saveCommuteConfig({ name, origin, destination })` — upsert the user's one `commute_configs` row.
+- `addCommuteRoute({ name, waypoints, distrustMultiplier? })`, `updateCommuteRoute(routeId, {...})`, `deleteCommuteRoute(routeId)` — CRUD on `commute_routes`, each verifying the route belongs to the caller's own config before writing.
+- `verifyRouteLiveTime({ origin, destination, waypoints })` — calls Task 3's already-built `fetchRouteLegs` directly and returns live/typical minutes for display. No DB write, informational only (does not block saving, per the earlier decision) — this is how the UI's "Verify" button lets the user sanity-check a waypoint against what they see in the Google Maps app before committing it.
+- `ensureCommuteApiKey()` — get-or-create the user's row in `commute_api_keys`, returned once for them to copy into their future Alexa setup (sub-project 3).
+
+New UI page at `src/app/[locale]/commute/page.tsx`: a form for name/origin/destination, and an editable list of route options (add/edit/delete), each with a "Verify" button showing live minutes inline. Standard authenticated-page pattern already used elsewhere in `src/app/[locale]/`.
+
+### API contract change
+
+`GET /api/commute` response drops the `"profile"` field (see Type changes above); otherwise unchanged (`generatedAt`, `routes[]`, `recommended`, `spokenText`). A caller with no `commute_configs` row yet gets `404` with `{ "error": "Commute not configured yet" }` instead of attempting a Google call with empty data.
+
+### What this replaces from Tasks 1-4 (already implemented before this amendment)
+
+- Task 1's `profiles.ts` (hardcoded `PROFILES` for alberto/patricia): **deleted**.
+- Task 1's `types.ts`: `ProfileId`/`DistrustRule` removed; `RouteDefinition`/`RouteMinutes`/`CommuteConfig`/`CommuteStatus` updated per Type changes above.
+- Task 2's `config.ts` (env-var loading + profile resolution): **rewritten** as DB queries per Config loading above.
+- Task 3's `google-routes.ts` (the `fetchRouteLegs` client): **unchanged** — it never knew about profiles or env vars, only takes coordinates as parameters.
+- Task 4's `decision.ts`: **signature simplified** (drops the `distrust` parameter) as shown above; core algorithm unchanged and remains covered by its existing, already-reviewed test scenarios (adjusted for the new single-argument signature).
+
+### Out of scope (still)
+
+- The Alexa Skill itself (sub-project 3) — `commute_api_keys` and `ensureCommuteApiKey()` exist now so that integration has something to authenticate with later, but wiring an actual Alexa Skill is not part of this amendment.
+- Historical logging/analytics of past commute decisions or verify-button checks.
+- Retry/backoff, caching, or scheduled pre-fetching (still no DB caching of live Google results — only the *configuration* is DB-backed, not computed statuses).
+- Sharing/collaboration on a single commute config between multiple users.
