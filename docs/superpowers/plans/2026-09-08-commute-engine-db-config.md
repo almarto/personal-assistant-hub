@@ -881,11 +881,11 @@ describe("buildSpokenText", () => {
     );
   });
 
-  it("names multiple jammed alternatives", () => {
+  it("names multiple jammed alternatives, closest competitor first", () => {
     const routes = [route("long", "Long", 42, 42), route("mid", "Mid", 55, 32), route("fast", "Fast", 50, 22)];
 
     expect(buildSpokenText(routes, "long")).toBe(
-      "Take the Long route today — the Mid route and the Fast route currently have heavy traffic, 13 minutes faster than the Mid route and 8 minutes faster than the Fast route."
+      "Take the Long route today — the Fast route and the Mid route currently have heavy traffic, 8 minutes faster than the Fast route and 13 minutes faster than the Mid route."
     );
   });
 
@@ -934,6 +934,15 @@ function isJammed(route: RouteMinutes): boolean {
   return route.liveMinutes > route.typicalMinutes * JAM_RATIO_THRESHOLD;
 }
 
+// Comparisons are listed closest-competitor-first: ascending by how much
+// live time separates each other route from the winner (can be negative
+// when "winner" is only ahead after the distrust buffer, in which case
+// that route sorts first too).
+function byGapAscending(winner: RouteMinutes) {
+  return (a: RouteMinutes, b: RouteMinutes) =>
+    (a.liveMinutes - winner.liveMinutes) - (b.liveMinutes - winner.liveMinutes);
+}
+
 function describeComparison(winner: RouteMinutes, other: RouteMinutes): string {
   if (winner.liveMinutes <= other.liveMinutes) {
     return `${round(other.liveMinutes - winner.liveMinutes)} minutes faster than the ${other.label} route`;
@@ -942,7 +951,9 @@ function describeComparison(winner: RouteMinutes, other: RouteMinutes): string {
 }
 
 function reasonFor(winner: RouteMinutes, routes: RouteMinutes[]): string {
-  const jammedOthers = routes.filter((route) => route.id !== winner.id && isJammed(route));
+  const jammedOthers = routes
+    .filter((route) => route.id !== winner.id && isJammed(route))
+    .sort(byGapAscending(winner));
   if (jammedOthers.length === 0) {
     return "";
   }
@@ -958,7 +969,7 @@ export function buildSpokenText(routes: RouteMinutes[], recommended: RouteId): s
     throw new Error(`Recommended route "${recommended}" not found in routes list`);
   }
 
-  const others = routes.filter((route) => route.id !== recommended);
+  const others = routes.filter((route) => route.id !== recommended).sort(byGapAscending(winner));
   const comparisons = others.map((other) => describeComparison(winner, other)).join(" and ");
   const reason = reasonFor(winner, routes);
 
