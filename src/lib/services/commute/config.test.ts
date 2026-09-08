@@ -7,10 +7,16 @@ vi.mock("@/lib/db", () => ({
 import { query } from "@/lib/db";
 
 import {
+  addCommuteRoute,
+  deleteCommuteRoute,
+  ensureCommuteApiKey,
   getCommuteConfigDetailForUser,
   getCommuteConfigForUser,
+  getCommuteConfigIdForUser,
   getGoogleRoutesApiKey,
   resolveUserIdFromApiKey,
+  saveCommuteConfig,
+  updateCommuteRoute,
 } from "./config";
 
 const queryMock = vi.mocked(query);
@@ -142,5 +148,123 @@ describe("resolveUserIdFromApiKey", () => {
   it("returns null when no row matches", async () => {
     queryMock.mockResolvedValueOnce({ rows: [] } as never);
     expect(await resolveUserIdFromApiKey("key-missing")).toBeNull();
+  });
+});
+
+describe("saveCommuteConfig", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("upserts the user's config row", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+
+    await saveCommuteConfig({
+      userId: "user-1",
+      name: "School run",
+      origin: { lat: 40.1, lng: -3.1 },
+      destination: { lat: 40.2, lng: -3.2 },
+    });
+
+    expect(queryMock).toHaveBeenCalledWith(
+      expect.stringContaining("ON CONFLICT (user_id) DO UPDATE"),
+      ["user-1", "School run", 40.1, -3.1, 40.2, -3.2]
+    );
+  });
+});
+
+describe("getCommuteConfigIdForUser", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("returns the id when a config exists", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
+    expect(await getCommuteConfigIdForUser("user-1")).toBe("config-1");
+  });
+
+  it("returns null when none exists", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+    expect(await getCommuteConfigIdForUser("user-1")).toBeNull();
+  });
+});
+
+describe("addCommuteRoute", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("inserts and returns the created route", async () => {
+    queryMock.mockResolvedValueOnce({
+      rows: [{ id: "route-1", name: "Fast", waypoints: [{ lat: 1, lng: 2 }], distrust_multiplier: 1.25 }],
+    } as never);
+
+    const route = await addCommuteRoute({
+      commuteConfigId: "config-1",
+      name: "Fast",
+      waypoints: [{ lat: 1, lng: 2 }],
+      distrustMultiplier: 1.25,
+    });
+
+    expect(route).toEqual({ id: "route-1", name: "Fast", waypoints: [{ lat: 1, lng: 2 }], distrustMultiplier: 1.25 });
+  });
+});
+
+describe("updateCommuteRoute", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("updates and returns the route when owned by the user", async () => {
+    queryMock.mockResolvedValueOnce({
+      rows: [{ id: "route-1", name: "Fast v2", waypoints: [{ lat: 3, lng: 4 }], distrust_multiplier: null }],
+    } as never);
+
+    const route = await updateCommuteRoute({
+      routeId: "route-1",
+      userId: "user-1",
+      name: "Fast v2",
+      waypoints: [{ lat: 3, lng: 4 }],
+    });
+
+    expect(route).toEqual({ id: "route-1", name: "Fast v2", waypoints: [{ lat: 3, lng: 4 }], distrustMultiplier: null });
+  });
+
+  it("throws when the route is not owned by the user (no row returned)", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+
+    await expect(
+      updateCommuteRoute({ routeId: "route-1", userId: "user-2", name: "x", waypoints: [] })
+    ).rejects.toThrow("not found");
+  });
+});
+
+describe("deleteCommuteRoute", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("succeeds when a row was deleted", async () => {
+    queryMock.mockResolvedValueOnce({ rowCount: 1 } as never);
+    await expect(deleteCommuteRoute("route-1", "user-1")).resolves.toBeUndefined();
+  });
+
+  it("throws when no row was deleted", async () => {
+    queryMock.mockResolvedValueOnce({ rowCount: 0 } as never);
+    await expect(deleteCommuteRoute("route-1", "user-2")).rejects.toThrow("not found");
+  });
+});
+
+describe("ensureCommuteApiKey", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("returns the existing key without creating a new one", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ api_key: "existing-key" }] } as never);
+    expect(await ensureCommuteApiKey("user-1")).toBe("existing-key");
+    expect(queryMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("creates and returns a new key when none exists", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never).mockResolvedValueOnce({ rows: [] } as never);
+
+    const key = await ensureCommuteApiKey("user-1");
+
+    expect(typeof key).toBe("string");
+    expect(key.length).toBeGreaterThan(0);
+    expect(queryMock).toHaveBeenCalledTimes(2);
+    expect(queryMock).toHaveBeenNthCalledWith(2, expect.stringContaining("INSERT INTO commute_api_keys"), [
+      "user-1",
+      key,
+    ]);
   });
 });
