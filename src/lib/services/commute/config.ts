@@ -1,67 +1,98 @@
-import { getProfileSpec, PROFILES } from "./profiles";
-import type { CommuteConfig, LatLng, ProfileId, RouteDefinition } from "./types";
+import { query } from "@/lib/db";
 
-function requireEnv(name: string): string {
-  const value = process.env[name];
+import type { CommuteConfig, LatLng, RouteDefinition } from "./types";
+
+export interface CommuteRouteDetail {
+  id: string;
+  name: string;
+  waypoints: LatLng[];
+  distrustMultiplier: number | null;
+}
+
+export interface CommuteConfigDetail {
+  id: string;
+  name: string;
+  origin: LatLng;
+  destination: LatLng;
+  routes: CommuteRouteDetail[];
+}
+
+interface CommuteConfigRow {
+  id: string;
+  name: string;
+  origin_lat: number;
+  origin_lng: number;
+  destination_lat: number;
+  destination_lng: number;
+}
+
+interface CommuteRouteRow {
+  id: string;
+  name: string;
+  waypoints: LatLng[];
+  distrust_multiplier: number | null;
+}
+
+export async function getCommuteConfigDetailForUser(userId: string): Promise<CommuteConfigDetail | null> {
+  const configResult = await query(
+    `SELECT id, name, origin_lat, origin_lng, destination_lat, destination_lng
+     FROM commute_configs WHERE user_id = $1`,
+    [userId]
+  );
+  const configRow = configResult.rows[0] as CommuteConfigRow | undefined;
+  if (!configRow) {
+    return null;
+  }
+
+  const routesResult = await query(
+    `SELECT id, name, waypoints, distrust_multiplier
+     FROM commute_routes WHERE commute_config_id = $1
+     ORDER BY created_at ASC`,
+    [configRow.id]
+  );
+
+  const routes: CommuteRouteDetail[] = (routesResult.rows as CommuteRouteRow[]).map((row) => ({
+    id: row.id,
+    name: row.name,
+    waypoints: row.waypoints,
+    distrustMultiplier: row.distrust_multiplier,
+  }));
+
+  return {
+    id: configRow.id,
+    name: configRow.name,
+    origin: { lat: configRow.origin_lat, lng: configRow.origin_lng },
+    destination: { lat: configRow.destination_lat, lng: configRow.destination_lng },
+    routes,
+  };
+}
+
+export async function getCommuteConfigForUser(userId: string): Promise<CommuteConfig | null> {
+  const detail = await getCommuteConfigDetailForUser(userId);
+  if (!detail) {
+    return null;
+  }
+
+  const routes: RouteDefinition[] = detail.routes.map((route) => ({
+    id: route.id,
+    label: route.name,
+    waypoints: route.waypoints,
+    distrustMultiplier: route.distrustMultiplier ?? undefined,
+  }));
+
+  return { origin: detail.origin, destination: detail.destination, routes };
+}
+
+export function getGoogleRoutesApiKey(): string {
+  const value = process.env.GOOGLE_ROUTES_API_KEY;
   if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
+    throw new Error("Missing required environment variable: GOOGLE_ROUTES_API_KEY");
   }
   return value;
 }
 
-function parseLatLng(value: string, envVarName: string): LatLng {
-  const parts = value.split(",");
-  const lat = Number(parts[0]);
-  const lng = Number(parts[1]);
-
-  if (parts.length !== 2 || Number.isNaN(lat) || Number.isNaN(lng)) {
-    throw new Error(`Invalid coordinate in ${envVarName}: expected "lat,lng", got "${value}"`);
-  }
-
-  return { lat, lng };
-}
-
-function parseWaypoints(value: string, envVarName: string): LatLng[] {
-  return value
-    .split(";")
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0)
-    .map((part) => parseLatLng(part, envVarName));
-}
-
-export function loadCommuteConfig(profileId: ProfileId): CommuteConfig {
-  const spec = getProfileSpec(profileId);
-
-  const origin = parseLatLng(requireEnv(spec.originEnvVar), spec.originEnvVar);
-  const destination = parseLatLng(requireEnv(spec.destinationEnvVar), spec.destinationEnvVar);
-
-  const routes: RouteDefinition[] = spec.routes.map((route) => ({
-    id: route.id,
-    label: route.label,
-    waypoints: parseWaypoints(requireEnv(route.waypointsEnvVar), route.waypointsEnvVar),
-  }));
-
-  return { origin, destination, routes, distrust: spec.distrust };
-}
-
-export function getGoogleRoutesApiKey(): string {
-  return requireEnv("GOOGLE_ROUTES_API_KEY");
-}
-
-export function resolveProfileFromUserId(userId: string): ProfileId | null {
-  for (const spec of PROFILES) {
-    if (process.env[spec.userIdEnvVar] === userId) {
-      return spec.id;
-    }
-  }
-  return null;
-}
-
-export function resolveProfileFromApiKey(apiKey: string): ProfileId | null {
-  for (const spec of PROFILES) {
-    if (process.env[spec.apiKeyEnvVar] === apiKey) {
-      return spec.id;
-    }
-  }
-  return null;
+export async function resolveUserIdFromApiKey(apiKey: string): Promise<string | null> {
+  const result = await query(`SELECT user_id FROM commute_api_keys WHERE api_key = $1`, [apiKey]);
+  const row = result.rows[0] as { user_id: string } | undefined;
+  return row?.user_id ?? null;
 }

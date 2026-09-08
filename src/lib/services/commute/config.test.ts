@@ -1,121 +1,146 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/db", () => ({
+  query: vi.fn(),
+}));
+
+import { query } from "@/lib/db";
 
 import {
+  getCommuteConfigDetailForUser,
+  getCommuteConfigForUser,
   getGoogleRoutesApiKey,
-  loadCommuteConfig,
-  resolveProfileFromApiKey,
-  resolveProfileFromUserId,
+  resolveUserIdFromApiKey,
 } from "./config";
 
-const ENV = {
-  COMMUTE_ORIGIN_ALBERTO: "40.4168,-3.7038",
-  COMMUTE_DESTINATION_ALBERTO: "40.4200,-3.7100",
-  COMMUTE_WAYPOINTS_ALBERTO_LONG: "40.4300,-3.7200;40.4320,-3.7250",
-  COMMUTE_WAYPOINTS_ALBERTO_MID: "40.4180,-3.7050;40.4190,-3.7070",
-  COMMUTE_WAYPOINTS_ALBERTO_FAST: "40.4180,-3.7050;40.4185,-3.7040",
-  COMMUTE_USER_ID_ALBERTO: "user-alberto-id",
-  COMMUTE_API_KEY_ALBERTO: "key-alberto",
-  COMMUTE_ORIGIN_PATRICIA: "40.5000,-3.8000",
-  COMMUTE_DESTINATION_PATRICIA: "40.5500,-3.8500",
-  COMMUTE_WAYPOINTS_PATRICIA_A: "40.5200,-3.8200",
-  COMMUTE_WAYPOINTS_PATRICIA_B: "40.5300,-3.8300",
-  COMMUTE_USER_ID_PATRICIA: "user-patricia-id",
-  COMMUTE_API_KEY_PATRICIA: "key-patricia",
-  GOOGLE_ROUTES_API_KEY: "test-google-key",
-};
+const queryMock = vi.mocked(query);
 
-function setEnv() {
-  for (const [key, value] of Object.entries(ENV)) {
-    process.env[key] = value;
-  }
-}
+describe("getCommuteConfigDetailForUser", () => {
+  beforeEach(() => queryMock.mockReset());
 
-function clearEnv() {
-  for (const key of Object.keys(ENV)) {
-    delete process.env[key];
-  }
-}
+  it("returns null when the user has no config row", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
 
-describe("loadCommuteConfig", () => {
-  beforeEach(clearEnv);
-  afterEach(clearEnv);
+    expect(await getCommuteConfigDetailForUser("user-1")).toBeNull();
+    expect(queryMock).toHaveBeenCalledTimes(1);
+  });
 
-  it("parses Alberto's origin, destination, waypoints, and distrust rule", () => {
-    setEnv();
+  it("returns the config with its routes, ordered", async () => {
+    queryMock
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: "config-1",
+            name: "School run",
+            origin_lat: 40.1,
+            origin_lng: -3.1,
+            destination_lat: 40.2,
+            destination_lng: -3.2,
+          },
+        ],
+      } as never)
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: "route-1",
+            name: "Fast",
+            waypoints: [{ lat: 40.15, lng: -3.15 }],
+            distrust_multiplier: 1.25,
+          },
+          {
+            id: "route-2",
+            name: "Long",
+            waypoints: [{ lat: 40.16, lng: -3.16 }],
+            distrust_multiplier: null,
+          },
+        ],
+      } as never);
 
-    const config = loadCommuteConfig("alberto");
+    const detail = await getCommuteConfigDetailForUser("user-1");
 
-    expect(config.origin).toEqual({ lat: 40.4168, lng: -3.7038 });
-    expect(config.destination).toEqual({ lat: 40.42, lng: -3.71 });
-    expect(config.distrust).toEqual({ routeId: "fast", multiplier: 1.25 });
-
-    const fast = config.routes.find((route) => route.id === "fast");
-    expect(fast).toEqual({
-      id: "fast",
-      label: "Fast",
-      waypoints: [
-        { lat: 40.418, lng: -3.705 },
-        { lat: 40.4185, lng: -3.704 },
+    expect(detail).toEqual({
+      id: "config-1",
+      name: "School run",
+      origin: { lat: 40.1, lng: -3.1 },
+      destination: { lat: 40.2, lng: -3.2 },
+      routes: [
+        { id: "route-1", name: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrustMultiplier: 1.25 },
+        { id: "route-2", name: "Long", waypoints: [{ lat: 40.16, lng: -3.16 }], distrustMultiplier: null },
       ],
+    });
+
+    expect(queryMock).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("FROM commute_routes"),
+      ["config-1"]
+    );
+  });
+});
+
+describe("getCommuteConfigForUser", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("maps the detail shape down to the lean domain CommuteConfig", async () => {
+    queryMock
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: "config-1",
+            name: "School run",
+            origin_lat: 40.1,
+            origin_lng: -3.1,
+            destination_lat: 40.2,
+            destination_lng: -3.2,
+          },
+        ],
+      } as never)
+      .mockResolvedValueOnce({
+        rows: [{ id: "route-1", name: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrust_multiplier: 1.25 }],
+      } as never);
+
+    const config = await getCommuteConfigForUser("user-1");
+
+    expect(config).toEqual({
+      origin: { lat: 40.1, lng: -3.1 },
+      destination: { lat: 40.2, lng: -3.2 },
+      routes: [{ id: "route-1", label: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrustMultiplier: 1.25 }],
     });
   });
 
-  it("parses Patricia's config with no distrust rule and 2 routes", () => {
-    setEnv();
-
-    const config = loadCommuteConfig("patricia");
-
-    expect(config.distrust).toBeUndefined();
-    expect(config.routes).toEqual([
-      { id: "route-a", label: "Route A", waypoints: [{ lat: 40.52, lng: -3.82 }] },
-      { id: "route-b", label: "Route B", waypoints: [{ lat: 40.53, lng: -3.83 }] },
-    ]);
-  });
-
-  it("throws when a required env var is missing", () => {
-    setEnv();
-    delete process.env.COMMUTE_WAYPOINTS_ALBERTO_FAST;
-
-    expect(() => loadCommuteConfig("alberto")).toThrow("COMMUTE_WAYPOINTS_ALBERTO_FAST");
-  });
-
-  it("throws on a malformed coordinate", () => {
-    setEnv();
-    process.env.COMMUTE_ORIGIN_ALBERTO = "not-a-coordinate";
-
-    expect(() => loadCommuteConfig("alberto")).toThrow("COMMUTE_ORIGIN_ALBERTO");
+  it("returns null when there is no config", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+    expect(await getCommuteConfigForUser("user-1")).toBeNull();
   });
 });
 
 describe("getGoogleRoutesApiKey", () => {
-  beforeEach(clearEnv);
-  afterEach(clearEnv);
+  const ORIGINAL = process.env.GOOGLE_ROUTES_API_KEY;
+  afterEach(() => {
+    if (ORIGINAL === undefined) delete process.env.GOOGLE_ROUTES_API_KEY;
+    else process.env.GOOGLE_ROUTES_API_KEY = ORIGINAL;
+  });
 
   it("returns the configured value", () => {
-    setEnv();
-    expect(getGoogleRoutesApiKey()).toBe("test-google-key");
+    process.env.GOOGLE_ROUTES_API_KEY = "test-key";
+    expect(getGoogleRoutesApiKey()).toBe("test-key");
   });
 
   it("throws when missing", () => {
+    delete process.env.GOOGLE_ROUTES_API_KEY;
     expect(() => getGoogleRoutesApiKey()).toThrow("GOOGLE_ROUTES_API_KEY");
   });
 });
 
-describe("resolveProfileFromUserId / resolveProfileFromApiKey", () => {
-  beforeEach(clearEnv);
-  afterEach(clearEnv);
+describe("resolveUserIdFromApiKey", () => {
+  beforeEach(() => queryMock.mockReset());
 
-  it("resolves each profile from its configured user id", () => {
-    setEnv();
-    expect(resolveProfileFromUserId("user-alberto-id")).toBe("alberto");
-    expect(resolveProfileFromUserId("user-patricia-id")).toBe("patricia");
-    expect(resolveProfileFromUserId("someone-else")).toBeNull();
+  it("returns the user id when the key matches", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ user_id: "user-1" }] } as never);
+    expect(await resolveUserIdFromApiKey("key-abc")).toBe("user-1");
   });
 
-  it("resolves each profile from its configured API key", () => {
-    setEnv();
-    expect(resolveProfileFromApiKey("key-alberto")).toBe("alberto");
-    expect(resolveProfileFromApiKey("key-patricia")).toBe("patricia");
-    expect(resolveProfileFromApiKey("wrong-key")).toBeNull();
+  it("returns null when no row matches", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+    expect(await resolveUserIdFromApiKey("key-missing")).toBeNull();
   });
 });
