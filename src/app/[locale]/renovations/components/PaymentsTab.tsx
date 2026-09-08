@@ -203,7 +203,7 @@ export function PaymentsTab({ payments, tasks, onRefresh }: PaymentsTabProps) {
                 <label>{t("tasksOptional")}</label>
                 <select name="task_id" defaultValue={editingPayment?.task_id || ""}>
                   <option value="">{t("noTaskAssigned")}</option>
-                  {tasks.map((tk) => (
+                  {tasks.filter((tk) => tk.status !== "completed").map((tk) => (
                     <option key={tk.id} value={tk.id}>
                       {tk.name}
                     </option>
