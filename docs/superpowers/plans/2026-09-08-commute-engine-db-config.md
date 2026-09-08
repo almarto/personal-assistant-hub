@@ -1156,7 +1156,7 @@ git commit -m "feat: add per-user commute status orchestration"
 - Produces (used by Task 7's UI):
   - `getMyCommuteConfigAction(): Promise<{ success: true; config: CommuteConfigDetail | null } | { success: false; error: string }>`
   - `saveCommuteConfigAction(input: { name: string; origin: LatLng; destination: LatLng }): Promise<{ success: boolean; error?: string }>`
-  - `addCommuteRouteAction(input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }): Promise<{ success: boolean; error?: string }>`
+  - `addCommuteRouteAction(input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }): Promise<{ success: true; route: CommuteRouteDetail } | { success: false; error: string }>` — returns the server-generated route (with its real DB id) so the UI never has to fabricate one
   - `updateCommuteRouteAction(routeId: string, input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }): Promise<{ success: boolean; error?: string }>`
   - `deleteCommuteRouteAction(routeId: string): Promise<{ success: boolean; error?: string }>`
   - `verifyRouteLiveTimeAction(input: { origin: LatLng; destination: LatLng; waypoints: LatLng[] }): Promise<{ success: true; liveMinutes: number; typicalMinutes: number } | { success: false; error: string }>`
@@ -1229,11 +1229,11 @@ export async function addCommuteRouteAction(input: { name: string; waypoints: La
     if (!commuteConfigId) {
       throw new Error("Save your origin and destination before adding routes");
     }
-    await addCommuteRoute({ commuteConfigId, ...input });
+    const route = await addCommuteRoute({ commuteConfigId, ...input });
     revalidatePath("/commute");
-    return { success: true };
+    return { success: true as const, route };
   } catch (error) {
-    return { success: false, error: errorMessage(error) };
+    return { success: false as const, error: errorMessage(error) };
   }
 }
 
@@ -1525,10 +1525,7 @@ function RouteList({ origin, destination, routes, onRoutesChange }: RouteListPro
       setNewWaypoints("");
       setNewMultiplier("");
       setVerifyResult(null);
-      onRoutesChange([
-        ...routes,
-        { id: crypto.randomUUID(), name: newName, waypoints, distrustMultiplier: distrustMultiplier ?? null },
-      ]);
+      onRoutesChange([...routes, result.route]);
     });
   }
 
