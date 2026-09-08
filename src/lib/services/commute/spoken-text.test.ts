@@ -24,11 +24,11 @@ describe("buildSpokenText", () => {
     );
   });
 
-  it("names multiple jammed alternatives", () => {
+  it("names multiple jammed alternatives, closest competitor first", () => {
     const routes = [route("long", "Long", 42, 42), route("mid", "Mid", 55, 32), route("fast", "Fast", 50, 22)];
 
     expect(buildSpokenText(routes, "long")).toBe(
-      "Take the Long route today — the Mid route and the Fast route currently have heavy traffic, 13 minutes faster than the Mid route and 8 minutes faster than the Fast route."
+      "Take the Long route today — the Fast route and the Mid route currently have heavy traffic, 8 minutes faster than the Fast route and 13 minutes faster than the Mid route."
     );
   });
 
