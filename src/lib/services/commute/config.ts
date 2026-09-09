@@ -158,14 +158,20 @@ export async function deleteCommuteConfig(configId: string, userId: string): Pro
 }
 
 export async function setDefaultCommuteConfig(configId: string, userId: string): Promise<void> {
-  const result = await query(
-    `WITH cleared AS (UPDATE commute_configs SET is_default = false WHERE user_id = $1)
-     UPDATE commute_configs SET is_default = true WHERE id = $2 AND user_id = $1 RETURNING id`,
-    [userId, configId]
-  );
-  if (result.rows.length === 0) {
+  const ownedResult = await query(`SELECT id FROM commute_configs WHERE id = $1 AND user_id = $2`, [
+    configId,
+    userId,
+  ]);
+  if (ownedResult.rows.length === 0) {
     throw new Error("Config not found or not owned by this user");
   }
+
+  // Two sequential, separately-committed statements rather than a single WITH
+  // combining both UPDATEs: within one command, Postgres doesn't guarantee
+  // row-processing order between data-modifying CTEs that touch the same row,
+  // which can spuriously trip the "one default per user" partial unique index.
+  await query(`UPDATE commute_configs SET is_default = false WHERE user_id = $1`, [userId]);
+  await query(`UPDATE commute_configs SET is_default = true WHERE id = $1`, [configId]);
 }
 
 export function getGoogleRoutesApiKey(): string {

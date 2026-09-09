@@ -145,6 +145,16 @@ describe("updateCommuteConfig", () => {
         destination: { lat: 3, lng: 4 },
       })
     ).resolves.toBeUndefined();
+
+    expect(queryMock).toHaveBeenCalledWith(expect.stringContaining("WHERE id = $6 AND user_id = $7"), [
+      "Al cole v2",
+      1,
+      2,
+      3,
+      4,
+      "config-1",
+      "user-1",
+    ]);
   });
 
   it("throws when the config is not owned by the user", async () => {
@@ -159,6 +169,16 @@ describe("updateCommuteConfig", () => {
         destination: { lat: 3, lng: 4 },
       })
     ).rejects.toThrow("not found");
+
+    expect(queryMock).toHaveBeenCalledWith(expect.stringContaining("WHERE id = $6 AND user_id = $7"), [
+      "x",
+      1,
+      2,
+      3,
+      4,
+      "config-1",
+      "user-2",
+    ]);
   });
 });
 
@@ -190,13 +210,40 @@ describe("setDefaultCommuteConfig", () => {
   beforeEach(() => queryMock.mockReset());
 
   it("sets the config as default when owned by the user", async () => {
-    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
+    queryMock
+      .mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never)
+      .mockResolvedValueOnce({ rowCount: 1 } as never)
+      .mockResolvedValueOnce({ rowCount: 1 } as never);
+
     await expect(setDefaultCommuteConfig("config-1", "user-1")).resolves.toBeUndefined();
+
+    expect(queryMock).toHaveBeenCalledTimes(3);
+    expect(queryMock).toHaveBeenNthCalledWith(1, expect.stringContaining("WHERE id = $1 AND user_id = $2"), [
+      "config-1",
+      "user-1",
+    ]);
+    expect(queryMock).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("UPDATE commute_configs SET is_default = false WHERE user_id = $1"),
+      ["user-1"]
+    );
+    expect(queryMock).toHaveBeenNthCalledWith(
+      3,
+      expect.stringContaining("UPDATE commute_configs SET is_default = true WHERE id = $1"),
+      ["config-1"]
+    );
   });
 
   it("throws when the config is not owned by the user", async () => {
     queryMock.mockResolvedValueOnce({ rows: [] } as never);
+
     await expect(setDefaultCommuteConfig("config-1", "user-2")).rejects.toThrow("not found");
+
+    expect(queryMock).toHaveBeenCalledTimes(1);
+    expect(queryMock).toHaveBeenNthCalledWith(1, expect.stringContaining("WHERE id = $1 AND user_id = $2"), [
+      "config-1",
+      "user-2",
+    ]);
   });
 });
 
