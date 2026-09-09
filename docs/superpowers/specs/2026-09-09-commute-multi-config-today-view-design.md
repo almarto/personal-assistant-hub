@@ -139,3 +139,7 @@ New i18n keys needed under the `Commute` namespace in both `messages/en.json` an
 - `?configId=` parameter on the external `GET /api/commute` endpoint.
 - Historical logging/analytics of past `/commute/today` views or decisions made.
 - Sharing a config between multiple users.
+
+## Note (2026-09-09): E2E test deferred
+
+Discovered while planning implementation: this repo has no Playwright infrastructure at all (no `e2e/` directory, no `playwright.config.ts`, no `test:e2e` script), despite CLAUDE.md specifying it. Standing that up (config, handling a session-gated page, dev-server wiring) is cross-cutting infra that deserves its own task rather than being folded into this feature's plan. The implementation plan covers this work with Vitest unit tests only; the Playwright test for the create-config → add-routes → view-today flow described above is deferred until e2e infra exists.
