@@ -4,19 +4,22 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { getCommuteStatusForConfig } from "@/lib/services/commute";
 import {
   addCommuteRoute,
+  createCommuteConfig,
+  deleteCommuteConfig,
   deleteCommuteRoute,
   ensureCommuteApiKey,
-  getCommuteConfigDetailForUser,
-  getCommuteConfigForUser,
-  getCommuteConfigIdForUser,
+  getCommuteConfigDetailById,
   getGoogleRoutesApiKey,
-  saveCommuteConfig,
+  listCommuteConfigsForUser,
+  setDefaultCommuteConfig,
+  updateCommuteConfig,
   updateCommuteRoute,
 } from "@/lib/services/commute/config";
 import { fetchRouteLegs } from "@/lib/services/commute/google-routes";
-import type { LatLng } from "@/lib/services/commute/types";
+import type { CommuteStatus, LatLng } from "@/lib/services/commute/types";
 
 async function requireUserId(): Promise<string> {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -39,20 +42,56 @@ function isValidDistrustMultiplier(value: number | undefined): boolean {
   return value === undefined || (Number.isFinite(value) && value >= 1);
 }
 
-export async function getMyCommuteConfigAction() {
+export async function listMyCommuteConfigsAction() {
   try {
     const userId = await requireUserId();
-    const config = await getCommuteConfigDetailForUser(userId);
+    const configs = await listCommuteConfigsForUser(userId);
+    return { success: true as const, configs };
+  } catch (error) {
+    return { success: false as const, error: errorMessage(error) };
+  }
+}
+
+export async function getCommuteConfigDetailAction(configId: string) {
+  try {
+    const userId = await requireUserId();
+    const config = await getCommuteConfigDetailById(configId, userId);
     return { success: true as const, config };
   } catch (error) {
     return { success: false as const, error: errorMessage(error) };
   }
 }
 
-export async function saveCommuteConfigAction(input: { name: string; origin: LatLng; destination: LatLng }) {
+export async function createCommuteConfigAction(input: { name: string; origin: LatLng; destination: LatLng }) {
   try {
     const userId = await requireUserId();
-    await saveCommuteConfig({ userId, ...input });
+    const configId = await createCommuteConfig({ userId, ...input });
+    revalidatePath("/commute");
+    return { success: true as const, configId };
+  } catch (error) {
+    return { success: false as const, error: errorMessage(error) };
+  }
+}
+
+export async function updateCommuteConfigAction(
+  configId: string,
+  input: { name: string; origin: LatLng; destination: LatLng }
+) {
+  try {
+    const userId = await requireUserId();
+    await updateCommuteConfig({ configId, userId, ...input });
+    revalidatePath("/commute");
+    revalidatePath(`/commute/${configId}`);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: errorMessage(error) };
+  }
+}
+
+export async function deleteCommuteConfigAction(configId: string) {
+  try {
+    const userId = await requireUserId();
+    await deleteCommuteConfig(configId, userId);
     revalidatePath("/commute");
     return { success: true };
   } catch (error) {
@@ -60,18 +99,28 @@ export async function saveCommuteConfigAction(input: { name: string; origin: Lat
   }
 }
 
-export async function addCommuteRouteAction(input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }) {
+export async function setDefaultCommuteConfigAction(configId: string) {
+  try {
+    const userId = await requireUserId();
+    await setDefaultCommuteConfig(configId, userId);
+    revalidatePath("/commute");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: errorMessage(error) };
+  }
+}
+
+export async function addCommuteRouteAction(
+  configId: string,
+  input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }
+) {
   if (!isValidDistrustMultiplier(input.distrustMultiplier)) {
     return { success: false as const, error: DISTRUST_MULTIPLIER_ERROR };
   }
   try {
     const userId = await requireUserId();
-    const commuteConfigId = await getCommuteConfigIdForUser(userId);
-    if (!commuteConfigId) {
-      throw new Error("Save your origin and destination before adding routes");
-    }
-    const route = await addCommuteRoute({ commuteConfigId, ...input });
-    revalidatePath("/commute");
+    const route = await addCommuteRoute({ commuteConfigId: configId, userId, ...input });
+    revalidatePath(`/commute/${configId}`);
     return { success: true as const, route };
   } catch (error) {
     return { success: false as const, error: errorMessage(error) };
@@ -80,6 +129,7 @@ export async function addCommuteRouteAction(input: { name: string; waypoints: La
 
 export async function updateCommuteRouteAction(
   routeId: string,
+  configId: string,
   input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }
 ) {
   if (!isValidDistrustMultiplier(input.distrustMultiplier)) {
@@ -88,18 +138,18 @@ export async function updateCommuteRouteAction(
   try {
     const userId = await requireUserId();
     await updateCommuteRoute({ routeId, userId, ...input });
-    revalidatePath("/commute");
+    revalidatePath(`/commute/${configId}`);
     return { success: true };
   } catch (error) {
     return { success: false, error: errorMessage(error) };
   }
 }
 
-export async function deleteCommuteRouteAction(routeId: string) {
+export async function deleteCommuteRouteAction(routeId: string, configId: string) {
   try {
     const userId = await requireUserId();
     await deleteCommuteRoute(routeId, userId);
-    revalidatePath("/commute");
+    revalidatePath(`/commute/${configId}`);
     return { success: true };
   } catch (error) {
     return { success: false, error: errorMessage(error) };
@@ -109,12 +159,12 @@ export async function deleteCommuteRouteAction(routeId: string) {
 // Origin and destination are read from the caller's own saved config rather
 // than taken from the request, so this cannot be used as a free-form proxy to
 // the (billed) Google Routes API for arbitrary coordinates.
-export async function verifyRouteLiveTimeAction(input: { waypoints: LatLng[] }) {
+export async function verifyRouteLiveTimeAction(configId: string, input: { waypoints: LatLng[] }) {
   try {
     const userId = await requireUserId();
-    const config = await getCommuteConfigForUser(userId);
+    const config = await getCommuteConfigDetailById(configId, userId);
     if (!config) {
-      throw new Error("Save your origin and destination first");
+      throw new Error("Config not found or not owned by this user");
     }
     const apiKey = getGoogleRoutesApiKey();
     const legs = await fetchRouteLegs(
@@ -126,6 +176,24 @@ export async function verifyRouteLiveTimeAction(input: { waypoints: LatLng[] }) 
     return { success: true as const, liveMinutes, typicalMinutes };
   } catch (error) {
     return { success: false as const, error: errorMessage(error) };
+  }
+}
+
+export type CommuteStatusResult =
+  | { success: true; status: CommuteStatus }
+  | { success: false; error: string; noRoutes: boolean };
+
+export async function getCommuteStatusAction(configId: string): Promise<CommuteStatusResult> {
+  try {
+    const userId = await requireUserId();
+    const status = await getCommuteStatusForConfig(configId, userId);
+    if (!status) {
+      return { success: false, error: "Config not found or not owned by this user", noRoutes: false };
+    }
+    return { success: true, status };
+  } catch (error) {
+    const noRoutes = error instanceof Error && error.message === "NO_ROUTES";
+    return { success: false, error: errorMessage(error), noRoutes };
   }
 }
 
