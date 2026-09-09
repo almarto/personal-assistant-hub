@@ -396,7 +396,27 @@
     "verifyResult": "En vivo: {live} min (habitual: {typical} min)",
     "invalidWaypoints": "Introduce al menos un punto como \"lat, lng\", separados por ;",
     "invalidRoute": "Introduce un nombre y al menos un punto intermedio",
-    "invalidMultiplier": "El multiplicador de desconfianza debe ser un número igual o mayor que 1"
+    "invalidMultiplier": "El multiplicador de desconfianza debe ser un número igual o mayor que 1",
+    "configsSection": "Tus configuraciones",
+    "newConfig": "Nueva configuración",
+    "emptyConfigs": "Aún no tienes ninguna configuración. Crea una para empezar.",
+    "defaultBadge": "Principal",
+    "makeDefault": "Hacer principal",
+    "setDefaultError": "No se pudo marcar como principal",
+    "deleteConfig": "Eliminar esta configuración",
+    "deleteConfigError": "No se pudo eliminar la configuración",
+    "confirmDeleteConfig": "¿Eliminar esta configuración y todas sus rutas? No se puede deshacer.",
+    "viewToday": "Ver mi ruta de hoy",
+    "newConfigTitle": "Nueva configuración de ruta",
+    "editConfigTitle": "Editar configuración de ruta",
+    "todayTitle": "Mi ruta de hoy",
+    "todaySubtitle": "Elige una configuración y compara los tiempos en vivo de cada ruta.",
+    "refresh": "Actualizar",
+    "liveMinutes": "{minutes} min en vivo",
+    "typicalMinutes": "{minutes} min habitual",
+    "noRoutesError": "Esta configuración aún no tiene rutas. Añade al menos una para poder comparar.",
+    "addRouteLink": "Añadir una ruta",
+    "emptyConfigsToday": "Aún no tienes ninguna configuración de ruta."
   },
   "Renovations": {
     "tabs": {

@@ -397,7 +397,27 @@
     "verifyResult": "Live: {live} min (typical: {typical} min)",
     "invalidWaypoints": "Enter at least one waypoint as \"lat, lng\", separated by ;",
     "invalidRoute": "Enter a name and at least one waypoint",
-    "invalidMultiplier": "The distrust multiplier must be a number of 1 or greater"
+    "invalidMultiplier": "The distrust multiplier must be a number of 1 or greater",
+    "configsSection": "Your configs",
+    "newConfig": "New config",
+    "emptyConfigs": "No commute configs yet. Create one to get started.",
+    "defaultBadge": "Default",
+    "makeDefault": "Make default",
+    "setDefaultError": "Failed to set as default",
+    "deleteConfig": "Delete this config",
+    "deleteConfigError": "Failed to delete config",
+    "confirmDeleteConfig": "Delete this config and all its routes? This cannot be undone.",
+    "viewToday": "View today's route",
+    "newConfigTitle": "New commute config",
+    "editConfigTitle": "Edit commute config",
+    "todayTitle": "My route today",
+    "todaySubtitle": "Pick a config and compare live times for each route.",
+    "refresh": "Refresh",
+    "liveMinutes": "{minutes} min live",
+    "typicalMinutes": "{minutes} min typical",
+    "noRoutesError": "This config has no routes yet. Add at least one to compare.",
+    "addRouteLink": "Add a route",
+    "emptyConfigsToday": "You don't have any commute configs yet."
   },
   "Renovations": {
     "tabs": {
