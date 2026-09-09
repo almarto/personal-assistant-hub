@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
-import { getCommuteStatus } from "@/lib/services/commute";
+import { getDefaultCommuteStatusForUser } from "@/lib/services/commute";
 import { resolveUserIdFromApiKey } from "@/lib/services/commute/config";
 
 async function resolveUserId(req: Request): Promise<string | null> {
@@ -26,7 +26,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const status = await getCommuteStatus(userId);
+    const status = await getDefaultCommuteStatusForUser(userId);
     if (!status) {
       return NextResponse.json({ error: "Commute not configured yet" }, { status: 404 });
     }

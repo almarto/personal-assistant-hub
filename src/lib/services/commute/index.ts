@@ -1,4 +1,4 @@
-import { getCommuteConfigForUser, getGoogleRoutesApiKey } from "./config";
+import { getCommuteConfigDetailById, getDefaultCommuteConfigId, getGoogleRoutesApiKey } from "./config";
 import { pickRecommendedRoute } from "./decision";
 import { fetchRouteLegs } from "./google-routes";
 import { buildSpokenText } from "./spoken-text";
@@ -12,10 +12,13 @@ function sumTypical(legs: RouteLeg[]): number {
   return legs.reduce((total, leg) => total + leg.staticDurationSeconds, 0) / 60;
 }
 
-export async function getCommuteStatus(userId: string): Promise<CommuteStatus | null> {
-  const config = await getCommuteConfigForUser(userId);
+export async function getCommuteStatusForConfig(configId: string, userId: string): Promise<CommuteStatus | null> {
+  const config = await getCommuteConfigDetailById(configId, userId);
   if (!config) {
     return null;
+  }
+  if (config.routes.length === 0) {
+    throw new Error("NO_ROUTES");
   }
 
   const apiKey = getGoogleRoutesApiKey();
@@ -28,10 +31,10 @@ export async function getCommuteStatus(userId: string): Promise<CommuteStatus | 
       );
       return {
         id: route.id,
-        label: route.label,
+        label: route.name,
         liveMinutes: sumLive(legs),
         typicalMinutes: sumTypical(legs),
-        distrustMultiplier: route.distrustMultiplier,
+        distrustMultiplier: route.distrustMultiplier ?? undefined,
       };
     })
   );
@@ -45,4 +48,12 @@ export async function getCommuteStatus(userId: string): Promise<CommuteStatus | 
     recommended,
     spokenText,
   };
+}
+
+export async function getDefaultCommuteStatusForUser(userId: string): Promise<CommuteStatus | null> {
+  const configId = await getDefaultCommuteConfigId(userId);
+  if (!configId) {
+    return null;
+  }
+  return getCommuteStatusForConfig(configId, userId);
 }

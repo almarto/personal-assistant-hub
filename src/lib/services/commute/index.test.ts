@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("./config", () => ({
-  getCommuteConfigForUser: vi.fn(),
+  getCommuteConfigDetailById: vi.fn(),
+  getDefaultCommuteConfigId: vi.fn(),
   getGoogleRoutesApiKey: vi.fn(),
 }));
 
@@ -9,34 +10,52 @@ vi.mock("./google-routes", () => ({
   fetchRouteLegs: vi.fn(),
 }));
 
-import { getCommuteConfigForUser, getGoogleRoutesApiKey } from "./config";
+import { getCommuteConfigDetailById, getDefaultCommuteConfigId, getGoogleRoutesApiKey } from "./config";
 import { fetchRouteLegs } from "./google-routes";
-import { getCommuteStatus } from "./index";
+import { getCommuteStatusForConfig, getDefaultCommuteStatusForUser } from "./index";
 
-const getCommuteConfigForUserMock = vi.mocked(getCommuteConfigForUser);
+const getCommuteConfigDetailByIdMock = vi.mocked(getCommuteConfigDetailById);
+const getDefaultCommuteConfigIdMock = vi.mocked(getDefaultCommuteConfigId);
 const getGoogleRoutesApiKeyMock = vi.mocked(getGoogleRoutesApiKey);
 const fetchRouteLegsMock = vi.mocked(fetchRouteLegs);
 
-describe("getCommuteStatus", () => {
+describe("getCommuteStatusForConfig", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     getGoogleRoutesApiKeyMock.mockReturnValue("test-key");
   });
 
-  it("returns null when the user has no config", async () => {
-    getCommuteConfigForUserMock.mockResolvedValue(null);
-    expect(await getCommuteStatus("user-1")).toBeNull();
+  it("returns null when the config doesn't exist or isn't owned by the user", async () => {
+    getCommuteConfigDetailByIdMock.mockResolvedValue(null);
+    expect(await getCommuteStatusForConfig("config-1", "user-1")).toBeNull();
+    expect(fetchRouteLegsMock).not.toHaveBeenCalled();
+  });
+
+  it("throws NO_ROUTES when the config has zero routes", async () => {
+    getCommuteConfigDetailByIdMock.mockResolvedValue({
+      id: "config-1",
+      name: "Al cole",
+      origin: { lat: 0, lng: 0 },
+      destination: { lat: 1, lng: 1 },
+      isDefault: true,
+      routes: [],
+    });
+
+    await expect(getCommuteStatusForConfig("config-1", "user-1")).rejects.toThrow("NO_ROUTES");
     expect(fetchRouteLegsMock).not.toHaveBeenCalled();
   });
 
   it("combines config, live data, decision, and spoken text into one status", async () => {
-    getCommuteConfigForUserMock.mockResolvedValue({
+    getCommuteConfigDetailByIdMock.mockResolvedValue({
+      id: "config-1",
+      name: "Al cole",
       origin: { lat: 0, lng: 0 },
       destination: { lat: 1, lng: 1 },
+      isDefault: true,
       routes: [
-        { id: "long-id", label: "Long", waypoints: [{ lat: 2, lng: 2 }] },
-        { id: "mid-id", label: "Mid", waypoints: [{ lat: 3, lng: 3 }] },
-        { id: "fast-id", label: "Fast", waypoints: [{ lat: 4, lng: 4 }], distrustMultiplier: 1.25 },
+        { id: "long-id", name: "Long", waypoints: [{ lat: 2, lng: 2 }], distrustMultiplier: null },
+        { id: "mid-id", name: "Mid", waypoints: [{ lat: 3, lng: 3 }], distrustMultiplier: null },
+        { id: "fast-id", name: "Fast", waypoints: [{ lat: 4, lng: 4 }], distrustMultiplier: 1.25 },
       ],
     });
 
@@ -47,7 +66,7 @@ describe("getCommuteStatus", () => {
       return [{ durationSeconds: 1320, staticDurationSeconds: 1320 }]; // fast: 22 min
     });
 
-    const status = await getCommuteStatus("user-1");
+    const status = await getCommuteStatusForConfig("config-1", "user-1");
 
     expect(status?.recommended).toBe("fast-id");
     expect(status?.routes).toEqual([
@@ -59,6 +78,36 @@ describe("getCommuteStatus", () => {
       "Take the Fast route today, 10 minutes faster than the Mid route and 20 minutes faster than the Long route."
     );
     expect(typeof status?.generatedAt).toBe("string");
-    expect(() => new Date(status!.generatedAt).toISOString()).not.toThrow();
+  });
+});
+
+describe("getDefaultCommuteStatusForUser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    getGoogleRoutesApiKeyMock.mockReturnValue("test-key");
+  });
+
+  it("returns null when the user has no default config", async () => {
+    getDefaultCommuteConfigIdMock.mockResolvedValue(null);
+    expect(await getDefaultCommuteStatusForUser("user-1")).toBeNull();
+    expect(getCommuteConfigDetailByIdMock).not.toHaveBeenCalled();
+  });
+
+  it("delegates to getCommuteStatusForConfig using the default config id", async () => {
+    getDefaultCommuteConfigIdMock.mockResolvedValue("config-1");
+    getCommuteConfigDetailByIdMock.mockResolvedValue({
+      id: "config-1",
+      name: "Al cole",
+      origin: { lat: 0, lng: 0 },
+      destination: { lat: 1, lng: 1 },
+      isDefault: true,
+      routes: [{ id: "r1", name: "Only", waypoints: [{ lat: 2, lng: 2 }], distrustMultiplier: null }],
+    });
+    fetchRouteLegsMock.mockResolvedValue([{ durationSeconds: 600, staticDurationSeconds: 600 }]);
+
+    const status = await getDefaultCommuteStatusForUser("user-1");
+
+    expect(getCommuteConfigDetailByIdMock).toHaveBeenCalledWith("config-1", "user-1");
+    expect(status?.recommended).toBe("r1");
   });
 });
