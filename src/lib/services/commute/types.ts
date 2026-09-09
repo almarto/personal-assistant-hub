@@ -5,19 +5,6 @@ export interface LatLng {
   lng: number;
 }
 
-export interface RouteDefinition {
-  id: RouteId;
-  label: string;
-  waypoints: LatLng[];
-  distrustMultiplier?: number;
-}
-
-export interface CommuteConfig {
-  origin: LatLng;
-  destination: LatLng;
-  routes: RouteDefinition[];
-}
-
 export interface RouteLeg {
   durationSeconds: number;
   staticDurationSeconds: number;

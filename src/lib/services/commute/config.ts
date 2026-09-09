@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 
 import { query } from "@/lib/db";
 
-import type { CommuteConfig, LatLng, RouteDefinition } from "./types";
+import type { LatLng } from "./types";
 
 export interface CommuteRouteDetail {
   id: string;
@@ -11,11 +11,18 @@ export interface CommuteRouteDetail {
   distrustMultiplier: number | null;
 }
 
+export interface CommuteConfigSummary {
+  id: string;
+  name: string;
+  isDefault: boolean;
+}
+
 export interface CommuteConfigDetail {
   id: string;
   name: string;
   origin: LatLng;
   destination: LatLng;
+  isDefault: boolean;
   routes: CommuteRouteDetail[];
 }
 
@@ -26,6 +33,7 @@ interface CommuteConfigRow {
   origin_lng: number;
   destination_lat: number;
   destination_lng: number;
+  is_default: boolean;
 }
 
 interface CommuteRouteRow {
@@ -35,11 +43,24 @@ interface CommuteRouteRow {
   distrust_multiplier: number | null;
 }
 
-export async function getCommuteConfigDetailForUser(userId: string): Promise<CommuteConfigDetail | null> {
-  const configResult = await query(
-    `SELECT id, name, origin_lat, origin_lng, destination_lat, destination_lng
-     FROM commute_configs WHERE user_id = $1`,
+export async function listCommuteConfigsForUser(userId: string): Promise<CommuteConfigSummary[]> {
+  const result = await query(
+    `SELECT id, name, is_default FROM commute_configs
+     WHERE user_id = $1 ORDER BY is_default DESC, created_at ASC`,
     [userId]
+  );
+  return (result.rows as Array<{ id: string; name: string; is_default: boolean }>).map((row) => ({
+    id: row.id,
+    name: row.name,
+    isDefault: row.is_default,
+  }));
+}
+
+export async function getCommuteConfigDetailById(configId: string, userId: string): Promise<CommuteConfigDetail | null> {
+  const configResult = await query(
+    `SELECT id, name, origin_lat, origin_lng, destination_lat, destination_lng, is_default
+     FROM commute_configs WHERE id = $1 AND user_id = $2`,
+    [configId, userId]
   );
   const configRow = configResult.rows[0] as CommuteConfigRow | undefined;
   if (!configRow) {
@@ -65,24 +86,86 @@ export async function getCommuteConfigDetailForUser(userId: string): Promise<Com
     name: configRow.name,
     origin: { lat: configRow.origin_lat, lng: configRow.origin_lng },
     destination: { lat: configRow.destination_lat, lng: configRow.destination_lng },
+    isDefault: configRow.is_default,
     routes,
   };
 }
 
-export async function getCommuteConfigForUser(userId: string): Promise<CommuteConfig | null> {
-  const detail = await getCommuteConfigDetailForUser(userId);
-  if (!detail) {
-    return null;
+export async function getDefaultCommuteConfigId(userId: string): Promise<string | null> {
+  const result = await query(`SELECT id FROM commute_configs WHERE user_id = $1 AND is_default = true`, [userId]);
+  const row = result.rows[0] as { id: string } | undefined;
+  return row?.id ?? null;
+}
+
+export interface CreateCommuteConfigParams {
+  userId: string;
+  name: string;
+  origin: LatLng;
+  destination: LatLng;
+}
+
+export async function createCommuteConfig(params: CreateCommuteConfigParams): Promise<string> {
+  const result = await query(
+    `INSERT INTO commute_configs (user_id, name, origin_lat, origin_lng, destination_lat, destination_lng, is_default)
+     VALUES ($1, $2, $3, $4, $5, $6, NOT EXISTS (SELECT 1 FROM commute_configs WHERE user_id = $1))
+     RETURNING id`,
+    [params.userId, params.name, params.origin.lat, params.origin.lng, params.destination.lat, params.destination.lng]
+  );
+  return (result.rows[0] as { id: string }).id;
+}
+
+export interface UpdateCommuteConfigParams {
+  configId: string;
+  userId: string;
+  name: string;
+  origin: LatLng;
+  destination: LatLng;
+}
+
+export async function updateCommuteConfig(params: UpdateCommuteConfigParams): Promise<void> {
+  const result = await query(
+    `UPDATE commute_configs
+     SET name = $1, origin_lat = $2, origin_lng = $3, destination_lat = $4, destination_lng = $5, updated_at = NOW()
+     WHERE id = $6 AND user_id = $7
+     RETURNING id`,
+    [
+      params.name,
+      params.origin.lat,
+      params.origin.lng,
+      params.destination.lat,
+      params.destination.lng,
+      params.configId,
+      params.userId,
+    ]
+  );
+  if (result.rows.length === 0) {
+    throw new Error("Config not found or not owned by this user");
+  }
+}
+
+export async function deleteCommuteConfig(configId: string, userId: string): Promise<void> {
+  const result = await query(`DELETE FROM commute_configs WHERE id = $1 AND user_id = $2`, [configId, userId]);
+  if (result.rowCount === 0) {
+    throw new Error("Config not found or not owned by this user");
   }
 
-  const routes: RouteDefinition[] = detail.routes.map((route) => ({
-    id: route.id,
-    label: route.name,
-    waypoints: route.waypoints,
-    distrustMultiplier: route.distrustMultiplier ?? undefined,
-  }));
+  await query(
+    `UPDATE commute_configs SET is_default = true
+     WHERE id = (SELECT id FROM commute_configs WHERE user_id = $1 ORDER BY created_at ASC LIMIT 1)
+       AND NOT EXISTS (SELECT 1 FROM commute_configs WHERE user_id = $1 AND is_default = true)`,
+    [userId]
+  );
+}
 
-  return { origin: detail.origin, destination: detail.destination, routes };
+export async function setDefaultCommuteConfig(configId: string, userId: string): Promise<void> {
+  const result = await query(
+    `WITH cleared AS (UPDATE commute_configs SET is_default = false WHERE user_id = $1)
+     UPDATE commute_configs SET is_default = true WHERE id = $2 AND user_id = $1 RETURNING id`,
+    [userId, configId]
+  );
+  if (result.rows.length === 0) {
+    throw new Error("Config not found or not owned by this user");
+  }
 }
 
 export function getGoogleRoutesApiKey(): string {
@@ -97,30 +180,6 @@ export async function resolveUserIdFromApiKey(apiKey: string): Promise<string | 
   const result = await query(`SELECT user_id FROM commute_api_keys WHERE api_key = $1`, [apiKey]);
   const row = result.rows[0] as { user_id: string } | undefined;
   return row?.user_id ?? null;
-}
-
-export interface SaveCommuteConfigParams {
-  userId: string;
-  name: string;
-  origin: LatLng;
-  destination: LatLng;
-}
-
-export async function saveCommuteConfig(params: SaveCommuteConfigParams): Promise<void> {
-  await query(
-    `INSERT INTO commute_configs (user_id, name, origin_lat, origin_lng, destination_lat, destination_lng)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     ON CONFLICT (user_id) DO UPDATE SET
-       name = $2, origin_lat = $3, origin_lng = $4, destination_lat = $5, destination_lng = $6,
-       updated_at = NOW()`,
-    [params.userId, params.name, params.origin.lat, params.origin.lng, params.destination.lat, params.destination.lng]
-  );
-}
-
-export async function getCommuteConfigIdForUser(userId: string): Promise<string | null> {
-  const result = await query(`SELECT id FROM commute_configs WHERE user_id = $1`, [userId]);
-  const row = result.rows[0] as { id: string } | undefined;
-  return row?.id ?? null;
 }
 
 export interface AddCommuteRouteParams {

@@ -8,30 +8,51 @@ import { query } from "@/lib/db";
 
 import {
   addCommuteRoute,
+  createCommuteConfig,
+  deleteCommuteConfig,
   deleteCommuteRoute,
   ensureCommuteApiKey,
-  getCommuteConfigDetailForUser,
-  getCommuteConfigForUser,
-  getCommuteConfigIdForUser,
+  getCommuteConfigDetailById,
+  getDefaultCommuteConfigId,
   getGoogleRoutesApiKey,
+  listCommuteConfigsForUser,
   resolveUserIdFromApiKey,
-  saveCommuteConfig,
+  setDefaultCommuteConfig,
+  updateCommuteConfig,
   updateCommuteRoute,
 } from "./config";
 
 const queryMock = vi.mocked(query);
 
-describe("getCommuteConfigDetailForUser", () => {
+describe("listCommuteConfigsForUser", () => {
   beforeEach(() => queryMock.mockReset());
 
-  it("returns null when the user has no config row", async () => {
-    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+  it("returns configs ordered default-first", async () => {
+    queryMock.mockResolvedValueOnce({
+      rows: [
+        { id: "config-1", name: "Al cole", is_default: true },
+        { id: "config-2", name: "Feria", is_default: false },
+      ],
+    } as never);
 
-    expect(await getCommuteConfigDetailForUser("user-1")).toBeNull();
-    expect(queryMock).toHaveBeenCalledTimes(1);
+    const configs = await listCommuteConfigsForUser("user-1");
+
+    expect(configs).toEqual([
+      { id: "config-1", name: "Al cole", isDefault: true },
+      { id: "config-2", name: "Feria", isDefault: false },
+    ]);
+  });
+});
+
+describe("getCommuteConfigDetailById", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("returns null when the config doesn't exist or isn't owned by the user", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+    expect(await getCommuteConfigDetailById("config-1", "user-1")).toBeNull();
   });
 
-  it("returns the config with its routes, ordered", async () => {
+  it("returns the config with its routes and isDefault", async () => {
     queryMock
       .mockResolvedValueOnce({
         rows: [
@@ -42,80 +63,140 @@ describe("getCommuteConfigDetailForUser", () => {
             origin_lng: -3.1,
             destination_lat: 40.2,
             destination_lng: -3.2,
+            is_default: true,
           },
         ],
       } as never)
       .mockResolvedValueOnce({
         rows: [
-          {
-            id: "route-1",
-            name: "Fast",
-            waypoints: [{ lat: 40.15, lng: -3.15 }],
-            distrust_multiplier: 1.25,
-          },
-          {
-            id: "route-2",
-            name: "Long",
-            waypoints: [{ lat: 40.16, lng: -3.16 }],
-            distrust_multiplier: null,
-          },
+          { id: "route-1", name: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrust_multiplier: 1.25 },
         ],
       } as never);
 
-    const detail = await getCommuteConfigDetailForUser("user-1");
+    const detail = await getCommuteConfigDetailById("config-1", "user-1");
 
     expect(detail).toEqual({
       id: "config-1",
       name: "School run",
       origin: { lat: 40.1, lng: -3.1 },
       destination: { lat: 40.2, lng: -3.2 },
-      routes: [
-        { id: "route-1", name: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrustMultiplier: 1.25 },
-        { id: "route-2", name: "Long", waypoints: [{ lat: 40.16, lng: -3.16 }], distrustMultiplier: null },
-      ],
+      isDefault: true,
+      routes: [{ id: "route-1", name: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrustMultiplier: 1.25 }],
     });
 
-    expect(queryMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringContaining("FROM commute_routes"),
-      ["config-1"]
-    );
+    expect(queryMock).toHaveBeenNthCalledWith(1, expect.stringContaining("WHERE id = $1 AND user_id = $2"), [
+      "config-1",
+      "user-1",
+    ]);
   });
 });
 
-describe("getCommuteConfigForUser", () => {
+describe("getDefaultCommuteConfigId", () => {
   beforeEach(() => queryMock.mockReset());
 
-  it("maps the detail shape down to the lean domain CommuteConfig", async () => {
-    queryMock
-      .mockResolvedValueOnce({
-        rows: [
-          {
-            id: "config-1",
-            name: "School run",
-            origin_lat: 40.1,
-            origin_lng: -3.1,
-            destination_lat: 40.2,
-            destination_lng: -3.2,
-          },
-        ],
-      } as never)
-      .mockResolvedValueOnce({
-        rows: [{ id: "route-1", name: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrust_multiplier: 1.25 }],
-      } as never);
-
-    const config = await getCommuteConfigForUser("user-1");
-
-    expect(config).toEqual({
-      origin: { lat: 40.1, lng: -3.1 },
-      destination: { lat: 40.2, lng: -3.2 },
-      routes: [{ id: "route-1", label: "Fast", waypoints: [{ lat: 40.15, lng: -3.15 }], distrustMultiplier: 1.25 }],
-    });
+  it("returns the default config's id", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
+    expect(await getDefaultCommuteConfigId("user-1")).toBe("config-1");
   });
 
-  it("returns null when there is no config", async () => {
+  it("returns null when the user has no default (no configs)", async () => {
     queryMock.mockResolvedValueOnce({ rows: [] } as never);
-    expect(await getCommuteConfigForUser("user-1")).toBeNull();
+    expect(await getDefaultCommuteConfigId("user-1")).toBeNull();
+  });
+});
+
+describe("createCommuteConfig", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("inserts a config and returns its id", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-new" }] } as never);
+
+    const id = await createCommuteConfig({
+      userId: "user-1",
+      name: "Al cole",
+      origin: { lat: 40.1, lng: -3.1 },
+      destination: { lat: 40.2, lng: -3.2 },
+    });
+
+    expect(id).toBe("config-new");
+    expect(queryMock).toHaveBeenCalledWith(expect.stringContaining("INSERT INTO commute_configs"), [
+      "user-1",
+      "Al cole",
+      40.1,
+      -3.1,
+      40.2,
+      -3.2,
+    ]);
+  });
+});
+
+describe("updateCommuteConfig", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("updates the config when owned by the user", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
+
+    await expect(
+      updateCommuteConfig({
+        configId: "config-1",
+        userId: "user-1",
+        name: "Al cole v2",
+        origin: { lat: 1, lng: 2 },
+        destination: { lat: 3, lng: 4 },
+      })
+    ).resolves.toBeUndefined();
+  });
+
+  it("throws when the config is not owned by the user", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+
+    await expect(
+      updateCommuteConfig({
+        configId: "config-1",
+        userId: "user-2",
+        name: "x",
+        origin: { lat: 1, lng: 2 },
+        destination: { lat: 3, lng: 4 },
+      })
+    ).rejects.toThrow("not found");
+  });
+});
+
+describe("deleteCommuteConfig", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("throws when no row was deleted", async () => {
+    queryMock.mockResolvedValueOnce({ rowCount: 0 } as never);
+    await expect(deleteCommuteConfig("config-1", "user-2")).rejects.toThrow("not found");
+  });
+
+  it("deletes and then promotes a new default in one follow-up query", async () => {
+    queryMock.mockResolvedValueOnce({ rowCount: 1 } as never).mockResolvedValueOnce({ rowCount: 1 } as never);
+
+    await deleteCommuteConfig("config-1", "user-1");
+
+    expect(queryMock).toHaveBeenCalledTimes(2);
+    expect(queryMock).toHaveBeenNthCalledWith(1, expect.stringContaining("DELETE FROM commute_configs"), [
+      "config-1",
+      "user-1",
+    ]);
+    expect(queryMock).toHaveBeenNthCalledWith(2, expect.stringContaining("UPDATE commute_configs SET is_default = true"), [
+      "user-1",
+    ]);
+  });
+});
+
+describe("setDefaultCommuteConfig", () => {
+  beforeEach(() => queryMock.mockReset());
+
+  it("sets the config as default when owned by the user", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
+    await expect(setDefaultCommuteConfig("config-1", "user-1")).resolves.toBeUndefined();
+  });
+
+  it("throws when the config is not owned by the user", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+    await expect(setDefaultCommuteConfig("config-1", "user-2")).rejects.toThrow("not found");
   });
 });
 
@@ -148,40 +229,6 @@ describe("resolveUserIdFromApiKey", () => {
   it("returns null when no row matches", async () => {
     queryMock.mockResolvedValueOnce({ rows: [] } as never);
     expect(await resolveUserIdFromApiKey("key-missing")).toBeNull();
-  });
-});
-
-describe("saveCommuteConfig", () => {
-  beforeEach(() => queryMock.mockReset());
-
-  it("upserts the user's config row", async () => {
-    queryMock.mockResolvedValueOnce({ rows: [] } as never);
-
-    await saveCommuteConfig({
-      userId: "user-1",
-      name: "School run",
-      origin: { lat: 40.1, lng: -3.1 },
-      destination: { lat: 40.2, lng: -3.2 },
-    });
-
-    expect(queryMock).toHaveBeenCalledWith(
-      expect.stringContaining("ON CONFLICT (user_id) DO UPDATE"),
-      ["user-1", "School run", 40.1, -3.1, 40.2, -3.2]
-    );
-  });
-});
-
-describe("getCommuteConfigIdForUser", () => {
-  beforeEach(() => queryMock.mockReset());
-
-  it("returns the id when a config exists", async () => {
-    queryMock.mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
-    expect(await getCommuteConfigIdForUser("user-1")).toBe("config-1");
-  });
-
-  it("returns null when none exists", async () => {
-    queryMock.mockResolvedValueOnce({ rows: [] } as never);
-    expect(await getCommuteConfigIdForUser("user-1")).toBeNull();
   });
 });
 
