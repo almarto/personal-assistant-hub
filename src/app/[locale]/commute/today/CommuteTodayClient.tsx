@@ -6,7 +6,7 @@ import { useState, useTransition } from "react";
 
 import type { CommuteStatusResult } from "@/app/actions/commute";
 import { getCommuteStatusAction } from "@/app/actions/commute";
-import { Link, useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import type { CommuteConfigSummary } from "@/lib/services/commute/config";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
@@ -21,7 +21,6 @@ interface Props {
 
 export function CommuteTodayClient({ configs, selectedConfigId, initialResult }: Props) {
   const t = useTranslations("Commute");
-  const router = useRouter();
 
   const [result, setResult] = useState(initialResult);
   const [currentConfigId, setCurrentConfigId] = useState(selectedConfigId);
@@ -36,7 +35,9 @@ export function CommuteTodayClient({ configs, selectedConfigId, initialResult }:
 
   function handleSelectConfig(configId: string) {
     setCurrentConfigId(configId);
-    router.push(`/commute/today?config=${configId}`);
+    const url = new URL(window.location.href);
+    url.searchParams.set("config", configId);
+    window.history.replaceState(null, "", url);
     fetchStatus(configId);
   }
 
