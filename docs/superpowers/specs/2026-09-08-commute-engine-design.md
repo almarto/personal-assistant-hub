@@ -270,6 +270,10 @@ New UI page at `src/app/[locale]/commute/page.tsx`: a form for name/origin/desti
 - Task 3's `google-routes.ts` (the `fetchRouteLegs` client): **unchanged** — it never knew about profiles or env vars, only takes coordinates as parameters.
 - Task 4's `decision.ts`: **signature simplified** (drops the `distrust` parameter) as shown above; core algorithm unchanged and remains covered by its existing, already-reviewed test scenarios (adjusted for the new single-argument signature).
 
+### Note (2026-09-09): inline route editing deferred
+
+Final review caught that "add/edit/remove routes" (this amendment's own wording above) shipped as add/remove only — `updateCommuteRouteAction` exists server-side but the UI never calls it, since Task 7's plan was corrected (commit `8f4b44c`) by dropping the unused import rather than adding the edit UI. Recorded here explicitly rather than left silent: editing a route today means delete-and-re-add (which loses its position in the list, since ordering is by creation time). Genuinely deferred, not forgotten — add an edit affordance to the config UI in a follow-up pass if this friction turns out to matter in practice.
+
 ### Out of scope (still)
 
 - The Alexa Skill itself (sub-project 3) — `commute_api_keys` and `ensureCommuteApiKey()` exist now so that integration has something to authenticate with later, but wiring an actual Alexa Skill is not part of this amendment.
