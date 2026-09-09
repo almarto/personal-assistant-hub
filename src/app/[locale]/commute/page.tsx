@@ -1,12 +1,13 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
-import { getMyCommuteConfigAction } from "@/app/actions/commute";
-import { redirect } from "@/i18n/routing";
+import { listMyCommuteConfigsAction } from "@/app/actions/commute";
+import { Link, redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
+import { Button } from "@/systemUI/components/Button/Button";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
-import { CommuteConfigClient } from "./CommuteConfigClient";
+import { CommuteConfigListClient } from "./CommuteConfigListClient";
 import styles from "./page.module.css";
 
 export default async function CommutePage({
@@ -26,8 +27,8 @@ export default async function CommutePage({
 
   const t = await getTranslations("Commute");
 
-  const result = await getMyCommuteConfigAction();
-  const initialConfig = result.success ? result.config : null;
+  const result = await listMyCommuteConfigsAction();
+  const configs = result.success ? result.configs : [];
 
   return (
     <PageLayout>
@@ -35,8 +36,13 @@ export default async function CommutePage({
         <div className={styles.header}>
           <h1 className={styles.title}>{t("title")}</h1>
           <p className={styles.subtitle}>{t("subtitle")}</p>
+          <div className={styles.headerActions}>
+            <Link href="/commute/today">
+              <Button variant="outline">{t("viewToday")}</Button>
+            </Link>
+          </div>
         </div>
-        <CommuteConfigClient initialConfig={initialConfig} />
+        <CommuteConfigListClient configs={configs} />
       </div>
     </PageLayout>
   );

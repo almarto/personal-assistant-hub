@@ -24,3 +24,9 @@
   max-width: 640px;
   line-height: 1.5;
 }
+
+.headerActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+}

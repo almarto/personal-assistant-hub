@@ -1,0 +1,87 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-lg);
+  margin: 0;
+  color: var(--color-text-secondary);
+  border: 1px dashed var(--color-border, #cbd5e1);
+  border-radius: var(--border-radius-lg);
+}
+
+.error {
+  font-size: var(--font-size-sm);
+  color: var(--color-danger, #dc2626);
+  margin: 0;
+}
+
+.configList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.configItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background, #f7f7f7);
+}
+
+.configLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  text-decoration: none;
+}
+
+.configName {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.defaultBadge {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+.configActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .configItem {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
