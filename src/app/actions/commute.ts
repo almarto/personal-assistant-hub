@@ -70,7 +70,7 @@ export async function addCommuteRouteAction(input: { name: string; waypoints: La
     if (!commuteConfigId) {
       throw new Error("Save your origin and destination before adding routes");
     }
-    const route = await addCommuteRoute({ commuteConfigId, ...input });
+    const route = await addCommuteRoute({ commuteConfigId, userId, ...input });
     revalidatePath("/commute");
     return { success: true as const, route };
   } catch (error) {

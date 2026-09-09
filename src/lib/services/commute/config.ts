@@ -190,6 +190,7 @@ export async function resolveUserIdFromApiKey(apiKey: string): Promise<string | 
 
 export interface AddCommuteRouteParams {
   commuteConfigId: string;
+  userId: string;
   name: string;
   waypoints: LatLng[];
   distrustMultiplier?: number;
@@ -198,11 +199,20 @@ export interface AddCommuteRouteParams {
 export async function addCommuteRoute(params: AddCommuteRouteParams): Promise<CommuteRouteDetail> {
   const result = await query(
     `INSERT INTO commute_routes (commute_config_id, name, waypoints, distrust_multiplier)
-     VALUES ($1, $2, $3, $4)
+     SELECT id, $2, $3, $4 FROM commute_configs WHERE id = $1 AND user_id = $5
      RETURNING id, name, waypoints, distrust_multiplier`,
-    [params.commuteConfigId, params.name, JSON.stringify(params.waypoints), params.distrustMultiplier ?? null]
+    [
+      params.commuteConfigId,
+      params.name,
+      JSON.stringify(params.waypoints),
+      params.distrustMultiplier ?? null,
+      params.userId,
+    ]
   );
-  const row = result.rows[0] as CommuteRouteRow;
+  const row = result.rows[0] as CommuteRouteRow | undefined;
+  if (!row) {
+    throw new Error("Config not found or not owned by this user");
+  }
   return { id: row.id, name: row.name, waypoints: row.waypoints, distrustMultiplier: row.distrust_multiplier };
 }
 

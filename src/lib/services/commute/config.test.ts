@@ -282,19 +282,32 @@ describe("resolveUserIdFromApiKey", () => {
 describe("addCommuteRoute", () => {
   beforeEach(() => queryMock.mockReset());
 
-  it("inserts and returns the created route", async () => {
+  it("inserts and returns the created route when the config is owned by the user", async () => {
     queryMock.mockResolvedValueOnce({
       rows: [{ id: "route-1", name: "Fast", waypoints: [{ lat: 1, lng: 2 }], distrust_multiplier: 1.25 }],
     } as never);
 
     const route = await addCommuteRoute({
       commuteConfigId: "config-1",
+      userId: "user-1",
       name: "Fast",
       waypoints: [{ lat: 1, lng: 2 }],
       distrustMultiplier: 1.25,
     });
 
     expect(route).toEqual({ id: "route-1", name: "Fast", waypoints: [{ lat: 1, lng: 2 }], distrustMultiplier: 1.25 });
+  });
+
+  it("throws when the config is not owned by the user (no row returned)", async () => {
+    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+
+    await expect(
+      addCommuteRoute({ commuteConfigId: "config-1", userId: "user-2", name: "x", waypoints: [{ lat: 1, lng: 2 }] })
+    ).rejects.toThrow("not found");
+
+    // Pin the ownership constraint itself, so dropping the WHERE clause fails
+    // this test instead of silently widening access.
+    expect(queryMock).toHaveBeenCalledWith(expect.stringContaining("WHERE id = $1 AND user_id = $5"), expect.anything());
   });
 });
 
