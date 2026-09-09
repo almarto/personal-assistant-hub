@@ -143,6 +143,11 @@ export async function updateCommuteConfig(params: UpdateCommuteConfigParams): Pr
   }
 }
 
+// Runs as two separate statements — a DELETE, then a conditional promote-a-new-default
+// UPDATE — rather than inside a transaction (no transaction wrapper exists in
+// lib/db.ts, and none is justified for a single-user app). A request racing a
+// concurrent mutation for the same user could observe the moment in between with
+// no default set; that's an accepted, narrow gap, not an oversight.
 export async function deleteCommuteConfig(configId: string, userId: string): Promise<void> {
   const result = await query(`DELETE FROM commute_configs WHERE id = $1 AND user_id = $2`, [configId, userId]);
   if (result.rowCount === 0) {
@@ -157,21 +162,25 @@ export async function deleteCommuteConfig(configId: string, userId: string): Pro
   );
 }
 
+// Two sequential, separately-committed statements rather than a single WITH combining
+// both UPDATEs: within one command, Postgres doesn't guarantee row-processing order
+// between data-modifying CTEs that touch the same row, which can spuriously trip the
+// "one default per user" partial unique index. Ownership is enforced on the final
+// UPDATE's WHERE clause (this file's usual convention) rather than via a separate
+// SELECT, so a config that vanishes between the two statements is correctly reported
+// as not found rather than silently leaving the user with no default. Running the two
+// statements outside a transaction (no wrapper exists in lib/db.ts, and none is
+// justified for a single-user app) leaves a narrow, accepted gap for a request racing
+// a concurrent mutation for the same user — not an oversight.
 export async function setDefaultCommuteConfig(configId: string, userId: string): Promise<void> {
-  const ownedResult = await query(`SELECT id FROM commute_configs WHERE id = $1 AND user_id = $2`, [
-    configId,
-    userId,
-  ]);
-  if (ownedResult.rows.length === 0) {
+  await query(`UPDATE commute_configs SET is_default = false WHERE user_id = $1 AND is_default = true`, [userId]);
+  const result = await query(
+    `UPDATE commute_configs SET is_default = true WHERE id = $1 AND user_id = $2 RETURNING id`,
+    [configId, userId]
+  );
+  if (result.rows.length === 0) {
     throw new Error("Config not found or not owned by this user");
   }
-
-  // Two sequential, separately-committed statements rather than a single WITH
-  // combining both UPDATEs: within one command, Postgres doesn't guarantee
-  // row-processing order between data-modifying CTEs that touch the same row,
-  // which can spuriously trip the "one default per user" partial unique index.
-  await query(`UPDATE commute_configs SET is_default = false WHERE user_id = $1`, [userId]);
-  await query(`UPDATE commute_configs SET is_default = true WHERE id = $1`, [configId]);
 }
 
 export function getGoogleRoutesApiKey(): string {

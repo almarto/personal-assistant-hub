@@ -211,39 +211,41 @@ describe("setDefaultCommuteConfig", () => {
 
   it("sets the config as default when owned by the user", async () => {
     queryMock
-      .mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never)
       .mockResolvedValueOnce({ rowCount: 1 } as never)
-      .mockResolvedValueOnce({ rowCount: 1 } as never);
+      .mockResolvedValueOnce({ rows: [{ id: "config-1" }] } as never);
 
     await expect(setDefaultCommuteConfig("config-1", "user-1")).resolves.toBeUndefined();
 
-    expect(queryMock).toHaveBeenCalledTimes(3);
-    expect(queryMock).toHaveBeenNthCalledWith(1, expect.stringContaining("WHERE id = $1 AND user_id = $2"), [
-      "config-1",
-      "user-1",
-    ]);
+    expect(queryMock).toHaveBeenCalledTimes(2);
     expect(queryMock).toHaveBeenNthCalledWith(
-      2,
+      1,
       expect.stringContaining("UPDATE commute_configs SET is_default = false WHERE user_id = $1"),
       ["user-1"]
     );
     expect(queryMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringContaining("UPDATE commute_configs SET is_default = true WHERE id = $1"),
-      ["config-1"]
+      2,
+      expect.stringContaining("UPDATE commute_configs SET is_default = true WHERE id = $1 AND user_id = $2"),
+      ["config-1", "user-1"]
     );
+    expect(queryMock).toHaveBeenNthCalledWith(2, expect.stringContaining("RETURNING id"), ["config-1", "user-1"]);
   });
 
-  it("throws when the config is not owned by the user", async () => {
-    queryMock.mockResolvedValueOnce({ rows: [] } as never);
+  it("throws when the config is not owned by the user, after still clearing the previous default", async () => {
+    queryMock.mockResolvedValueOnce({ rowCount: 1 } as never).mockResolvedValueOnce({ rows: [] } as never);
 
     await expect(setDefaultCommuteConfig("config-1", "user-2")).rejects.toThrow("not found");
 
-    expect(queryMock).toHaveBeenCalledTimes(1);
-    expect(queryMock).toHaveBeenNthCalledWith(1, expect.stringContaining("WHERE id = $1 AND user_id = $2"), [
-      "config-1",
-      "user-2",
-    ]);
+    expect(queryMock).toHaveBeenCalledTimes(2);
+    expect(queryMock).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("UPDATE commute_configs SET is_default = false WHERE user_id = $1"),
+      ["user-2"]
+    );
+    expect(queryMock).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("UPDATE commute_configs SET is_default = true WHERE id = $1 AND user_id = $2"),
+      ["config-1", "user-2"]
+    );
   });
 });
 
