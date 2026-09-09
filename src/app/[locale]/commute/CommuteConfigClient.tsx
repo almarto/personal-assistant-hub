@@ -1,28 +1,29 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
 import {
   addCommuteRouteAction,
+  createCommuteConfigAction,
+  deleteCommuteConfigAction,
   deleteCommuteRouteAction,
-  saveCommuteConfigAction,
+  setDefaultCommuteConfigAction,
+  updateCommuteConfigAction,
   verifyRouteLiveTimeAction,
 } from "@/app/actions/commute";
-import type {
-  CommuteConfigDetail,
-  CommuteRouteDetail,
-} from "@/lib/services/commute/config";
+import { useRouter } from "@/i18n/routing";
+import type { CommuteConfigDetail, CommuteRouteDetail } from "@/lib/services/commute/config";
 import type { LatLng } from "@/lib/services/commute/types";
 import { Button } from "@/systemUI/components/Button/Button";
 import { Card } from "@/systemUI/components/Card/Card";
 
 import styles from "./CommuteConfigClient.module.css";
 
-interface Props {
-  initialConfig: CommuteConfigDetail | null;
-}
+export type CommuteConfigClientProps =
+  | { mode: "create" }
+  | { mode: "edit"; config: CommuteConfigDetail };
 
 const MIN_DISTRUST_MULTIPLIER = 1;
 
@@ -49,17 +50,16 @@ function formatLatLng(point: LatLng): string {
   return `${point.lat}, ${point.lng}`;
 }
 
-export function CommuteConfigClient({ initialConfig }: Props) {
+export function CommuteConfigClient(props: CommuteConfigClientProps) {
   const t = useTranslations("Commute");
+  const router = useRouter();
 
-  const [config, setConfig] = useState(initialConfig);
-  const [name, setName] = useState(initialConfig?.name ?? "");
-  const [origin, setOrigin] = useState(
-    initialConfig ? formatLatLng(initialConfig.origin) : ""
-  );
-  const [destination, setDestination] = useState(
-    initialConfig ? formatLatLng(initialConfig.destination) : ""
-  );
+  const initial = props.mode === "edit" ? props.config : null;
+
+  const [config, setConfig] = useState(initial);
+  const [name, setName] = useState(initial?.name ?? "");
+  const [origin, setOrigin] = useState(initial ? formatLatLng(initial.origin) : "");
+  const [destination, setDestination] = useState(initial ? formatLatLng(initial.destination) : "");
   const [configError, setConfigError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -72,7 +72,17 @@ export function CommuteConfigClient({ initialConfig }: Props) {
     }
     setConfigError(null);
     startTransition(async () => {
-      const result = await saveCommuteConfigAction({
+      if (props.mode === "create") {
+        const result = await createCommuteConfigAction({ name, origin: originPoint, destination: destinationPoint });
+        if (!result.success) {
+          setConfigError(result.error ?? t("saveError"));
+          return;
+        }
+        router.push(`/commute/${result.configId}`);
+        return;
+      }
+
+      const result = await updateCommuteConfigAction(props.config.id, {
         name,
         origin: originPoint,
         destination: destinationPoint,
@@ -81,13 +91,34 @@ export function CommuteConfigClient({ initialConfig }: Props) {
         setConfigError(result.error ?? t("saveError"));
         return;
       }
-      setConfig((current) => ({
-        id: current?.id ?? "",
-        name,
-        origin: originPoint,
-        destination: destinationPoint,
-        routes: current?.routes ?? [],
-      }));
+      setConfig((current) =>
+        current ? { ...current, name, origin: originPoint, destination: destinationPoint } : current
+      );
+    });
+  }
+
+  function handleSetDefault() {
+    if (props.mode !== "edit") return;
+    startTransition(async () => {
+      const result = await setDefaultCommuteConfigAction(props.config.id);
+      if (!result.success) {
+        setConfigError(result.error ?? t("setDefaultError"));
+        return;
+      }
+      setConfig((current) => (current ? { ...current, isDefault: true } : current));
+    });
+  }
+
+  function handleDeleteConfig() {
+    if (props.mode !== "edit") return;
+    if (!window.confirm(t("confirmDeleteConfig"))) return;
+    startTransition(async () => {
+      const result = await deleteCommuteConfigAction(props.config.id);
+      if (!result.success) {
+        setConfigError(result.error ?? t("deleteConfigError"));
+        return;
+      }
+      router.push("/commute");
     });
   }
 
@@ -130,22 +161,32 @@ export function CommuteConfigClient({ initialConfig }: Props) {
             />
           </div>
 
+          {config?.isDefault && <p className={styles.defaultBadge}>{t("defaultBadge")}</p>}
           {configError && <p className={styles.error}>{configError}</p>}
 
           <div className={styles.actions}>
             <Button onClick={handleSaveConfig} disabled={isPending}>
               {t("save")}
             </Button>
+            {props.mode === "edit" && !config?.isDefault && (
+              <Button variant="outline" onClick={handleSetDefault} disabled={isPending} leftIcon={<Star size={16} />}>
+                {t("makeDefault")}
+              </Button>
+            )}
+            {props.mode === "edit" && (
+              <Button variant="ghost" onClick={handleDeleteConfig} disabled={isPending} leftIcon={<Trash2 size={16} />}>
+                {t("deleteConfig")}
+              </Button>
+            )}
           </div>
         </div>
       </Card>
 
-      {config && (
+      {props.mode === "edit" && config && (
         <RouteList
+          configId={config.id}
           routes={config.routes}
-          onRoutesChange={(routes) =>
-            setConfig((current) => (current ? { ...current, routes } : current))
-          }
+          onRoutesChange={(routes) => setConfig((current) => (current ? { ...current, routes } : current))}
         />
       )}
     </div>
@@ -153,11 +194,12 @@ export function CommuteConfigClient({ initialConfig }: Props) {
 }
 
 interface RouteListProps {
+  configId: string;
   routes: CommuteRouteDetail[];
   onRoutesChange: (routes: CommuteRouteDetail[]) => void;
 }
 
-function RouteList({ routes, onRoutesChange }: RouteListProps) {
+function RouteList({ configId, routes, onRoutesChange }: RouteListProps) {
   const t = useTranslations("Commute");
 
   const [newName, setNewName] = useState("");
@@ -187,7 +229,7 @@ function RouteList({ routes, onRoutesChange }: RouteListProps) {
     }
     setError(null);
     startTransition(async () => {
-      const result = await verifyRouteLiveTimeAction({ waypoints });
+      const result = await verifyRouteLiveTimeAction(configId, { waypoints });
       if (!result.success) {
         setVerifyResult(null);
         setError(result.error);
@@ -222,7 +264,7 @@ function RouteList({ routes, onRoutesChange }: RouteListProps) {
 
     setError(null);
     startTransition(async () => {
-      const result = await addCommuteRouteAction({
+      const result = await addCommuteRouteAction(configId, {
         name: newName,
         waypoints,
         distrustMultiplier,
@@ -241,7 +283,7 @@ function RouteList({ routes, onRoutesChange }: RouteListProps) {
 
   function handleDelete(routeId: string) {
     startTransition(async () => {
-      const result = await deleteCommuteRouteAction(routeId);
+      const result = await deleteCommuteRouteAction(routeId, configId);
       if (!result.success) {
         setError(result.error ?? t("deleteRouteError"));
         return;
@@ -307,9 +349,7 @@ function RouteList({ routes, onRoutesChange }: RouteListProps) {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="commute-route-multiplier">
-            {t("distrustMultiplier")}
-          </label>
+          <label htmlFor="commute-route-multiplier">{t("distrustMultiplier")}</label>
           <input
             id="commute-route-multiplier"
             className={styles.input}
