@@ -1,4 +1,4 @@
-import { Activity, Boxes, Calendar, Hammer, Salad, Users } from "lucide-react";
+import { Activity, Boxes, Calendar, Car, Hammer, Salad, Users } from "lucide-react";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
@@ -121,6 +121,18 @@ export default async function HubHome({
             <h3 className={styles.appTitle}>{launcherT("renovations.title")}</h3>
             <p className={styles.appDescription}>
               {launcherT("renovations.description")}
+            </p>
+          </Link>
+        </div>
+
+        <div className={styles.appCard}>
+          <Link href="/commute" className={styles.appCardLink}>
+            <div className={styles.iconWrapper}>
+              <Car size={28} />
+            </div>
+            <h3 className={styles.appTitle}>{launcherT("commute.title")}</h3>
+            <p className={styles.appDescription}>
+              {launcherT("commute.description")}
             </p>
           </Link>
         </div>

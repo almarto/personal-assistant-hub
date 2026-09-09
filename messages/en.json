@@ -34,6 +34,10 @@
     "tripPlanner": {
       "title": "Luggage Trip Planner",
       "description": "Plan trips and coordinate packing with friends."
+    },
+    "commute": {
+      "title": "Commute Routes",
+      "description": "Compare your driving routes with live traffic and pick the fastest one."
     }
   },
   "Auth": {
@@ -361,6 +365,39 @@
     "uploadImages": "Upload Images",
     "images": "Images",
     "locationPath": "Found in"
+  },
+  "Commute": {
+    "title": "Commute Routes",
+    "subtitle": "Set your origin and destination, then add the alternative routes to compare.",
+    "originSection": "Origin & destination",
+    "configName": "Name",
+    "configNamePlaceholder": "Name (e.g. School run)",
+    "origin": "Origin",
+    "originPlaceholder": "Origin lat, lng",
+    "destination": "Destination",
+    "destinationPlaceholder": "Destination lat, lng",
+    "save": "Save",
+    "saveError": "Failed to save",
+    "invalidConfig": "Fill in a name and both coordinates as \"lat, lng\"",
+    "routesSection": "Routes",
+    "emptyRoutes": "No routes yet. Add one below to start comparing.",
+    "routeName": "Route name",
+    "routeNamePlaceholder": "Route name (e.g. Fast)",
+    "waypoints": "Waypoints",
+    "waypointsPlaceholder": "Waypoints: lat, lng; lat, lng",
+    "distrustMultiplier": "Distrust multiplier",
+    "distrustMultiplierPlaceholder": "Optional, e.g. 1.25",
+    "waypointCount": "{count} waypoint(s)",
+    "bufferSuffix": "×{value} buffer",
+    "addRoute": "Add route",
+    "addRouteError": "Failed to add route",
+    "delete": "Delete",
+    "deleteRouteError": "Failed to delete route",
+    "verify": "Verify live time",
+    "verifyResult": "Live: {live} min (typical: {typical} min)",
+    "invalidWaypoints": "Enter at least one waypoint as \"lat, lng\", separated by ;",
+    "invalidRoute": "Enter a name and at least one waypoint",
+    "invalidMultiplier": "The distrust multiplier must be a number of 1 or greater"
   },
   "Renovations": {
     "tabs": {

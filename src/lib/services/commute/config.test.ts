@@ -228,6 +228,13 @@ describe("updateCommuteRoute", () => {
     await expect(
       updateCommuteRoute({ routeId: "route-1", userId: "user-2", name: "x", waypoints: [] })
     ).rejects.toThrow("not found");
+
+    // Pin the ownership constraint itself, so dropping the join condition from
+    // the SQL fails this test instead of silently widening access.
+    expect(queryMock).toHaveBeenCalledWith(
+      expect.stringContaining("c.user_id = $5"),
+      expect.anything()
+    );
   });
 });
 
@@ -242,6 +249,13 @@ describe("deleteCommuteRoute", () => {
   it("throws when no row was deleted", async () => {
     queryMock.mockResolvedValueOnce({ rowCount: 0 } as never);
     await expect(deleteCommuteRoute("route-1", "user-2")).rejects.toThrow("not found");
+
+    // Pin the ownership constraint itself, so dropping the join condition from
+    // the SQL fails this test instead of silently widening access.
+    expect(queryMock).toHaveBeenCalledWith(
+      expect.stringContaining("c.user_id = $2"),
+      expect.anything()
+    );
   });
 });
 

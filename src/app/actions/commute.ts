@@ -9,6 +9,7 @@ import {
   deleteCommuteRoute,
   ensureCommuteApiKey,
   getCommuteConfigDetailForUser,
+  getCommuteConfigForUser,
   getCommuteConfigIdForUser,
   getGoogleRoutesApiKey,
   saveCommuteConfig,
@@ -28,6 +29,14 @@ async function requireUserId(): Promise<string> {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function errorMessage(error: any): string {
   return error instanceof Error ? error.message : "Something went wrong";
+}
+
+const DISTRUST_MULTIPLIER_ERROR = "Distrust multiplier must be a number of 1 or greater";
+
+// A distrust multiplier below 1 inverts the feature's intent, and 0/NaN would
+// permanently poison every recommendation comparison for that route.
+function isValidDistrustMultiplier(value: number | undefined): boolean {
+  return value === undefined || (Number.isFinite(value) && value >= 1);
 }
 
 export async function getMyCommuteConfigAction() {
@@ -52,6 +61,9 @@ export async function saveCommuteConfigAction(input: { name: string; origin: Lat
 }
 
 export async function addCommuteRouteAction(input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }) {
+  if (!isValidDistrustMultiplier(input.distrustMultiplier)) {
+    return { success: false as const, error: DISTRUST_MULTIPLIER_ERROR };
+  }
   try {
     const userId = await requireUserId();
     const commuteConfigId = await getCommuteConfigIdForUser(userId);
@@ -70,6 +82,9 @@ export async function updateCommuteRouteAction(
   routeId: string,
   input: { name: string; waypoints: LatLng[]; distrustMultiplier?: number }
 ) {
+  if (!isValidDistrustMultiplier(input.distrustMultiplier)) {
+    return { success: false, error: DISTRUST_MULTIPLIER_ERROR };
+  }
   try {
     const userId = await requireUserId();
     await updateCommuteRoute({ routeId, userId, ...input });
@@ -91,11 +106,21 @@ export async function deleteCommuteRouteAction(routeId: string) {
   }
 }
 
-export async function verifyRouteLiveTimeAction(input: { origin: LatLng; destination: LatLng; waypoints: LatLng[] }) {
+// Origin and destination are read from the caller's own saved config rather
+// than taken from the request, so this cannot be used as a free-form proxy to
+// the (billed) Google Routes API for arbitrary coordinates.
+export async function verifyRouteLiveTimeAction(input: { waypoints: LatLng[] }) {
   try {
-    await requireUserId();
+    const userId = await requireUserId();
+    const config = await getCommuteConfigForUser(userId);
+    if (!config) {
+      throw new Error("Save your origin and destination first");
+    }
     const apiKey = getGoogleRoutesApiKey();
-    const legs = await fetchRouteLegs(input, apiKey);
+    const legs = await fetchRouteLegs(
+      { origin: config.origin, destination: config.destination, waypoints: input.waypoints },
+      apiKey
+    );
     const liveMinutes = legs.reduce((total, leg) => total + leg.durationSeconds, 0) / 60;
     const typicalMinutes = legs.reduce((total, leg) => total + leg.staticDurationSeconds, 0) / 60;
     return { success: true as const, liveMinutes, typicalMinutes };

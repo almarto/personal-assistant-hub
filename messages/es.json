@@ -34,6 +34,10 @@
     "tripPlanner": {
       "title": "Planificador de Viajes",
       "description": "Planifica viajes y coordina el equipaje con amigos."
+    },
+    "commute": {
+      "title": "Rutas al Trabajo",
+      "description": "Compara tus rutas en coche con el tráfico en vivo y elige la más rápida."
     }
   },
   "Auth": {
@@ -360,6 +364,39 @@
     "uploadImages": "Subir Imágenes",
     "images": "Imágenes",
     "locationPath": "Encontrado en"
+  },
+  "Commute": {
+    "title": "Rutas al Trabajo",
+    "subtitle": "Define tu origen y destino, y añade las rutas alternativas a comparar.",
+    "originSection": "Origen y destino",
+    "configName": "Nombre",
+    "configNamePlaceholder": "Nombre (ej. Ir al cole)",
+    "origin": "Origen",
+    "originPlaceholder": "Origen lat, lng",
+    "destination": "Destino",
+    "destinationPlaceholder": "Destino lat, lng",
+    "save": "Guardar",
+    "saveError": "No se pudo guardar",
+    "invalidConfig": "Rellena un nombre y ambas coordenadas como \"lat, lng\"",
+    "routesSection": "Rutas",
+    "emptyRoutes": "Aún no hay rutas. Añade una abajo para empezar a comparar.",
+    "routeName": "Nombre de la ruta",
+    "routeNamePlaceholder": "Nombre de la ruta (ej. Rápida)",
+    "waypoints": "Puntos intermedios",
+    "waypointsPlaceholder": "Puntos: lat, lng; lat, lng",
+    "distrustMultiplier": "Multiplicador de desconfianza",
+    "distrustMultiplierPlaceholder": "Opcional, ej. 1.25",
+    "waypointCount": "{count} punto(s) intermedio(s)",
+    "bufferSuffix": "margen ×{value}",
+    "addRoute": "Añadir ruta",
+    "addRouteError": "No se pudo añadir la ruta",
+    "delete": "Eliminar",
+    "deleteRouteError": "No se pudo eliminar la ruta",
+    "verify": "Verificar tiempo en vivo",
+    "verifyResult": "En vivo: {live} min (habitual: {typical} min)",
+    "invalidWaypoints": "Introduce al menos un punto como \"lat, lng\", separados por ;",
+    "invalidRoute": "Introduce un nombre y al menos un punto intermedio",
+    "invalidMultiplier": "El multiplicador de desconfianza debe ser un número igual o mayor que 1"
   },
   "Renovations": {
     "tabs": {

@@ -1,5 +1,7 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
 import {
@@ -8,19 +10,39 @@ import {
   saveCommuteConfigAction,
   verifyRouteLiveTimeAction,
 } from "@/app/actions/commute";
-import type { CommuteConfigDetail, CommuteRouteDetail } from "@/lib/services/commute/config";
+import type {
+  CommuteConfigDetail,
+  CommuteRouteDetail,
+} from "@/lib/services/commute/config";
 import type { LatLng } from "@/lib/services/commute/types";
+import { Button } from "@/systemUI/components/Button/Button";
+import { Card } from "@/systemUI/components/Card/Card";
+
+import styles from "./CommuteConfigClient.module.css";
 
 interface Props {
   initialConfig: CommuteConfigDetail | null;
 }
 
+const MIN_DISTRUST_MULTIPLIER = 1;
+
 function parseLatLng(value: string): LatLng | null {
-  const parts = value.split(",").map((part) => Number(part.trim()));
-  if (parts.length !== 2 || parts.some((n) => Number.isNaN(n))) {
+  const rawParts = value.split(",").map((part) => part.trim());
+  // `Number("")` is 0, not NaN, so empty parts must be rejected up front:
+  // otherwise "40.4168," would silently parse as { lat: 40.4168, lng: 0 }.
+  if (rawParts.length !== 2 || rawParts.some((part) => part.length === 0)) {
     return null;
   }
-  return { lat: parts[0], lng: parts[1] };
+
+  const [lat, lng] = rawParts.map(Number);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    return null;
+  }
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+    return null;
+  }
+
+  return { lat, lng };
 }
 
 function formatLatLng(point: LatLng): string {
@@ -28,10 +50,16 @@ function formatLatLng(point: LatLng): string {
 }
 
 export function CommuteConfigClient({ initialConfig }: Props) {
+  const t = useTranslations("Commute");
+
   const [config, setConfig] = useState(initialConfig);
   const [name, setName] = useState(initialConfig?.name ?? "");
-  const [origin, setOrigin] = useState(initialConfig ? formatLatLng(initialConfig.origin) : "");
-  const [destination, setDestination] = useState(initialConfig ? formatLatLng(initialConfig.destination) : "");
+  const [origin, setOrigin] = useState(
+    initialConfig ? formatLatLng(initialConfig.origin) : ""
+  );
+  const [destination, setDestination] = useState(
+    initialConfig ? formatLatLng(initialConfig.destination) : ""
+  );
   const [configError, setConfigError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -39,14 +67,18 @@ export function CommuteConfigClient({ initialConfig }: Props) {
     const originPoint = parseLatLng(origin);
     const destinationPoint = parseLatLng(destination);
     if (!originPoint || !destinationPoint || !name.trim()) {
-      setConfigError("Fill in a name and both coordinates as \"lat, lng\"");
+      setConfigError(t("invalidConfig"));
       return;
     }
     setConfigError(null);
     startTransition(async () => {
-      const result = await saveCommuteConfigAction({ name, origin: originPoint, destination: destinationPoint });
+      const result = await saveCommuteConfigAction({
+        name,
+        origin: originPoint,
+        destination: destinationPoint,
+      });
       if (!result.success) {
-        setConfigError(result.error ?? "Failed to save");
+        setConfigError(result.error ?? t("saveError"));
         return;
       }
       setConfig((current) => ({
@@ -60,43 +92,60 @@ export function CommuteConfigClient({ initialConfig }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <section className="flex flex-col gap-2 rounded border border-gray-200 p-4">
-        <h2 className="font-medium">Origin &amp; destination</h2>
-        <input
-          className="rounded border border-gray-300 p-2"
-          placeholder="Name (e.g. School run)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          className="rounded border border-gray-300 p-2"
-          placeholder="Origin lat, lng"
-          value={origin}
-          onChange={(e) => setOrigin(e.target.value)}
-        />
-        <input
-          className="rounded border border-gray-300 p-2"
-          placeholder="Destination lat, lng"
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-        />
-        {configError && <p className="text-sm text-red-600">{configError}</p>}
-        <button
-          className="self-start rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-          onClick={handleSaveConfig}
-          disabled={isPending}
-        >
-          Save
-        </button>
-      </section>
+    <div className={styles.sections}>
+      <Card className={styles.section}>
+        <h2 className={styles.sectionTitle}>{t("originSection")}</h2>
+
+        <div className={styles.form}>
+          <div className={styles.formGroup}>
+            <label htmlFor="commute-name">{t("configName")}</label>
+            <input
+              id="commute-name"
+              className={styles.input}
+              placeholder={t("configNamePlaceholder")}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="commute-origin">{t("origin")}</label>
+            <input
+              id="commute-origin"
+              className={styles.input}
+              placeholder={t("originPlaceholder")}
+              value={origin}
+              onChange={(e) => setOrigin(e.target.value)}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="commute-destination">{t("destination")}</label>
+            <input
+              id="commute-destination"
+              className={styles.input}
+              placeholder={t("destinationPlaceholder")}
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+            />
+          </div>
+
+          {configError && <p className={styles.error}>{configError}</p>}
+
+          <div className={styles.actions}>
+            <Button onClick={handleSaveConfig} disabled={isPending}>
+              {t("save")}
+            </Button>
+          </div>
+        </div>
+      </Card>
 
       {config && (
         <RouteList
-          origin={config.origin}
-          destination={config.destination}
           routes={config.routes}
-          onRoutesChange={(routes) => setConfig((current) => (current ? { ...current, routes } : current))}
+          onRoutesChange={(routes) =>
+            setConfig((current) => (current ? { ...current, routes } : current))
+          }
         />
       )}
     </div>
@@ -104,13 +153,13 @@ export function CommuteConfigClient({ initialConfig }: Props) {
 }
 
 interface RouteListProps {
-  origin: LatLng;
-  destination: LatLng;
   routes: CommuteRouteDetail[];
   onRoutesChange: (routes: CommuteRouteDetail[]) => void;
 }
 
-function RouteList({ origin, destination, routes, onRoutesChange }: RouteListProps) {
+function RouteList({ routes, onRoutesChange }: RouteListProps) {
+  const t = useTranslations("Commute");
+
   const [newName, setNewName] = useState("");
   const [newWaypoints, setNewWaypoints] = useState("");
   const [newMultiplier, setNewMultiplier] = useState("");
@@ -133,33 +182,53 @@ function RouteList({ origin, destination, routes, onRoutesChange }: RouteListPro
   function handleVerify() {
     const waypoints = parseWaypointsInput(newWaypoints);
     if (!waypoints) {
-      setError("Enter at least one waypoint as \"lat, lng\", separated by ;");
+      setError(t("invalidWaypoints"));
       return;
     }
     setError(null);
     startTransition(async () => {
-      const result = await verifyRouteLiveTimeAction({ origin, destination, waypoints });
+      const result = await verifyRouteLiveTimeAction({ waypoints });
       if (!result.success) {
         setVerifyResult(null);
         setError(result.error);
         return;
       }
-      setVerifyResult(`Live: ${Math.round(result.liveMinutes)} min (typical: ${Math.round(result.typicalMinutes)} min)`);
+      setVerifyResult(
+        t("verifyResult", {
+          live: Math.round(result.liveMinutes),
+          typical: Math.round(result.typicalMinutes),
+        })
+      );
     });
   }
 
   function handleAdd() {
     const waypoints = parseWaypointsInput(newWaypoints);
     if (!waypoints || !newName.trim()) {
-      setError("Enter a name and at least one waypoint");
+      setError(t("invalidRoute"));
       return;
     }
-    const distrustMultiplier = newMultiplier.trim() ? Number(newMultiplier) : undefined;
+
+    const rawMultiplier = newMultiplier.trim();
+    let distrustMultiplier: number | undefined;
+    if (rawMultiplier) {
+      const parsed = Number(rawMultiplier);
+      if (!Number.isFinite(parsed) || parsed < MIN_DISTRUST_MULTIPLIER) {
+        setError(t("invalidMultiplier"));
+        return;
+      }
+      distrustMultiplier = parsed;
+    }
+
     setError(null);
     startTransition(async () => {
-      const result = await addCommuteRouteAction({ name: newName, waypoints, distrustMultiplier });
+      const result = await addCommuteRouteAction({
+        name: newName,
+        waypoints,
+        distrustMultiplier,
+      });
       if (!result.success) {
-        setError(result.error ?? "Failed to add route");
+        setError(result.error ?? t("addRouteError"));
         return;
       }
       setNewName("");
@@ -174,7 +243,7 @@ function RouteList({ origin, destination, routes, onRoutesChange }: RouteListPro
     startTransition(async () => {
       const result = await deleteCommuteRouteAction(routeId);
       if (!result.success) {
-        setError(result.error ?? "Failed to delete route");
+        setError(result.error ?? t("deleteRouteError"));
         return;
       }
       onRoutesChange(routes.filter((route) => route.id !== routeId));
@@ -182,61 +251,87 @@ function RouteList({ origin, destination, routes, onRoutesChange }: RouteListPro
   }
 
   return (
-    <section className="flex flex-col gap-3 rounded border border-gray-200 p-4">
-      <h2 className="font-medium">Routes</h2>
+    <Card className={styles.section}>
+      <h2 className={styles.sectionTitle}>{t("routesSection")}</h2>
 
-      <ul className="flex flex-col gap-2">
-        {routes.map((route) => (
-          <li key={route.id} className="flex items-center justify-between rounded border border-gray-100 p-2">
-            <span>
-              {route.name} — {route.waypoints.length} waypoint(s)
-              {route.distrustMultiplier ? ` (×${route.distrustMultiplier} buffer)` : ""}
-            </span>
-            <button className="text-sm text-red-600" onClick={() => handleDelete(route.id)} disabled={isPending}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+      {routes.length === 0 ? (
+        <p className={styles.emptyState}>{t("emptyRoutes")}</p>
+      ) : (
+        <ul className={styles.routeList}>
+          {routes.map((route) => (
+            <li key={route.id} className={styles.routeItem}>
+              <div className={styles.routeInfo}>
+                <span className={styles.routeName}>{route.name}</span>
+                <span className={styles.routeMeta}>
+                  {t("waypointCount", { count: route.waypoints.length })}
+                  {route.distrustMultiplier
+                    ? ` · ${t("bufferSuffix", { value: route.distrustMultiplier })}`
+                    : ""}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleDelete(route.id)}
+                disabled={isPending}
+                leftIcon={<Trash2 size={16} />}
+              >
+                {t("delete")}
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
 
-      <div className="flex flex-col gap-2 border-t border-gray-100 pt-3">
-        <input
-          className="rounded border border-gray-300 p-2"
-          placeholder="Route name (e.g. Fast)"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-        />
-        <input
-          className="rounded border border-gray-300 p-2"
-          placeholder="Waypoints: lat, lng; lat, lng"
-          value={newWaypoints}
-          onChange={(e) => setNewWaypoints(e.target.value)}
-        />
-        <input
-          className="rounded border border-gray-300 p-2"
-          placeholder="Distrust multiplier (optional, e.g. 1.25)"
-          value={newMultiplier}
-          onChange={(e) => setNewMultiplier(e.target.value)}
-        />
-        {verifyResult && <p className="text-sm text-gray-700">{verifyResult}</p>}
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="flex gap-2">
-          <button
-            className="rounded border border-gray-400 px-4 py-2 disabled:opacity-50"
-            onClick={handleVerify}
-            disabled={isPending}
-          >
-            Verify live time
-          </button>
-          <button
-            className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-            onClick={handleAdd}
-            disabled={isPending}
-          >
-            Add route
-          </button>
+      <div className={styles.form}>
+        <div className={styles.formGroup}>
+          <label htmlFor="commute-route-name">{t("routeName")}</label>
+          <input
+            id="commute-route-name"
+            className={styles.input}
+            placeholder={t("routeNamePlaceholder")}
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="commute-route-waypoints">{t("waypoints")}</label>
+          <input
+            id="commute-route-waypoints"
+            className={styles.input}
+            placeholder={t("waypointsPlaceholder")}
+            value={newWaypoints}
+            onChange={(e) => setNewWaypoints(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="commute-route-multiplier">
+            {t("distrustMultiplier")}
+          </label>
+          <input
+            id="commute-route-multiplier"
+            className={styles.input}
+            inputMode="decimal"
+            placeholder={t("distrustMultiplierPlaceholder")}
+            value={newMultiplier}
+            onChange={(e) => setNewMultiplier(e.target.value)}
+          />
+        </div>
+
+        {verifyResult && <p className={styles.result}>{verifyResult}</p>}
+        {error && <p className={styles.error}>{error}</p>}
+
+        <div className={styles.actions}>
+          <Button variant="outline" onClick={handleVerify} disabled={isPending}>
+            {t("verify")}
+          </Button>
+          <Button onClick={handleAdd} disabled={isPending}>
+            {t("addRoute")}
+          </Button>
         </div>
       </div>
-    </section>
+    </Card>
   );
 }

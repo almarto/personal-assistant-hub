@@ -1,10 +1,13 @@
 import { headers } from "next/headers";
+import { getTranslations } from "next-intl/server";
 
 import { getMyCommuteConfigAction } from "@/app/actions/commute";
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
+import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 import { CommuteConfigClient } from "./CommuteConfigClient";
+import styles from "./page.module.css";
 
 export default async function CommutePage({
   params,
@@ -21,13 +24,20 @@ export default async function CommutePage({
     });
   }
 
+  const t = await getTranslations("Commute");
+
   const result = await getMyCommuteConfigAction();
   const initialConfig = result.success ? result.config : null;
 
   return (
-    <div className="mx-auto max-w-2xl p-4">
-      <h1 className="mb-4 text-xl font-semibold">Commute routes</h1>
-      <CommuteConfigClient initialConfig={initialConfig} />
-    </div>
+    <PageLayout>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>{t("title")}</h1>
+          <p className={styles.subtitle}>{t("subtitle")}</p>
+        </div>
+        <CommuteConfigClient initialConfig={initialConfig} />
+      </div>
+    </PageLayout>
   );
 }
