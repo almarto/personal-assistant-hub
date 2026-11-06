@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { generatePassword, isStrongPassword } from "./password";
 
@@ -27,5 +27,23 @@ describe("isStrongPassword", () => {
 
   it("accepts what generatePassword produces", () => {
     expect(isStrongPassword(generatePassword())).toBe(true);
+  });
+});
+
+describe("generatePassword", () => {
+  it("has the expected length", () => {
+    expect(generatePassword()).toHaveLength(12);
+  });
+
+  it("does not rely on Math.random", () => {
+    const spy = vi.spyOn(Math, "random");
+    generatePassword();
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it("produces different passwords on successive calls", () => {
+    const passwords = new Set(Array.from({ length: 20 }, generatePassword));
+    expect(passwords.size).toBe(20);
   });
 });
