@@ -13,7 +13,7 @@ import { assignAppRole } from "@/lib/services/user-roles";
 import { AppError } from "@/lib/types/errors";
 import type { AppRole } from "@/lib/types/roles";
 import { Role } from "@/lib/types/roles";
-import { generatePassword } from "@/lib/utils/password";
+import { generatePassword, isStrongPassword } from "@/lib/utils/password";
 
 interface CreateUserData {
   name: string;
@@ -168,19 +168,26 @@ export async function resetPasswordWithToken(email: string, token: string, newPa
       return { success: false, error: "Usuario no encontrado" };
     }
 
-    // Use admin secret to authorize this server-side action
+    if (!isStrongPassword(newPassword)) {
+      return { success: false, error: "PASSWORD_REQUIREMENTS_NOT_MET" };
+    }
+
+    // The emailed code is what authorizes this, so there's no session to act
+    // as. Write the password directly instead of going through an admin route.
     try {
-      const adminSecret = process.env.BETTER_AUTH_ADMIN_SECRET;
-      
-      await auth.api.setUserPassword({
-        body: {
+      const { password, internalAdapter } = await auth.$context;
+      const hashedPassword = await password.hash(newPassword);
+
+      if (await internalAdapter.findCredentialAccount(user.id)) {
+        await internalAdapter.updatePassword(user.id, hashedPassword);
+      } else {
+        await internalAdapter.createAccount({
           userId: user.id,
-          newPassword: newPassword,
-        },
-        headers: {
-          authorization: `Bearer ${adminSecret}`
-        }
-      });
+          providerId: "credential",
+          accountId: user.id,
+          password: hashedPassword,
+        });
+      }
 
       // Invalidate the token
       await query('DELETE FROM "verification" WHERE identifier = $1', [identifier]);
