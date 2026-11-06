@@ -1,0 +1,27 @@
+version: 2
+
+# One grouped PR at a time keeps these within the free Actions minutes. The
+# cooldown skips releases too new to trust; security updates ignore it.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 3
+    groups:
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 1
+    groups:
+      actions:
+        patterns: ["*"]
