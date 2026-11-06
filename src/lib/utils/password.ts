@@ -11,6 +11,20 @@ export function isStrongPassword(password: string) {
   );
 }
 
+// Uniform integer in [0, max) from the Web Crypto API; rejection sampling avoids modulo bias.
+function secureRandomInt(max: number) {
+  const limit = Math.floor(0x100000000 / max) * max;
+  const buffer = new Uint32Array(1);
+  do {
+    crypto.getRandomValues(buffer);
+  } while (buffer[0] >= limit);
+  return buffer[0] % max;
+}
+
+function pickRandom(characters: string) {
+  return characters[secureRandomInt(characters.length)];
+}
+
 export function generatePassword() {
   const length = 12;
   const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -20,20 +34,17 @@ export function generatePassword() {
 
   const allChars = uppercase + lowercase + numbers + special;
 
-  let password = "";
-  // Ensure at least one of each required type
-  password += uppercase[Math.floor(Math.random() * uppercase.length)];
-  password += lowercase[Math.floor(Math.random() * lowercase.length)];
-  password += numbers[Math.floor(Math.random() * numbers.length)];
-
-  // Fill the rest
-  for (let i = 3; i < length; i++) {
-    password += allChars[Math.floor(Math.random() * allChars.length)];
+  // Ensure at least one of each required type, then fill the rest
+  const characters = [pickRandom(uppercase), pickRandom(lowercase), pickRandom(numbers)];
+  while (characters.length < length) {
+    characters.push(pickRandom(allChars));
   }
 
-  // Shuffle the password
-  return password
-    .split("")
-    .sort(() => 0.5 - Math.random())
-    .join("");
+  // Fisher-Yates shuffle
+  for (let i = characters.length - 1; i > 0; i--) {
+    const j = secureRandomInt(i + 1);
+    [characters[i], characters[j]] = [characters[j], characters[i]];
+  }
+
+  return characters.join("");
 }
