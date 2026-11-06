@@ -1,7 +1,7 @@
 name: Security
 
 # Both jobs are required checks on main, so they gate every PR. The weekly run
-# repeats them over the whole history. The audit only fails on critical
+# repeats them over the whole history. The audit only fails on high or critical
 # advisories, so a new one blocks every PR until it's fixed, which is intended;
 # Dependabot alerts cover the lower severities. A failed scheduled run emails
 # the repo owner.
@@ -75,4 +75,4 @@ jobs:
           node-version: 22
 
       # Reads the lockfile, so no install is needed.
-      - run: pnpm audit --prod --audit-level=critical
+      - run: pnpm audit --prod --audit-level=high
