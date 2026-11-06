@@ -19,7 +19,7 @@
     "@vercel/speed-insights": "2.0.0",
     "better-auth": "1.7.14",
     "clsx": "2.1.1",
-    "lucide-react": "0.562.0",
+    "lucide-react": "1.62.0",
     "next": "16.4.3",
     "next-intl": "4.14.9",
     "pg": "8.23.1",
