@@ -84,6 +84,8 @@ function RenovationsPageContent() {
   }, []);
 
   useEffect(() => {
+    // Loading data on mount: the state it sets is what shows the spinner.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
   }, [loadData]);
 

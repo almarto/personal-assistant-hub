@@ -36,10 +36,6 @@ export default function InventoryDashboard() {
   // Default type to Space for root-level items (Rooms)
   const [newLocType] = useState("Space");
 
-  useEffect(() => {
-    fetchLocations();
-  }, []);
-
   const fetchLocations = async () => {
     try {
       const res = await fetch("/api/inventory/locations?parentId=null");
@@ -53,6 +49,12 @@ export default function InventoryDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Fetches when it runs; nothing is set until the data arrives.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchLocations();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

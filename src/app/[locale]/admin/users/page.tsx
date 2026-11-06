@@ -16,7 +16,9 @@ export default async function AdminUsersPage() {
     },
   });
 
-  const usersRaw = (usersData?.users || []) as User[];
+  // listUsers types its rows without the username plugin's column, which is
+  // there at runtime.
+  const usersRaw = (usersData?.users || []) as unknown as User[];
 
   const userIds = usersRaw.map((u) => u.id);
   const appRolesMap = await getUsersAppRoles(userIds);

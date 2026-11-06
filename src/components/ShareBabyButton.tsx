@@ -40,13 +40,6 @@ export default function ShareBabyButton({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (isOpen) {
-      loadData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
-
   const loadData = async () => {
     const [sharesResult, usersResult] = await Promise.all([
       getSharesAction(babyId),
@@ -55,6 +48,15 @@ export default function ShareBabyButton({
     setShares(sharesResult);
     setPotentialUsers(usersResult);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      // Fetches when it runs; nothing is set until the data arrives.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const handleShare = async (e: React.FormEvent) => {
     e.preventDefault();
