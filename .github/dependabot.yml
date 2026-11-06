@@ -1,7 +1,8 @@
 version: 2
 
-# One grouped PR at a time keeps these within the free Actions minutes. The
-# cooldown skips releases too new to trust; security updates ignore it.
+# Minor and patch bumps arrive as one grouped PR, security fixes as another, and
+# each major bump alone so it can be judged on its own. The cooldown skips
+# releases too new to trust; security updates ignore it.
 updates:
   - package-ecosystem: npm
     directory: /
@@ -14,6 +15,9 @@ updates:
       minor-and-patch:
         patterns: ["*"]
         update-types: [minor, patch]
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
 
   - package-ecosystem: github-actions
     directory: /

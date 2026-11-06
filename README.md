@@ -65,6 +65,10 @@ docs/superpowers/    # design specs + implementation plans
 messages/            # every UI string, EN & ES
 ```
 
+## ⚖️ License
+
+All rights reserved. The code is public to read, not to use: see [LICENSE](LICENSE).
+
 ---
 
 Built by [Alberto Martínez Tomás](https://www.linkedin.com/in/almarto/) - software engineer, Valencia 🇪🇸

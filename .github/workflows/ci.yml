@@ -1,6 +1,7 @@
 name: CI
 
-# This repo commits straight to main, so main is checked as well as PRs.
+# Changes reach main through PRs only. Main is checked too, so its latest commit
+# always has a result of its own.
 on:
   push:
     branches: [main]
