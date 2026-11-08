@@ -4,7 +4,14 @@ import { routing } from "@/i18n/routing";
 import { requireFinances } from "@/lib/auth-guards";
 import { createBankingClient } from "@/lib/services/finances/client";
 import { getEnableBankingConfig } from "@/lib/services/finances/config";
-import { activateConnectionByState } from "@/lib/services/finances/connections";
+import { upsertAccounts } from "@/lib/services/finances/accounts";
+import type { BankingClient } from "@/lib/services/finances/client";
+import {
+  activateConnectionByState,
+  recordSyncResult,
+} from "@/lib/services/finances/connections";
+import { syncConnection } from "@/lib/services/finances/sync";
+import type { BankAccountInfo } from "@/lib/services/finances/types";
 
 const FINANCES_PATH = `/${routing.defaultLocale}/finances`;
 
@@ -15,6 +22,38 @@ function redirectTo(request: Request, path: string) {
 function redirectToFinances(request: Request, error?: string) {
   const query = error ? `?error=${encodeURIComponent(error)}` : "";
   return redirectTo(request, `${FINANCES_PATH}${query}`);
+}
+
+/**
+ * Stores the accounts and imports their movements. A failure here does not
+ * undo the connection: the detail page shows the sync error and the user can
+ * sync again.
+ */
+async function importInitialData(
+  client: BankingClient,
+  connectionId: string,
+  accounts: BankAccountInfo[]
+): Promise<void> {
+  try {
+    const stored = await upsertAccounts(connectionId, accounts);
+    const result = await syncConnection({
+      client,
+      connectionId,
+      accounts: stored,
+      now: new Date(),
+    });
+    if (!result.ok) {
+      console.error("Initial bank import failed:", result.error);
+    }
+  } catch (error) {
+    console.error("Initial bank import failed:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    try {
+      await recordSyncResult(connectionId, { at: new Date(), error: message });
+    } catch (recordError) {
+      console.error("Recording the import failure failed:", recordError);
+    }
+  }
 }
 
 export async function GET(request: Request) {
@@ -48,12 +87,18 @@ export async function GET(request: Request) {
 
     // A wrong state still spends the single-use code, which is harmless because
     // the session is not stored; the state match is the gate.
-    const activated = await activateConnectionByState({
+    const connection = await activateConnectionByState({
       userId,
       state,
-      ...session.value,
+      sessionId: session.value.sessionId,
+      validUntil: session.value.validUntil,
     });
-    return redirectToFinances(request, activated ? undefined : "invalid_state");
+    if (!connection) {
+      return redirectToFinances(request, "invalid_state");
+    }
+
+    await importInitialData(client, connection.id, session.value.accounts);
+    return redirectTo(request, `${FINANCES_PATH}/${connection.id}`);
   } catch (error) {
     console.error("Bank callback failed:", error);
     return redirectToFinances(request, "session_failed");
