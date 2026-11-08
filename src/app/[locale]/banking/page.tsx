@@ -69,6 +69,9 @@ export default async function BankingPage({
   const selectedCountry = isBankCountry(bankCountry) ? bankCountry : null;
   const aspsps =
     client && selectedCountry ? await client.listAspsps(selectedCountry) : null;
+  if (aspsps && !aspsps.ok) {
+    console.error("Loading banks failed:", aspsps.error.message);
+  }
 
   async function connect(formData: FormData) {
     "use server";
