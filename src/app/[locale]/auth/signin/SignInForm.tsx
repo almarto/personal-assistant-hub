@@ -76,7 +76,7 @@ export default function SignInForm() {
   const handleRequestResetToken = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetEmail) {
-      setError(tErrors("EMAIL_REQUIRED") || "Email is required");
+      setError(tErrors("EMAIL_REQUIRED"));
       return;
     }
     setIsRequestingReset(true);

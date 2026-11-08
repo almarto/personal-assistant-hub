@@ -334,9 +334,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
                       padding: 0,
                     }}
                   >
-                    {isRequestingReset
-                      ? t("sending") || "Enviando..."
-                      : t("forgotPassword") || "¿Olvidaste tu contraseña?"}
+                    {isRequestingReset ? t("sending") : t("forgotPassword")}
                   </button>
                 </div>
                 <div className={styles.passwordWrapper}>

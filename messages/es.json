@@ -66,7 +66,8 @@
     "FAILED_TO_CREATE_USER": "Error al crear el usuario",
     "PASSWORD_REQUIREMENTS_NOT_MET": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
     "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
-    "default": "Ocurrió un error inesperado"
+    "default": "Ocurrió un error inesperado",
+    "EMAIL_REQUIRED": "El correo electrónico es obligatorio"
   },
   "FoodErrors": {
     "FORBIDDEN_ADD": "El usuario no tiene permiso para agregar registros de comida para este bebé",
@@ -205,7 +206,9 @@
     "appRole_schedule_manager": "Gestor de horarios",
     "appRole_trip_planner": "Planificador de Viajes",
     "appRole_finances": "Finanzas",
-    "impersonate": "Ver como este usuario"
+    "impersonate": "Ver como este usuario",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "sending": "Enviando…"
   },
   "Navigation": {
     "admin": "Administrador",

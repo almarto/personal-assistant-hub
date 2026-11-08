@@ -66,7 +66,8 @@
     "FAILED_TO_CREATE_USER": "Failed to create user",
     "PASSWORD_REQUIREMENTS_NOT_MET": "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match",
-    "default": "An unexpected error occurred"
+    "default": "An unexpected error occurred",
+    "EMAIL_REQUIRED": "Email is required"
   },
   "FoodErrors": {
     "FORBIDDEN_ADD": "User does not have permission to add food entries for this baby",
@@ -205,7 +206,9 @@
     "appRole_schedule_manager": "Schedule Manager",
     "appRole_trip_planner": "Trip Planner",
     "appRole_finances": "Finances",
-    "impersonate": "View as this user"
+    "impersonate": "View as this user",
+    "forgotPassword": "Forgot your password?",
+    "sending": "Sending…"
   },
   "Navigation": {
     "admin": "Admin",
