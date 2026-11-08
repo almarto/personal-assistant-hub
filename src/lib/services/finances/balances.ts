@@ -62,7 +62,7 @@ export async function latestBalances(
        WHERE account_id = ANY($1::uuid[])
        GROUP BY account_id
      ) latest ON latest.account_id = b.account_id AND latest.fetched_at = b.fetched_at
-     ORDER BY b.account_id, b.id`,
+     ORDER BY b.account_id, b.balance_type`,
     [accountIds]
   );
 
