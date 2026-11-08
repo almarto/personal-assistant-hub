@@ -39,8 +39,11 @@ function loadEnvFile(envFileName: string) {
 }
 
 async function migrate() {
-  const isProd = process.argv.includes("--prod");
-  loadEnvFile(isProd ? ".env.production" : ".env");
+  // --from-env: the environment is already set (Vercel deploys); load no file.
+  if (!process.argv.includes("--from-env")) {
+    const isProd = process.argv.includes("--prod");
+    loadEnvFile(isProd ? ".env.production" : ".env");
+  }
 
   console.log("Running better-auth migrations...");
   execSync("npx @better-auth/cli migrate --yes", { stdio: "inherit" });

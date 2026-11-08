@@ -63,6 +63,12 @@ ENABLE_BANKING_PRIVATE_KEY="..." # the application's private key; multi-line quo
 
 Enable Banking only accepts `https` redirect URLs, so run the dev server with `pnpm next dev --experimental-https` when working on the finances feature.
 
+## 🚢 Deploys and migrations
+
+Vercel builds with the `vercel-build` script, which runs the migrations before `next build` **only on production deployments** (`VERCEL_ENV=production`). Preview deployments share the production database, so they skip migrations and just build. A failed migration fails the production deploy. Locally, `pnpm migrate` (`.env`) and `pnpm migrate:prod` (`.env.production`) work as before.
+
+For this to happen, the project's Build Command in Vercel must not be overridden.
+
 ## 📁 Layout
 
 ```
