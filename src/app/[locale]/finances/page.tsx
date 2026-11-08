@@ -12,7 +12,6 @@ import { PSU_TYPE } from "@/lib/services/finances/types";
 import { Button } from "@/systemUI/components/Button/Button";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
-import { AccountSummary } from "./AccountSummary";
 import styles from "./page.module.css";
 
 // Temporary until the bank picker lists all banks.
@@ -181,17 +180,6 @@ export default async function FinancesPage({
                           ).toLocaleDateString(locale),
                         })}
                       </p>
-                      {client && (
-                        <ul className={styles.accountList}>
-                          {connection.accounts.map((account) => (
-                            <AccountSummary
-                              key={account.uid}
-                              client={client}
-                              account={account}
-                            />
-                          ))}
-                        </ul>
-                      )}
                     </>
                   )}
                 </li>

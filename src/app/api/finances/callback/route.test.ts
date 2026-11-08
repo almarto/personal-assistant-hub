@@ -54,7 +54,7 @@ describe("GET /api/finances/callback", () => {
 
   it("stores the session and redirects to the finances page", async () => {
     createSessionMock.mockResolvedValue({ ok: true, value: SESSION });
-    activateMock.mockResolvedValue(true);
+    activateMock.mockResolvedValue({ id: "c-1" });
 
     const response = await callback("code=abc&state=state-1");
 
@@ -98,7 +98,7 @@ describe("GET /api/finances/callback", () => {
 
   it("rejects an unknown, reused or foreign state", async () => {
     createSessionMock.mockResolvedValue({ ok: true, value: SESSION });
-    activateMock.mockResolvedValue(false);
+    activateMock.mockResolvedValue(null);
 
     const response = await callback("code=abc&state=forged");
 

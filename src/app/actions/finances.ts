@@ -52,6 +52,7 @@ export async function startConnectionAction(
       userId: session.user.id,
       aspspName: aspsp.name,
       aspspCountry: aspsp.country,
+      aspspLogo: aspsp.logo,
       psuType,
     });
     const authorization = await client.startAuthorization({
