@@ -200,6 +200,7 @@
     "appRoles": "Feature Roles",
     "appRole_schedule_manager": "Schedule Manager",
     "appRole_trip_planner": "Trip Planner",
+    "appRole_finances": "Finances",
     "impersonate": "View as this user"
   },
   "Navigation": {

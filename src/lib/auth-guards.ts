@@ -53,6 +53,10 @@ export async function requireTripPlanner() {
   return requireAppRole(APP_ROLE.TRIP_PLANNER);
 }
 
+export async function requireFinances() {
+  return requireAppRole(APP_ROLE.FINANCES);
+}
+
 export class NotInFamilyError extends Error {
   constructor() {
     super("User does not belong to any family");
