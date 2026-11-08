@@ -52,3 +52,8 @@ export function bankTint(name: string): string {
   for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   return BANK_TINTS[hash % BANK_TINTS.length];
 }
+
+/** Identifies a bank across the picker and the connected list. */
+export function bankKey(bank: { name: string; country: string }): string {
+  return `${bank.country}:${bank.name}`;
+}

@@ -8,15 +8,11 @@ import { Link } from "@/i18n/routing";
 import type { Aspsp, PsuType } from "@/lib/services/finances/types";
 import { PSU_TYPE } from "@/lib/services/finances/types";
 
-import { countryName } from "../format";
+import { bankKey, countryName } from "../format";
 import { BankLogo } from "./BankLogo";
 import styles from "./BankPicker.module.css";
 
 const ALL_COUNTRIES = "all";
-
-export function bankKey(bank: { name: string; country: string }): string {
-  return `${bank.country}:${bank.name}`;
-}
 
 interface BankPickerProps {
   banks: Aspsp[];

@@ -17,8 +17,9 @@ import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 import { AddBankDialog } from "./components/AddBankDialog";
 import { BankCard } from "./components/BankCard";
-import { bankKey,BankPicker } from "./components/BankPicker";
+import { BankPicker } from "./components/BankPicker";
 import { PendingConnections } from "./components/PendingConnections";
+import { bankKey } from "./format";
 import styles from "./page.module.css";
 
 const ERROR_CODES = [
@@ -60,6 +61,14 @@ async function loadBankList(): Promise<BankList> {
   return { kind: "loaded", banks: result.value };
 }
 
+/** Server actions may only close over serializable values, so this is module-level. */
+function failWith(locale: string, code: ErrorCode): never {
+  return redirect({
+    href: { pathname: "/finances", query: { error: code } },
+    locale,
+  });
+}
+
 function connectedKeys(banks: BankCardData[]): string[] {
   return banks.map((bank) =>
     bankKey({ name: bank.aspspName, country: bank.aspspCountry })
@@ -94,25 +103,18 @@ export default async function FinancesPage({
   const bankList = isFirstBank || showDialog ? await loadBankList() : null;
   const errorCode = toErrorCode(error);
 
-  function failWith(code: ErrorCode): never {
-    return redirect({
-      href: { pathname: "/finances", query: { error: code } },
-      locale,
-    });
-  }
-
   async function connect(formData: FormData) {
     "use server";
     const result = await startConnectionAction(formData);
     console.error("Start connection failed:", result.error);
-    failWith("start_failed");
+    failWith(locale, "start_failed");
   }
 
   async function retry(formData: FormData) {
     "use server";
     const result = await retryConnectionAction(formData);
     console.error("Retry connection failed:", result.error);
-    failWith("retry_failed");
+    failWith(locale, "retry_failed");
   }
 
   async function discard(formData: FormData) {
@@ -120,7 +122,7 @@ export default async function FinancesPage({
     const result = await discardConnectionAction(formData);
     if (!result.success) {
       console.error("Discard connection failed:", result.error);
-      failWith("discard_failed");
+      failWith(locale, "discard_failed");
     }
   }
 
