@@ -1,22 +1,25 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
-import { startConnectionAction } from "@/app/actions/finances";
-import { redirect } from "@/i18n/routing";
+import {
+  discardConnectionAction,
+  retryConnectionAction,
+  startConnectionAction,
+} from "@/app/actions/finances";
+import { Link, redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
-import type { BankingClient } from "@/lib/services/finances/client";
 import { createBankingClient } from "@/lib/services/finances/client";
 import { getEnableBankingConfig } from "@/lib/services/finances/config";
-import { listConnectionsForUser } from "@/lib/services/finances/connections";
-import { PSU_TYPE } from "@/lib/services/finances/types";
-import { Button } from "@/systemUI/components/Button/Button";
+import type { BankCardData } from "@/lib/services/finances/overview";
+import { getFinancesOverview } from "@/lib/services/finances/overview";
+import type { Aspsp } from "@/lib/services/finances/types";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
+import { AddBankDialog } from "./components/AddBankDialog";
+import { BankCard } from "./components/BankCard";
+import { bankKey,BankPicker } from "./components/BankPicker";
+import { PendingConnections } from "./components/PendingConnections";
 import styles from "./page.module.css";
-
-// Temporary until the bank picker lists all banks.
-const BANK_COUNTRIES = ["DE", "ES", "FR", "IT", "NL", "PT"] as const;
-type BankCountry = (typeof BANK_COUNTRIES)[number];
 
 const ERROR_CODES = [
   "invalid_state",
@@ -24,25 +27,43 @@ const ERROR_CODES = [
   "session_failed",
   "invalid_request",
   "start_failed",
+  "retry_failed",
+  "discard_failed",
 ] as const;
 
-type ErrorCode = (typeof ERROR_CODES)[number];
+type ErrorCode = (typeof ERROR_CODES)[number] | "generic";
 
-function isErrorCode(value: string | undefined): value is ErrorCode {
-  return ERROR_CODES.some((code) => code === value);
+function toErrorCode(value: string | undefined): ErrorCode | null {
+  if (!value) return null;
+  return ERROR_CODES.find((code) => code === value) ?? "generic";
 }
 
-function isBankCountry(value: string | undefined): value is BankCountry {
-  return BANK_COUNTRIES.some((country) => country === value);
-}
+type BankList =
+  | { kind: "loaded"; banks: Aspsp[] }
+  | { kind: "failed" }
+  | { kind: "unconfigured" };
 
-function createClientOrNull(): BankingClient | null {
+/** The only live Enable Banking call on this page, made only for the picker. */
+async function loadBankList(): Promise<BankList> {
+  let client;
   try {
-    return createBankingClient(getEnableBankingConfig());
+    client = createBankingClient(getEnableBankingConfig());
   } catch (error) {
     console.error("Enable Banking is not configured:", error);
-    return null;
+    return { kind: "unconfigured" };
   }
+  const result = await client.listAspsps();
+  if (!result.ok) {
+    console.error("Loading banks failed:", result.error.message);
+    return { kind: "failed" };
+  }
+  return { kind: "loaded", banks: result.value };
+}
+
+function connectedKeys(banks: BankCardData[]): string[] {
+  return banks.map((bank) =>
+    bankKey({ name: bank.aspspName, country: bank.aspspCountry })
+  );
 }
 
 export default async function FinancesPage({
@@ -50,10 +71,10 @@ export default async function FinancesPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ bankCountry?: string; error?: string }>;
+  searchParams: Promise<{ add?: string; error?: string }>;
 }) {
   const { locale } = await params;
-  const { bankCountry, error } = await searchParams;
+  const { add, error } = await searchParams;
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
@@ -64,129 +85,192 @@ export default async function FinancesPage({
   }
 
   const t = await getTranslations("Finances");
-  const client = createClientOrNull();
-  const connections = await listConnectionsForUser(session.user.id);
-  const countryNames = new Intl.DisplayNames(locale, { type: "region" });
+  const { banks, pending } = await getFinancesOverview(
+    session.user.id,
+    new Date()
+  );
+  const isFirstBank = banks.length === 0 && pending.length === 0;
+  const showDialog = !isFirstBank && add === "1";
+  const bankList = isFirstBank || showDialog ? await loadBankList() : null;
+  const errorCode = toErrorCode(error);
 
-  const selectedCountry = isBankCountry(bankCountry) ? bankCountry : null;
-  const aspsps =
-    client && selectedCountry ? await client.listAspsps(selectedCountry) : null;
-  if (aspsps && !aspsps.ok) {
-    console.error("Loading banks failed:", aspsps.error.message);
+  function failWith(code: ErrorCode): never {
+    return redirect({
+      href: { pathname: "/finances", query: { error: code } },
+      locale,
+    });
   }
 
   async function connect(formData: FormData) {
     "use server";
     const result = await startConnectionAction(formData);
     console.error("Start connection failed:", result.error);
-    return redirect({
-      href: { pathname: "/finances", query: { error: "start_failed" } },
-      locale,
-    });
+    failWith("start_failed");
   }
 
+  async function retry(formData: FormData) {
+    "use server";
+    const result = await retryConnectionAction(formData);
+    console.error("Retry connection failed:", result.error);
+    failWith("retry_failed");
+  }
+
+  async function discard(formData: FormData) {
+    "use server";
+    const result = await discardConnectionAction(formData);
+    if (!result.success) {
+      console.error("Discard connection failed:", result.error);
+      failWith("discard_failed");
+    }
+  }
+
+  const picker = (cancelHref?: string) => {
+    if (!bankList) return null;
+    if (bankList.kind === "unconfigured") {
+      return <p className={styles.pickerNotice}>{t("configError")}</p>;
+    }
+    if (bankList.kind === "failed") {
+      return <p className={styles.pickerNotice}>{t("banksLoadFailed")}</p>;
+    }
+    return (
+      <BankPicker
+        banks={bankList.banks}
+        connectedKeys={connectedKeys(banks)}
+        action={connect}
+        cancelHref={cancelHref}
+      />
+    );
+  };
+
   return (
-    <PageLayout>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>{t("title")}</h1>
-          <p className={styles.subtitle}>{t("subtitle")}</p>
-        </div>
-
-        {isErrorCode(error) && (
-          <p className={styles.error}>{t(`errors.${error}`)}</p>
+    <PageLayout theme="finances">
+      <div className={styles.root}>
+        {errorCode && (
+          <p role="alert" className={styles.error}>
+            {t(`errors.${errorCode}`)}
+          </p>
         )}
-        {!client && <p className={styles.error}>{t("configError")}</p>}
 
-        {client && (
-          <section className={styles.section}>
-            <form method="get" className={styles.form}>
-              <label className={styles.field}>
-                {t("bankCountryLabel")}
-                <select
-                  name="bankCountry"
-                  defaultValue={selectedCountry ?? ""}
-                  className={styles.select}
-                  required
-                >
-                  <option value="" disabled>
-                    —
-                  </option>
-                  {BANK_COUNTRIES.map((country) => (
-                    <option key={country} value={country}>
-                      {countryNames.of(country)} ({country})
-                    </option>
+        {isFirstBank ? (
+          <>
+            <div className={styles.intro}>
+              <span className={styles.eyebrow}>{t("firstBank.eyebrow")}</span>
+              <h1 className={styles.introTitle}>{t("firstBank.title")}</h1>
+              <p className={styles.introLead}>{t("firstBank.lead")}</p>
+            </div>
+            <div className={styles.firstBankLayout}>
+              <section className={styles.pickerCard}>{picker()}</section>
+              <aside className={styles.howItWorks}>
+                <div className={styles.howCard}>
+                  <span className={styles.howTitle}>
+                    {t("firstBank.howTitle")}
+                  </span>
+                  {(["step1", "step2", "step3"] as const).map((step, index) => (
+                    <div key={step} className={styles.howStep}>
+                      <span className={styles.howNumber}>{index + 1}</span>
+                      <span className={styles.howText}>
+                        {t(`firstBank.${step}`)}
+                      </span>
+                    </div>
                   ))}
-                </select>
-              </label>
-              <Button type="submit" variant="outline">
-                {t("loadBanks")}
-              </Button>
-            </form>
+                </div>
+                <div className={styles.readOnlyNote}>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                  <span>{t("firstBank.readOnly")}</span>
+                </div>
+              </aside>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.titleRow}>
+              <div className={styles.titleText}>
+                <h1 className={styles.title}>{t("title")}</h1>
+                <p className={styles.subtitle}>{t("subtitle")}</p>
+              </div>
+              <Link
+                href={{ pathname: "/finances", query: { add: "1" } }}
+                className={styles.addButton}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                {t("addBank")}
+              </Link>
+            </div>
 
-            {aspsps && !aspsps.ok && (
-              <p className={styles.error}>{t("banksLoadFailed")}</p>
+            {banks.length > 0 && (
+              <section className={styles.banksSection}>
+                <div className={styles.sectionHeader}>
+                  <h2 className={styles.sectionTitle}>{t("banksHeading")}</h2>
+                  <span className={styles.sectionHint}>
+                    {t("sortedByBalance")}
+                  </span>
+                </div>
+                <div className={styles.bankGrid}>
+                  {banks.map((bank) => (
+                    <BankCard key={bank.id} bank={bank} />
+                  ))}
+                  <Link
+                    href={{ pathname: "/finances", query: { add: "1" } }}
+                    className={styles.addCard}
+                  >
+                    <span className={styles.addCardIcon}>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M12 5v14M5 12h14" />
+                      </svg>
+                    </span>
+                    <span className={styles.addCardTitle}>
+                      {t("addBankCardTitle")}
+                    </span>
+                    <span className={styles.addCardText}>
+                      {t("addBankCardText")}
+                    </span>
+                  </Link>
+                </div>
+              </section>
             )}
 
-            {aspsps?.ok && selectedCountry && (
-              <form action={connect} className={styles.form}>
-                <input
-                  type="hidden"
-                  name="bankCountry"
-                  value={selectedCountry}
-                />
-                <label className={styles.field}>
-                  {t("bankLabel")}
-                  <select name="aspspName" className={styles.select} required>
-                    {aspsps.value.map((aspsp) => (
-                      <option key={aspsp.name} value={aspsp.name}>
-                        {aspsp.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className={styles.field}>
-                  {t("psuTypeLabel")}
-                  <select name="psuType" className={styles.select}>
-                    <option value={PSU_TYPE.PERSONAL}>{t("personal")}</option>
-                    <option value={PSU_TYPE.BUSINESS}>{t("business")}</option>
-                  </select>
-                </label>
-                <Button type="submit">{t("connect")}</Button>
-              </form>
-            )}
-          </section>
+            <PendingConnections
+              pending={pending}
+              retryAction={retry}
+              discardAction={discard}
+            />
+          </>
         )}
 
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>{t("connections")}</h2>
-          {connections.length === 0 ? (
-            <p className={styles.notice}>{t("noConnections")}</p>
-          ) : (
-            <ul className={styles.connectionList}>
-              {connections.map((connection) => (
-                <li key={connection.id} className={styles.connection}>
-                  <p className={styles.connectionName}>
-                    {connection.aspspName} ({connection.aspspCountry})
-                  </p>
-                  {connection.status === "pending" ? (
-                    <p className={styles.meta}>{t("pending")}</p>
-                  ) : (
-                    <>
-                      <p className={styles.meta}>
-                        {t("validUntil", {
-                          date: new Date(
-                            connection.validUntil
-                          ).toLocaleDateString(locale),
-                        })}
-                      </p>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        {showDialog && <AddBankDialog>{picker("/finances")}</AddBankDialog>}
       </div>
     </PageLayout>
   );

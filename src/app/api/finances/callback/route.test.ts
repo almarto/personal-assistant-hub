@@ -21,8 +21,8 @@ vi.mock("@/lib/services/finances/sync", () => ({
 }));
 
 import { requireFinances } from "@/lib/auth-guards";
-import { createBankingClient } from "@/lib/services/finances/client";
 import { upsertAccounts } from "@/lib/services/finances/accounts";
+import { createBankingClient } from "@/lib/services/finances/client";
 import {
   activateConnectionByState,
   recordSyncResult,

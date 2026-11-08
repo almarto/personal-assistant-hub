@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 
 import { routing } from "@/i18n/routing";
 import { requireFinances } from "@/lib/auth-guards";
-import { createBankingClient } from "@/lib/services/finances/client";
-import { getEnableBankingConfig } from "@/lib/services/finances/config";
 import { upsertAccounts } from "@/lib/services/finances/accounts";
 import type { BankingClient } from "@/lib/services/finances/client";
+import { createBankingClient } from "@/lib/services/finances/client";
+import { getEnableBankingConfig } from "@/lib/services/finances/config";
 import {
   activateConnectionByState,
   recordSyncResult,

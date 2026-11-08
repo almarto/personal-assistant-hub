@@ -51,6 +51,11 @@
   --color-secondary: #f59e0b; /* Amber */
 }
 
+[data-theme="finances"] {
+  --color-primary: #0f766e; /* Deep teal */
+  --color-secondary: #0b1f33; /* Ink navy */
+}
+
 [data-theme="wellness"] {
   --color-primary: oklch(58% 0.16 45); /* terracota */
   --color-secondary: oklch(38% 0.09 310); /* ciruela */

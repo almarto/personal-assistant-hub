@@ -602,32 +602,78 @@
     }
   },
   "Finances": {
-    "title": "Bank connections",
-    "subtitle": "Connect a bank through Enable Banking and check that balances and transactions come through.",
-    "bankCountryLabel": "Bank's country",
-    "loadBanks": "Load banks",
-    "bankLabel": "Bank",
-    "psuTypeLabel": "Account type",
-    "personal": "Personal",
-    "business": "Business",
-    "connect": "Connect bank",
-    "connections": "Connections",
-    "noConnections": "No banks connected yet.",
-    "pending": "Waiting for authorization at the bank",
-    "validUntil": "Consent valid until {date}",
-    "balances": "Balances",
-    "noBalances": "No balances returned.",
-    "transactionsLast30Days": "{count, plural, one {# transaction} other {# transactions}} in the last 30 days",
-    "unnamedAccount": "Account",
-    "accountLoadFailed": "Could not load this account.",
-    "banksLoadFailed": "Could not load the banks for this country.",
+    "title": "Finances",
+    "subtitle": "Your connected banks, balances and movements in one place.",
+    "addBank": "Add bank",
+    "banksHeading": "Banks",
+    "sortedByBalance": "Sorted by balance",
+    "addBankCardTitle": "Add bank",
+    "addBankCardText": "Connect another bank to see all your accounts here.",
+    "viewDetail": "View details →",
+    "balance": "Balance",
+    "noBalance": "No balance yet",
+    "accountCount": "{count, plural, one {# account} other {# accounts}}",
+    "syncedAt": "synced {when}",
+    "neverSynced": "not synced yet",
+    "lastSyncFailed": "The last sync failed",
+    "status": {
+      "active": "Active",
+      "expiring": "Expires in {days, plural, one {# day} other {# days}}",
+      "expired": "Consent expired"
+    },
+    "psu": {
+      "personal": "Personal",
+      "business": "Business"
+    },
+    "pendingHeading": "Pending connections",
+    "pendingWaiting": "Waiting for authorization at the bank · started {when}",
+    "retry": "Retry",
+    "discard": "Discard",
+    "firstBank": {
+      "eyebrow": "First step",
+      "title": "Connect your first bank",
+      "lead": "Choose your bank and authorize it on its own website or app. We only read balances and movements: we can never move money.",
+      "howTitle": "What happens when you connect",
+      "step1": "We take you to your bank's website to sign in. We never see your credentials.",
+      "step2": "We import your movements from the 1st of the current month, so you start with a full month.",
+      "step3": "Balances and movements are stored here and you can sync them whenever you want. The permission lasts at most 90 days.",
+      "readOnly": "Read-only access. You can revoke it at any time from your bank."
+    },
+    "picker": {
+      "bankStep": "1 · Bank",
+      "typeStep": "2 · Account type",
+      "searchLabel": "Search bank",
+      "searchPlaceholder": "Search by name (for example, Trade Republic)",
+      "allCountries": "All",
+      "resultCount": "{count, plural, one {# bank} other {# banks}}",
+      "noResults": "No banks match your search.",
+      "connected": "Connected",
+      "accountType": "Account type",
+      "personal": "Personal",
+      "business": "Business",
+      "chooseBank": "Choose a bank to continue",
+      "summaryPersonal": "{bank} · personal account",
+      "summaryBusiness": "{bank} · business account",
+      "connect": "Connect",
+      "connecting": "Connecting…",
+      "cancel": "Cancel"
+    },
+    "dialog": {
+      "title": "Add bank",
+      "description": "Choose the bank you want to connect. We will take you to its website to authorize read-only access.",
+      "close": "Close"
+    },
+    "banksLoadFailed": "Could not load the list of banks. Try again later.",
     "configError": "Enable Banking is not configured (check the ENABLE_BANKING_* environment variables).",
     "errors": {
       "invalid_state": "The authorization could not be matched to your request. Start the connection again.",
       "access_denied": "Authorization was cancelled at the bank.",
       "session_failed": "The bank session could not be created. Try again.",
       "invalid_request": "The bank returned an incomplete response. Try again.",
-      "start_failed": "The connection could not be started. Check the server log for details."
+      "start_failed": "The connection could not be started. Try again later.",
+      "retry_failed": "The connection could not be retried. Try again later.",
+      "discard_failed": "The pending connection could not be discarded.",
+      "generic": "Something went wrong with the bank connection. Try again."
     }
   }
 }
