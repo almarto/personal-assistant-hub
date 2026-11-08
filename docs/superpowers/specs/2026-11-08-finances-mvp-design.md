@@ -31,7 +31,9 @@ A personal finance app ("Finanzas") that gathers each user's bank accounts in on
    - **Booked**: request `transaction_status=BOOK` with `date_from` = newest stored booked date for that account minus **5 days** of overlap (or the 1st of the month on first import); follow `continuation_key` until exhausted; insert new ones, skip ones already stored.
    - **Pending**: request `transaction_status=PDNG` with `date_from` = today minus **10 days**; replace that account's stored pending set with the response. This is how a pending movement disappears once its booked version arrives. If a bank ignores the status filter, filter the response by its `status` field ourselves.
    - Balances: fetch and append a snapshot of all balance types.
-9. **Deploy**: migrations run **automatically on production deploys only** (`VERCEL_ENV=production`), before `next build`; a failed migration fails the deploy. Preview deployments share the production DB, so they must **never** run migrations. Local `pnpm migrate` and `pnpm migrate:prod` keep working as today. The user adds the env vars on Vercel.
+9. **Naming consistency** (decided with the user): everything is under `finances`: pages `/[locale]/finances`, callback `/api/finances/callback` (replaces `/api/banking/callback`; the user updates the redirect URLs registered in Enable Banking: sandbox app `https://localhost:3000/api/finances/callback`, production app `https://almarto.es/api/finances/callback`), env var `ENABLE_BANKING_REDIRECT_URL` updated to match.
+10. **Bank logos** (decided with the user): every bank in `GET /aspsps` has a `logo` URL (PNG under `https://enablebanking.com/brands/...`, checked: 827 banks in the sandbox list, all on that host). Show it in badges and lists via `next/image` (allow that host in `remotePatterns`), store it on the connection (`aspsp_logo`), and fall back to the initials badge when missing.
+11. **Deploy**: migrations run **automatically on production deploys only** (`VERCEL_ENV=production`), before `next build`; a failed migration fails the deploy. Preview deployments share the production DB, so they must **never** run migrations. Local `pnpm migrate` and `pnpm migrate:prod` keep working as today. The user adds the env vars on Vercel.
 
 ## Non-goals (this PR) → issues
 
@@ -64,10 +66,9 @@ Project rules from `CLAUDE.md` (pnpm, pinned versions, no new dependencies unles
 - Overlap of 5 days for booked and a 10-day pending window.
 - The "Caduca en N días" threshold of 14 days.
 - Initial import runs inside the callback before redirecting; if it fails, the connection is still stored as active with `last_sync_error` set, and the user retries with "Sincronizar ahora".
-- Pages move from `/banking` to `/finances` (the app is "Finanzas" and the role is `finances`); the registered callback stays `/api/banking/callback`.
+- Pages move from `/banking` to `/finances` (the app is "Finanzas" and the role is `finances`).
 - "Reintentar" also discards the old pending attempt, so only the new one is listed.
 - The old `/banking` page URL redirects to `/finances`; the launcher card points to `/finances`.
-- Bank initials badges instead of logos.
 - Balance snapshots are appended rather than overwritten (enables the summary panel's history later).
 - Production-only migrations run through a `vercel-build` script that checks `VERCEL_ENV`.
 
