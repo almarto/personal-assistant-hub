@@ -11,6 +11,7 @@ export interface StoredTransaction {
   amount: string;
   currency: string;
   bookingDate: string | null;
+  valueDate: string | null;
   transactionDate: string | null;
   counterparty: string | null;
   description: string | null;
@@ -23,6 +24,7 @@ interface TransactionRow {
   amount: string;
   currency: string;
   booking_date: string | null;
+  value_date: string | null;
   transaction_date: string | null;
   counterparty: string | null;
   description: string | null;
@@ -131,6 +133,7 @@ export async function listTransactions(
   const result = await query(
     `SELECT t.id, t.account_id, t.status, t.amount::text AS amount, t.currency,
             to_char(t.booking_date, 'YYYY-MM-DD') AS booking_date,
+            to_char(t.value_date, 'YYYY-MM-DD') AS value_date,
             to_char(t.transaction_date, 'YYYY-MM-DD') AS transaction_date,
             t.counterparty, t.description
      FROM bank_transactions t
@@ -149,6 +152,7 @@ export async function listTransactions(
     amount: row.amount,
     currency: row.currency,
     bookingDate: row.booking_date,
+    valueDate: row.value_date,
     transactionDate: row.transaction_date,
     counterparty: row.counterparty,
     description: row.description,
