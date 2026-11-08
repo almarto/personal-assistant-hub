@@ -478,7 +478,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           <Button
             type="submit"
             isLoading={isSubmitting}
-            disabled={!isDirty || isSubmitting}
+            disabled={!isDirty}
           >
             {editingUser ? t("save") : t("createUser")}
           </Button>
