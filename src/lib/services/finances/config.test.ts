@@ -44,7 +44,7 @@ describe("normalizePrivateKey", () => {
 describe("getEnableBankingConfig", () => {
   const env = {
     ENABLE_BANKING_APP_ID: "app-1",
-    ENABLE_BANKING_REDIRECT_URL: "https://localhost:3000/api/banking/callback",
+    ENABLE_BANKING_REDIRECT_URL: "https://localhost:3000/api/finances/callback",
     ENABLE_BANKING_PRIVATE_KEY: bareBody,
   };
 

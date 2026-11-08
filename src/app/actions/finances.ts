@@ -3,12 +3,12 @@
 import { redirect } from "next/navigation";
 
 import { requireFinances } from "@/lib/auth-guards";
-import { createBankingClient } from "@/lib/services/banking/client";
-import { getEnableBankingConfig } from "@/lib/services/banking/config";
-import { createPendingConnection } from "@/lib/services/banking/connections";
-import { computeValidUntil } from "@/lib/services/banking/consent";
-import type { BankCountry, PsuType } from "@/lib/services/banking/types";
-import { BANK_COUNTRIES, PSU_TYPE } from "@/lib/services/banking/types";
+import { createBankingClient } from "@/lib/services/finances/client";
+import { getEnableBankingConfig } from "@/lib/services/finances/config";
+import { createPendingConnection } from "@/lib/services/finances/connections";
+import { computeValidUntil } from "@/lib/services/finances/consent";
+import type { BankCountry, PsuType } from "@/lib/services/finances/types";
+import { BANK_COUNTRIES, PSU_TYPE } from "@/lib/services/finances/types";
 
 type ActionFailure = { success: false; error: string };
 

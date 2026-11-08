@@ -170,7 +170,7 @@ export default async function HubHome({
 
         {hasFinancesAccess && (
           <div className={styles.appCard}>
-            <Link href="/banking" className={styles.appCardLink}>
+            <Link href="/finances" className={styles.appCardLink}>
               <div className={styles.iconWrapper}>
                 <Landmark size={28} />
               </div>

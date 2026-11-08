@@ -3,19 +3,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // i18n/routing creates next-intl navigation helpers that cannot load under vitest.
 vi.mock("@/i18n/routing", () => ({ routing: { defaultLocale: "es" } }));
 vi.mock("@/lib/auth-guards", () => ({ requireFinances: vi.fn() }));
-vi.mock("@/lib/services/banking/config", () => ({
+vi.mock("@/lib/services/finances/config", () => ({
   getEnableBankingConfig: vi.fn(() => ({ appId: "app-1" })),
 }));
-vi.mock("@/lib/services/banking/client", () => ({
+vi.mock("@/lib/services/finances/client", () => ({
   createBankingClient: vi.fn(),
 }));
-vi.mock("@/lib/services/banking/connections", () => ({
+vi.mock("@/lib/services/finances/connections", () => ({
   activateConnectionByState: vi.fn(),
 }));
 
 import { requireFinances } from "@/lib/auth-guards";
-import { createBankingClient } from "@/lib/services/banking/client";
-import { activateConnectionByState } from "@/lib/services/banking/connections";
+import { createBankingClient } from "@/lib/services/finances/client";
+import { activateConnectionByState } from "@/lib/services/finances/connections";
 
 import { GET } from "./route";
 
@@ -32,7 +32,7 @@ const SESSION = {
 
 function callback(query: string) {
   return GET(
-    new Request(`https://localhost:3000/api/banking/callback?${query}`)
+    new Request(`https://localhost:3000/api/finances/callback?${query}`)
   );
 }
 
@@ -41,7 +41,7 @@ function location(response: Response): string {
   return `${url.pathname}${url.search}`;
 }
 
-describe("GET /api/banking/callback", () => {
+describe("GET /api/finances/callback", () => {
   beforeEach(() => {
     requireFinancesMock.mockReset();
     activateMock.mockReset();
@@ -52,13 +52,13 @@ describe("GET /api/banking/callback", () => {
     } as never);
   });
 
-  it("stores the session and redirects to the banking page", async () => {
+  it("stores the session and redirects to the finances page", async () => {
     createSessionMock.mockResolvedValue({ ok: true, value: SESSION });
     activateMock.mockResolvedValue(true);
 
     const response = await callback("code=abc&state=state-1");
 
-    expect(location(response)).toBe("/es/banking");
+    expect(location(response)).toBe("/es/finances");
     expect(createSessionMock).toHaveBeenCalledWith("abc");
     expect(activateMock).toHaveBeenCalledWith({
       userId: "u-1",
@@ -70,7 +70,7 @@ describe("GET /api/banking/callback", () => {
   it("reports a cancelled authorization without creating a session", async () => {
     const response = await callback("error=access_denied&state=state-1");
 
-    expect(location(response)).toBe("/es/banking?error=access_denied");
+    expect(location(response)).toBe("/es/finances?error=access_denied");
     expect(createSessionMock).not.toHaveBeenCalled();
   });
 
@@ -79,7 +79,7 @@ describe("GET /api/banking/callback", () => {
     async (query) => {
       const response = await callback(query);
 
-      expect(location(response)).toBe("/es/banking?error=invalid_request");
+      expect(location(response)).toBe("/es/finances?error=invalid_request");
       expect(createSessionMock).not.toHaveBeenCalled();
     }
   );
@@ -92,7 +92,7 @@ describe("GET /api/banking/callback", () => {
 
     const response = await callback("code=abc&state=state-1");
 
-    expect(location(response)).toBe("/es/banking?error=session_failed");
+    expect(location(response)).toBe("/es/finances?error=session_failed");
     expect(activateMock).not.toHaveBeenCalled();
   });
 
@@ -102,7 +102,7 @@ describe("GET /api/banking/callback", () => {
 
     const response = await callback("code=abc&state=forged");
 
-    expect(location(response)).toBe("/es/banking?error=invalid_state");
+    expect(location(response)).toBe("/es/finances?error=invalid_state");
   });
 
   it("sends users without access to the home page", async () => {

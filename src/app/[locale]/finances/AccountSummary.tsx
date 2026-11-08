@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
-import type { BankingClient } from "@/lib/services/banking/client";
-import type { BankAccountRef } from "@/lib/services/banking/types";
+import type { BankingClient } from "@/lib/services/finances/client";
+import type { BankAccountRef } from "@/lib/services/finances/types";
 
 import styles from "./page.module.css";
 
@@ -18,7 +18,7 @@ export async function AccountSummary({
   client: BankingClient;
   account: BankAccountRef;
 }) {
-  const t = await getTranslations("Banking");
+  const t = await getTranslations("Finances");
   const [balances, transactions] = await Promise.all([
     client.getBalances(account.uid),
     client.getTransactions(account.uid, dateDaysAgo(DAYS_OF_TRANSACTIONS)),

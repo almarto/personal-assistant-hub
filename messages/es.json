@@ -600,7 +600,7 @@
       "empty": "No hay ingredientes para este rango."
     }
   },
-  "Banking": {
+  "Finances": {
     "title": "Conexiones bancarias",
     "subtitle": "Conecta un banco a través de Enable Banking y comprueba que llegan los saldos y los movimientos.",
     "bankCountryLabel": "País del banco",

@@ -57,11 +57,11 @@ Bank connections (Enable Banking) need three more variables:
 
 ```bash
 ENABLE_BANKING_APP_ID=...        # application (client) id from the Enable Banking control panel
-ENABLE_BANKING_REDIRECT_URL=https://localhost:3000/api/banking/callback  # must match a registered redirect URL
+ENABLE_BANKING_REDIRECT_URL=https://localhost:3000/api/finances/callback  # must match a registered redirect URL
 ENABLE_BANKING_PRIVATE_KEY="..." # the application's private key; multi-line quoted value, bare base64 or full PEM
 ```
 
-Enable Banking only accepts `https` redirect URLs, so run the dev server with `pnpm next dev --experimental-https` when working on the banking feature.
+Enable Banking only accepts `https` redirect URLs, so run the dev server with `pnpm next dev --experimental-https` when working on the finances feature.
 
 ## 📁 Layout
 

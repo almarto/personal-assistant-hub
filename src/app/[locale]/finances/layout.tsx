@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { userHasAppRole } from "@/lib/services/user-roles";
 import { APP_ROLE } from "@/lib/types/roles";
 
-export default async function BankingLayout({
+export default async function FinancesLayout({
   children,
   params,
 }: {
@@ -23,7 +23,7 @@ export default async function BankingLayout({
       href: {
         pathname: "/auth/signin",
         query: {
-          callbackUrl: "/banking",
+          callbackUrl: "/finances",
         },
       },
       locale,

@@ -7,7 +7,7 @@ import type { EnableBankingConfig } from "./config";
 const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
 const config: EnableBankingConfig = {
   appId: "app-1",
-  redirectUrl: "https://localhost:3000/api/banking/callback",
+  redirectUrl: "https://localhost:3000/api/finances/callback",
   privateKeyPem: privateKey.export({ type: "pkcs8", format: "pem" }).toString(),
 };
 

@@ -6,21 +6,21 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 vi.mock("@/lib/auth-guards", () => ({ requireFinances: vi.fn() }));
-vi.mock("@/lib/services/banking/config", () => ({
+vi.mock("@/lib/services/finances/config", () => ({
   getEnableBankingConfig: vi.fn(() => ({ appId: "app-1" })),
 }));
-vi.mock("@/lib/services/banking/client", () => ({
+vi.mock("@/lib/services/finances/client", () => ({
   createBankingClient: vi.fn(),
 }));
-vi.mock("@/lib/services/banking/connections", () => ({
+vi.mock("@/lib/services/finances/connections", () => ({
   createPendingConnection: vi.fn(),
 }));
 
 import { requireFinances } from "@/lib/auth-guards";
-import { createBankingClient } from "@/lib/services/banking/client";
-import { createPendingConnection } from "@/lib/services/banking/connections";
+import { createBankingClient } from "@/lib/services/finances/client";
+import { createPendingConnection } from "@/lib/services/finances/connections";
 
-import { startConnectionAction } from "./banking";
+import { startConnectionAction } from "./finances";
 
 const requireFinancesMock = vi.mocked(requireFinances);
 const createClientMock = vi.mocked(createBankingClient);

@@ -2,19 +2,19 @@ import { NextResponse } from "next/server";
 
 import { routing } from "@/i18n/routing";
 import { requireFinances } from "@/lib/auth-guards";
-import { createBankingClient } from "@/lib/services/banking/client";
-import { getEnableBankingConfig } from "@/lib/services/banking/config";
-import { activateConnectionByState } from "@/lib/services/banking/connections";
+import { createBankingClient } from "@/lib/services/finances/client";
+import { getEnableBankingConfig } from "@/lib/services/finances/config";
+import { activateConnectionByState } from "@/lib/services/finances/connections";
 
-const BANKING_PATH = `/${routing.defaultLocale}/banking`;
+const FINANCES_PATH = `/${routing.defaultLocale}/finances`;
 
 function redirectTo(request: Request, path: string) {
   return NextResponse.redirect(new URL(path, request.url));
 }
 
-function redirectToBanking(request: Request, error?: string) {
+function redirectToFinances(request: Request, error?: string) {
   const query = error ? `?error=${encodeURIComponent(error)}` : "";
-  return redirectTo(request, `${BANKING_PATH}${query}`);
+  return redirectTo(request, `${FINANCES_PATH}${query}`);
 }
 
 export async function GET(request: Request) {
@@ -29,13 +29,13 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const bankError = params.get("error");
   if (bankError) {
-    return redirectToBanking(request, bankError);
+    return redirectToFinances(request, bankError);
   }
 
   const code = params.get("code");
   const state = params.get("state");
   if (!code || !state) {
-    return redirectToBanking(request, "invalid_request");
+    return redirectToFinances(request, "invalid_request");
   }
 
   try {
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     const session = await client.createSession(code);
     if (!session.ok) {
       console.error("Bank session creation failed:", session.error.message);
-      return redirectToBanking(request, "session_failed");
+      return redirectToFinances(request, "session_failed");
     }
 
     // A wrong state still spends the single-use code, which is harmless because
@@ -53,9 +53,9 @@ export async function GET(request: Request) {
       state,
       ...session.value,
     });
-    return redirectToBanking(request, activated ? undefined : "invalid_state");
+    return redirectToFinances(request, activated ? undefined : "invalid_state");
   } catch (error) {
     console.error("Bank callback failed:", error);
-    return redirectToBanking(request, "session_failed");
+    return redirectToFinances(request, "session_failed");
   }
 }
