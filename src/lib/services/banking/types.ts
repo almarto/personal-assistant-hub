@@ -16,3 +16,34 @@ export type PsuType = (typeof PSU_TYPE)[keyof typeof PSU_TYPE];
 export const BANK_COUNTRIES = ["DE", "ES", "FR", "IT", "NL", "PT"] as const;
 
 export type BankCountry = (typeof BANK_COUNTRIES)[number];
+
+export interface Aspsp {
+  name: string;
+  country: string;
+  maximumConsentValiditySeconds: number | null;
+}
+
+export interface BankAccountRef {
+  uid: string;
+  name: string | null;
+}
+
+export interface BankSession {
+  sessionId: string;
+  accounts: BankAccountRef[];
+  validUntil: string;
+}
+
+export interface AccountBalance {
+  type: string;
+  currency: string;
+  amount: string;
+}
+
+export interface BankTransaction {
+  /** Signed: debits are negative. */
+  amount: string;
+  currency: string;
+  bookingDate: string | null;
+  description: string | null;
+}
