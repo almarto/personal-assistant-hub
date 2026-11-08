@@ -8,7 +8,7 @@ export class ResendEmailProvider implements IEmailService {
   private resend: Resend;
   private defaultFrom: string;
 
-  constructor(apiKey: string, defaultFrom: string = "Baby Food Tracker <no-reply@almarto.es>") {
+  constructor(apiKey: string, defaultFrom: string = "Personal Assistant Hub <no-reply@almarto.es>") {
     if (!apiKey) {
       console.warn("Resend API key is missing. Email sending will fail.");
     }

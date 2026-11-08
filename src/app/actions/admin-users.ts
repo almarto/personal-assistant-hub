@@ -71,8 +71,8 @@ export async function createUserAndNotify(data: CreateUserData) {
 
     const { error: emailError } = await emailService.sendEmail({
       to: [data.email],
-      subject: "Bienvenido a Baby Food Tracker",
-      text: `¡Bienvenido a Baby Food Tracker!\n\nAquí están tus detalles de inicio de sesión:\nEnlace: ${appUrl}\nNombre de usuario: ${data.username}\nContraseña: ${password}\n\nPor favor cambia tu contraseña después de iniciar sesión.`,
+      subject: "Bienvenido a Personal Assistant Hub",
+      text: `¡Bienvenido a Personal Assistant Hub!\n\nAquí están tus detalles de inicio de sesión:\nEnlace: ${appUrl}\nNombre de usuario: ${data.username}\nContraseña: ${password}\n\nPor favor cambia tu contraseña después de iniciar sesión.`,
       html: emailHtml,
     });
 

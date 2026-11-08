@@ -17,7 +17,7 @@ export function generateWelcomeEmailHtml({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Baby Food Tracker</title>
+  <title>Welcome to Personal Assistant Hub</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -116,7 +116,7 @@ export function generateWelcomeEmailHtml({
 <body>
   <div class="container">
     <div class="header">
-      <h1 class="logo">Baby Food Tracker</h1>
+      <h1 class="logo">Personal Assistant Hub</h1>
     </div>
     
     <div class="card">
@@ -157,7 +157,7 @@ export function generateWelcomeEmailHtml({
     </div>
 
     <div class="footer">
-      <p>© ${new Date().getFullYear()} Baby Food Tracker. Todos los derechos reservados.</p>
+      <p>© ${new Date().getFullYear()} Personal Assistant Hub. Todos los derechos reservados.</p>
       <p>Si no solicitaste esta cuenta, por favor ignora este correo.</p>
     </div>
   </div>
