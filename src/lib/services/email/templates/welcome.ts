@@ -1,3 +1,5 @@
+import { escapeHtml } from "./escape-html";
+
 interface WelcomeEmailProps {
   name: string;
   username: string;
@@ -120,21 +122,21 @@ export function generateWelcomeEmailHtml({
     </div>
     
     <div class="card">
-      <div class="welcome-text">¡Bienvenido, ${name}!</div>
+      <div class="welcome-text">¡Bienvenido, ${escapeHtml(name)}!</div>
       
       <p>Tu cuenta ha sido creada exitosamente. Estamos emocionados de ayudarte a seguir el viaje de tu bebé hacia los alimentos sólidos.</p>
       
       <div class="credentials-box">
         <div class="credential-row">
           <span class="credential-label">Nombre de usuario</span>
-          <span class="credential-value">${username}</span>
+          <span class="credential-value">${escapeHtml(username)}</span>
         </div>
         ${
           password
             ? `
         <div class="credential-row">
           <span class="credential-label">Contraseña Temporal</span>
-          <span class="credential-value">${password}</span>
+          <span class="credential-value">${escapeHtml(password)}</span>
         </div>
         `
             : ""
@@ -152,7 +154,7 @@ export function generateWelcomeEmailHtml({
       }
 
       <div style="text-align: center;">
-        <a href="${loginUrl}" class="button" style="color: #ffffff !important;">Iniciar Sesión en tu Cuenta</a>
+        <a href="${escapeHtml(loginUrl)}" class="button" style="color: #ffffff !important;">Iniciar Sesión en tu Cuenta</a>
       </div>
     </div>
 

@@ -1,3 +1,5 @@
+import { escapeHtml } from "./escape-html";
+
 interface TripInviteEmailProps {
   displayName: string;
   tripName: string;
@@ -15,7 +17,7 @@ export function generateTripInviteEmailHtml({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You're invited: ${tripName}</title>
+  <title>You're invited: ${escapeHtml(tripName)}</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -78,10 +80,10 @@ export function generateTripInviteEmailHtml({
     </div>
 
     <div class="card">
-      <div class="title-text">Hola, ${displayName}</div>
-      <p>Te han invitado al viaje <strong>${tripName}</strong>. Entra para ver la lista de cosas que preparar.</p>
+      <div class="title-text">Hola, ${escapeHtml(displayName)}</div>
+      <p>Te han invitado al viaje <strong>${escapeHtml(tripName)}</strong>. Entra para ver la lista de cosas que preparar.</p>
       <div style="text-align: center;">
-        <a href="${inviteUrl}" class="button" style="color: #ffffff !important;">Ver mi viaje</a>
+        <a href="${escapeHtml(inviteUrl)}" class="button" style="color: #ffffff !important;">Ver mi viaje</a>
       </div>
     </div>
 

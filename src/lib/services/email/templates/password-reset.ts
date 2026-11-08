@@ -1,3 +1,5 @@
+import { escapeHtml } from "./escape-html";
+
 interface PasswordResetEmailProps {
   name: string;
   token: string;
@@ -89,12 +91,12 @@ export function generatePasswordResetEmailHtml({
     </div>
     
     <div class="card">
-      <div class="greeting-text">Hola, ${name}</div>
+      <div class="greeting-text">Hola, ${escapeHtml(name)}</div>
       
       <p>Hemos recibido una solicitud para restablecer tu contraseña. Si fuiste tú, por favor utiliza el siguiente código de verificación de 6 dígitos.</p>
       
       <div class="token-box">
-        <span class="token-value">${token}</span>
+        <span class="token-value">${escapeHtml(token)}</span>
       </div>
 
       <div class="warning">
