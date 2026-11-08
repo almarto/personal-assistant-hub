@@ -209,6 +209,15 @@
   border-color: #ff4444;
 }
 
+.success {
+  color: #166534;
+  background-color: #dcfce7;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
 .error {
   color: #d32f2f;
   background-color: #fdecea;

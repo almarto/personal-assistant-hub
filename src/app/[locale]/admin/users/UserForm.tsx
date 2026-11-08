@@ -20,6 +20,8 @@ import { Card } from "@/systemUI/components/Card/Card";
 import { CheckboxChipGroup } from "@/systemUI/components/CheckboxChip/CheckboxChip";
 
 import styles from "./page.module.css";
+import type { UserFormValues } from "./user-form-state";
+import { clearPasswordFields, isFormDirty } from "./user-form-state";
 
 interface UserFormProps {
   editingUser: User | null;
@@ -34,7 +36,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
 
   const isAdmin = checkIsAdmin(session?.user?.role);
 
-  const [formData, setFormData] = useState({
+  const initialValues: UserFormValues = {
     name: editingUser?.name || "",
     username: editingUser?.username || "",
     email: editingUser?.email || "",
@@ -43,7 +45,12 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
     currentPassword: "",
     role: (editingUser?.role as Role) || Role.USER,
     appRoles: (editingUser?.appRoles ?? []) as AppRole[],
-  });
+  };
+  const [formData, setFormData] = useState<UserFormValues>(initialValues);
+  // What was last loaded or saved; Save is enabled only when the form differs.
+  const [savedValues, setSavedValues] = useState<UserFormValues>(initialValues);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -53,6 +60,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
   const [isRequestingReset, setIsRequestingReset] = useState(false);
 
   const isCurrentUser = editingUser?.id === session?.user?.id;
+  const isDirty = isFormDirty(formData, savedValues);
 
   const handleRequestResetToken = async () => {
     setIsRequestingReset(true);
@@ -67,9 +75,22 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
     }
   };
 
+  const markSaved = () => {
+    const saved = clearPasswordFields(formData);
+    setFormData(saved);
+    setSavedValues(saved);
+    setIsRestoringPassword(false);
+    setResetToken("");
+    setSuccessMessage(
+      formData.password ? t("passwordUpdated") : t("changesSaved")
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting || !isDirty) return;
     setError("");
+    setSuccessMessage("");
 
     if (!formData.name || !formData.username || !formData.email) {
       setError(t("allFieldsRequired"));
@@ -96,12 +117,13 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
       }
     };
 
+    setIsSubmitting(true);
     try {
       if (editingUser) {
         if (isAdmin) {
           // Admin updating user (or self)
           // Update name
-          if (editingUser.name !== formData.name) {
+          if (savedValues.name !== formData.name) {
             const { error } = await authClient.admin.updateUser({
               userId: editingUser.id,
               data: {
@@ -115,7 +137,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           }
 
           // Update role
-          if (editingUser.role !== formData.role) {
+          if (savedValues.role !== formData.role) {
             const { error } = await authClient.admin.setRole({
               userId: editingUser.id,
               role: formData.role,
@@ -150,7 +172,7 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
         } else if (isCurrentUser) {
           // Non-admin updating self
           // Update name
-          if (editingUser.name !== formData.name) {
+          if (savedValues.name !== formData.name) {
             const { error } = await authClient.updateUser({
               name: formData.name,
             });
@@ -207,17 +229,29 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           return;
         }
       }
+      markSaved();
       onSuccess();
     } catch (error) {
       console.error("Failed to save user", error);
       setError(tAuth("default"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <Card className={styles.createForm}>
       <form onSubmit={handleSubmit} noValidate>
-        {error && <div className={styles.error}>{error}</div>}
+        {error && (
+          <div role="alert" className={styles.error}>
+            {error}
+          </div>
+        )}
+        {successMessage && !isDirty && (
+          <div role="status" className={styles.success}>
+            {successMessage}
+          </div>
+        )}
         <div className={styles.formGroup}>
           <label>{t("name")}</label>
           <input
@@ -441,7 +475,11 @@ export function UserForm({ editingUser, onCancel, onSuccess }: UserFormProps) {
           <Button type="button" variant="outline" onClick={onCancel}>
             {t("cancel")}
           </Button>
-          <Button type="submit">
+          <Button
+            type="submit"
+            isLoading={isSubmitting}
+            disabled={!isDirty || isSubmitting}
+          >
             {editingUser ? t("save") : t("createUser")}
           </Button>
         </div>

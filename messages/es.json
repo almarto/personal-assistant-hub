@@ -208,7 +208,9 @@
     "appRole_finances": "Finanzas",
     "impersonate": "Ver como este usuario",
     "forgotPassword": "¿Olvidaste tu contraseña?",
-    "sending": "Enviando…"
+    "sending": "Enviando…",
+    "changesSaved": "Cambios guardados.",
+    "passwordUpdated": "Contraseña actualizada."
   },
   "Navigation": {
     "admin": "Administrador",
