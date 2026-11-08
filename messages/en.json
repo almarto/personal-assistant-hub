@@ -674,6 +674,38 @@
       "retry_failed": "The connection could not be retried. Try again later.",
       "discard_failed": "The pending connection could not be discarded.",
       "generic": "Something went wrong with the bank connection. Try again."
+    },
+    "detail": {
+      "backToBanks": "All banks",
+      "consentUntil": "consent valid until {date}",
+      "syncedAt": "Synced {when}",
+      "neverSynced": "Not synced yet",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…",
+      "syncFailed": "Could not sync: {error}",
+      "lastSyncError": "The last sync had problems:",
+      "accountsHeading": "Accounts · {count}",
+      "previousAccounts": "Previous accounts",
+      "nextAccounts": "Next accounts",
+      "allAccounts": "All accounts",
+      "allAccountsNote": "Accounts and cards combined",
+      "noBalance": "No balance yet",
+      "balanceKind": {
+        "booked": "Booked balance",
+        "available": "Available balance",
+        "other": "Balance ({type})"
+      },
+      "movements": "Movements",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "pendingHeading": "Pending · {count}",
+      "pendingNote": "Not yet booked by the bank",
+      "pendingTag": "Pending",
+      "pendingMayChange": "The final amount may change",
+      "today": "Today",
+      "noMovements": "No movements this month.",
+      "noMonths": "No movements stored yet.",
+      "unknownMovement": "Movement"
     }
   }
 }

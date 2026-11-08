@@ -673,6 +673,38 @@
       "retry_failed": "No se pudo reintentar la conexión. Inténtalo más tarde.",
       "discard_failed": "No se pudo descartar la conexión pendiente.",
       "generic": "Algo falló en la conexión con el banco. Inténtalo de nuevo."
+    },
+    "detail": {
+      "backToBanks": "Todos los bancos",
+      "consentUntil": "consentimiento válido hasta el {date}",
+      "syncedAt": "Sincronizado {when}",
+      "neverSynced": "Sin sincronizar",
+      "syncNow": "Sincronizar ahora",
+      "syncing": "Sincronizando…",
+      "syncFailed": "No se pudo sincronizar: {error}",
+      "lastSyncError": "La última sincronización tuvo problemas:",
+      "accountsHeading": "Cuentas · {count}",
+      "previousAccounts": "Cuentas anteriores",
+      "nextAccounts": "Cuentas siguientes",
+      "allAccounts": "Todas las cuentas",
+      "allAccountsNote": "Cuentas y tarjetas combinadas",
+      "noBalance": "Sin saldo todavía",
+      "balanceKind": {
+        "booked": "Saldo contable",
+        "available": "Saldo disponible",
+        "other": "Saldo ({type})"
+      },
+      "movements": "Movimientos",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "pendingHeading": "Pendientes · {count}",
+      "pendingNote": "Aún no contabilizados por el banco",
+      "pendingTag": "Pendiente",
+      "pendingMayChange": "El importe final puede variar",
+      "today": "Hoy",
+      "noMovements": "No hay movimientos en este mes.",
+      "noMonths": "Aún no hay movimientos guardados.",
+      "unknownMovement": "Movimiento"
     }
   }
 }
