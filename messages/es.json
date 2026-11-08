@@ -35,6 +35,10 @@
       "title": "Planificador de Viajes",
       "description": "Planifica viajes y coordina el equipaje con amigos."
     },
+    "finances": {
+      "title": "Finanzas",
+      "description": "Conecta tus cuentas bancarias y consulta saldos y movimientos."
+    },
     "commute": {
       "title": "Rutas al Trabajo",
       "description": "Compara tus rutas en coche con el tráfico en vivo y elige la más rápida."
@@ -594,6 +598,35 @@
       "updating": "Actualizando...",
       "updateError": "No se ha podido actualizar la lista. Revisa el rango de fechas.",
       "empty": "No hay ingredientes para este rango."
+    }
+  },
+  "Banking": {
+    "title": "Conexiones bancarias",
+    "subtitle": "Conecta un banco a través de Enable Banking y comprueba que llegan los saldos y los movimientos.",
+    "bankCountryLabel": "País del banco",
+    "loadBanks": "Cargar bancos",
+    "bankLabel": "Banco",
+    "psuTypeLabel": "Tipo de cuenta",
+    "personal": "Personal",
+    "business": "Empresa",
+    "connect": "Conectar banco",
+    "connections": "Conexiones",
+    "noConnections": "Todavía no hay bancos conectados.",
+    "pending": "Esperando la autorización en el banco",
+    "validUntil": "Consentimiento válido hasta {date}",
+    "balances": "Saldos",
+    "noBalances": "No se devolvieron saldos.",
+    "transactionsLast30Days": "{count, plural, one {# movimiento} other {# movimientos}} en los últimos 30 días",
+    "unnamedAccount": "Cuenta",
+    "accountLoadFailed": "No se pudo cargar esta cuenta.",
+    "banksLoadFailed": "No se pudieron cargar los bancos de este país.",
+    "configError": "Enable Banking no está configurado (revisa las variables de entorno ENABLE_BANKING_*).",
+    "errors": {
+      "invalid_state": "No se pudo asociar la autorización con tu solicitud. Inicia la conexión de nuevo.",
+      "access_denied": "Se canceló la autorización en el banco.",
+      "session_failed": "No se pudo crear la sesión con el banco. Inténtalo de nuevo.",
+      "invalid_request": "El banco devolvió una respuesta incompleta. Inténtalo de nuevo.",
+      "start_failed": "No se pudo iniciar la conexión. Revisa el log del servidor para ver el detalle."
     }
   }
 }

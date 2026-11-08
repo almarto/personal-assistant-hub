@@ -35,6 +35,10 @@
       "title": "Luggage Trip Planner",
       "description": "Plan trips and coordinate packing with friends."
     },
+    "finances": {
+      "title": "Finances",
+      "description": "Connect your bank accounts and check balances and transactions."
+    },
     "commute": {
       "title": "Commute Routes",
       "description": "Compare your driving routes with live traffic and pick the fastest one."
@@ -595,6 +599,35 @@
       "updating": "Updating...",
       "updateError": "Couldn't update the list. Check the date range.",
       "empty": "No ingredients for this range."
+    }
+  },
+  "Banking": {
+    "title": "Bank connections",
+    "subtitle": "Connect a bank through Enable Banking and check that balances and transactions come through.",
+    "bankCountryLabel": "Bank's country",
+    "loadBanks": "Load banks",
+    "bankLabel": "Bank",
+    "psuTypeLabel": "Account type",
+    "personal": "Personal",
+    "business": "Business",
+    "connect": "Connect bank",
+    "connections": "Connections",
+    "noConnections": "No banks connected yet.",
+    "pending": "Waiting for authorization at the bank",
+    "validUntil": "Consent valid until {date}",
+    "balances": "Balances",
+    "noBalances": "No balances returned.",
+    "transactionsLast30Days": "{count, plural, one {# transaction} other {# transactions}} in the last 30 days",
+    "unnamedAccount": "Account",
+    "accountLoadFailed": "Could not load this account.",
+    "banksLoadFailed": "Could not load the banks for this country.",
+    "configError": "Enable Banking is not configured (check the ENABLE_BANKING_* environment variables).",
+    "errors": {
+      "invalid_state": "The authorization could not be matched to your request. Start the connection again.",
+      "access_denied": "Authorization was cancelled at the bank.",
+      "session_failed": "The bank session could not be created. Try again.",
+      "invalid_request": "The bank returned an incomplete response. Try again.",
+      "start_failed": "The connection could not be started. Check the server log for details."
     }
   }
 }
