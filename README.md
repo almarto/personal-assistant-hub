@@ -53,6 +53,16 @@ BETTER_AUTH_SECRET=...  # generate a strong random secret for local development
 
 `GOOGLE_ROUTES_API_KEY` is only needed for the commute engine to query live traffic.
 
+Bank connections (Enable Banking) need three more variables:
+
+```bash
+ENABLE_BANKING_APP_ID=...        # application (client) id from the Enable Banking control panel
+ENABLE_BANKING_REDIRECT_URL=https://localhost:3000/api/banking/callback  # must match a registered redirect URL
+ENABLE_BANKING_PRIVATE_KEY="..." # the application's private key; multi-line quoted value, bare base64 or full PEM
+```
+
+Enable Banking only accepts `https` redirect URLs, so run the dev server with `pnpm next dev --experimental-https` when working on the banking feature.
+
 ## 📁 Layout
 
 ```
