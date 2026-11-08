@@ -35,6 +35,10 @@
       "title": "Planificador de Viajes",
       "description": "Planifica viajes y coordina el equipaje con amigos."
     },
+    "finances": {
+      "title": "Finanzas",
+      "description": "Conecta tus cuentas bancarias y consulta saldos y movimientos."
+    },
     "commute": {
       "title": "Rutas al Trabajo",
       "description": "Compara tus rutas en coche con el tráfico en vivo y elige la más rápida."
@@ -62,7 +66,8 @@
     "FAILED_TO_CREATE_USER": "Error al crear el usuario",
     "PASSWORD_REQUIREMENTS_NOT_MET": "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.",
     "PASSWORDS_DO_NOT_MATCH": "Las contraseñas no coinciden",
-    "default": "Ocurrió un error inesperado"
+    "default": "Ocurrió un error inesperado",
+    "EMAIL_REQUIRED": "El correo electrónico es obligatorio"
   },
   "FoodErrors": {
     "FORBIDDEN_ADD": "El usuario no tiene permiso para agregar registros de comida para este bebé",
@@ -200,7 +205,12 @@
     "appRoles": "Roles de funcionalidades",
     "appRole_schedule_manager": "Gestor de horarios",
     "appRole_trip_planner": "Planificador de Viajes",
-    "impersonate": "Ver como este usuario"
+    "appRole_finances": "Finanzas",
+    "impersonate": "Ver como este usuario",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "sending": "Enviando…",
+    "changesSaved": "Cambios guardados.",
+    "passwordUpdated": "Contraseña actualizada."
   },
   "Navigation": {
     "admin": "Administrador",
@@ -593,6 +603,113 @@
       "updating": "Actualizando...",
       "updateError": "No se ha podido actualizar la lista. Revisa el rango de fechas.",
       "empty": "No hay ingredientes para este rango."
+    }
+  },
+  "Finances": {
+    "title": "Finanzas",
+    "subtitle": "Tus bancos conectados, saldos y movimientos en un solo sitio.",
+    "addBank": "Añadir banco",
+    "banksHeading": "Bancos",
+    "sortedByBalance": "Ordenados por saldo",
+    "addBankCardTitle": "Añadir banco",
+    "addBankCardText": "Conecta otra entidad para ver todas tus cuentas aquí.",
+    "viewDetail": "Ver detalle →",
+    "balance": "Saldo",
+    "noBalance": "Sin saldo todavía",
+    "accountCount": "{count, plural, one {# cuenta} other {# cuentas}}",
+    "syncedAt": "sincronizado {when}",
+    "neverSynced": "sin sincronizar",
+    "lastSyncFailed": "La última sincronización falló",
+    "status": {
+      "active": "Activo",
+      "expiring": "Caduca en {days, plural, one {# día} other {# días}}",
+      "expired": "Consentimiento caducado"
+    },
+    "psu": {
+      "personal": "Personal",
+      "business": "Empresa"
+    },
+    "pendingHeading": "Conexiones pendientes",
+    "pendingWaiting": "Esperando la autorización en el banco · iniciada {when}",
+    "retry": "Reintentar",
+    "discard": "Descartar",
+    "firstBank": {
+      "eyebrow": "Primer paso",
+      "title": "Conecta tu primer banco",
+      "lead": "Elige tu banco y autorízalo desde su propia web o app. Solo leemos saldos y movimientos: nunca podemos mover dinero.",
+      "howTitle": "Qué pasa al conectar",
+      "step1": "Te llevamos a la web de tu banco para que inicies sesión. No vemos tus claves.",
+      "step2": "Importamos tus movimientos desde el 1 del mes en curso, para empezar con un mes completo.",
+      "step3": "Guardamos saldos y movimientos aquí y puedes sincronizarlos cuando quieras. El permiso dura como máximo 90 días.",
+      "readOnly": "Acceso de solo lectura. Puedes revocarlo cuando quieras desde tu banco."
+    },
+    "picker": {
+      "bankStep": "1 · Banco",
+      "typeStep": "2 · Tipo de cuenta",
+      "searchLabel": "Buscar banco",
+      "searchPlaceholder": "Busca por nombre (por ejemplo, Trade Republic)",
+      "allCountries": "Todos",
+      "resultCount": "{count, plural, one {# banco} other {# bancos}}",
+      "noResults": "Ningún banco coincide con la búsqueda.",
+      "connected": "Conectado",
+      "accountType": "Tipo de cuenta",
+      "personal": "Personal",
+      "business": "Empresa",
+      "chooseBank": "Elige un banco para continuar",
+      "summaryPersonal": "{bank} · cuenta personal",
+      "summaryBusiness": "{bank} · cuenta de empresa",
+      "connect": "Conectar",
+      "connecting": "Conectando…",
+      "cancel": "Cancelar"
+    },
+    "dialog": {
+      "title": "Añadir banco",
+      "description": "Elige la entidad que quieres conectar. Te llevaremos a su web para autorizar el acceso de solo lectura.",
+      "close": "Cerrar"
+    },
+    "banksLoadFailed": "No se pudo cargar la lista de bancos. Inténtalo más tarde.",
+    "configError": "Enable Banking no está configurado (revisa las variables de entorno ENABLE_BANKING_*).",
+    "errors": {
+      "invalid_state": "No se pudo asociar la autorización a tu solicitud. Vuelve a iniciar la conexión.",
+      "access_denied": "Se canceló la autorización en el banco.",
+      "session_failed": "No se pudo crear la sesión con el banco. Inténtalo de nuevo.",
+      "invalid_request": "El banco devolvió una respuesta incompleta. Inténtalo de nuevo.",
+      "start_failed": "No se pudo iniciar la conexión. Inténtalo más tarde.",
+      "retry_failed": "No se pudo reintentar la conexión. Inténtalo más tarde.",
+      "discard_failed": "No se pudo descartar la conexión pendiente.",
+      "generic": "Algo falló en la conexión con el banco. Inténtalo de nuevo."
+    },
+    "detail": {
+      "backToBanks": "Todos los bancos",
+      "consentUntil": "consentimiento válido hasta el {date}",
+      "syncedAt": "Sincronizado {when}",
+      "neverSynced": "Sin sincronizar",
+      "syncNow": "Sincronizar ahora",
+      "syncing": "Sincronizando…",
+      "syncFailed": "No se pudo sincronizar: {error}",
+      "lastSyncError": "La última sincronización tuvo problemas:",
+      "accountsHeading": "Cuentas · {count}",
+      "previousAccounts": "Cuentas anteriores",
+      "nextAccounts": "Cuentas siguientes",
+      "allAccounts": "Todas las cuentas",
+      "allAccountsNote": "Cuentas y tarjetas combinadas",
+      "noBalance": "Sin saldo todavía",
+      "balanceKind": {
+        "booked": "Saldo contable",
+        "available": "Saldo disponible",
+        "other": "Saldo ({type})"
+      },
+      "movements": "Movimientos",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "pendingHeading": "Pendientes · {count}",
+      "pendingNote": "Aún no contabilizados por el banco",
+      "pendingTag": "Pendiente",
+      "pendingMayChange": "El importe final puede variar",
+      "today": "Hoy",
+      "noMovements": "No hay movimientos en este mes.",
+      "noMonths": "Aún no hay movimientos guardados.",
+      "unknownMovement": "Movimiento"
     }
   }
 }

@@ -19,6 +19,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       isLoading,
+      disabled,
       leftIcon,
       rightIcon,
       children,
@@ -35,8 +36,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           styles[size],
           className
         )}
-        disabled={isLoading || props.disabled}
         {...props}
+        disabled={isLoading || disabled}
       >
         {isLoading && <Loader2 className={styles.spinner} size={16} />}
         {!isLoading && leftIcon && (

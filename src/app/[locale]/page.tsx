@@ -1,4 +1,4 @@
-import { Activity, Boxes, Calendar, Car, Hammer, Salad, Users } from "lucide-react";
+import { Activity, Boxes, Calendar, Car, Hammer, Landmark, Salad, Users } from "lucide-react";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
@@ -53,6 +53,7 @@ export default async function HubHome({
   const isAdmin = checkIsAdmin(session.user.role);
   const appRoles = await getUserAppRoles(session.user.id);
   const hasTripPlannerAccess = isAdmin || appRoles.includes(APP_ROLE.TRIP_PLANNER);
+  const hasFinancesAccess = isAdmin || appRoles.includes(APP_ROLE.FINANCES);
   const isTripPlannerOnly =
     !isAdmin && appRoles.length === 1 && appRoles[0] === APP_ROLE.TRIP_PLANNER;
   const wellnessFamilyId = await getFamilyIdForUser(session.user.id);
@@ -162,6 +163,22 @@ export default async function HubHome({
               </h3>
               <p className={styles.appDescription}>
                 {launcherT("tripPlanner.description")}
+              </p>
+            </Link>
+          </div>
+        )}
+
+        {hasFinancesAccess && (
+          <div className={styles.appCard}>
+            <Link href="/finances" className={styles.appCardLink}>
+              <div className={styles.iconWrapper}>
+                <Landmark size={28} />
+              </div>
+              <h3 className={styles.appTitle}>
+                {launcherT("finances.title")}
+              </h3>
+              <p className={styles.appDescription}>
+                {launcherT("finances.description")}
               </p>
             </Link>
           </div>

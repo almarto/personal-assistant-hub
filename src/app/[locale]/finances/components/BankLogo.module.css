@@ -1,0 +1,25 @@
+.initials,
+.frame {
+  flex: none;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.initials {
+  color: #0b1f33;
+  font-weight: var(--font-weight-bold);
+}
+
+.frame {
+  background: #ffffff;
+  border: 1px solid #eef0f3;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

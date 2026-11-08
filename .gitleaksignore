@@ -1,0 +1,6 @@
+# False positives: the PEM armor line "-----BEGIN PRIVATE KEY-----" as plain text.
+# The test builds its key at runtime with generateKeyPairSync; the plan only
+# describes that header. No key material is committed. Each entry is pinned to
+# one commit, file and line, so any real key is still reported.
+e9fd8312f62701935d767367a41250ab35363d46:src/lib/services/banking/config.test.ts:private-key:11
+4d656432048e1404661ca5bae964c5f0503da55a:docs/superpowers/plans/2026-11-08-enable-banking-connection.md:private-key:91

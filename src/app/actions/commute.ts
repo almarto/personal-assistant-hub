@@ -34,7 +34,8 @@ function errorMessage(error: any): string {
   return error instanceof Error ? error.message : "Something went wrong";
 }
 
-const DISTRUST_MULTIPLIER_ERROR = "Distrust multiplier must be a number of 1 or greater";
+const DISTRUST_MULTIPLIER_ERROR =
+  "Distrust multiplier must be a number of 1 or greater";
 
 // A distrust multiplier below 1 inverts the feature's intent, and 0/NaN would
 // permanently poison every recommendation comparison for that route.
@@ -62,7 +63,11 @@ export async function getCommuteConfigDetailAction(configId: string) {
   }
 }
 
-export async function createCommuteConfigAction(input: { name: string; origin: LatLng; destination: LatLng }) {
+export async function createCommuteConfigAction(input: {
+  name: string;
+  origin: LatLng;
+  destination: LatLng;
+}) {
   try {
     const userId = await requireUserId();
     const configId = await createCommuteConfig({ userId, ...input });
@@ -119,7 +124,11 @@ export async function addCommuteRouteAction(
   }
   try {
     const userId = await requireUserId();
-    const route = await addCommuteRoute({ commuteConfigId: configId, userId, ...input });
+    const route = await addCommuteRoute({
+      commuteConfigId: configId,
+      userId,
+      ...input,
+    });
     revalidatePath(`/commute/${configId}`);
     return { success: true as const, route };
   } catch (error) {
@@ -145,7 +154,10 @@ export async function updateCommuteRouteAction(
   }
 }
 
-export async function deleteCommuteRouteAction(routeId: string, configId: string) {
+export async function deleteCommuteRouteAction(
+  routeId: string,
+  configId: string
+) {
   try {
     const userId = await requireUserId();
     await deleteCommuteRoute(routeId, userId);
@@ -159,7 +171,10 @@ export async function deleteCommuteRouteAction(routeId: string, configId: string
 // Origin and destination are read from the caller's own saved config rather
 // than taken from the request, so this cannot be used as a free-form proxy to
 // the (billed) Google Routes API for arbitrary coordinates.
-export async function verifyRouteLiveTimeAction(configId: string, input: { waypoints: LatLng[] }) {
+export async function verifyRouteLiveTimeAction(
+  configId: string,
+  input: { waypoints: LatLng[] }
+) {
   try {
     const userId = await requireUserId();
     const config = await getCommuteConfigDetailById(configId, userId);
@@ -168,11 +183,17 @@ export async function verifyRouteLiveTimeAction(configId: string, input: { waypo
     }
     const apiKey = getGoogleRoutesApiKey();
     const legs = await fetchRouteLegs(
-      { origin: config.origin, destination: config.destination, waypoints: input.waypoints },
+      {
+        origin: config.origin,
+        destination: config.destination,
+        waypoints: input.waypoints,
+      },
       apiKey
     );
-    const liveMinutes = legs.reduce((total, leg) => total + leg.durationSeconds, 0) / 60;
-    const typicalMinutes = legs.reduce((total, leg) => total + leg.staticDurationSeconds, 0) / 60;
+    const liveMinutes =
+      legs.reduce((total, leg) => total + leg.durationSeconds, 0) / 60;
+    const typicalMinutes =
+      legs.reduce((total, leg) => total + leg.staticDurationSeconds, 0) / 60;
     return { success: true as const, liveMinutes, typicalMinutes };
   } catch (error) {
     return { success: false as const, error: errorMessage(error) };
@@ -183,12 +204,18 @@ export type CommuteStatusResult =
   | { success: true; status: CommuteStatus }
   | { success: false; error: string; noRoutes: boolean };
 
-export async function getCommuteStatusAction(configId: string): Promise<CommuteStatusResult> {
+export async function getCommuteStatusAction(
+  configId: string
+): Promise<CommuteStatusResult> {
   try {
     const userId = await requireUserId();
     const status = await getCommuteStatusForConfig(configId, userId);
     if (!status) {
-      return { success: false, error: "Config not found or not owned by this user", noRoutes: false };
+      return {
+        success: false,
+        error: "Config not found or not owned by this user",
+        noRoutes: false,
+      };
     }
     return { success: true, status };
   } catch (error) {

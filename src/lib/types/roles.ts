@@ -6,6 +6,7 @@
 export const APP_ROLE = {
   SCHEDULE_MANAGER: "schedule_manager",
   TRIP_PLANNER: "trip_planner",
+  FINANCES: "finances",
 } as const;
 
 export type AppRole = (typeof APP_ROLE)[keyof typeof APP_ROLE];

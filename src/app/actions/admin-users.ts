@@ -71,17 +71,17 @@ export async function createUserAndNotify(data: CreateUserData) {
 
     const { error: emailError } = await emailService.sendEmail({
       to: [data.email],
-      subject: "Bienvenido a Baby Food Tracker",
-      text: `¡Bienvenido a Baby Food Tracker!\n\nAquí están tus detalles de inicio de sesión:\nEnlace: ${appUrl}\nNombre de usuario: ${data.username}\nContraseña: ${password}\n\nPor favor cambia tu contraseña después de iniciar sesión.`,
+      subject: "Bienvenido a Personal Assistant Hub",
+      text: `¡Bienvenido a Personal Assistant Hub!\n\nAquí están tus detalles de inicio de sesión:\nEnlace: ${appUrl}\nNombre de usuario: ${data.username}\nContraseña: ${password}\n\nPor favor cambia tu contraseña después de iniciar sesión.`,
       html: emailHtml,
     });
 
     if (emailError) {
       console.error("Failed to send welcome email:", emailError);
-      return { 
-        success: true, 
+      return {
+        success: true,
         warning: "User created but email failed to send",
-        generatedPassword: password 
+        generatedPassword: password,
       };
     }
 
@@ -108,7 +108,10 @@ export async function createUserAndNotify(data: CreateUserData) {
 
 export async function requestPasswordResetToken(email: string) {
   // Find user details by email
-  const userResult = await query('SELECT id, name, email FROM "user" WHERE email = $1', [email]);
+  const userResult = await query(
+    'SELECT id, name, email FROM "user" WHERE email = $1',
+    [email]
+  );
   const user = userResult.rows[0];
 
   if (!user) {
@@ -121,15 +124,27 @@ export async function requestPasswordResetToken(email: string) {
 
   try {
     const identifier = `password_reset_${email}`;
-    await query('DELETE FROM "verification" WHERE identifier = $1', [identifier]);
+    await query('DELETE FROM "verification" WHERE identifier = $1', [
+      identifier,
+    ]);
 
     await query(
       `INSERT INTO "verification" (id, identifier, value, "expiresAt", "createdAt", "updatedAt") 
        VALUES ($1, $2, $3, $4, $5, $6)`,
-      [crypto.randomUUID(), identifier, token, expiresAt, new Date(), new Date()]
+      [
+        crypto.randomUUID(),
+        identifier,
+        token,
+        expiresAt,
+        new Date(),
+        new Date(),
+      ]
     );
 
-    const emailHtml = generatePasswordResetEmailHtml({ name: user.name, token });
+    const emailHtml = generatePasswordResetEmailHtml({
+      name: user.name,
+      token,
+    });
     const { error: emailError } = await emailService.sendEmail({
       to: [email],
       subject: "Personal Assistant Hub: Restablecer tu contraseña",
@@ -149,7 +164,11 @@ export async function requestPasswordResetToken(email: string) {
   }
 }
 
-export async function resetPasswordWithToken(email: string, token: string, newPassword: string) {
+export async function resetPasswordWithToken(
+  email: string,
+  token: string,
+  newPassword: string
+) {
   try {
     const identifier = `password_reset_${email}`;
     const tokenResult = await query(
@@ -161,7 +180,9 @@ export async function resetPasswordWithToken(email: string, token: string, newPa
       return { success: false, error: "Código inválido o expirado" };
     }
 
-    const userResult = await query('SELECT id FROM "user" WHERE email = $1', [email]);
+    const userResult = await query('SELECT id FROM "user" WHERE email = $1', [
+      email,
+    ]);
     const user = userResult.rows[0];
 
     if (!user) {
@@ -190,13 +211,18 @@ export async function resetPasswordWithToken(email: string, token: string, newPa
       }
 
       // Invalidate the token
-      await query('DELETE FROM "verification" WHERE identifier = $1', [identifier]);
+      await query('DELETE FROM "verification" WHERE identifier = $1', [
+        identifier,
+      ]);
 
       return { success: true };
     } catch (error: unknown) {
       const apiError = error as { message?: string };
       console.error("Set user password api error:", apiError);
-      return { success: false, error: apiError?.message || "Error al actualizar la contraseña" };
+      return {
+        success: false,
+        error: apiError?.message || "Error al actualizar la contraseña",
+      };
     }
   } catch (error) {
     console.error("Failed to reset password:", error);

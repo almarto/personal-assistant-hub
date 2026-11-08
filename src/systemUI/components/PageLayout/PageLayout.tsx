@@ -9,7 +9,8 @@ interface PageLayoutProps {
   children: React.ReactNode;
   headerContent?: React.ReactNode;
   showLogo?: boolean;
-  theme?: "hub" | "baby" | "schedule" | "admin" | "profile" | "wellness";
+  theme?:
+    "hub" | "baby" | "schedule" | "admin" | "profile" | "wellness" | "finances";
 }
 
 export const PageLayout = ({

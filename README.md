@@ -53,6 +53,22 @@ BETTER_AUTH_SECRET=...  # generate a strong random secret for local development
 
 `GOOGLE_ROUTES_API_KEY` is only needed for the commute engine to query live traffic.
 
+Bank connections (Enable Banking) need three more variables:
+
+```bash
+ENABLE_BANKING_APP_ID=...        # application (client) id from the Enable Banking control panel
+ENABLE_BANKING_REDIRECT_URL=https://localhost:3000/api/finances/callback  # must match a registered redirect URL
+ENABLE_BANKING_PRIVATE_KEY="..." # the application's private key; multi-line quoted value, bare base64 or full PEM
+```
+
+Enable Banking only accepts `https` redirect URLs, so run the dev server with `pnpm next dev --experimental-https` when working on the finances feature.
+
+## 🚢 Deploys and migrations
+
+Vercel builds with the `vercel-build` script, which runs the migrations before `next build` **only on production deployments** (`VERCEL_ENV=production`). Preview deployments share the production database, so they skip migrations and just build. A failed migration fails the production deploy. Locally, `pnpm migrate` (`.env`) and `pnpm migrate:prod` (`.env.production`) work as before.
+
+For this to happen, the project's Build Command in Vercel must not be overridden.
+
 ## 📁 Layout
 
 ```
