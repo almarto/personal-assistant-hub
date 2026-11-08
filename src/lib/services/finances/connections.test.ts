@@ -56,7 +56,17 @@ describe("activateConnectionByState", () => {
     userId: "u-1",
     state: "state-1",
     sessionId: "s-1",
-    accounts: [{ uid: "a-1", name: "Main" }],
+    accounts: [
+      {
+        uid: "a-1",
+        identificationHash: null,
+        name: "Main",
+        product: null,
+        iban: null,
+        currency: null,
+        raw: {},
+      },
+    ],
     validUntil: "2027-02-06T00:00:00Z",
   };
 

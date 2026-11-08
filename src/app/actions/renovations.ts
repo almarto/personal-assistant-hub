@@ -80,7 +80,10 @@ export async function fetchAccountsAction() {
   return db.getRenovationAccounts(userId);
 }
 
-export async function depositAction(data: { account_type: string; amount: number }) {
+export async function depositAction(data: {
+  account_type: string;
+  amount: number;
+}) {
   const userId = await requireUser();
   try {
     await db.depositToAccount(userId, data.account_type, data.amount);
@@ -94,28 +97,40 @@ export async function depositAction(data: { account_type: string; amount: number
   }
 }
 
-export async function withdrawAction(data: { account_type: string; amount: number }) {
+export async function withdrawAction(data: {
+  account_type: string;
+  amount: number;
+}) {
   const userId = await requireUser();
   try {
     await db.withdrawToCash(userId, data.account_type, data.amount);
     revalidatePath("/renovations");
     return { error: null };
   } catch (error) {
-    if (error instanceof db.InsufficientFundsError || error instanceof db.InvalidAccountTypeError) {
+    if (
+      error instanceof db.InsufficientFundsError ||
+      error instanceof db.InvalidAccountTypeError
+    ) {
       return { error: error.message };
     }
     throw error;
   }
 }
 
-export async function adjustAction(data: { account_type: string; amount: number }) {
+export async function adjustAction(data: {
+  account_type: string;
+  amount: number;
+}) {
   const userId = await requireUser();
   try {
     await db.adjustAccount(userId, data.account_type, data.amount);
     revalidatePath("/renovations");
     return { error: null };
   } catch (error) {
-    if (error instanceof db.InsufficientFundsError || error instanceof db.InvalidAccountTypeError) {
+    if (
+      error instanceof db.InsufficientFundsError ||
+      error instanceof db.InvalidAccountTypeError
+    ) {
       return { error: error.message };
     }
     throw error;

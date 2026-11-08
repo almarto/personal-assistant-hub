@@ -8,13 +8,16 @@ import type { BankingClient } from "@/lib/services/finances/client";
 import { createBankingClient } from "@/lib/services/finances/client";
 import { getEnableBankingConfig } from "@/lib/services/finances/config";
 import { listConnectionsForUser } from "@/lib/services/finances/connections";
-import type { BankCountry } from "@/lib/services/finances/types";
-import { BANK_COUNTRIES, PSU_TYPE } from "@/lib/services/finances/types";
+import { PSU_TYPE } from "@/lib/services/finances/types";
 import { Button } from "@/systemUI/components/Button/Button";
 import { PageLayout } from "@/systemUI/components/PageLayout/PageLayout";
 
 import { AccountSummary } from "./AccountSummary";
 import styles from "./page.module.css";
+
+// Temporary until the bank picker lists all banks.
+const BANK_COUNTRIES = ["DE", "ES", "FR", "IT", "NL", "PT"] as const;
+type BankCountry = (typeof BANK_COUNTRIES)[number];
 
 const ERROR_CODES = [
   "invalid_state",

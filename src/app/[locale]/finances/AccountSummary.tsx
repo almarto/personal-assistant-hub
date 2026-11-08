@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import type { BankingClient } from "@/lib/services/finances/client";
-import type { BankAccountRef } from "@/lib/services/finances/types";
+import type { BankAccountInfo } from "@/lib/services/finances/types";
 
 import styles from "./page.module.css";
 
@@ -16,12 +16,15 @@ export async function AccountSummary({
   account,
 }: {
   client: BankingClient;
-  account: BankAccountRef;
+  account: BankAccountInfo;
 }) {
   const t = await getTranslations("Finances");
   const [balances, transactions] = await Promise.all([
     client.getBalances(account.uid),
-    client.getTransactions(account.uid, dateDaysAgo(DAYS_OF_TRANSACTIONS)),
+    client.getTransactions(account.uid, {
+      dateFrom: dateDaysAgo(DAYS_OF_TRANSACTIONS),
+      status: "BOOK",
+    }),
   ]);
 
   if (!balances.ok && !transactions.ok) {
@@ -54,7 +57,9 @@ export async function AccountSummary({
       )}
       {transactions.ok ? (
         <p className={styles.meta}>
-          {t("transactionsLast30Days", { count: transactions.value.length })}
+          {t("transactionsLast30Days", {
+            count: transactions.value.transactions.length,
+          })}
         </p>
       ) : (
         <p className={styles.error}>{t("accountLoadFailed")}</p>

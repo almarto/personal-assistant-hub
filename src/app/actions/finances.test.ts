@@ -65,7 +65,7 @@ describe("startConnectionAction", () => {
   });
 
   it.each([
-    { ...VALID_FORM, bankCountry: "XX" },
+    { ...VALID_FORM, bankCountry: "Spain" },
     { ...VALID_FORM, psuType: "other" },
     { ...VALID_FORM, aspspName: "  " },
   ])("rejects invalid input (%j) without touching the API", async (fields) => {

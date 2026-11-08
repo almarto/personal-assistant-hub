@@ -3,7 +3,10 @@
 import { revalidatePath } from "next/cache";
 
 import { requireFamilyMembership } from "@/lib/auth-guards";
-import { generateShoppingList, toggleShoppingItem } from "@/lib/services/wellness/shoppingList";
+import {
+  generateShoppingList,
+  toggleShoppingItem,
+} from "@/lib/services/wellness/shoppingList";
 import type { ShoppingListRow } from "@/lib/types/wellness";
 
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -45,12 +48,19 @@ export async function generateShoppingListAction(
   }
 
   const { userId, familyId } = await requireFamilyMembership();
-  const rows = await generateShoppingList(userId, familyId, rangeStart, rangeEnd);
+  const rows = await generateShoppingList(
+    userId,
+    familyId,
+    rangeStart,
+    rangeEnd
+  );
   revalidatePath("/wellness/shopping");
   return rows;
 }
 
-export async function toggleShoppingItemAction(itemId: string): Promise<boolean> {
+export async function toggleShoppingItemAction(
+  itemId: string
+): Promise<boolean> {
   const { userId } = await requireFamilyMembership();
   const checked = await toggleShoppingItem(itemId, userId);
   revalidatePath("/wellness/shopping");

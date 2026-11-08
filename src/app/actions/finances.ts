@@ -7,8 +7,8 @@ import { createBankingClient } from "@/lib/services/finances/client";
 import { getEnableBankingConfig } from "@/lib/services/finances/config";
 import { createPendingConnection } from "@/lib/services/finances/connections";
 import { computeValidUntil } from "@/lib/services/finances/consent";
-import type { BankCountry, PsuType } from "@/lib/services/finances/types";
-import { BANK_COUNTRIES, PSU_TYPE } from "@/lib/services/finances/types";
+import type { PsuType } from "@/lib/services/finances/types";
+import { PSU_TYPE } from "@/lib/services/finances/types";
 
 type ActionFailure = { success: false; error: string };
 
@@ -16,8 +16,8 @@ function failure(error: string): ActionFailure {
   return { success: false, error };
 }
 
-function isBankCountry(value: string): value is BankCountry {
-  return (BANK_COUNTRIES as readonly string[]).includes(value);
+function isCountryCode(value: string): boolean {
+  return /^[A-Z]{2}$/.test(value);
 }
 
 function isPsuType(value: string): value is PsuType {
@@ -32,7 +32,7 @@ export async function startConnectionAction(
   const aspspName = String(formData.get("aspspName") ?? "").trim();
   const psuType = String(formData.get("psuType") ?? "");
 
-  if (!isBankCountry(bankCountry) || !isPsuType(psuType) || !aspspName) {
+  if (!isCountryCode(bankCountry) || !isPsuType(psuType) || !aspspName) {
     return failure("Invalid bank, country or account type");
   }
 

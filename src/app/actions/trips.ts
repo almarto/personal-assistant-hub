@@ -12,7 +12,11 @@ export async function createAttributeValueAction(data: {
 }) {
   const session = await requireAdmin();
   try {
-    const value = await db.createAttributeValue(session.user.id, data.category, data.name.trim());
+    const value = await db.createAttributeValue(
+      session.user.id,
+      data.category,
+      data.name.trim()
+    );
     return { error: null, value };
   } catch (error) {
     if (error instanceof db.DuplicateAttributeValueError) {
@@ -23,7 +27,9 @@ export async function createAttributeValueAction(data: {
 }
 
 export async function createTripAction(
-  data: CreateTripInput & { participants: { email: string; display_name: string }[] }
+  data: CreateTripInput & {
+    participants: { email: string; display_name: string }[];
+  }
 ) {
   const session = await requireAdmin();
   try {
@@ -52,7 +58,10 @@ export async function createTripAction(
   }
 }
 
-export async function updateTripAction(tripId: string, data: Partial<CreateTripInput>) {
+export async function updateTripAction(
+  tripId: string,
+  data: Partial<CreateTripInput>
+) {
   await requireAdmin();
   try {
     const updated = await db.updateTrip(tripId, data);
@@ -84,14 +93,20 @@ export async function inviteParticipantAction(
     revalidatePath(`/trips/${tripId}`);
     return { error: null };
   } catch (error) {
-    if (error instanceof db.ParticipantAlreadyInvitedError || error instanceof db.TripNotFoundError) {
+    if (
+      error instanceof db.ParticipantAlreadyInvitedError ||
+      error instanceof db.TripNotFoundError
+    ) {
       return { error: error.message };
     }
     throw error;
   }
 }
 
-export async function removeParticipantAction(tripId: string, participantId: string) {
+export async function removeParticipantAction(
+  tripId: string,
+  participantId: string
+) {
   await requireAdmin();
   await db.removeParticipant(participantId);
   revalidatePath(`/trips/${tripId}`);
@@ -155,14 +170,21 @@ export async function toggleIndividualChecklistItemAction(
   checked: boolean
 ) {
   const access = await requireTripAccess(tripId);
-  const participantId = access.type === "admin" ? targetParticipantId : access.participantId;
+  const participantId =
+    access.type === "admin" ? targetParticipantId : access.participantId;
   if (!participantId) return { error: "No participant to update" };
   try {
-    await db.setChecklistItemChecked(tripId, packingItemId, participantId, checked);
+    await db.setChecklistItemChecked(
+      tripId,
+      packingItemId,
+      participantId,
+      checked
+    );
     revalidatePath(`/trips/${tripId}`);
     return { error: null };
   } catch (error) {
-    if (error instanceof db.PackingItemNotFoundError) return { error: error.message };
+    if (error instanceof db.PackingItemNotFoundError)
+      return { error: error.message };
     throw error;
   }
 }
@@ -178,7 +200,8 @@ export async function toggleSharedChecklistItemAction(
     revalidatePath(`/trips/${tripId}`);
     return { error: null };
   } catch (error) {
-    if (error instanceof db.PackingItemNotFoundError) return { error: error.message };
+    if (error instanceof db.PackingItemNotFoundError)
+      return { error: error.message };
     throw error;
   }
 }
@@ -194,7 +217,8 @@ export async function assignChecklistItemAction(
     revalidatePath(`/trips/${tripId}`);
     return { error: null };
   } catch (error) {
-    if (error instanceof db.PackingItemNotFoundError) return { error: error.message };
+    if (error instanceof db.PackingItemNotFoundError)
+      return { error: error.message };
     throw error;
   }
 }

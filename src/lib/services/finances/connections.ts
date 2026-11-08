@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 
 import { query } from "@/lib/db";
 
-import type { BankAccountRef, PsuType } from "./types";
+import type { BankAccountInfo, PsuType } from "./types";
 
 interface BankConnectionBase {
   id: string;
@@ -18,7 +18,7 @@ export type BankConnection = BankConnectionBase &
     | {
         status: "active";
         sessionId: string;
-        accounts: BankAccountRef[];
+        accounts: BankAccountInfo[];
         validUntil: string;
       }
   );
@@ -31,7 +31,7 @@ interface BankConnectionRow {
   status: "pending" | "active";
   state: string | null;
   session_id: string | null;
-  accounts: BankAccountRef[] | null;
+  accounts: BankAccountInfo[] | null;
   valid_until: Date | null;
   created_at: Date;
 }
@@ -66,7 +66,7 @@ export interface ActivateConnectionParams {
   userId: string;
   state: string;
   sessionId: string;
-  accounts: BankAccountRef[];
+  accounts: BankAccountInfo[];
   validUntil: string;
 }
 

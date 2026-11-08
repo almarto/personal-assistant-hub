@@ -42,23 +42,24 @@ describe("createBankingClient", () => {
     );
   });
 
-  it("lists the banks of a country", async () => {
+  it("lists all banks when no country is given, mapping the logo", async () => {
     fetchMock.mockResolvedValue(
       jsonResponse({
         aspsps: [
           {
             name: "Trade Republic",
             country: "DE",
+            logo: "https://enablebanking.com/brands/DE/Trade_Republic/",
             maximum_consent_validity: 7776000,
           },
-          { name: "Other Bank", country: "DE" },
+          { name: "Other Bank", country: "ES" },
         ],
       })
     );
 
-    const result = await client.listAspsps("DE");
+    const result = await client.listAspsps();
 
-    expect(lastRequest().url).toBe(`${BASE_URL}/aspsps?country=DE`);
+    expect(lastRequest().url).toBe(`${BASE_URL}/aspsps`);
     expect(lastRequest().init.method ?? "GET").toBe("GET");
     expect(result).toEqual({
       ok: true,
@@ -66,15 +67,25 @@ describe("createBankingClient", () => {
         {
           name: "Trade Republic",
           country: "DE",
+          logo: "https://enablebanking.com/brands/DE/Trade_Republic/",
           maximumConsentValiditySeconds: 7776000,
         },
         {
           name: "Other Bank",
-          country: "DE",
+          country: "ES",
+          logo: null,
           maximumConsentValiditySeconds: null,
         },
       ],
     });
+  });
+
+  it("lists the banks of a country", async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ aspsps: [] }));
+
+    await client.listAspsps("DE");
+
+    expect(lastRequest().url).toBe(`${BASE_URL}/aspsps?country=DE`);
   });
 
   it("starts an authorization and returns the bank url", async () => {
@@ -107,11 +118,26 @@ describe("createBankingClient", () => {
     });
   });
 
-  it("creates a session from the callback code", async () => {
+  it("creates a session from the callback code with full account data", async () => {
+    const mainAccount = {
+      uid: "u1",
+      identification_hash: "h1",
+      name: "Main",
+      product: "Cuenta Online",
+      currency: "EUR",
+      account_id: { iban: "ES9121000418450200051332" },
+    };
+    const otherAccount = {
+      uid: "u2",
+      all_account_ids: [
+        { identification: "123", scheme_name: "BBAN" },
+        { identification: "DE89370400440532013000", scheme_name: "IBAN" },
+      ],
+    };
     fetchMock.mockResolvedValue(
       jsonResponse({
         session_id: "s-1",
-        accounts: [{ uid: "u1", name: "Main" }, { uid: "u2" }],
+        accounts: [mainAccount, otherAccount],
         access: { valid_until: "2027-02-06T00:00:00Z" },
       })
     );
@@ -128,15 +154,31 @@ describe("createBankingClient", () => {
       value: {
         sessionId: "s-1",
         accounts: [
-          { uid: "u1", name: "Main" },
-          { uid: "u2", name: null },
+          {
+            uid: "u1",
+            identificationHash: "h1",
+            name: "Main",
+            product: "Cuenta Online",
+            iban: "ES9121000418450200051332",
+            currency: "EUR",
+            raw: mainAccount,
+          },
+          {
+            uid: "u2",
+            identificationHash: null,
+            name: null,
+            product: null,
+            iban: "DE89370400440532013000",
+            currency: null,
+            raw: otherAccount,
+          },
         ],
         validUntil: "2027-02-06T00:00:00Z",
       },
     });
   });
 
-  it("reads account balances", async () => {
+  it("reads account balances with their reference date", async () => {
     fetchMock.mockResolvedValue(
       jsonResponse({
         balances: [
@@ -144,6 +186,11 @@ describe("createBankingClient", () => {
             name: "Booked",
             balance_type: "CLAV",
             balance_amount: { currency: "EUR", amount: "12.34" },
+            reference_date: "2026-11-07",
+          },
+          {
+            balance_type: "XPCD",
+            balance_amount: { currency: "EUR", amount: "20.00" },
           },
         ],
       })
@@ -154,51 +201,124 @@ describe("createBankingClient", () => {
     expect(lastRequest().url).toBe(`${BASE_URL}/accounts/u1/balances`);
     expect(result).toEqual({
       ok: true,
-      value: [{ type: "CLAV", currency: "EUR", amount: "12.34" }],
+      value: [
+        {
+          type: "CLAV",
+          currency: "EUR",
+          amount: "12.34",
+          referenceDate: "2026-11-07",
+        },
+        { type: "XPCD", currency: "EUR", amount: "20.00", referenceDate: null },
+      ],
     });
   });
 
-  it("reads transactions from a date, with debits as negative amounts", async () => {
+  it("reads a page of transactions with status, sign, counterparty and continuation key", async () => {
+    const coffee = {
+      transaction_id: "t-1",
+      entry_reference: "e-1",
+      transaction_amount: { currency: "EUR", amount: "5.00" },
+      credit_debit_indicator: "DBIT",
+      status: "BOOK",
+      booking_date: "2026-11-01",
+      value_date: "2026-11-02",
+      transaction_date: "2026-10-31",
+      creditor: { name: "Cafe" },
+      debtor: { name: "Me" },
+      remittance_information: ["Coffee", "Card payment"],
+    };
+    const salary = {
+      transaction_amount: { currency: "EUR", amount: "100.00" },
+      credit_debit_indicator: "CRDT",
+      status: "PDNG",
+      creditor: { name: "Me" },
+      debtor: { name: "Employer" },
+    };
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        transactions: [coffee, salary],
+        continuation_key: "k2",
+      })
+    );
+
+    const result = await client.getTransactions("u1", {
+      dateFrom: "2026-11-01",
+      status: "BOOK",
+      continuationKey: "k1",
+    });
+
+    expect(lastRequest().url).toBe(
+      `${BASE_URL}/accounts/u1/transactions?date_from=2026-11-01&transaction_status=BOOK&continuation_key=k1`
+    );
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        transactions: [
+          {
+            status: "booked",
+            amount: "-5.00",
+            currency: "EUR",
+            bookingDate: "2026-11-01",
+            valueDate: "2026-11-02",
+            transactionDate: "2026-10-31",
+            counterparty: "Cafe",
+            description: "Coffee · Card payment",
+            transactionId: "t-1",
+            entryReference: "e-1",
+            raw: coffee,
+          },
+          {
+            status: "pending",
+            amount: "100.00",
+            currency: "EUR",
+            bookingDate: null,
+            valueDate: null,
+            transactionDate: null,
+            counterparty: "Employer",
+            description: null,
+            transactionId: null,
+            entryReference: null,
+            raw: salary,
+          },
+        ],
+        continuationKey: "k2",
+      },
+    });
+  });
+
+  it("infers the status from the booking date when the bank sends another status", async () => {
     fetchMock.mockResolvedValue(
       jsonResponse({
         transactions: [
           {
-            transaction_amount: { currency: "EUR", amount: "5.00" },
+            transaction_amount: { currency: "EUR", amount: "1.00" },
             credit_debit_indicator: "DBIT",
-            booking_date: "2026-11-01",
-            remittance_information: ["Coffee", "Card payment"],
+            status: "OTHR",
+            booking_date: "2026-11-03",
           },
           {
-            transaction_amount: { currency: "EUR", amount: "100.00" },
-            credit_debit_indicator: "CRDT",
-            booking_date: null,
+            transaction_amount: { currency: "EUR", amount: "2.00" },
+            credit_debit_indicator: "DBIT",
           },
         ],
       })
     );
 
-    const result = await client.getTransactions("u1", "2026-10-09");
+    const result = await client.getTransactions("u1", {
+      dateFrom: "2026-11-01",
+      status: "PDNG",
+    });
 
     expect(lastRequest().url).toBe(
-      `${BASE_URL}/accounts/u1/transactions?date_from=2026-10-09`
+      `${BASE_URL}/accounts/u1/transactions?date_from=2026-11-01&transaction_status=PDNG`
     );
-    expect(result).toEqual({
-      ok: true,
-      value: [
-        {
-          amount: "-5.00",
-          currency: "EUR",
-          bookingDate: "2026-11-01",
-          description: "Coffee",
-        },
-        {
-          amount: "100.00",
-          currency: "EUR",
-          bookingDate: null,
-          description: null,
-        },
-      ],
-    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.transactions.map((tx) => tx.status)).toEqual([
+      "booked",
+      "pending",
+    ]);
+    expect(result.value.continuationKey).toBeNull();
   });
 
   it("maps a non-2xx response to an http error without leaking the token", async () => {

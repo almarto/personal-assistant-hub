@@ -12,38 +12,62 @@ export const PSU_TYPE = {
 
 export type PsuType = (typeof PSU_TYPE)[keyof typeof PSU_TYPE];
 
-// ISO 3166-1 alpha-2 country of the *bank* (not the UI language).
-export const BANK_COUNTRIES = ["DE", "ES", "FR", "IT", "NL", "PT"] as const;
-
-export type BankCountry = (typeof BANK_COUNTRIES)[number];
-
 export interface Aspsp {
   name: string;
   country: string;
+  logo: string | null;
   maximumConsentValiditySeconds: number | null;
 }
 
-export interface BankAccountRef {
+export interface BankAccountInfo {
+  /** Session-scoped id used in API paths. */
   uid: string;
+  /** Stable across sessions. */
+  identificationHash: string | null;
   name: string | null;
+  product: string | null;
+  iban: string | null;
+  currency: string | null;
+  raw: unknown;
 }
 
 export interface BankSession {
   sessionId: string;
-  accounts: BankAccountRef[];
+  accounts: BankAccountInfo[];
   validUntil: string;
 }
 
 export interface AccountBalance {
   type: string;
-  currency: string;
   amount: string;
+  currency: string;
+  referenceDate: string | null;
 }
 
-export interface BankTransaction {
+export const TRANSACTION_STATUS = {
+  BOOKED: "booked",
+  PENDING: "pending",
+} as const;
+
+export type TransactionStatus =
+  (typeof TRANSACTION_STATUS)[keyof typeof TRANSACTION_STATUS];
+
+export interface BankTransactionRecord {
+  status: TransactionStatus;
   /** Signed: debits are negative. */
   amount: string;
   currency: string;
   bookingDate: string | null;
+  valueDate: string | null;
+  transactionDate: string | null;
+  counterparty: string | null;
   description: string | null;
+  transactionId: string | null;
+  entryReference: string | null;
+  raw: unknown;
+}
+
+export interface TransactionsPage {
+  transactions: BankTransactionRecord[];
+  continuationKey: string | null;
 }
